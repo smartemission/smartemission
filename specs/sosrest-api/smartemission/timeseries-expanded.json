@@ -1,0 +1,422 @@
+// http://api.smartemission.nl/sosemu/api/v1/timeseries?station=23&expanded=true
+[
+  
+  {
+    "id": "1",
+    "label": "CO - station 23",
+    "uom": "ug/m3",
+    "station": {
+      "properties": {
+        "id": 23,
+        "label": "station 23"
+      },
+      "geometry": {
+        "coordinates": [
+          5.865785,
+          51.815593
+        ],
+        "type": "Point"
+      },
+      "type": "Feature"
+    },
+    "referenceValues": [],
+    "firstValue": {
+      "timestamp": 1455099591.0,
+      "value": 23062.1
+    },
+    "lastValue": {
+      "timestamp": 1455099591.0,
+      "value": 23062.1
+    },
+    "parameters": {
+      "service": {
+        "id": "1",
+        "label": "Smart Emission: timeseries-api (SOS 2.0)"
+      },
+      "offering": {
+        "id": "1",
+        "label": "1 - src=s_co - src_value=20054  - offering"
+      },
+      "feature": {
+        "id": "23",
+        "label": "station 23"
+      },
+      "procedure": {
+        "id": "1",
+        "label": "1 - on 2016-02-10 11:19:51+01:00 - procedure"
+      },
+      "phenomenon": {
+        "id": "1",
+        "label": "CO"
+      },
+      "category": {
+        "id": "1",
+        "label": "CO"
+      }
+    },
+    "statusIntervals": []
+  }
+
+  
+      ,
+  
+  
+  {
+    "id": "2",
+    "label": "CO2 - station 23",
+    "uom": "ppm",
+    "station": {
+      "properties": {
+        "id": 23,
+        "label": "station 23"
+      },
+      "geometry": {
+        "coordinates": [
+          5.865785,
+          51.815593
+        ],
+        "type": "Point"
+      },
+      "type": "Feature"
+    },
+    "referenceValues": [],
+    "firstValue": {
+      "timestamp": 1455099591.0,
+      "value": 2200.0
+    },
+    "lastValue": {
+      "timestamp": 1455099591.0,
+      "value": 2200.0
+    },
+    "parameters": {
+      "service": {
+        "id": "1",
+        "label": "Smart Emission: timeseries-api (SOS 2.0)"
+      },
+      "offering": {
+        "id": "2",
+        "label": "2 - src=s_co2 - src_value=2200000  - offering"
+      },
+      "feature": {
+        "id": "23",
+        "label": "station 23"
+      },
+      "procedure": {
+        "id": "2",
+        "label": "2 - on 2016-02-10 11:19:51+01:00 - procedure"
+      },
+      "phenomenon": {
+        "id": "2",
+        "label": "CO2"
+      },
+      "category": {
+        "id": "2",
+        "label": "CO2"
+      }
+    },
+    "statusIntervals": []
+  }
+
+  
+      ,
+  
+  
+  {
+    "id": "3",
+    "label": "NO2 - station 23",
+    "uom": "ug/m3",
+    "station": {
+      "properties": {
+        "id": 23,
+        "label": "station 23"
+      },
+      "geometry": {
+        "coordinates": [
+          5.865785,
+          51.815593
+        ],
+        "type": "Point"
+      },
+      "type": "Feature"
+    },
+    "referenceValues": [],
+    "firstValue": {
+      "timestamp": 1455099591.0,
+      "value": 96.9
+    },
+    "lastValue": {
+      "timestamp": 1455099591.0,
+      "value": 96.9
+    },
+    "parameters": {
+      "service": {
+        "id": "1",
+        "label": "Smart Emission: timeseries-api (SOS 2.0)"
+      },
+      "offering": {
+        "id": "3",
+        "label": "3 - src=s_no2 - src_value=51  - offering"
+      },
+      "feature": {
+        "id": "23",
+        "label": "station 23"
+      },
+      "procedure": {
+        "id": "3",
+        "label": "3 - on 2016-02-10 11:19:51+01:00 - procedure"
+      },
+      "phenomenon": {
+        "id": "3",
+        "label": "NO2"
+      },
+      "category": {
+        "id": "3",
+        "label": "NO2"
+      }
+    },
+    "statusIntervals": []
+  }
+
+  
+      ,
+  
+  
+  {
+    "id": "4",
+    "label": "O3 - station 23",
+    "uom": "ug/m3",
+    "station": {
+      "properties": {
+        "id": 23,
+        "label": "station 23"
+      },
+      "geometry": {
+        "coordinates": [
+          5.865785,
+          51.815593
+        ],
+        "type": "Point"
+      },
+      "type": "Feature"
+    },
+    "referenceValues": [],
+    "firstValue": {
+      "timestamp": 1455099591.0,
+      "value": 154.0
+    },
+    "lastValue": {
+      "timestamp": 1455099591.0,
+      "value": 154.0
+    },
+    "parameters": {
+      "service": {
+        "id": "1",
+        "label": "Smart Emission: timeseries-api (SOS 2.0)"
+      },
+      "offering": {
+        "id": "4",
+        "label": "4 - src=s_o3 - src_value=77  - offering"
+      },
+      "feature": {
+        "id": "23",
+        "label": "station 23"
+      },
+      "procedure": {
+        "id": "4",
+        "label": "4 - on 2016-02-10 11:19:51+01:00 - procedure"
+      },
+      "phenomenon": {
+        "id": "4",
+        "label": "O3"
+      },
+      "category": {
+        "id": "4",
+        "label": "O3"
+      }
+    },
+    "statusIntervals": []
+  }
+
+  
+      ,
+  
+  
+  {
+    "id": "5",
+    "label": "Temperatuur - station 23",
+    "uom": "Celsius",
+    "station": {
+      "properties": {
+        "id": 23,
+        "label": "station 23"
+      },
+      "geometry": {
+        "coordinates": [
+          5.865785,
+          51.815593
+        ],
+        "type": "Point"
+      },
+      "type": "Feature"
+    },
+    "referenceValues": [],
+    "firstValue": {
+      "timestamp": 1455099591.0,
+      "value": 3.0
+    },
+    "lastValue": {
+      "timestamp": 1455099591.0,
+      "value": 3.0
+    },
+    "parameters": {
+      "service": {
+        "id": "1",
+        "label": "Smart Emission: timeseries-api (SOS 2.0)"
+      },
+      "offering": {
+        "id": "5",
+        "label": "5 - src=s_temperatureambient - src_value=276400  - offering"
+      },
+      "feature": {
+        "id": "23",
+        "label": "station 23"
+      },
+      "procedure": {
+        "id": "5",
+        "label": "5 - on 2016-02-10 11:19:51+01:00 - procedure"
+      },
+      "phenomenon": {
+        "id": "5",
+        "label": "Temperatuur"
+      },
+      "category": {
+        "id": "5",
+        "label": "Temperatuur"
+      }
+    },
+    "statusIntervals": []
+  }
+
+  
+      ,
+  
+  
+  {
+    "id": "6",
+    "label": "Luchtdruk - station 23",
+    "uom": "HectoPascal",
+    "station": {
+      "properties": {
+        "id": 23,
+        "label": "station 23"
+      },
+      "geometry": {
+        "coordinates": [
+          5.865785,
+          51.815593
+        ],
+        "type": "Point"
+      },
+      "type": "Feature"
+    },
+    "referenceValues": [],
+    "firstValue": {
+      "timestamp": 1455099591.0,
+      "value": 988.0
+    },
+    "lastValue": {
+      "timestamp": 1455099591.0,
+      "value": 988.0
+    },
+    "parameters": {
+      "service": {
+        "id": "1",
+        "label": "Smart Emission: timeseries-api (SOS 2.0)"
+      },
+      "offering": {
+        "id": "6",
+        "label": "6 - src=s_barometer - src_value=98797  - offering"
+      },
+      "feature": {
+        "id": "23",
+        "label": "station 23"
+      },
+      "procedure": {
+        "id": "6",
+        "label": "6 - on 2016-02-10 11:19:51+01:00 - procedure"
+      },
+      "phenomenon": {
+        "id": "6",
+        "label": "Luchtdruk"
+      },
+      "category": {
+        "id": "6",
+        "label": "Luchtdruk"
+      }
+    },
+    "statusIntervals": []
+  }
+
+  
+      ,
+  
+  
+  {
+    "id": "7",
+    "label": "Luchtvochtigheid - station 23",
+    "uom": "Procent",
+    "station": {
+      "properties": {
+        "id": 23,
+        "label": "station 23"
+      },
+      "geometry": {
+        "coordinates": [
+          5.865785,
+          51.815593
+        ],
+        "type": "Point"
+      },
+      "type": "Feature"
+    },
+    "referenceValues": [],
+    "firstValue": {
+      "timestamp": 1455099591.0,
+      "value": 76.0
+    },
+    "lastValue": {
+      "timestamp": 1455099591.0,
+      "value": 76.0
+    },
+    "parameters": {
+      "service": {
+        "id": "1",
+        "label": "Smart Emission: timeseries-api (SOS 2.0)"
+      },
+      "offering": {
+        "id": "7",
+        "label": "7 - src=s_humidity - src_value=76303  - offering"
+      },
+      "feature": {
+        "id": "23",
+        "label": "station 23"
+      },
+      "procedure": {
+        "id": "7",
+        "label": "7 - on 2016-02-10 11:19:51+01:00 - procedure"
+      },
+      "phenomenon": {
+        "id": "7",
+        "label": "Luchtvochtigheid"
+      },
+      "category": {
+        "id": "7",
+        "label": "Luchtvochtigheid"
+      }
+    },
+    "statusIntervals": []
+  }
+
+  
+  
+]

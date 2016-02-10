@@ -1,0 +1,470 @@
+// http://api.smartemission.nl/sosemu/api/v1/stations
+[
+  
+  {
+    "properties": {
+      "id": "3",
+      "label": "station 3"
+    },
+    "geometry": {
+      "coordinates": [
+        5.840116,
+        51.989525
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  }
+  
+      ,
+  
+  
+  {
+    "properties": {
+      "id": "7",
+      "label": "station 7"
+    },
+    "geometry": {
+      "coordinates": [
+        5.671273,
+        51.472471
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  }
+  
+      ,
+  
+  
+  {
+    "properties": {
+      "id": "9",
+      "label": "station 9"
+    },
+    "geometry": {
+      "coordinates": [
+        5.671681,
+        51.472548
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  }
+  
+      ,
+  
+  
+  {
+    "properties": {
+      "id": "12",
+      "label": "station 12"
+    },
+    "geometry": {
+      "coordinates": [
+        5.856978,
+        51.83822
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  }
+  
+      ,
+  
+  
+  {
+    "properties": {
+      "id": "13",
+      "label": "station 13"
+    },
+    "geometry": {
+      "coordinates": [
+        5.838703,
+        51.841181
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  }
+  
+      ,
+  
+  
+  {
+    "properties": {
+      "id": "14",
+      "label": "station 14"
+    },
+    "geometry": {
+      "coordinates": [
+        5.857781,
+        51.841393
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  }
+  
+      ,
+  
+  
+  {
+    "properties": {
+      "id": "15",
+      "label": "station 15"
+    },
+    "geometry": {
+      "coordinates": [
+        5.671618,
+        51.472015
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  }
+  
+      ,
+  
+  
+  {
+    "properties": {
+      "id": "16",
+      "label": "station 16"
+    },
+    "geometry": {
+      "coordinates": [
+        5.67117,
+        51.472563
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  }
+  
+      ,
+  
+  
+  {
+    "properties": {
+      "id": "19",
+      "label": "station 19"
+    },
+    "geometry": {
+      "coordinates": [
+        5.671213,
+        51.472585
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  }
+  
+      ,
+  
+  
+  {
+    "properties": {
+      "id": "20",
+      "label": "station 20"
+    },
+    "geometry": {
+      "coordinates": [
+        5.671451,
+        51.472655
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  }
+  
+      ,
+  
+  
+  {
+    "properties": {
+      "id": "21",
+      "label": "station 21"
+    },
+    "geometry": {
+      "coordinates": [
+        5.671148,
+        51.472573
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  }
+  
+      ,
+  
+  
+  {
+    "properties": {
+      "id": "23",
+      "label": "station 23"
+    },
+    "geometry": {
+      "coordinates": [
+        5.865785,
+        51.815593
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  }
+  
+      ,
+  
+  
+  {
+    "properties": {
+      "id": "24",
+      "label": "station 24"
+    },
+    "geometry": {
+      "coordinates": [
+        5.859705,
+        51.842615
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  }
+  
+      ,
+  
+  
+  {
+    "properties": {
+      "id": "25",
+      "label": "station 25"
+    },
+    "geometry": {
+      "coordinates": [
+        5.870223,
+        51.868105
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  }
+  
+      ,
+  
+  
+  {
+    "properties": {
+      "id": "26",
+      "label": "station 26"
+    },
+    "geometry": {
+      "coordinates": [
+        5.876646,
+        51.824756
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  }
+  
+      ,
+  
+  
+  {
+    "properties": {
+      "id": "27",
+      "label": "station 27"
+    },
+    "geometry": {
+      "coordinates": [
+        5.840506,
+        51.833878
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  }
+  
+      ,
+  
+  
+  {
+    "properties": {
+      "id": "28",
+      "label": "station 28"
+    },
+    "geometry": {
+      "coordinates": [
+        5.87185,
+        51.830098
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  }
+  
+      ,
+  
+  
+  {
+    "properties": {
+      "id": "30",
+      "label": "station 30"
+    },
+    "geometry": {
+      "coordinates": [
+        5.67121,
+        51.472638
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  }
+  
+      ,
+  
+  
+  {
+    "properties": {
+      "id": "31",
+      "label": "station 31"
+    },
+    "geometry": {
+      "coordinates": [
+        5.671218,
+        51.47259
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  }
+  
+      ,
+  
+  
+  {
+    "properties": {
+      "id": "32",
+      "label": "station 32"
+    },
+    "geometry": {
+      "coordinates": [
+        5.671213,
+        51.472598
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  }
+  
+      ,
+  
+  
+  {
+    "properties": {
+      "id": "34",
+      "label": "station 34"
+    },
+    "geometry": {
+      "coordinates": [
+        5.670858,
+        51.472661
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  }
+  
+      ,
+  
+  
+  {
+    "properties": {
+      "id": "37",
+      "label": "station 37"
+    },
+    "geometry": {
+      "coordinates": [
+        5.671085,
+        51.4727
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  }
+  
+      ,
+  
+  
+  {
+    "properties": {
+      "id": "38",
+      "label": "station 38"
+    },
+    "geometry": {
+      "coordinates": [
+        5.671191,
+        51.472601
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  }
+  
+      ,
+  
+  
+  {
+    "properties": {
+      "id": "39",
+      "label": "station 39"
+    },
+    "geometry": {
+      "coordinates": [
+        5.671105,
+        51.472511
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  }
+  
+      ,
+  
+  
+  {
+    "properties": {
+      "id": "40",
+      "label": "station 40"
+    },
+    "geometry": {
+      "coordinates": [
+        5.670848,
+        51.472203
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  }
+  
+      ,
+  
+  
+  {
+    "properties": {
+      "id": "41",
+      "label": "station 41"
+    },
+    "geometry": {
+      "coordinates": [
+        5.671181,
+        51.472593
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  }
+  
+  
+]

@@ -1,0 +1,5373 @@
+// http://inspire.rivm.nl/sos/eaq/api/v1/stations
+[
+  {
+    "properties": {
+      "id": 1,
+      "label": "Amsterdam-A10 west: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.84102249,
+        52.339496609087945,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 2,
+      "label": "Amsterdam-Einsteinweg: CO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.845233,
+        52.38133099908829,
+        2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 3,
+      "label": "Amsterdam-Einsteinweg: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.845233,
+        52.38133099908829,
+        2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 4,
+      "label": "Amsterdam-Einsteinweg: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.845233,
+        52.38133099908829,
+        2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 6,
+      "label": "Amsterdam-Einsteinweg: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.845233,
+        52.38133099908829,
+        2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 7,
+      "label": "Amsterdam-Einsteinweg: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.845233,
+        52.38133099908829,
+        2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 8,
+      "label": "Amsterdam-Haarlemmerweg: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.87575,
+        52.38542199908832,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 9,
+      "label": "Amsterdam-Haarlemmerweg: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.87575,
+        52.38542199908832,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 13,
+      "label": "Amsterdam-Hoogtij: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.773478,
+        52.42801699908869,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 14,
+      "label": "Amsterdam-Hoogtij: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.773478,
+        52.42801699908869,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 16,
+      "label": "Amsterdam-Hoogtij: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.773478,
+        52.42801699908869,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 17,
+      "label": "Amsterdam-Hoogtij: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.773478,
+        52.42801699908869,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 18,
+      "label": "Amsterdam-Hoogtij: SO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.773478,
+        52.42801699908869,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 19,
+      "label": "Amsterdam-Jan van Galenstraat: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.860319,
+        52.374785999088246,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 20,
+      "label": "Amsterdam-Jan van Galenstraat: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.860319,
+        52.374785999088246,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 22,
+      "label": "Amsterdam-Kantershof (Zuid Oost): NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.988397,
+        52.320691999087785,
+        -3.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 23,
+      "label": "Amsterdam-Kantershof (Zuid Oost): NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.988397,
+        52.320691999087785,
+        -3.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 25,
+      "label": "Amsterdam-Nieuwendammerdijk: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.943822,
+        52.38931399908836,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 26,
+      "label": "Amsterdam-Nieuwendammerdijk: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.943822,
+        52.38931399908836,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 28,
+      "label": "Amsterdam-Nieuwendammerdijk: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        4.943822,
+        52.38931399908836,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 29,
+      "label": "Amsterdam-Oude Schans: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.9044,
+        52.37205599908822,
+        2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 30,
+      "label": "Amsterdam-Oude Schans: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.9044,
+        52.37205599908822,
+        2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 34,
+      "label": "Amsterdam-Spaarnwoude: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.728581,
+        52.398436999088446,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 35,
+      "label": "Amsterdam-Spaarnwoude: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.728581,
+        52.398436999088446,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 37,
+      "label": "Amsterdam-Spaarnwoude: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.728581,
+        52.398436999088446,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 38,
+      "label": "Amsterdam-Spaarnwoude: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.728581,
+        52.398436999088446,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 39,
+      "label": "Amsterdam-Sportpark Ookmeer (Osdorp): NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.793344000000001,
+        52.36681099908817,
+        -1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 40,
+      "label": "Amsterdam-Sportpark Ookmeer (Osdorp): NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.793344000000001,
+        52.36681099908817,
+        -1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 44,
+      "label": "Amsterdam-Stadhouderskade: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.8997,
+        52.3580389990881,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 45,
+      "label": "Amsterdam-Stadhouderskade: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.8997,
+        52.3580389990881,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 47,
+      "label": "Amsterdam-Stadhouderskade: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.8997,
+        52.3580389990881,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 48,
+      "label": "Amsterdam-Stadhouderskade: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.8997,
+        52.3580389990881,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 49,
+      "label": "Amsterdam-Van Diemenstraat: CO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.887811,
+        52.38998299908838,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 50,
+      "label": "Amsterdam-Van Diemenstraat: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.887811,
+        52.38998299908838,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 51,
+      "label": "Amsterdam-Van Diemenstraat: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.887811,
+        52.38998299908838,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 53,
+      "label": "Amsterdam-Van Diemenstraat: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        4.887811,
+        52.38998299908838,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 54,
+      "label": "Amsterdam-Van Diemenstraat: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.887811,
+        52.38998299908838,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 55,
+      "label": "Amsterdam-Van Diemenstraat: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.887811,
+        52.38998299908838,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 56,
+      "label": "Amsterdam-Vondelpark: CO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.866208,
+        52.359713999088115,
+        2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 57,
+      "label": "Amsterdam-Vondelpark: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.866208,
+        52.359713999088115,
+        2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 58,
+      "label": "Amsterdam-Vondelpark: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.866208,
+        52.359713999088115,
+        2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 60,
+      "label": "Amsterdam-Vondelpark: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        4.866208,
+        52.359713999088115,
+        2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 61,
+      "label": "Amsterdam-Vondelpark: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.866208,
+        52.359713999088115,
+        2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 62,
+      "label": "Amsterdam-Vondelpark: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.866208,
+        52.359713999088115,
+        2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 63,
+      "label": "Amsterdam-Westerpark: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.870157,
+        52.39397199908839,
+        3.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 64,
+      "label": "Amsterdam-Westerpark: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.870157,
+        52.39397199908839,
+        3.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 65,
+      "label": "Amsterdam-Westerpark: SO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.870157,
+        52.39397199908839,
+        3.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 66,
+      "label": "Apeldoorn-Stationsstraat: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        5.966718999999999,
+        52.213964999086905,
+        11.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 67,
+      "label": "Axel-Zaaidijk: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        3.9153460000000004,
+        51.284527999079714,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 68,
+      "label": "Badhoevedorp-Sloterweg: CO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.774006,
+        52.3340029990879,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 69,
+      "label": "Badhoevedorp-Sloterweg: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.774006,
+        52.3340029990879,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 70,
+      "label": "Badhoevedorp-Sloterweg: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.774006,
+        52.3340029990879,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 72,
+      "label": "Badhoevedorp-Sloterweg: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.774006,
+        52.3340029990879,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 73,
+      "label": "Badhoevedorp-Sloterweg: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.774006,
+        52.3340029990879,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 74,
+      "label": "Balk-Trophornsterweg: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        5.573491569999999,
+        52.916915889092984,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 75,
+      "label": "Balk-Trophornsterweg: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        5.573491569999999,
+        52.916915889092984,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 77,
+      "label": "Balk-Trophornsterweg: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        5.573491569999999,
+        52.916915889092984,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 78,
+      "label": "Balk-Trophornsterweg: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        5.573491569999999,
+        52.916915889092984,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 79,
+      "label": "Barsbeek-De Veenen: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        6.017571,
+        52.65414399909065,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 80,
+      "label": "Barsbeek-De Veenen: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        6.017571,
+        52.65414399909065,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 82,
+      "label": "Barsbeek-De Veenen: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        6.017571,
+        52.65414399909065,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 83,
+      "label": "Barsbeek-De Veenen: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        6.017571,
+        52.65414399909065,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 84,
+      "label": "Beverwijk West-Creutzberglaan: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.640531,
+        52.48930299908922,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 85,
+      "label": "Beverwijk West-Creutzberglaan: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.640531,
+        52.48930299908922,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 86,
+      "label": "Biddinghuizen-Hoekwantweg: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        5.61921,
+        52.44870999908887,
+        -4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 87,
+      "label": "Biddinghuizen-Hoekwantweg: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        5.61921,
+        52.44870999908887,
+        -4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 89,
+      "label": "Biddinghuizen-Hoekwantweg: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        5.61921,
+        52.44870999908887,
+        -4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 90,
+      "label": "Biddinghuizen-Hoekwantweg: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        5.61921,
+        52.44870999908887,
+        -4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 91,
+      "label": "Biest Houtakker-Biestsestraat: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        5.14845,
+        51.51843999908142,
+        15.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 92,
+      "label": "Biest Houtakker-Biestsestraat: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        5.14845,
+        51.51843999908142,
+        15.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 94,
+      "label": "Biest Houtakker-Biestsestraat: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        5.14845,
+        51.51843999908142,
+        15.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 95,
+      "label": "Biest Houtakker-Biestsestraat: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        5.14845,
+        51.51843999908142,
+        15.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 96,
+      "label": "Biest Houtakker-Biestsestraat: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        5.14845,
+        51.51843999908142,
+        15.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 105,
+      "label": "Botlek-Oude Maasweg: SO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.312500000000001,
+        51.88888899908427,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 109,
+      "label": "Breda-Bastenakenstraat: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.781016,
+        51.60307999908206,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 110,
+      "label": "Breda-Bastenakenstraat: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.781016,
+        51.60307999908206,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 112,
+      "label": "Breda-Bastenakenstraat: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        4.781016,
+        51.60307999908206,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 113,
+      "label": "Breda-Bastenakenstraat: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.781016,
+        51.60307999908206,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 114,
+      "label": "Breda-Bastenakenstraat: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.781016,
+        51.60307999908206,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 116,
+      "label": "Breda-Tilburgseweg: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.824944,
+        51.593532999082,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 117,
+      "label": "Breda-Tilburgseweg: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.824944,
+        51.593532999082,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 119,
+      "label": "Breda-Tilburgseweg: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.824944,
+        51.593532999082,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 120,
+      "label": "Breda-Tilburgseweg: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.824944,
+        51.593532999082,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 121,
+      "label": "Breukelen-Snelweg: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.987444,
+        52.201529999086794,
+        -1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 122,
+      "label": "Breukelen-Snelweg: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.987444,
+        52.201529999086794,
+        -1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 124,
+      "label": "Breukelen-Snelweg: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        4.987444,
+        52.201529999086794,
+        -1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 125,
+      "label": "Breukelen-Snelweg: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.987444,
+        52.201529999086794,
+        -1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 126,
+      "label": "Breukelen-Snelweg: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.987444,
+        52.201529999086794,
+        -1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 127,
+      "label": "Bussum-Ceintuurbaan: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        5.1758299999999995,
+        52.26797999908736,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 128,
+      "label": "Bussum-Ceintuurbaan: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        5.1758299999999995,
+        52.26797999908736,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 130,
+      "label": "Cabauw-Wielsekade: CO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.923301,
+        51.97448899908495,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 131,
+      "label": "Cabauw-Wielsekade: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.923301,
+        51.97448899908495,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 132,
+      "label": "Cabauw-Wielsekade: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.923301,
+        51.97448899908495,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 134,
+      "label": "Cabauw-Wielsekade: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        4.923301,
+        51.97448899908495,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 135,
+      "label": "Cabauw-Wielsekade: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.923301,
+        51.97448899908495,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 136,
+      "label": "Cabauw-Wielsekade: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.923301,
+        51.97448899908495,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 137,
+      "label": "Cabauw-Wielsekade: SO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.923301,
+        51.97448899908495,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 138,
+      "label": "Den Haag-Bleriotlaan: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.359376000000001,
+        52.03902299908547,
+        -2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 139,
+      "label": "Den Haag-Bleriotlaan: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.359376000000001,
+        52.03902299908547,
+        -2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 141,
+      "label": "Den Haag-Bleriotlaan: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        4.359376000000001,
+        52.03902299908547,
+        -2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 142,
+      "label": "Den Haag-Bleriotlaan: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.359376000000001,
+        52.03902299908547,
+        -2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 143,
+      "label": "Den Haag-Rebecquestraat: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.289185,
+        52.07714799908579,
+        2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 144,
+      "label": "Den Haag-Rebecquestraat: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.289185,
+        52.07714799908579,
+        2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 146,
+      "label": "Den Haag-Rebecquestraat: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        4.289185,
+        52.07714799908579,
+        2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 147,
+      "label": "Den Haag-Rebecquestraat: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.289185,
+        52.07714799908579,
+        2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 148,
+      "label": "Den Haag-Rebecquestraat: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.289185,
+        52.07714799908579,
+        2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 149,
+      "label": "Den Haag-Veerkade: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.315872,
+        52.07507099908577,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 150,
+      "label": "Den Haag-Veerkade: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.315872,
+        52.07507099908577,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 152,
+      "label": "Den Haag-Veerkade: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.315872,
+        52.07507099908577,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 153,
+      "label": "De Rijp-Oostdijkje: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.8617,
+        52.56358999908985,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 154,
+      "label": "De Rips-Klotterpeellaan: NH3"
+    },
+    "geometry": {
+      "coordinates": [
+        5.808593,
+        51.53590099908157,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 155,
+      "label": "De Rips-Klotterpeellaan: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        5.808593,
+        51.53590099908157,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 158,
+      "label": "De Zilk-Vogelaarsdreef: NH3"
+    },
+    "geometry": {
+      "coordinates": [
+        4.510817,
+        52.296555999087595,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 160,
+      "label": "De Zilk-Vogelaarsdreef: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.510817,
+        52.296555999087595,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 161,
+      "label": "De Zilk-Vogelaarsdreef: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.510817,
+        52.296555999087595,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 164,
+      "label": "De Zilk-Vogelaarsdreef: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        4.510817,
+        52.296555999087595,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 165,
+      "label": "De Zilk-Vogelaarsdreef: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.510817,
+        52.296555999087595,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 166,
+      "label": "De Zilk-Vogelaarsdreef: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.510817,
+        52.296555999087595,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 167,
+      "label": "De Zilk-Vogelaarsdreef: SO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.510817,
+        52.296555999087595,
+        4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 169,
+      "label": "Dordrecht-Bamendaweg: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.708239,
+        51.80065799908359,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 170,
+      "label": "Dordrecht-Bamendaweg: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.708239,
+        51.80065799908359,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 172,
+      "label": "Dordrecht-Bamendaweg: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        4.708239,
+        51.80065799908359,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 173,
+      "label": "Dordrecht-Bamendaweg: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.708239,
+        51.80065799908359,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 174,
+      "label": "Eibergen-Lintveldseweg: NH3"
+    },
+    "geometry": {
+      "coordinates": [
+        6.605367,
+        52.091800999085905,
+        19.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 175,
+      "label": "Eibergen-Lintveldseweg: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        6.605367,
+        52.091800999085905,
+        19.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 176,
+      "label": "Eibergen-Lintveldseweg: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        6.605367,
+        52.091800999085905,
+        19.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 178,
+      "label": "Eibergen-Lintveldseweg: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        6.605367,
+        52.091800999085905,
+        19.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 179,
+      "label": "Eibergen-Lintveldseweg: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        6.605367,
+        52.091800999085905,
+        19.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 180,
+      "label": "Eibergen-Lintveldseweg: SO2"
+    },
+    "geometry": {
+      "coordinates": [
+        6.605367,
+        52.091800999085905,
+        19.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 181,
+      "label": "Eindhoven-Genovevalaan: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        5.47235,
+        51.46866199908107,
+        17.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 182,
+      "label": "Eindhoven-Genovevalaan: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        5.47235,
+        51.46866199908107,
+        17.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 184,
+      "label": "Eindhoven-Genovevalaan: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        5.47235,
+        51.46866199908107,
+        17.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 185,
+      "label": "Eindhoven-Genovevalaan: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        5.47235,
+        51.46866199908107,
+        17.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 186,
+      "label": "Eindhoven-Noordbrabantlaan: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        5.444832999999999,
+        51.44415699908088,
+        18.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 187,
+      "label": "Eindhoven-Noordbrabantlaan: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        5.444832999999999,
+        51.44415699908088,
+        18.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 189,
+      "label": "Eindhoven-Noordbrabantlaan: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        5.444832999999999,
+        51.44415699908088,
+        18.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 190,
+      "label": "Enschede-Winkelhorst: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        6.919494,
+        52.23450399908708,
+        38.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 191,
+      "label": "Europoort-Markweg: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.091394,
+        51.95941699908484,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 192,
+      "label": "Europoort-Markweg: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.091394,
+        51.95941699908484,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 193,
+      "label": "Fijnaart-Zwingelspaansedijk: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.515271,
+        51.653728999082446,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 194,
+      "label": "Fijnaart-Zwingelspaansedijk: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.515271,
+        51.653728999082446,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 196,
+      "label": "Fijnaart-Zwingelspaansedijk: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.515271,
+        51.653728999082446,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 197,
+      "label": "Groningen-Europaweg: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        6.578900999999999,
+        53.21779599909574,
+        2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 198,
+      "label": "Groningen-Europaweg: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        6.578900999999999,
+        53.21779599909574,
+        2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 200,
+      "label": "Groningen-Europaweg: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        6.578900999999999,
+        53.21779599909574,
+        2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 201,
+      "label": "Groningen-Europaweg: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        6.578900999999999,
+        53.21779599909574,
+        2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 202,
+      "label": "Groningen-Nijensteinheerd: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        6.608937,
+        53.246534999096006,
+        -1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 203,
+      "label": "Groningen-Nijensteinheerd: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        6.608937,
+        53.246534999096006,
+        -1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 205,
+      "label": "Groningen-Nijensteinheerd: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        6.608937,
+        53.246534999096006,
+        -1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 206,
+      "label": "Groningen-Nijensteinheerd: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        6.608937,
+        53.246534999096006,
+        -1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 207,
+      "label": "Haarlem-Amsterdamsevaart: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.64759,
+        52.38103999908829,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 208,
+      "label": "Haarlem-Amsterdamsevaart: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.64759,
+        52.38103999908829,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 210,
+      "label": "Haarlem-Amsterdamsevaart: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        4.64759,
+        52.38103999908829,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 211,
+      "label": "Haarlem-Amsterdamsevaart: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.64759,
+        52.38103999908829,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 212,
+      "label": "Heerlen-Deken Nicolayestraat: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        5.977283,
+        50.88486999907691,
+        115.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 213,
+      "label": "Heerlen-Deken Nicolayestraat: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        5.977283,
+        50.88486999907691,
+        115.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 215,
+      "label": "Heerlen-Deken Nicolayestraat: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        5.977283,
+        50.88486999907691,
+        115.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 216,
+      "label": "Heerlen-Deken Nicolayestraat: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        5.977283,
+        50.88486999907691,
+        115.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 217,
+      "label": "Heerlen-Jamboreepad: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        5.986853,
+        50.90031699907702,
+        98.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 218,
+      "label": "Heerlen-Jamboreepad: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        5.986853,
+        50.90031699907702,
+        98.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 219,
+      "label": "Heerlen-Looierstraat: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        5.970496,
+        50.887958999076936,
+        100.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 220,
+      "label": "Heerlen-Looierstraat: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        5.970496,
+        50.887958999076936,
+        100.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 222,
+      "label": "Heerlen-Looierstraat: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        5.970496,
+        50.887958999076936,
+        100.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 223,
+      "label": "Heerlen-Looierstraat: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        5.970496,
+        50.887958999076936,
+        100.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 224,
+      "label": "Hellendoorn-Luttenbergerweg: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        6.402933000000001,
+        52.38827199908836,
+        7.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 225,
+      "label": "Hellendoorn-Luttenbergerweg: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        6.402933000000001,
+        52.38827199908836,
+        7.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 227,
+      "label": "Hellendoorn-Luttenbergerweg: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        6.402933000000001,
+        52.38827199908836,
+        7.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 228,
+      "label": "Hilversum-J. Gerardtsweg: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        5.181552000000001,
+        52.23508299908707,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 229,
+      "label": "Hilversum-J. Gerardtsweg: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        5.181552000000001,
+        52.23508299908707,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 231,
+      "label": "Hilversum-J. Gerardtsweg: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        5.181552000000001,
+        52.23508299908707,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 234,
+      "label": "Hoek v. Holland-Berghaven: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.121944,
+        51.977802999084986,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 235,
+      "label": "Hoek v. Holland-Berghaven: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.121944,
+        51.977802999084986,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 237,
+      "label": "Hoek v. Holland-Berghaven: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        4.121944,
+        51.977802999084986,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 238,
+      "label": "Hoek v. Holland-Berghaven: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.121944,
+        51.977802999084986,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 239,
+      "label": "Hoek v. Holland-Berghaven: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.121944,
+        51.977802999084986,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 240,
+      "label": "Hoek v. Holland-Berghaven: SO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.121944,
+        51.977802999084986,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 241,
+      "label": "Hoofddorp-Hoofdweg: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.766614000000001,
+        52.287449999087514,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 242,
+      "label": "Hoofddorp-Hoofdweg: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.766614000000001,
+        52.287449999087514,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 244,
+      "label": "Hoofddorp-Hoofdweg: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        4.766614000000001,
+        52.287449999087514,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 245,
+      "label": "Hoofddorp-Hoofdweg: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.766614000000001,
+        52.287449999087514,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 248,
+      "label": "Hoogvliet-Leemkuil: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.355241999999999,
+        51.86741099908411,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 249,
+      "label": "Hoogvliet-Leemkuil: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.355241999999999,
+        51.86741099908411,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 251,
+      "label": "Hoogvliet-Leemkuil: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        4.355241999999999,
+        51.86741099908411,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 252,
+      "label": "Hoogvliet-Leemkuil: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.355241999999999,
+        51.86741099908411,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 253,
+      "label": "Hoogvliet-Leemkuil: SO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.355241999999999,
+        51.86741099908411,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 254,
+      "label": "Huijbergen-Vennekenstraat: NH3"
+    },
+    "geometry": {
+      "coordinates": [
+        4.359835,
+        51.43444299908081,
+        18.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 255,
+      "label": "Huijbergen-Vennekenstraat: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.359835,
+        51.43444299908081,
+        18.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 256,
+      "label": "Huijbergen-Vennekenstraat: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.359835,
+        51.43444299908081,
+        18.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 258,
+      "label": "Huijbergen-Vennekenstraat: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        4.359835,
+        51.43444299908081,
+        18.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 259,
+      "label": "Huijbergen-Vennekenstraat: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.359835,
+        51.43444299908081,
+        18.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 260,
+      "label": "Ijmuiden-Kanaaldijk: CO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.601842,
+        52.463038999088994,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 261,
+      "label": "Ijmuiden-Kanaaldijk: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.601842,
+        52.463038999088994,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 262,
+      "label": "Ijmuiden-Kanaaldijk: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.601842,
+        52.463038999088994,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 264,
+      "label": "Ijmuiden-Kanaaldijk: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.601842,
+        52.463038999088994,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 265,
+      "label": "Ijmuiden-Kanaaldijk: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.601842,
+        52.463038999088994,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 266,
+      "label": "Ijmuiden-Kanaaldijk: SO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.601842,
+        52.463038999088994,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 273,
+      "label": "Kollumerwaard-Hooge Zuidwal: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        6.276815000000001,
+        53.330424999096806,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 274,
+      "label": "Kollumerwaard-Hooge Zuidwal: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        6.276815000000001,
+        53.330424999096806,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 276,
+      "label": "Kollumerwaard-Hooge Zuidwal: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        6.276815000000001,
+        53.330424999096806,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 278,
+      "label": "Kollumerwaard-Hooge Zuidwal: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        6.276815000000001,
+        53.330424999096806,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 279,
+      "label": "Kollumerwaard-Hooge Zuidwal: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        6.276815000000001,
+        53.330424999096806,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 280,
+      "label": "Kollumerwaard-Hooge Zuidwal: SO2"
+    },
+    "geometry": {
+      "coordinates": [
+        6.276815000000001,
+        53.330424999096806,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 282,
+      "label": "Kootwijkerbroek-Drieenhuizerweg: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        5.664074000000001,
+        52.1540669990864,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 283,
+      "label": "Laren-Jagerspad: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        5.235903,
+        52.25735599908725,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 284,
+      "label": "Laren-Jagerspad: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        5.235903,
+        52.25735599908725,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 286,
+      "label": "Laren-Jagerspad: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        5.235903,
+        52.25735599908725,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 287,
+      "label": "Leiden-Willem de Zwijgerlaan: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.50756,
+        52.16775299908652,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 290,
+      "label": "Maassluis-Kwartellaan: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.228025,
+        51.93203899908461,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 291,
+      "label": "Maassluis-Kwartellaan: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.228025,
+        51.93203899908461,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 293,
+      "label": "Maassluis-Kwartellaan: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        4.228025,
+        51.93203899908461,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 294,
+      "label": "Maassluis-Kwartellaan: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.228025,
+        51.93203899908461,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 295,
+      "label": "Maassluis-Kwartellaan: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.228025,
+        51.93203899908461,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 296,
+      "label": "Maassluis-Kwartellaan: SO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.228025,
+        51.93203899908461,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 297,
+      "label": "Moerdijk-Julianastraat: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.623598,
+        51.69938899908279,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 298,
+      "label": "Moerdijk-Julianastraat: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.623598,
+        51.69938899908279,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 300,
+      "label": "Nieuwdorp-Coudorp: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        3.744999,
+        51.46445699908103,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 301,
+      "label": "Nijmegen-Graafseweg: CO"
+    },
+    "geometry": {
+      "coordinates": [
+        5.857777,
+        51.841371999083904,
+        30.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 302,
+      "label": "Nijmegen-Graafseweg: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        5.857777,
+        51.841371999083904,
+        30.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 303,
+      "label": "Nijmegen-Graafseweg: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        5.857777,
+        51.841371999083904,
+        30.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 305,
+      "label": "Nijmegen-Graafseweg: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        5.857777,
+        51.841371999083904,
+        30.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 306,
+      "label": "Nijmegen-Graafseweg: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        5.857777,
+        51.841371999083904,
+        30.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 307,
+      "label": "Nijmegen-Ruyterstraat: CO"
+    },
+    "geometry": {
+      "coordinates": [
+        5.856938,
+        51.83822099908387,
+        30.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 308,
+      "label": "Nijmegen-Ruyterstraat: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        5.856938,
+        51.83822099908387,
+        30.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 309,
+      "label": "Nijmegen-Ruyterstraat: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        5.856938,
+        51.83822099908387,
+        30.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 311,
+      "label": "Nijmegen-Ruyterstraat: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        5.856938,
+        51.83822099908387,
+        30.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 312,
+      "label": "Nijmegen-Ruyterstraat: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        5.856938,
+        51.83822099908387,
+        30.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 313,
+      "label": "Oude Meer-Aalsmeerderdijk: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.715008,
+        52.32746399908785,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 314,
+      "label": "Oude Meer-Aalsmeerderdijk: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.715008,
+        52.32746399908785,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 316,
+      "label": "Oude Meer-Aalsmeerderdijk: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.715008,
+        52.32746399908785,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 317,
+      "label": "Pernis-Soetemanweg: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.388808,
+        51.88786899908427,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 318,
+      "label": "Pernis-Soetemanweg: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.388808,
+        51.88786899908427,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 320,
+      "label": "Pernis-Soetemanweg: SO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.388808,
+        51.88786899908427,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 321,
+      "label": "Philippine-Stelleweg: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        3.7494839999999994,
+        51.29449799907978,
+        5.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 322,
+      "label": "Philippine-Stelleweg: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        3.7494839999999994,
+        51.29449799907978,
+        5.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 324,
+      "label": "Philippine-Stelleweg: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        3.7494839999999994,
+        51.29449799907978,
+        5.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 325,
+      "label": "Philippine-Stelleweg: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        3.7494839999999994,
+        51.29449799907978,
+        5.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 326,
+      "label": "Philippine-Stelleweg: SO2"
+    },
+    "geometry": {
+      "coordinates": [
+        3.7494839999999994,
+        51.29449799907978,
+        5.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 327,
+      "label": "Posterholt-Vlodropperweg: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        6.0423990000000005,
+        51.11919399907854,
+        32.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 328,
+      "label": "Posterholt-Vlodropperweg: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        6.0423990000000005,
+        51.11919399907854,
+        32.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 330,
+      "label": "Posterholt-Vlodropperweg: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        6.0423990000000005,
+        51.11919399907854,
+        32.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 331,
+      "label": "Ridderkerk-Hogeweg: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.580058,
+        51.86943099908411,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 332,
+      "label": "Ridderkerk-Hogeweg: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.580058,
+        51.86943099908411,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 334,
+      "label": "Ridderkerk-Hogeweg: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        4.580058,
+        51.86943099908411,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 335,
+      "label": "Ridderkerk-Hogeweg: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.580058,
+        51.86943099908411,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 336,
+      "label": "Ridderkerk-Hogeweg: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.580058,
+        51.86943099908411,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 338,
+      "label": "Rotterdam-Bentinckplein: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.46134,
+        51.92710999908458,
+        2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 339,
+      "label": "Rotterdam Noord -Statenweg: CO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.461344,
+        51.927110999084576,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 340,
+      "label": "Rotterdam Noord -Statenweg: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.461344,
+        51.927110999084576,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 341,
+      "label": "Rotterdam Noord -Statenweg: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.461344,
+        51.927110999084576,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 343,
+      "label": "Rotterdam Noord -Statenweg: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        4.461344,
+        51.927110999084576,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 344,
+      "label": "Rotterdam Noord -Statenweg: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.461344,
+        51.927110999084576,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 345,
+      "label": "Rotterdam-Oost Sidelinge A13: CO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.430692,
+        51.93847199908467,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 346,
+      "label": "Rotterdam-Oost Sidelinge A13: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.430692,
+        51.93847199908467,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 347,
+      "label": "Rotterdam-Oost Sidelinge A13: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.430692,
+        51.93847199908467,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 349,
+      "label": "Rotterdam-Oost Sidelinge A13: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.430692,
+        51.93847199908467,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 350,
+      "label": "Rotterdam-Oost Sidelinge A13: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.430692,
+        51.93847199908467,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 351,
+      "label": "Rotterdam-Schiedamsevest: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.479923,
+        51.914232999084476,
+        3.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 352,
+      "label": "Rotterdam-Schiedamsevest: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.479923,
+        51.914232999084476,
+        3.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 354,
+      "label": "Rotterdam-Schiedamsevest: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        4.479923,
+        51.914232999084476,
+        3.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 355,
+      "label": "Rotterdam-Schiedamsevest: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.479923,
+        51.914232999084476,
+        3.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 356,
+      "label": "Rotterdam-Schiedamsevest: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.479923,
+        51.914232999084476,
+        3.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 357,
+      "label": "Rotterdam Zuid-Pleinweg: CO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.480689999999999,
+        51.891146999084285,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 358,
+      "label": "Rotterdam Zuid-Pleinweg: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.480689999999999,
+        51.891146999084285,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 359,
+      "label": "Rotterdam Zuid-Pleinweg: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.480689999999999,
+        51.891146999084285,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 361,
+      "label": "Rotterdam Zuid-Pleinweg: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.480689999999999,
+        51.891146999084285,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 362,
+      "label": "Rotterdam Zuid-Pleinweg: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.480689999999999,
+        51.891146999084285,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 363,
+      "label": "Rotterdam Zuid-Zwartewaalstraat: CO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.487528,
+        51.89361699908431,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 364,
+      "label": "Rotterdam Zuid-Zwartewaalstraat: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.487528,
+        51.89361699908431,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 365,
+      "label": "Rotterdam Zuid-Zwartewaalstraat: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.487528,
+        51.89361699908431,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 367,
+      "label": "Rotterdam Zuid-Zwartewaalstraat: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.487528,
+        51.89361699908431,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 368,
+      "label": "Rotterdam Zuid-Zwartewaalstraat: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.487528,
+        51.89361699908431,
+        0.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 369,
+      "label": "Schiedam-Alphons Arienstraat: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.401389,
+        51.921388999084535,
+        3.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 370,
+      "label": "Schiedam-Alphons Arienstraat: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.401389,
+        51.921388999084535,
+        3.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 372,
+      "label": "Schiedam-Alphons Arienstraat: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        4.401389,
+        51.921388999084535,
+        3.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 373,
+      "label": "Schiedam-Alphons Arienstraat: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.401389,
+        51.921388999084535,
+        3.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 374,
+      "label": "Schiedam-Alphons Arienstraat: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.401389,
+        51.921388999084535,
+        3.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 375,
+      "label": "Schiedam-Alphons Arienstraat: SO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.401389,
+        51.921388999084535,
+        3.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 376,
+      "label": "Utrecht-de Jongweg: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        5.124464,
+        52.105030999086004,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 377,
+      "label": "Utrecht-de Jongweg: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        5.124464,
+        52.105030999086004,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 379,
+      "label": "Utrecht-de Jongweg: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        5.124464,
+        52.105030999086004,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 380,
+      "label": "Utrecht-de Jongweg: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        5.124464,
+        52.105030999086004,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 385,
+      "label": "Utrecht-Erzeijstraat: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        5.120507,
+        52.06774799908571,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 386,
+      "label": "Utrecht-Erzeijstraat: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        5.120507,
+        52.06774799908571,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 388,
+      "label": "Utrecht-Erzeijstraat: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        5.120507,
+        52.06774799908571,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 390,
+      "label": "Utrecht-Erzeijstraat: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        5.120507,
+        52.06774799908571,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 391,
+      "label": "Utrecht-Griftpark: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        5.128183,
+        52.10130799908598,
+        2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 392,
+      "label": "Utrecht-Griftpark: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        5.128183,
+        52.10130799908598,
+        2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 393,
+      "label": "Utrecht-Griftpark: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        5.128183,
+        52.10130799908598,
+        2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 394,
+      "label": "Utrecht-Griftpark: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        5.128183,
+        52.10130799908598,
+        2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 396,
+      "label": "Valthermond-Noorderdiep: NH3"
+    },
+    "geometry": {
+      "coordinates": [
+        6.932432,
+        52.87572499909261,
+        10.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 398,
+      "label": "Valthermond-Noorderdiep: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        6.932432,
+        52.87572499909261,
+        10.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 399,
+      "label": "Valthermond-Noorderdiep: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        6.932432,
+        52.87572499909261,
+        10.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 402,
+      "label": "Valthermond-Noorderdiep: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        6.932432,
+        52.87572499909261,
+        10.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 403,
+      "label": "Valthermond-Noorderdiep: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        6.932432,
+        52.87572499909261,
+        10.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 405,
+      "label": "Veldhoven-Europalaan: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        5.393328000000001,
+        51.40736499908061,
+        22.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 406,
+      "label": "Veldhoven-Europalaan: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        5.393328000000001,
+        51.40736499908061,
+        22.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 408,
+      "label": "Veldhoven-Europalaan: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        5.393328000000001,
+        51.40736499908061,
+        22.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 409,
+      "label": "Veldhoven-Europalaan: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        5.393328000000001,
+        51.40736499908061,
+        22.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 410,
+      "label": "Veldhoven-Europalaan: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        5.393328000000001,
+        51.40736499908061,
+        22.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 411,
+      "label": "Velsen-Reijndersweg: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.579343,
+        52.47887099908912,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 412,
+      "label": "Velsen-Reijndersweg: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.579343,
+        52.47887099908912,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 413,
+      "label": "Velsen-Staalstraat: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.628799999999999,
+        52.474399999089094,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 414,
+      "label": "Velsen-Staalstraat: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.628799999999999,
+        52.474399999089094,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 422,
+      "label": "Vlaardingen-Floreslaan: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.326303,
+        51.910473999084445,
+        -1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 423,
+      "label": "Vlaardingen-Floreslaan: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.326303,
+        51.910473999084445,
+        -1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 425,
+      "label": "Vlaardingen-Floreslaan: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        4.326303,
+        51.910473999084445,
+        -1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 427,
+      "label": "Vlaardingen-Floreslaan: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.326303,
+        51.910473999084445,
+        -1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 428,
+      "label": "Vlaardingen-Floreslaan: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.326303,
+        51.910473999084445,
+        -1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 437,
+      "label": "Vredepeel-Vredeweg: NH3"
+    },
+    "geometry": {
+      "coordinates": [
+        5.853069999999999,
+        51.54051999908159,
+        28.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 440,
+      "label": "Vredepeel-Vredeweg: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        5.853069999999999,
+        51.54051999908159,
+        28.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 441,
+      "label": "Vredepeel-Vredeweg: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        5.853069999999999,
+        51.54051999908159,
+        28.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 444,
+      "label": "Vredepeel-Vredeweg: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        5.853069999999999,
+        51.54051999908159,
+        28.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 446,
+      "label": "Vredepeel-Vredeweg: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        5.853069999999999,
+        51.54051999908159,
+        28.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 447,
+      "label": "Vredepeel-Vredeweg: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        5.853069999999999,
+        51.54051999908159,
+        28.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 450,
+      "label": "Wekerom-Riemterdijk: NH3"
+    },
+    "geometry": {
+      "coordinates": [
+        5.708419000000001,
+        52.11162099908606,
+        18.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 451,
+      "label": "Wekerom-Riemterdijk: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        5.708419000000001,
+        52.11162099908606,
+        18.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 452,
+      "label": "Wekerom-Riemterdijk: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        5.708419000000001,
+        52.11162099908606,
+        18.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 454,
+      "label": "Wekerom-Riemterdijk: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        5.708419000000001,
+        52.11162099908606,
+        18.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 455,
+      "label": "Wekerom-Riemterdijk: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        5.708419000000001,
+        52.11162099908606,
+        18.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 456,
+      "label": "Wekerom-Riemterdijk: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        5.708419000000001,
+        52.11162099908606,
+        18.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 457,
+      "label": "Westmaas-Groeneweg: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.450529,
+        51.78657899908348,
+        -1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 458,
+      "label": "Westmaas-Groeneweg: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.450529,
+        51.78657899908348,
+        -1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 460,
+      "label": "Westmaas-Groeneweg: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        4.450529,
+        51.78657899908348,
+        -1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 461,
+      "label": "Westmaas-Groeneweg: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.450529,
+        51.78657899908348,
+        -1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 464,
+      "label": "Wieringerwerf-Medemblikkerweg: NH3"
+    },
+    "geometry": {
+      "coordinates": [
+        5.050509,
+        52.80365699909196,
+        -4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 466,
+      "label": "Wieringerwerf-Medemblikkerweg: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        5.050509,
+        52.80365699909196,
+        -4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 467,
+      "label": "Wieringerwerf-Medemblikkerweg: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        5.050509,
+        52.80365699909196,
+        -4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 470,
+      "label": "Wieringerwerf-Medemblikkerweg: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        5.050509,
+        52.80365699909196,
+        -4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 471,
+      "label": "Wieringerwerf-Medemblikkerweg: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        5.050509,
+        52.80365699909196,
+        -4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 472,
+      "label": "Wieringerwerf-Medemblikkerweg: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        5.050509,
+        52.80365699909196,
+        -4.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 474,
+      "label": "Wijk aan Zee-Burgemeester Rothestraat: CO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.601986,
+        52.49399199908925,
+        7.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 475,
+      "label": "Wijk aan Zee-Burgemeester Rothestraat: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.601986,
+        52.49399199908925,
+        7.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 476,
+      "label": "Wijk aan Zee-Burgemeester Rothestraat: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.601986,
+        52.49399199908925,
+        7.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 478,
+      "label": "Wijk aan Zee-Burgemeester Rothestraat: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.601986,
+        52.49399199908925,
+        7.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 479,
+      "label": "Wijk aan Zee-Burgemeester Rothestraat: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.601986,
+        52.49399199908925,
+        7.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 480,
+      "label": "Wijk aan Zee-Burgemeester Rothestraat: SO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.601986,
+        52.49399199908925,
+        7.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 481,
+      "label": "Wijnandsrade-Opfergeltstraat: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        5.881748000000001,
+        50.902280999077036,
+        96.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 482,
+      "label": "Wijnandsrade-Opfergeltstraat: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        5.881748000000001,
+        50.902280999077036,
+        96.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 484,
+      "label": "Wijnandsrade-Opfergeltstraat: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        5.881748000000001,
+        50.902280999077036,
+        96.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 485,
+      "label": "Wijnandsrade-Opfergeltstraat: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        5.881748000000001,
+        50.902280999077036,
+        96.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 486,
+      "label": "Wijnandsrade-Opfergeltstraat: SO2"
+    },
+    "geometry": {
+      "coordinates": [
+        5.881748000000001,
+        50.902280999077036,
+        96.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 487,
+      "label": "Zaandam-Wagenschotpad: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.816706,
+        52.448010999088865,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 488,
+      "label": "Zaandam-Wagenschotpad: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.816706,
+        52.448010999088865,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 490,
+      "label": "Zaandam-Wagenschotpad: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        4.816706,
+        52.448010999088865,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 491,
+      "label": "Zaandam-Wagenschotpad: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.816706,
+        52.448010999088865,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 492,
+      "label": "Zaandam-Wagenschotpad: PM2.5"
+    },
+    "geometry": {
+      "coordinates": [
+        4.816706,
+        52.448010999088865,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 495,
+      "label": "Zaanstad-Hemkade: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.83206,
+        52.42022999908862,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 496,
+      "label": "Zaanstad-Hemkade: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.83206,
+        52.42022999908862,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 498,
+      "label": "Zaanstad-Hemkade: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.83206,
+        52.42022999908862,
+        1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 502,
+      "label": "Zegveld-Oude Meije: CO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.83819,
+        52.13794999908628,
+        -2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 504,
+      "label": "Zegveld-Oude Meije: NH3"
+    },
+    "geometry": {
+      "coordinates": [
+        4.83819,
+        52.13794999908628,
+        -2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 505,
+      "label": "Zegveld-Oude Meije: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        4.83819,
+        52.13794999908628,
+        -2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 506,
+      "label": "Zegveld-Oude Meije: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        4.83819,
+        52.13794999908628,
+        -2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 508,
+      "label": "Zegveld-Oude Meije: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        4.83819,
+        52.13794999908628,
+        -2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 510,
+      "label": "Zegveld-Oude Meije: PM10"
+    },
+    "geometry": {
+      "coordinates": [
+        4.83819,
+        52.13794999908628,
+        -2.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 511,
+      "label": "Zierikzee-Lange Slikweg: NO"
+    },
+    "geometry": {
+      "coordinates": [
+        3.9166229999999995,
+        51.6347059990823,
+        -1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 512,
+      "label": "Zierikzee-Lange Slikweg: NO2"
+    },
+    "geometry": {
+      "coordinates": [
+        3.9166229999999995,
+        51.6347059990823,
+        -1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  },
+  {
+    "properties": {
+      "id": 514,
+      "label": "Zierikzee-Lange Slikweg: O3"
+    },
+    "geometry": {
+      "coordinates": [
+        3.9166229999999995,
+        51.6347059990823,
+        -1.0
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  }
+]
