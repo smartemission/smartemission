@@ -12,26 +12,37 @@
             margin: 0;
         }
 
-        html, body, #smartem-map {
+        html, body, #map {
             height: 100%;
         }
 
     </style>
-    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
-    <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
 
 </head>
 <body>
-<div id="smartem-map"></div>
+<div id="map"></div>
+<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+
+<!-- https://github.com/stefanocudini/leaflet-layerJSON -->
+<script src="lib/leaflet-layerjson.js"></script>
+<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
 <script>
     // create the tile layer with correct attribution
+    var map = new L.Map('map', {zoom: 8, center: new L.latLng([52.2,5.4]) });
+
     var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
     var osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
-    var osmTiles = new L.TileLayer(osmUrl, {minZoom: 8, maxZoom: 18, attribution: osmAttrib});
+    var osmTiles = new L.TileLayer(osmUrl, {attribution: osmAttrib});
+    map.addLayer(osmTiles);	//base layer osmTiles.addTo(map);
 
-    var sosRestUrl = 'http://api.smartemission.nl/sosemu/api/v1/stations';
+    // See https://github.com/stefanocudini/leaflet-layerJSON/blob/master/examples/jsonp.html
+    var sosRestUrl = 'http://api.smartemission.nl/sosemu/api/v1/stations?format=json';
+    var jsonLayer = new L.LayerJSON({url: sosRestUrl, locAsGeoJSON: false, propertyLoc: ['geometry.coordinates', 'geometry.coordinates'], jsonpParam: 'callback'});
+    map.addLayer(jsonLayer);
+    map.addControl(new L.Control.Layers({},{'JSON Data Layer': jsonLayer},{collapsed:false}));
 
-    $.getJSON(sosRestUrl, function (data) {
+    // map.addLayer(jsonLayer);
+/*    $.getJSON(sosRestUrl, function (data) {
         var geojson = L.geoJson(data, {
             onEachFeature: function (feature, layer) {
                 layer.bindPopup(feature.properties.name);
@@ -40,7 +51,7 @@
         var map = L.map('smartem-map').fitBounds(geojson.getBounds());
         osmTiles.addTo(map);
         geojson.addTo(map);
-    });
+    });  */
 
 
 </script>
