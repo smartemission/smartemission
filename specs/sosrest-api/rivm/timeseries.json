@@ -1,0 +1,50 @@
+// http://inspire.rivm.nl/sos/eaq/api/v1/timeseries?station=2&expanded=true
+[
+  {
+    "id": "2",
+    "label": "Carbon monoxide (air) NL.RIVM.AQ/SPP-NL_A_IR-GFC_06003, Amsterdam-Einsteinweg: CO",
+    "uom": "mg.m-3",
+    "station": {
+      "properties": {
+        "id": 2,
+        "label": "Amsterdam-Einsteinweg: CO"
+      },
+      "geometry": {
+        "coordinates": [
+          4.845233,
+          52.38133099908829,
+          2.0
+        ],
+        "type": "Point"
+      },
+      "type": "Feature"
+    },
+    "referenceValues": [],
+    "parameters": {
+      "service": {
+        "id": "RIVM_inspire",
+        "label": "RIVM Timeseries Service."
+      },
+      "offering": {
+        "id": "6",
+        "label": "NL.RIVM.AQ/SPP-NL_A_IR-GFC_06003"
+      },
+      "feature": {
+        "id": "2",
+        "label": "Amsterdam-Einsteinweg: CO"
+      },
+      "procedure": {
+        "id": "6",
+        "label": "NL.RIVM.AQ/SPP-NL_A_IR-GFC_06003"
+      },
+      "phenomenon": {
+        "id": "124",
+        "label": "Carbon monoxide (air)"
+      },
+      "category": {
+        "id": "124",
+        "label": "Carbon monoxide (air)"
+      }
+    }
+  }
+]
