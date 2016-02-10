@@ -22,9 +22,6 @@
 <body>
 <div id="map"></div>
 <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
-
-<!-- https://github.com/stefanocudini/leaflet-layerJSON -->
-<script src="lib/leaflet-layerjson.js"></script>
 <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
 <script>
     // create the tile layer with correct attribution
@@ -33,26 +30,21 @@
     var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
     var osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
     var osmTiles = new L.TileLayer(osmUrl, {attribution: osmAttrib});
-    map.addLayer(osmTiles);	//base layer osmTiles.addTo(map);
+    map.addLayer(osmTiles);
 
-    // See https://github.com/stefanocudini/leaflet-layerJSON/blob/master/examples/jsonp.html
-    var sosRestUrl = 'http://api.smartemission.nl/sosemu/api/v1/stations?format=json';
-    var jsonLayer = new L.LayerJSON({url: sosRestUrl, locAsGeoJSON: false, propertyLoc: ['geometry.coordinates', 'geometry.coordinates'], jsonpParam: 'callback'});
-    map.addLayer(jsonLayer);
-    map.addControl(new L.Control.Layers({},{'JSON Data Layer': jsonLayer},{collapsed:false}));
+    // See http://stackoverflow.com/questions/11916780/changing-getjson-to-jsonp
+    // Notice the callback=? . This triggers a JSONP call
+    var sosRestUrl = 'http://api.smartemission.nl/sosemu/api/v1/stations?format=json&callback=?';
 
-    // map.addLayer(jsonLayer);
-/*    $.getJSON(sosRestUrl, function (data) {
+    $.getJSON(sosRestUrl, function (data) {
         var geojson = L.geoJson(data, {
             onEachFeature: function (feature, layer) {
-                layer.bindPopup(feature.properties.name);
+                layer.bindPopup(feature.properties.label);
             }
         });
-        var map = L.map('smartem-map').fitBounds(geojson.getBounds());
-        osmTiles.addTo(map);
-        geojson.addTo(map);
-    });  */
-
+        map.fitBounds(geojson.getBounds());
+        map.addLayer(geojson);
+    });
 
 </script>
 
