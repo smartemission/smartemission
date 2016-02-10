@@ -37,11 +37,11 @@
                 layer.bindPopup(feature.properties.name);
             }
         });
+        var map = L.map('smartem-map').fitBounds(geojson.getBounds());
+        osmTiles.addTo(map);
+        geojson.addTo(map);
     });
 
-    var map = L.map('smartem-map').fitBounds(geojson.getBounds());
-    osmTiles.addTo(map);
-    geojson.addTo(map);
 
 </script>
 
