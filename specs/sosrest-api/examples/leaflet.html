@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+    <title>Example usage of Smart Emission SOS REST API</title>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
+    <!--[if lte IE 8]>
+     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.ie.css" />
+  <![endif]-->
+    <style type="text/css">
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        html, body, #smartem-map {
+            height: 100%;
+        }
+
+    </style>
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+    <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+
+</head>
+<body>
+<div id="smartem-map"></div>
+<script>
+    // create the tile layer with correct attribution
+    var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    var osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+    var osmTiles = new L.TileLayer(osmUrl, {minZoom: 8, maxZoom: 18, attribution: osmAttrib});
+
+    var sosRestUrl = 'http://api.smartemission.nl/sosemu/api/v1/stations';
+
+    $.getJSON(sosRestUrl, function (data) {
+        var geojson = L.geoJson(data, {
+            onEachFeature: function (feature, layer) {
+                layer.bindPopup(feature.properties.name);
+            }
+        });
+    });
+
+    var map = L.map('smartem-map').fitBounds(geojson.getBounds());
+    osmTiles.addTo(map);
+    geojson.addTo(map);
+
+</script>
+
+</body>
+</html>
