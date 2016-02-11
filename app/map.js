@@ -1,0 +1,58 @@
+    // create the tile layer with correct attribution
+    var map = new L.Map('map', {zoom: 13, center: new L.latLng([51.8348, 5.85]) });
+    var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    var osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+    var osmTiles = new L.TileLayer(osmUrl, {attribution: osmAttrib});
+    map.addLayer(osmTiles);
+    
+	// See http://stackoverflow.com/questions/11916780/changing-getjson-to-jsonp
+    // Notice the callback=? . This triggers a JSONP call
+
+    var locaties = 'http://api.smartemission.nl/sosemu/api/v1/stations?format=json&callback=?';
+    $.getJSON(locaties, function (data) {
+        var geojson = L.geoJson(data).addTo(map)
+
+		.on('click', function () {
+			sidebar.toggle();
+		}); 
+    });
+			
+		var sidebar = L.control.sidebar('sidebar', {
+			closeButton: true,
+			position: 'left'
+		}); 	
+		map.addControl(sidebar);
+					
+		var locatie = L.icon({
+				iconUrl: 'locatie-icon.png',
+				iconSize:     	[24, 41],
+				iconAnchor:		[10, 40]
+			});
+		
+		var locatieclick = L.icon({
+				iconUrl: 'locatie-icon-click.png',
+				iconSize:     [24, 41], 
+				iconAnchor:   [10, 40]
+			});
+			
+		
+		map.on('click', function () {
+			sidebar.hide();
+			map.setView([51.8348, 5.85],13);  
+		});
+		sidebar.on('show', function () {	
+			console.log('Sidebar will be visible.');
+		});
+		sidebar.on('shown', function () {						
+			console.log('Sidebar is visible.');
+		});
+		sidebar.on('hide', function () { 						
+			console.log('Sidebar will be hidden.');
+		});
+		sidebar.on('hidden', function () { 						
+			console.log('Sidebar is hidden.');
+		});
+		
+		L.DomEvent.on(sidebar.getCloseButton(), 'click', function () {					
+			console.log('Close button clicked.');
+		});
