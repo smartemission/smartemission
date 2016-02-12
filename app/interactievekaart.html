@@ -7,16 +7,18 @@
 		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.3/css/bootstrap-select.min.css" />
-		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
-		<link rel="stylesheet" href="CSS/L.Control.Sidebar.css" />
+		<link rel="stylesheet" href="L.Control.Sidebar.css" />
 		<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
 		
 		<script src="https://code.jquery.com/jquery-2.1.3.js"></script>
 		<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 		<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>	
-		
-		
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.3/js/bootstrap-select.min.js"></script>
+		<script src="L.Control.Sidebar.js"></script>
+		<script src="map.js"></script>	
+	
 		<style>
 			html, body, #map {
 				height: 100%;
@@ -27,24 +29,13 @@
 					font-size: 40px;   
 			} 
 		</style>
-
-		<script>
-		$(document).ready(function() {
-			$('h6').hide();
-			$('button').click(function() {
-			$("h6").toggle();
-			});
-		});
-		</script>
-		
-			
 	</head>
 
 	<body>
 	
 		 <div id="sidebar">
 			<header class="w3-container w3-cyan">
-			<h1>Jose1</h1>
+			<h1 id="name"></h1>
 			</header>
 			
 			<div class="w3-container">
@@ -103,7 +94,7 @@
 			</div> 
 	
 			<div class="w3-container">
-				<h6>
+				<div id="table"> 
 					<table class="w3-table w3-bordered w3-striped">
 						<thead>
 						<tr>
@@ -115,39 +106,39 @@
 						<tbody>
 						<tr>
 						  <td>CO</td>
-						  <td>50 PPM</td>
+						  <td id="CO" ></td>
 						  <td>55 PPM</td>  
 						</tr>
 						<tr>
 						  <td>CO2</td>
-						  <td>340 PPM</td>
+						   <td id="CO2" ></td>
 						  <td>305 PPM</td>
 						</tr>
 						<tr>
 						  <td>NO2</td>
-						  <td>31 PPM</td>
+						   <td id="NO2" ></td>
 						  <td>25 PPM</td>
 						</tr>
 						<tr>
 						  <td>SO2</td>
+						  <td id="SO2" ></td>
 						  <td>1,5 PPM</td>
-						  <td>1,1 PPM</td>
+						  
 						</tr>
 						<tr>
 						  <td>NH3</td>
- 						  <td>15 PPM</td>
+ 						   <td id="NH3" ></td>
 						  <td>18 PPM</td>
 						</tr>
 						<tr>
 						  <td>O3</td>
-						  <td>15 PPM</td>
+						   <td id="O3" ></td>
 						  <td>11 PPM</td>
 						</tr>
 						</tbody>
 					</table>
-				</h6>
+				</div>
 			</div>
-
 		<br>
 
 			<div class="w3-container">
@@ -222,14 +213,6 @@
 			</div>
 		</div>
 			
-		<div id="map"></div>
-
-		<script src="https://code.jquery.com/jquery-2.1.3.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.3/js/bootstrap-select.min.js"></script>
-		<script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
-		<script src="JS/L.Control.Sidebar.js"></script>
-		<script src="JS/map.js"></script>
-			
+		<div id="map"></div>	
 	</body>
 </html>
