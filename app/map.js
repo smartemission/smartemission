@@ -1,3 +1,10 @@
+$(document).ready(function() {
+		
+	//	$('table').hide();
+	//	$('button').click(function() {
+	//	$("table").toggle();
+	//	});
+				
     // create the tile layer with correct attribution
     var map = new L.Map('map', {zoom: 13, center: new L.latLng([51.8348, 5.85]) });
     var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -7,16 +14,36 @@
     
 	// See http://stackoverflow.com/questions/11916780/changing-getjson-to-jsonp
     // Notice the callback=? . This triggers a JSONP call
+	
+	var locaties = 'http://api.smartemission.nl/sosemu/api/v1/stations?format=json&callback=?';
+		$.getJSON(locaties, function (data) {
+			var geojson = L.geoJson(data).addTo(map)
 
-    var locaties = 'http://api.smartemission.nl/sosemu/api/v1/stations?format=json&callback=?';
-    $.getJSON(locaties, function (data) {
-        var geojson = L.geoJson(data).addTo(map)
+			.on('click', function () {
+				sidebar.toggle();
+			}); 
+	});
 
-		.on('click', function () {
-			sidebar.toggle();
-		}); 
-    });
-			
+	var value = 'var values = "http://api.smartemission.nl/sosemu/api/v1/timeseries?station=23&callback=?';
+		//$.getJSON(value, function (data) {
+// naam van het station, regel 38 van HTML. 		
+			//var name = L.geoJson(data).addTo(map)
+			//{
+				//.on('click', function (feature, layer) {
+					//layer(feature.properties.label);
+			   //});
+		    //};
+// coordinaten van het station, regel 49 HTML		
+			//var coordinate = L.geoJson(data).addTo(map)
+			//{
+				//onEachFeature: function (feature, layer) {
+					//layer(feature.geometry.coordinate);
+				//};
+			//};
+		//});
+	
+	
+	
 		var sidebar = L.control.sidebar('sidebar', {
 			closeButton: true,
 			position: 'left'
@@ -34,7 +61,7 @@
 				iconSize:     [24, 41], 
 				iconAnchor:   [10, 40]
 			});
-			
+
 		
 		map.on('click', function () {
 			sidebar.hide();
@@ -53,6 +80,8 @@
 			console.log('Sidebar is hidden.');
 		});
 		
-		L.DomEvent.on(sidebar.getCloseButton(), 'click', function () {					
+		sidebar.on(sidebar.getCloseButton(), 'click', function () {					
 			console.log('Close button clicked.');
 		});
+		
+});
