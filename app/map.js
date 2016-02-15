@@ -11,7 +11,9 @@ $(document).ready(function() {
     var osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
     var osmTiles = new L.TileLayer(osmUrl, {attribution: osmAttrib});
     map.addLayer(osmTiles);
-    
+	var source  = $("#entry-template").html();
+	var template = Handlebars.compile(source);
+
 	// See http://stackoverflow.com/questions/11916780/changing-getjson-to-jsonp
     // Notice the callback=? . This triggers a JSONP call
 	
@@ -24,8 +26,11 @@ $(document).ready(function() {
 					var timeseriesUrl = 'http://api.smartemission.nl/sosemu/api/v1/timeseries?station=' + stationId + '&callback=?';
 
 					$.getJSON(timeseriesUrl, function (data) {
-						// sidebar.toggle();
-						var timeSeries = data;
+						var html = template(data);
+						// Hier met JQUery
+						var sidebarElm = $("#sidebar");
+						sidebarElm.append(html);
+						sidebar.toggle();
 					});
 				});
 	});
