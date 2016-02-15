@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Interactieve kaart</title>
+		  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.3/css/bootstrap-select.min.css" />
+		<link rel="stylesheet" href="L.Control.Sidebar.css" />
+		<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+
+        <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+		<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.3/js/bootstrap-select.min.js"></script>
+		<script src="L.Control.Sidebar.js"></script>
+		<script src="map.js"></script>
+
+		<style>
+			html, body, #map {
+				height: 100%;
+			}
+			body	{font-family: Times New Roman;
+			}
+			h1{ 	text-align: center;
+					font-size: 40px;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		 <div id="sidebar">
+			<header class="w3-container w3-cyan">
+			<h1 id="name"></h1>
+			</header>
+
+			<div class="w3-container">
+				<hr>
+				<div class="w3-row">
+				  <div class="w3-col s3">
+					<img src="locatie-icon.png" width="40" height="70">
+				  </div>
+				  <div class="w3-col s9 w3-container">
+					<h2>Locatie</h2>
+					<div id="coordinate">	</div>
+				  </div>
+				</div>
+				<hr>
+			</div>
+
+			<div class="w3-container">
+				<div class="w3-row">
+				  <div class="w3-twothird">
+					<h3>Meeteenheden</h3>
+				  </div>
+				  <div class="w3-col s1">
+					<h3>Waarde</h3>
+				  </div>
+				</div>
+			</div>
+
+			<div class="w3-container">
+				<div class="w3-row">
+					<div class="w3-col s5 w3-padding-8 w3-container">
+						<h5>Luchtkwaliteit</h5>
+					</div>
+					<div class="w3-col s2 w3-padding-16">
+						<button>...</button>
+					</div>
+					<div class="w3-col s2 w3-padding-16">
+						<img src="slidebox.png" width="150" height="20" >
+					</div>
+					<div class="w3-col s2">
+						<img src="slidbox-marker.png" width="20" height="20" >
+					</div>
+				</div>
+			</div>
+
+			<div class="w3-container">
+				<div class="w3-row">
+				  <div class="w3-right-align" >
+					  <div class="w3-col s8 w3-container" >
+						<p>Goed</p>
+					  </div>
+					  <div class="w3-container" >
+						<p>Slecht</p>
+					  </div>
+				  </div>
+				</div>
+			</div>
+
+			<div class="w3-container">
+				<div id="table">
+					<table class="w3-table w3-bordered w3-striped">
+						<thead>
+						<tr>
+						  <th>Meeteenheden</th>
+						  <th>Waarde Jose1</th>
+						  <th>Waarde LML station</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr>
+						  <td>CO</td>
+						  <td id="CO" ></td>
+						  <td>55 PPM</td>
+						</tr>
+						<tr>
+						  <td>CO2</td>
+						   <td id="CO2" ></td>
+						  <td>305 PPM</td>
+						</tr>
+						<tr>
+						  <td>NO2</td>
+						   <td id="NO2" ></td>
+						  <td>25 PPM</td>
+						</tr>
+						<tr>
+						  <td>SO2</td>
+						  <td id="SO2" ></td>
+						  <td>1,5 PPM</td>
+
+						</tr>
+						<tr>
+						  <td>NH3</td>
+ 						   <td id="NH3" ></td>
+						  <td>18 PPM</td>
+						</tr>
+						<tr>
+						  <td>O3</td>
+						   <td id="O3" ></td>
+						  <td>11 PPM</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		<br>
+
+			<div class="w3-container">
+				<div class="w3-row">
+				  <div class="w3-col s7 w3-padding-8 w3-container">
+					<h5>Geluid</h5>
+				  </div>
+				  <div class="w3-col s2 w3-padding-16">
+					<img src="slidebox.png" width="150" height="20" >
+				  </div>
+				  <div class="w3-col s2">
+					<img src="slidbox-marker.png" width="20" height="20" >
+				  </div>
+				</div>
+			</div>
+
+			<div class="w3-container">
+				<div class="w3-row">
+				  <div class="w3-right-align" >
+					  <div class="w3-col s8 w3-container" >
+						<p>Zacht</p>
+					  </div>
+					  <div class="w3-container" >
+						<p>Hard</p>
+					  </div>
+				  </div>
+				</div>
+			</div>
+
+			<div class="w3-container">
+				<div class="w3-row">
+				  <div class="w3-twothird w3-container">
+					<h5>Temperatuur</h5>
+				  </div>
+				  <div class="w3-col s1 w3-container">
+					<h5> 15&#8451 </h5>
+				  </div>
+				</div>
+			</div>
+
+			<div class="w3-container">
+
+				<div class="w3-row">
+				  <div class="w3-twothird w3-container">
+					<h5>Luchtvochtigheid</h5>
+				  </div>
+				  <div class="w3-col s1 w3-container">
+					<h5>94%</h5>
+				  </div>
+				</div>
+			</div>
+
+			<div class="w3-container">
+				<div class="w3-row">
+				  <div class="w3-twothird w3-container">
+					<h5>Luchtdruk</h5>
+				  </div>
+				  <div class="w3-container">
+					<h5>1012 hPa</h5>
+				  </div>
+				</div>
+			</div>
+
+			<div class="w3-container">
+				<div class="w3-row">
+				  <div class="w3-twothird w3-container">
+					<h5>Aardtrillingen</h5>
+				  </div>
+				  <div class="w3-container">
+					<h5>0,5G xyz</h5>
+				  </div>
+				</div>
+			</div>
+		</div>
+
+		<div id="map"></div>
+	</body>
+</html>

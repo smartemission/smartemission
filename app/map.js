@@ -19,9 +19,15 @@ $(document).ready(function() {
 		$.getJSON(locaties, function (data) {
 			var geojson = L.geoJson(data).addTo(map)
 
-			.on('click', function () {
-				sidebar.toggle();
-			}); 
+				.on('click', function (e) {
+					var stationId = e.layer.feature.properties.id;
+					var timeseriesUrl = 'http://api.smartemission.nl/sosemu/api/v1/timeseries?station=' + stationId + '&callback=?';
+
+					$.getJSON(timeseriesUrl, function (data) {
+						// sidebar.toggle();
+						var timeSeries = data;
+					});
+				});
 	});
 
 	var value = 'var values = "http://api.smartemission.nl/sosemu/api/v1/timeseries?station=23&callback=?';
