@@ -26,7 +26,7 @@ $(document).ready(function () {
                 var timeseriesUrl = 'http://api.smartemission.nl/sosemu/api/v1/timeseries?station=' + stationId + '&callback=?';
 
                 $.getJSON(timeseriesUrl, function (data) {
-                    stationData = {
+                    var stationData = {
                         station : e.layer.feature,
                         data : data
                     };
@@ -35,7 +35,9 @@ $(document).ready(function () {
 
                     // Hier met JQuery
                     var sidebarElm = $("#sidebar");
-                    // sidebarElm clearen
+
+                    // sidebarElm clear first
+                    sidebarElm.empty();
                     sidebarElm.append(html);
                     sidebar.toggle();
                 });
