@@ -104,41 +104,14 @@
                         </tr>
                         </thead>
                         <tbody>
+                        {{#each data.gasses}}
                         <tr>
-                            <td>{{ data.0.parameters.phenomenon.label }}</td>
-                            <td>{{ data.0.lastValue.value }} {{ data.0.uom }}</td>
-                            <td></td>
+                        <td>{{ parameters.phenomenon.label }}</td>
+                        <td>{{ lastValue.value }} {{ uom }}</td>
+                         <td>nvt</td>
+                        {{/each}}
                         </tr>
-                        <tr>
-                            <td>{{ data.1.parameters.phenomenon.label }}</td>
-                            <td>{{ data.1.lastValue.value }} {{ data.1.uom }}</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>{{ data.2.parameters.phenomenon.label }}</td>
-                            <td>{{ data.2.lastValue.value }} {{ data.2.uom }}</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>{{ data.3.parameters.phenomenon.label }}</td>
-                            <td>{{ data.3.lastValue.value }} {{ data.3.uom }}</td>
-                            <td></td>
-                        </tr>
-						<tr>
-                            <td>{{ data.4.parameters.phenomenon.label }}</td>
-                            <td>{{ data.4.lastValue.value }} {{ data.4.uom }}</td>
-                            <td></td>
-                        </tr>
-						<tr>
-                            <td>{{ data.5.parameters.phenomenon.label }}</td>
-                            <td>{{ data.5.lastValue.value }} {{ data.5.uom }}</td>
-                            <td></td>
-                        </tr>
-						<tr>
-                            <td>{{ data.6.parameters.phenomenon.label }}</td>
-                            <td>{{ data.6.lastValue.value }} {{ data.6.uom }}</td>
-                            <td></td>
-                        </tr>
+
 						</tbody>
                     </table>
                 </div>
@@ -170,7 +143,32 @@
                         </div>
                     </div>
                 </div>
-            </div
+            </div>
+            <div class="w3-container">
+                 <div id="table">
+                     <table class="w3-table w3-bordered w3-striped">
+                         <thead>
+                         <tr>
+                             <th>Meeteenheden</th>
+                             <th>Waarde station {{ station.properties.id }}</th>
+                             <th>Waarde KNMI</th>
+                         </tr>
+                         </thead>
+                         <tbody>
+                         {{#each data.meteo}}
+                         <tr>
+                         <td>{{ parameters.phenomenon.label }}</td>
+                         <td>{{ lastValue.value }} {{ uom }}</td>
+                          <td>nvt</td>
+                         {{/each}}
+                         </tr>
+
+ 						</tbody>
+                     </table>
+                 </div>
+             </div>
+             <br>
+
         </div>
     </script>
 

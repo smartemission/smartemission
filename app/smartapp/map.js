@@ -1,8 +1,8 @@
 $(document).ready(function () {
 
     $('table').hide();
-    $('button').click(function() {
-    $("table").toggle();
+    $('button').click(function () {
+        $("table").toggle();
     });
 
     // create the tile layer with correct attribution
@@ -20,20 +20,55 @@ $(document).ready(function () {
     var locaties = 'http://api.smartemission.nl/sosemu/api/v1/stations?format=json&callback=?';
     $.getJSON(locaties, function (data) {
         var geojson = L.geoJson(data).addTo(map)
-			
+
             .on('click', function (e) {
                 var stationId = e.layer.feature.properties.id;
                 var timeseriesUrl = 'http://api.smartemission.nl/sosemu/api/v1/timeseries?station=' + stationId + '&callback=?';
 
                 $.getJSON(timeseriesUrl, function (data) {
+
+                    // Split into categories for ease of templating: gasses, meteo and audio
+                    var gasLabels = 'CO2,CO,NO2,O3,NH3';
+                    var meteoLabels = 'Temperatuur,Luchtdruk,Luchtvochtigheid';
+                    var audioLabels = 'To be Determined';
+
+                    // See to which category an observation belongs by matching the label
+                    var gasses = [];
+                    var meteo = [];
+                    var audio = [];
+
+                    for (var idx in data) {
+                        var component = data[idx];
+                        var label = component.parameters.phenomenon.label;
+
+                        // Is it a gas?
+                        if (gasLabels.indexOf(label) >= 0) {
+                            gasses.push(component);
+
+                        // Is it a meteo?
+                        } else if (meteoLabels.indexOf(label) >= 0) {
+                            meteo.push(component);
+
+                        // Is it audio?
+                        } else if (audioLabels.indexOf(label) >= 0) {
+                            // For later
+                        }
+
+                    }
+                    // Create station data struct: splitting up component categories
                     var stationData = {
-						station : e.layer.feature,
-						data : data
-					};
-					
-					console.log (stationData);
-					
-					var html = template(stationData);
+                        station: e.layer.feature,
+                        data: {
+                            gasses: gasses,
+                            meteo: meteo,
+                            audio: audio
+                        }
+
+                    };
+
+                    console.log(stationData);
+
+                    var html = template(stationData);
 
                     // Hier met JQuery
                     var sidebarElm = $("#sidebar");
@@ -42,15 +77,15 @@ $(document).ready(function () {
                     sidebarElm.empty();
                     sidebarElm.append(html);
                     sidebar.toggle();
-					
-			//Coordinaten verkeerd om, zoom in zee bij Somalie. (5.85 , 51,83)
-					//var zoom = e.layer.feature.geometry.coordinates;
-					//	map.setView(zoom, 18);
-					
-					
+
+                    //Coordinaten verkeerd om, zoom in zee bij Somalie. (5.85 , 51,83)
+                    //var zoom = e.layer.feature.geometry.coordinates;
+                    //	map.setView(zoom, 18);
+
+
                 });
 
-				
+
             });
     });
 
