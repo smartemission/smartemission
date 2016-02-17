@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Interactieve kaart</title>
+    <title>SmartApp</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.3/css/bootstrap-select.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.3/css/bootstrap-select.min.css"/>
     <link rel="stylesheet" href="L.Control.Sidebar.css"/>
     <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
 
@@ -23,11 +22,9 @@
         html, body, #map {
             height: 100%;
         }
-
         body {
             font-family: Times New Roman;
         }
-
         h1 {
             text-align: center;
             font-size: 40px;
@@ -38,7 +35,7 @@
     <script id="entry-template" type="text/x-handlebars-template">
         <div>
             <header class="w3-container w3-cyan">
-                <h1 id="name">Station {{ station.properties.id }}</h1>
+                <h1>Station {{ station.properties.id }}</h1>
             </header>
 
             <div class="w3-container">
@@ -49,7 +46,7 @@
                     </div>
                     <div class="w3-col s9 w3-container">
                         <h2>Locatie</h2>
-                        <p>{{ station.geometry.coordinates }}</p>
+                        <h5>{{ station.geometry.coordinates }}</h5>
                     </div>
                 </div>
                 <hr>
@@ -102,43 +99,47 @@
                         <thead>
                         <tr>
                             <th>Meeteenheden</th>
-                            <th>Waarde Jose1</th>
+                            <th>Waarde station {{ station.properties.id }}</th>
                             <th>Waarde LML station</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
-                            <td>CO</td>
-                            <td id="CO"></td>
-                            <td>55 PPM</td>
+                            <td>{{ data.0.parameters.phenomenon.label }}</td>
+                            <td>{{ data.0.lastValue.value }} {{ data.0.uom }}</td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <td>CO2</td>
-                            <td id="CO2"></td>
-                            <td>305 PPM</td>
+                            <td>{{ data.1.parameters.phenomenon.label }}</td>
+                            <td>{{ data.1.lastValue.value }} {{ data.1.uom }}</td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <td>NO2</td>
-                            <td id="NO2"></td>
-                            <td>25 PPM</td>
+                            <td>{{ data.2.parameters.phenomenon.label }}</td>
+                            <td>{{ data.2.lastValue.value }} {{ data.2.uom }}</td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <td>SO2</td>
-                            <td id="SO2"></td>
-                            <td>1,5 PPM</td>
-
+                            <td>{{ data.3.parameters.phenomenon.label }}</td>
+                            <td>{{ data.3.lastValue.value }} {{ data.3.uom }}</td>
+                            <td></td>
                         </tr>
-                        <tr>
-                            <td>NH3</td>
-                            <td id="NH3"></td>
-                            <td>18 PPM</td>
+						<tr>
+                            <td>{{ data.4.parameters.phenomenon.label }}</td>
+                            <td>{{ data.4.lastValue.value }} {{ data.4.uom }}</td>
+                            <td></td>
                         </tr>
-                        <tr>
-                            <td>O3</td>
-                            <td id="O3"></td>
-                            <td>11 PPM</td>
+						<tr>
+                            <td>{{ data.5.parameters.phenomenon.label }}</td>
+                            <td>{{ data.5.lastValue.value }} {{ data.5.uom }}</td>
+                            <td></td>
                         </tr>
-                        </tbody>
+						<tr>
+                            <td>{{ data.6.parameters.phenomenon.label }}</td>
+                            <td>{{ data.6.lastValue.value }} {{ data.6.uom }}</td>
+                            <td></td>
+                        </tr>
+						</tbody>
                     </table>
                 </div>
             </div>
@@ -169,52 +170,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="w3-container">
-                <div class="w3-row">
-                    <div class="w3-twothird w3-container">
-                        <h5>Temperatuur</h5>
-                    </div>
-                    <div class="w3-col s1 w3-container">
-                        <h5> 15&#8451 </h5>
-                    </div>
-                </div>
-            </div>
-
-            <div class="w3-container">
-
-                <div class="w3-row">
-                    <div class="w3-twothird w3-container">
-                        <h5>Luchtvochtigheid</h5>
-                    </div>
-                    <div class="w3-col s1 w3-container">
-                        <h5>94%</h5>
-                    </div>
-                </div>
-            </div>
-
-            <div class="w3-container">
-                <div class="w3-row">
-                    <div class="w3-twothird w3-container">
-                        <h5>Luchtdruk</h5>
-                    </div>
-                    <div class="w3-container">
-                        <h5>1012 hPa</h5>
-                    </div>
-                </div>
-            </div>
-
-            <div class="w3-container">
-                <div class="w3-row">
-                    <div class="w3-twothird w3-container">
-                        <h5>Aardtrillingen</h5>
-                    </div>
-                    <div class="w3-container">
-                        <h5>0,5G xyz</h5>
-                    </div>
-                </div>
-            </div>
+            </div
         </div>
     </script>
 
