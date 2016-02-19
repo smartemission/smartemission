@@ -30,6 +30,7 @@
             font-size: 40px;
         }
     </style>
+	
 
     <!-- Handlebars template -->
     <script id="entry-template" type="text/x-handlebars-template">
@@ -41,10 +42,10 @@
             <div class="w3-container">
                 <hr>
                 <div class="w3-row">
-                    <div class="w3-col s3">
+                    <div class="w3-col s2">
                         <img src="locatie-icon.png" width="40" height="70">
                     </div>
-                    <div class="w3-col s9 w3-container">
+                    <div class="w3-col s3 w3-container">
                         <h2>Locatie</h2>
                         <h5>{{ station.geometry.coordinates }}</h5>
                     </div>
@@ -65,12 +66,13 @@
 
             <div class="w3-container">
                 <div class="w3-row">
-                    <div class="w3-col s5 w3-padding-8 w3-container">
+                    <div class="w3-col s7 w3-padding-8 w3-container">
                         <h5>Luchtkwaliteit</h5>
                     </div>
-                    <div class="w3-col s2 w3-padding-16">
+                    <!--<div class="w3-col s2 w3-padding-16">
                         <button>...</button>
                     </div>
+					-->
                     <div class="w3-col s2 w3-padding-16">
                         <img src="slidebox.png" width="150" height="20">
                     </div>
@@ -80,6 +82,8 @@
                 </div>
             </div>
 
+			
+			
             <div class="w3-container">
                 <div class="w3-row">
                     <div class="w3-right-align">
@@ -94,7 +98,7 @@
             </div>
 
             <div class="w3-container">
-                <div id="table">
+                <div id="table1">
                     <table class="w3-table w3-bordered w3-striped">
                         <thead>
                         <tr>
