@@ -1,9 +1,9 @@
 $(document).ready(function () {
 
-    $('table').hide();
-    $('button').click(function () {
-        $("table").toggle();
-    });
+			//$('table1').hide();   
+			//$("button").click(function(){
+			//$("table1").toggle();
+			//});
 
     // create the tile layer with correct attribution
     var map = new L.Map('map', {zoom: 13, center: new L.latLng([51.8348, 5.85])});
@@ -17,17 +17,27 @@ $(document).ready(function () {
     // See http://stackoverflow.com/questions/11916780/changing-getjson-to-jsonp
     // Notice the callback=? . This triggers a JSONP call
 
+
     var locaties = 'http://api.smartemission.nl/sosemu/api/v1/stations?format=json&callback=?';
     $.getJSON(locaties, function (data) {
-        var geojson = L.geoJson(data).addTo(map)
+        var geojson = L.geoJson(data, {
+				pointToLayer: function(feature, latlng) {
+					var locatie = new L.icon({
+						iconUrl: 'locatie-icon.png',
+						iconSize: [24, 41],
+						iconAnchor: [10, 40]
+					});
+					return L.marker(latlng, {icon: locatie});
+				}
+		}).addTo(map)
 
             .on('click', function (e) {
                 var stationId = e.layer.feature.properties.id;
                 var timeseriesUrl = 'http://api.smartemission.nl/sosemu/api/v1/timeseries?station=' + stationId + '&callback=?';
 
-                $.getJSON(timeseriesUrl, function (data) {
-
-                    // Split into categories for ease of templating: gasses, meteo and audio
+				$.getJSON(timeseriesUrl, function (data) {
+					
+					// Split into categories for ease of templating: gasses, meteo and audio
                     var gasLabels = 'CO2,CO,NO2,O3,NH3';
                     var meteoLabels = 'Temperatuur,Luchtdruk,Luchtvochtigheid';
                     var audioLabels = 'To be Determined';
@@ -55,6 +65,7 @@ $(document).ready(function () {
                         }
 
                     }
+
                     // Create station data struct: splitting up component categories
                     var stationData = {
                         station: e.layer.feature,
@@ -65,7 +76,6 @@ $(document).ready(function () {
                         }
 
                     };
-
                     console.log(stationData);
 
                     var html = template(stationData);
@@ -79,10 +89,9 @@ $(document).ready(function () {
                     sidebar.toggle();
 
                     //Coordinaten verkeerd om, zoom in zee bij Somalie. (5.85 , 51,83)
-                    //var zoom = e.layer.feature.geometry.coordinates;
-                    //	map.setView(zoom, 18);
-
-
+						//var zoom = 	e.layer.feature.geometry.coordinates;
+						//map.setView(zoom, 18);
+					
                 });
 
 
