@@ -3,7 +3,10 @@
   {
     "properties": {
       "id": "{{ station['device_id'] }}",
-      "label": "{{ station['device_name'] }}"
+      "label": "{{ station['device_name'] }}",
+      "altitude": "{{ station['altitude'] }}",
+      "last_update": "{{ station['last_update'] }}",
+      "value_stale": "{{ station['value_stale'] }}"
     },
     "geometry": {
       "coordinates": [

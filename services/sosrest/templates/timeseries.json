@@ -34,7 +34,7 @@
       },
       "offering": {
         "id": "{{ last_value['id'] }}",
-        "label": "{{ last_value['id'] }} - src={{ last_value['name'] }} - src_value={{ last_value['value_raw'] }}  - offering"
+        "label": "{{ last_value['id'] }} - src={{ last_value['name'] }} - src_value={{ last_value['value_raw'] }}  - stale={{ last_value['value_stale'] }} offering"
       },
       "feature": {
         "id": "{{ last_value['device_id'] }}",
