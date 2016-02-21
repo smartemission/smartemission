@@ -40,7 +40,7 @@ $(document).ready(function () {
 					// Split into categories for ease of templating: gasses, meteo and audio
                     var gasLabels = 'CO2,CO,NO2,O3,NH3';
                     var meteoLabels = 'Temperatuur,Luchtdruk,Luchtvochtigheid';
-                    var audioLabels = 'To be Determined';
+                    var audioLabels = 'Audio Maxvalue,Audio/Noise Level 1-5';
 
                     // See to which category an observation belongs by matching the label
                     var gasses = [];
@@ -61,7 +61,8 @@ $(document).ready(function () {
 
                         // Is it audio?
                         } else if (audioLabels.indexOf(label) >= 0) {
-                            // For later
+                            // Is it a audio?
+                            audio.push(component);
                         }
 
                     }

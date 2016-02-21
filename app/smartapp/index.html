@@ -126,8 +126,18 @@
                 <div class="w3-row">
                     <div class="w3-col s7 w3-padding-8 w3-container">
                         <h5>Geluid</h5>
+                        <p>
+                            {{#if data.audio.[0]}}
+                            {{ data.audio.[0].lastValue.value }} {{ data.audio.[0].uom }}
+                              {{/if}}
+
+                            {{#if data.audio.[1]}}
+                            - Niveau {{ data.audio.[1].lastValue.value }} van 5
+                              {{/if}}
+                        </p>
                     </div>
-                    <div class="w3-col s2 w3-padding-16">
+
+                    <div class="w3-col s2 w3-padding-16" >
                         <img src="slidebox.png" width="150" height="20">
                     </div>
                     <div class="w3-col s2">
