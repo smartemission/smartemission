@@ -22,8 +22,9 @@ $(document).ready(function () {
     $.getJSON(locaties, function (data) {
         var geojson = L.geoJson(data, {
 				pointToLayer: function(feature, latlng) {
+                    var iconUrl = feature.properties['value_stale'] == '0' ? 'locatie-icon.png' : 'locatie-icon-stale.png';
 					var locatie = new L.icon({
-						iconUrl: 'locatie-icon.png',
+						iconUrl: iconUrl,
 						iconSize: [24, 41],
 						iconAnchor: [10, 40]
 					});
