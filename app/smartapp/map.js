@@ -16,16 +16,12 @@ $(document).ready(function () {
     function getMarkerIcon(feature, selected) {
         // Default
         var iconUrl = feature.properties['value_stale'] == '0' ? 'locatie-icon.png' : 'locatie-icon-stale.png';
-        var iconOptions = {
-            iconUrl: iconUrl,
-            iconSize: [24, 41],
-            iconAnchor: [10, 40]
-        };
 
-        if (selected) {
-            iconOptions.iconUrl = 'locatie-icon-click.png';
-        }
-        return new L.icon(iconOptions);
+        return new L.icon({
+                    iconUrl: selected ? 'locatie-icon-click.png' : iconUrl,
+                    iconSize: [24, 41],
+                    iconAnchor: [10, 40]
+                });
     }
 
     // URL of the Smart Emission SOS REST API
