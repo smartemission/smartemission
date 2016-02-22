@@ -1,12 +1,7 @@
 $(document).ready(function () {
 
-			//$('table1').hide();   
-			//$("button").click(function(){
-			//$("table1").toggle();
-			//});
-
     // create the tile layer with correct attribution
-    var map = new L.Map('map', {zoom: 13, center: new L.latLng([51.8348, 5.85])});
+    var map = new L.Map('map', {zoom: 12, center: new L.latLng([51.8348, 5.85])});
     var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
     var osmAttrib = 'Map data <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
     var osmTiles = new L.TileLayer(osmUrl, {attribution: osmAttrib});
@@ -89,14 +84,25 @@ $(document).ready(function () {
                     sidebarElm.empty();
                     sidebarElm.append(html);
                     sidebar.toggle();
-
-                    //Coordinaten verkeerd om, zoom in zee bij Somalie. (5.85 , 51,83)
-						//var zoom = 	e.layer.feature.geometry.coordinates;
-						//map.setView(zoom, 18);
 					
+					// Zoom to station and change icon to yellow	
+					var zoom = L.geoJson(data, {
+						pointToLayer: function(feature, latlng) {
+							var locatieclick = L.icon({
+								iconUrl: 'locatie-icon-click.png',
+								iconSize: [24, 41],
+								iconAnchor: [10, 40]
+							});
+							return L.marker(latlng, {icon: locatieclick});
+							map.setView([latlng], 18);
+						}
+					}).addTo(map)
+					
+					 //Coordinaten verkeerd om, zoom in zee bij Somalie. (5.85 , 51,83)
+							//var zoom = 	e.layer.feature.geometry.coordinates;
+							//map.setView(zoom, 18);
+						
                 });
-
-
             });
     });
 
@@ -107,22 +113,9 @@ $(document).ready(function () {
     });
     map.addControl(sidebar);
 
-    var locatie = L.icon({
-        iconUrl: 'locatie-icon.png',
-        iconSize: [24, 41],
-        iconAnchor: [10, 40]
-    });
-
-    var locatieclick = L.icon({
-        iconUrl: 'locatie-icon-click.png',
-        iconSize: [24, 41],
-        iconAnchor: [10, 40]
-    });
-
-
     map.on('click', function () {
         sidebar.hide();
-        map.setView([51.8348, 5.85], 13);
+        map.setView([51.8348, 5.85], 12);
     });
     sidebar.on('show', function () {
         console.log('Sidebar will be visible.');
