@@ -42,23 +42,37 @@
             <div class="w3-container">
                 <hr>
                 <div class="w3-row">
-                    <div class="w3-col s2">
+                    <div class="w3-quarter">
                         <img src="locatie-icon.png" width="40" height="70">
                     </div>
-                    <div class="w3-col s3 w3-container">
+                    <div class="w3-col s8">
                         <h2>Locatie</h2>
                         <h5>{{ station.geometry.coordinates }}</h5>
                     </div>
                 </div>
                 <hr>
             </div>
+			
+		    <div class="w3-container">
+                <div class="w3-row">
+                    <div class="w3-quarter">
+                        <img src="clock.png" width="60" height="60 	">
+                    </div>
+                    <div class="w3-col s8">
+                        <h2>Laatste meting </h2>
+                        <h5>{{ station.properties.last_update }}</h5>
+                    </div>
+                </div>
+				<hr>
+            </div>
+
 
             <div class="w3-container">
                 <div class="w3-row">
                     <div class="w3-twothird">
                         <h3>Meeteenheden</h3>
                     </div>
-                    <div class="w3-col s1">
+                    <div class="w3-third">
                         <h3>Waarde</h3>
                     </div>
                 </div>
@@ -116,7 +130,7 @@
                         {{/each}}
                         </tr>
 
-						</tbody>
+			</tbody>
                     </table>
                 </div>
             </div>
