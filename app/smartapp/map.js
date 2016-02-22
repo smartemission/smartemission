@@ -1,43 +1,66 @@
 $(document).ready(function () {
 
-    // create the tile layer with correct attribution
+    // Create Map with layers
     var map = new L.Map('map', {zoom: 12, center: new L.latLng([51.8348, 5.85])});
     var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
     var osmAttrib = 'Map data <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
     var osmTiles = new L.TileLayer(osmUrl, {attribution: osmAttrib});
     map.addLayer(osmTiles);
+
+    // Precompile Handlebars.js Template
     var source = $("#entry-template").html();
     var template = Handlebars.compile(source);
 
+
+    // Create icon based on feature props and selected state
+    function getMarkerIcon(feature, selected) {
+        // Default
+        var iconUrl = feature.properties['value_stale'] == '0' ? 'locatie-icon.png' : 'locatie-icon-stale.png';
+        var iconOptions = {
+            iconUrl: iconUrl,
+            iconSize: [24, 41],
+            iconAnchor: [10, 40]
+        };
+
+        if (selected) {
+            iconOptions.iconUrl = 'locatie-icon-click.png';
+        }
+        return new L.icon(iconOptions);
+    }
+
+    // URL of the Smart Emission SOS REST API
+    var apiUrl = 'http://api.smartemission.nl/sosemu/api/v1';
+
     // See http://stackoverflow.com/questions/11916780/changing-getjson-to-jsonp
     // Notice the callback=? . This triggers a JSONP call
+    var stationsUrl = apiUrl + '/stations?format=json&callback=?';
+    var markers = {};
+    var oldMarkerId;
 
+    // Split into categories for ease of templating: gasses, meteo and audio
+    var gasLabels = 'CO2,CO,NO2,O3,NH3';
+    var meteoLabels = 'Temperatuur,Luchtdruk,Luchtvochtigheid';
+    var audioLabels = 'Audio Maxvalue,Audio/Noise Level 1-5';
 
-    var locaties = 'http://api.smartemission.nl/sosemu/api/v1/stations?format=json&callback=?';
-    $.getJSON(locaties, function (data) {
+    // First get stations JSON object via REST
+    $.getJSON(stationsUrl, function (data) {
+        // Callback when getting stations
         var geojson = L.geoJson(data, {
-				pointToLayer: function(feature, latlng) {
-                    var iconUrl = feature.properties['value_stale'] == '0' ? 'locatie-icon.png' : 'locatie-icon-stale.png';
-					var locatie = new L.icon({
-						iconUrl: iconUrl,
-						iconSize: [24, 41],
-						iconAnchor: [10, 40]
-					});
-					return L.marker(latlng, {icon: locatie});
-				}
-		}).addTo(map)
-
+            pointToLayer: function (feature, latlng) {
+                // Create and save Marker
+                var icon = getMarkerIcon(feature, false);
+                var marker = L.marker(latlng, {icon: icon});
+                markers[feature.properties.id] = marker;
+                return marker;
+            }
+        }).addTo(map)
+            // When station-marker clicked get Timeseries with last value for that Station
             .on('click', function (e) {
-                var stationId = e.layer.feature.properties.id;
-                var timeseriesUrl = 'http://api.smartemission.nl/sosemu/api/v1/timeseries?station=' + stationId + '&callback=?';
+                var feature = e.layer.feature;
+                var stationId = feature.properties.id;
+                var timeseriesUrl = apiUrl + '/timeseries?format=json&station=' + stationId + '&callback=?';
 
-				$.getJSON(timeseriesUrl, function (data) {
-					
-					// Split into categories for ease of templating: gasses, meteo and audio
-                    var gasLabels = 'CO2,CO,NO2,O3,NH3';
-                    var meteoLabels = 'Temperatuur,Luchtdruk,Luchtvochtigheid';
-                    var audioLabels = 'Audio Maxvalue,Audio/Noise Level 1-5';
-
+                $.getJSON(timeseriesUrl, function (data) {
                     // See to which category an observation belongs by matching the label
                     var gasses = [];
                     var meteo = [];
@@ -51,29 +74,28 @@ $(document).ready(function () {
                         if (gasLabels.indexOf(label) >= 0) {
                             gasses.push(component);
 
-                        // Is it a meteo?
+                            // Is it a meteo?
                         } else if (meteoLabels.indexOf(label) >= 0) {
                             meteo.push(component);
 
-                        // Is it audio?
+                            // Is it audio?
                         } else if (audioLabels.indexOf(label) >= 0) {
                             // Is it a audio?
                             audio.push(component);
                         }
-
                     }
 
                     // Create station data struct: splitting up component categories
                     var stationData = {
-                        station: e.layer.feature,
+                        station: feature,
                         data: {
                             gasses: gasses,
                             meteo: meteo,
                             audio: audio
                         }
-
                     };
-                    console.log(stationData);
+
+                    // console.log(stationData);
 
                     var html = template(stationData);
 
@@ -84,24 +106,29 @@ $(document).ready(function () {
                     sidebarElm.empty();
                     sidebarElm.append(html);
                     sidebar.toggle();
-					
-					// Zoom to station and change icon to yellow	
-					var zoom = L.geoJson(data, {
-						pointToLayer: function(feature, latlng) {
-							var locatieclick = L.icon({
-								iconUrl: 'locatie-icon-click.png',
-								iconSize: [24, 41],
-								iconAnchor: [10, 40]
-							});
-							return L.marker(latlng, {icon: locatieclick});
-							map.setView([latlng], 18);
-						}
-					}).addTo(map)
-					
-					 //Coordinaten verkeerd om, zoom in zee bij Somalie. (5.85 , 51,83)
-							//var zoom = 	e.layer.feature.geometry.coordinates;
-							//map.setView(zoom, 18);
-						
+
+                    // Zoom to station and change icon to yellow
+
+                    // Get the Marker
+                    var markerClicked = markers[stationId];
+                    if (markerClicked) {
+                        var icon = getMarkerIcon(feature, true);
+                        markerClicked.setIcon(icon);
+
+                        // Reset previous clicked marker if exists
+                        if (oldMarkerId) {
+                            var oldMarkerClicked = markers[oldMarkerId];
+                            icon = getMarkerIcon(oldMarkerClicked.feature, false);
+                            oldMarkerClicked.setIcon(icon);
+                        }
+
+                        // Save the clicked marker feature id, to reset
+                        oldMarkerId = stationId;
+                    }
+
+                    // Coordinaten geometrie (lon,lat) en LatLon object (lat, lon) moeten omgedraaid
+                    var zoomTo = feature.geometry.coordinates;
+                    map.setView(new L.latLng([zoomTo[1], zoomTo[0]]), 14);
                 });
             });
     });
@@ -117,6 +144,7 @@ $(document).ready(function () {
         sidebar.hide();
         map.setView([51.8348, 5.85], 12);
     });
+
     sidebar.on('show', function () {
         console.log('Sidebar will be visible.');
     });
