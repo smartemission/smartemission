@@ -2269,28 +2269,28 @@ Heron.options.layertree.tree = [
         text: 'Smart Emission - Audio', expanded: true, children: [
         {nodeType: "gx_layer", layer: "Smart Emission - Current Audio Level"}
     ]
-    },
-    {
-        text: 'Geonovum Weather', expanded: false, children: [
-        {nodeType: "gx_layer", layer: "Weather Stations", text: "Weather Stations (WMS)"},
-        {nodeType: "gx_layer", layer: "Weather Observations", text: "Weather Observations (WMS Time)"},
-        {nodeType: "gx_layer", layer: "Last Weather Observations", text: "Last Weather Observations (WMS)"}
-    ]
-    },
-    {
-        text: 'Fiware', expanded: false, children: [
-        {nodeType: "gx_layer", layer: "Fiware Entities", text: "Fiware Entities (Geonovum)"}
-    ]
-    },
-    {
-        text: 'KNMI - Meteorology', expanded: false, children: [
-        {nodeType: "gx_layer", layer: "KNMI - Current Temperatures"},
-        {nodeType: "gx_layer", layer: "KNMI - Current Wind Forces"},
-        {nodeType: "gx_layer", layer: "KNMI - Current Wind Directions"},
-        {nodeType: "gx_layer", layer: "KNMI - Current Air Pressures"},
-        {nodeType: "gx_layer", layer: "KNMI - Rain Radar (Color)"}
-    ]
-    },
+    }
+    //{
+    //    text: 'Geonovum Weather', expanded: false, children: [
+    //    {nodeType: "gx_layer", layer: "Weather Stations", text: "Weather Stations (WMS)"},
+    //    {nodeType: "gx_layer", layer: "Weather Observations", text: "Weather Observations (WMS Time)"},
+    //    {nodeType: "gx_layer", layer: "Last Weather Observations", text: "Last Weather Observations (WMS)"}
+    //]
+    //},
+    //{
+    //    text: 'Fiware', expanded: false, children: [
+    //    {nodeType: "gx_layer", layer: "Fiware Entities", text: "Fiware Entities (Geonovum)"}
+    //]
+    //},
+    //{
+    //    text: 'KNMI - Meteorology', expanded: false, children: [
+    //    {nodeType: "gx_layer", layer: "KNMI - Current Temperatures"},
+    //    {nodeType: "gx_layer", layer: "KNMI - Current Wind Forces"},
+    //    {nodeType: "gx_layer", layer: "KNMI - Current Wind Directions"},
+    //    {nodeType: "gx_layer", layer: "KNMI - Current Air Pressures"},
+    //    {nodeType: "gx_layer", layer: "KNMI - Rain Radar (Color)"}
+    //]
+    //}
     //{
     //    text: 'Kadaster', expanded: false, children: [
     //
@@ -2304,78 +2304,78 @@ Heron.options.layertree.tree = [
     //    }
     //]
     //},
-    {
-        text: 'PDOK', expanded: false, children: [
-        {
-            text: 'BAG', expanded: false, children: [
-            {nodeType: "gx_layer", layer: "BAG - Adressen", text: "BAG Adressen"},
-            {nodeType: "gx_layer", layer: "BAG - Woonplaatsen", text: "BAG Woonplaatsen"},
-            {nodeType: "gx_layer", layer: "BAG - Ligplaatsen", text: "BAG Ligplaatsen"},
-            {nodeType: "gx_layer", layer: "BAG - Standplaatsen", text: "BAG Standplaatsen"},
-            {nodeType: "gx_layer", layer: "BAG - Verblijfsobjecten", text: "BAG Verblijfsobjecten"},
-            {nodeType: "gx_layer", layer: "BAG - Panden", text: "BAG Panden"},
-            {nodeType: "gx_layer", layer: "BAG - Panden (WFS)", text: "BAG Panden (WFS)"}
-        ]
-        },
-        {
-            text: 'Bestuurlijke Grenzen', expanded: false, children: [
-            /*							{nodeType: "gx_layer", layer: "Bestuurlijke Grenzen - Buurten", text: "Buurten" },
-             {nodeType: "gx_layer", layer: "Bestuurlijke Grenzen - Wijken", text: "Wijken" },  */
-            {nodeType: "gx_layer", layer: "Bestuurlijke Grenzen - Gemeenten", text: "Gemeenten (WMS)"},
-            {nodeType: "gx_layer", layer: "Bestuurlijke Grenzen - Gemeenten (WFS)", text: "Gemeenten (WFS)"},
-            {nodeType: "gx_layer", layer: "Bestuurlijke Grenzen - Provincies", text: "Provincies"},
-            {nodeType: "gx_layer", layer: "Bestuurlijke Grenzen - Provincies (WFS)", text: "Provincies (WFS)"},
-            {nodeType: "gx_layer", layer: "Bestuurlijke Grenzen - Land", text: "Land"},
-            {nodeType: "gx_layer", layer: "Bestuurlijke Grenzen - Land (WFS)", text: "Land (WFS)"}
-        ]
-        },
-        {
-            text: 'Digitaal Topografisch Bestand (DTB)', expanded: false, children: [
-            {nodeType: "gx_layer", layer: "DTB Vlakken"},
-            {nodeType: "gx_layer", layer: "DTB Lijnen"},
-            {nodeType: "gx_layer", layer: "DTB Punten"}
-        ]
-        },
-        {
-            text: 'Actueel Hoogtebestand (AHN)', expanded: false, children: [
-            {nodeType: "gx_layer", layer: "AHN2 0.5m Ruw"},
-            {nodeType: "gx_layer", layer: "AHN2 0.5m Geinterpoleerd"},
-            {nodeType: "gx_layer", layer: "AHN2 0.5m Niet Geinterpoleerd"},
-            {nodeType: "gx_layer", layer: "AHN2 5m"},
-            {nodeType: "gx_layer", layer: "AHN2 Bladindex"},
-            {nodeType: "gx_layer", layer: "AHN 25m", text: 'AHN1 25m (Oud)'}
-        ]
-        },
-        {
-            text: 'Rijksdriehoeksmeting (RDInfo)', expanded: false, children: [
-            {nodeType: "gx_layer", layer: "RD Info - Punten"},
-            {nodeType: "gx_layer", layer: "RD Info - Stations"}
-        ]
-
-        },
-        {
-            text: 'Natuur & Mileu', expanded: false, children: [
-            {nodeType: "gx_layer", layer: "Natura 2000"},
-            {nodeType: "gx_layer", layer: "Nationale Parken"},
-            {nodeType: "gx_layer", layer: "NOK 2010 - EHS"},
-            {nodeType: "gx_layer", layer: "NOK 2010 - RODS"},
-            {nodeType: "gx_layer", layer: "NOK 2010 - BBLBuitenbegrenzing", text: "NOK 2010 - BBLBuitenbegr."}
-        ]
-        }
-    ]
-    },
-    {
-        text: 'RO Online', expanded: false, children: [
-        {nodeType: "gx_layer", layer: "RO Online Bestemmingsplannen", text: "Bestemmingsplannen (BP)"},
-        {nodeType: "gx_layer", layer: "RO Online Gem. Structuurvisie", text: "Gem. Structuurvisie (GSV),"},
-        {nodeType: "gx_layer", layer: "RO Online Prov. Structuurvisie", text: "Prov. Structuurvisie (PSV)"}
-    ]
-    },
-    {
-        text: 'Scratch folder', expanded: false, children: [
-        {nodeType: "gx_layer", layer: "Tekenlaag", text: "Drawing Layer"},
-        {nodeType: "gx_layer", layer: "Kladlaag", text: "Upload Loayer"}
-    ]
-    }
+    //{
+    //    text: 'PDOK', expanded: false, children: [
+    //    {
+    //        text: 'BAG', expanded: false, children: [
+    //        {nodeType: "gx_layer", layer: "BAG - Adressen", text: "BAG Adressen"},
+    //        {nodeType: "gx_layer", layer: "BAG - Woonplaatsen", text: "BAG Woonplaatsen"},
+    //        {nodeType: "gx_layer", layer: "BAG - Ligplaatsen", text: "BAG Ligplaatsen"},
+    //        {nodeType: "gx_layer", layer: "BAG - Standplaatsen", text: "BAG Standplaatsen"},
+    //        {nodeType: "gx_layer", layer: "BAG - Verblijfsobjecten", text: "BAG Verblijfsobjecten"},
+    //        {nodeType: "gx_layer", layer: "BAG - Panden", text: "BAG Panden"},
+    //        {nodeType: "gx_layer", layer: "BAG - Panden (WFS)", text: "BAG Panden (WFS)"}
+    //    ]
+    //    },
+    //    {
+    //        text: 'Bestuurlijke Grenzen', expanded: false, children: [
+    //        /*							{nodeType: "gx_layer", layer: "Bestuurlijke Grenzen - Buurten", text: "Buurten" },
+    //         {nodeType: "gx_layer", layer: "Bestuurlijke Grenzen - Wijken", text: "Wijken" },  */
+    //        {nodeType: "gx_layer", layer: "Bestuurlijke Grenzen - Gemeenten", text: "Gemeenten (WMS)"},
+    //        {nodeType: "gx_layer", layer: "Bestuurlijke Grenzen - Gemeenten (WFS)", text: "Gemeenten (WFS)"},
+    //        {nodeType: "gx_layer", layer: "Bestuurlijke Grenzen - Provincies", text: "Provincies"},
+    //        {nodeType: "gx_layer", layer: "Bestuurlijke Grenzen - Provincies (WFS)", text: "Provincies (WFS)"},
+    //        {nodeType: "gx_layer", layer: "Bestuurlijke Grenzen - Land", text: "Land"},
+    //        {nodeType: "gx_layer", layer: "Bestuurlijke Grenzen - Land (WFS)", text: "Land (WFS)"}
+    //    ]
+    //    },
+    //    {
+    //        text: 'Digitaal Topografisch Bestand (DTB)', expanded: false, children: [
+    //        {nodeType: "gx_layer", layer: "DTB Vlakken"},
+    //        {nodeType: "gx_layer", layer: "DTB Lijnen"},
+    //        {nodeType: "gx_layer", layer: "DTB Punten"}
+    //    ]
+    //    },
+    //    {
+    //        text: 'Actueel Hoogtebestand (AHN)', expanded: false, children: [
+    //        {nodeType: "gx_layer", layer: "AHN2 0.5m Ruw"},
+    //        {nodeType: "gx_layer", layer: "AHN2 0.5m Geinterpoleerd"},
+    //        {nodeType: "gx_layer", layer: "AHN2 0.5m Niet Geinterpoleerd"},
+    //        {nodeType: "gx_layer", layer: "AHN2 5m"},
+    //        {nodeType: "gx_layer", layer: "AHN2 Bladindex"},
+    //        {nodeType: "gx_layer", layer: "AHN 25m", text: 'AHN1 25m (Oud)'}
+    //    ]
+    //    },
+    //    {
+    //        text: 'Rijksdriehoeksmeting (RDInfo)', expanded: false, children: [
+    //        {nodeType: "gx_layer", layer: "RD Info - Punten"},
+    //        {nodeType: "gx_layer", layer: "RD Info - Stations"}
+    //    ]
+    //
+    //    },
+    //    {
+    //        text: 'Natuur & Mileu', expanded: false, children: [
+    //        {nodeType: "gx_layer", layer: "Natura 2000"},
+    //        {nodeType: "gx_layer", layer: "Nationale Parken"},
+    //        {nodeType: "gx_layer", layer: "NOK 2010 - EHS"},
+    //        {nodeType: "gx_layer", layer: "NOK 2010 - RODS"},
+    //        {nodeType: "gx_layer", layer: "NOK 2010 - BBLBuitenbegrenzing", text: "NOK 2010 - BBLBuitenbegr."}
+    //    ]
+    //    }
+    //]
+    //},
+    //{
+    //    text: 'RO Online', expanded: false, children: [
+    //    {nodeType: "gx_layer", layer: "RO Online Bestemmingsplannen", text: "Bestemmingsplannen (BP)"},
+    //    {nodeType: "gx_layer", layer: "RO Online Gem. Structuurvisie", text: "Gem. Structuurvisie (GSV),"},
+    //    {nodeType: "gx_layer", layer: "RO Online Prov. Structuurvisie", text: "Prov. Structuurvisie (PSV)"}
+    //]
+    //},
+    //{
+    //    text: 'Scratch folder', expanded: false, children: [
+    //    {nodeType: "gx_layer", layer: "Tekenlaag", text: "Drawing Layer"},
+    //    {nodeType: "gx_layer", layer: "Kladlaag", text: "Upload Loayer"}
+    //]
+    //}
 
 ];
