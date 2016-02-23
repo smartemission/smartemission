@@ -124,7 +124,7 @@ $(document).ready(function () {
 
                     // Coordinaten geometrie (lon,lat) en LatLon object (lat, lon) moeten omgedraaid
                     var zoomTo = feature.geometry.coordinates;
-                    map.setView(new L.latLng([zoomTo[1], zoomTo[0]]), 14);
+                    map.setView(new L.latLng([zoomTo[1], zoomTo[0]]), 17);
                 });
             });
     });
