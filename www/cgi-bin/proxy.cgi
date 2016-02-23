@@ -16,6 +16,8 @@ import sys, os
 # Designed to prevent Open Proxy type stuff.
 allowedHosts = ['sosmet.nerc-bas.ac.uk',
                 'geoservices.knmi.nl',
+                'api.smartemission.nl',
+                'smartemission.nl',
                 'sensors.geonovum.nl',
                 'www.nationaalgeoregister.nl',
                 'gis.kademo.nl',
