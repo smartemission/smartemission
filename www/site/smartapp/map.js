@@ -129,7 +129,6 @@ $(document).ready(function () {
             });
     });
 
-
     var sidebar = L.control.sidebar('sidebar', {
         closeButton: true,
         position: 'left'
