@@ -34,7 +34,7 @@
 
     <!-- Handlebars template -->
     <script id="entry-template" type="text/x-handlebars-template">
-        <div>
+	    <div>
             <header class="w3-container w3-cyan">
                 <h1>Station {{ station.properties.id }}</h1>
             </header>
@@ -47,11 +47,12 @@
                     </div>
                     <div class="w3-col s8">
                         <h2>Locatie</h2>
-                        <h5>{{ station.geometry.coordinates }}</h5>
+                        <h5>{{ station.geometry.coordinates.[1] }}, {{ station.geometry.coordinates.[0] }} </h5>
                     </div>
                 </div>
                 <hr>
             </div>
+			
 			
 		    <div class="w3-container">
                 <div class="w3-row">
@@ -67,38 +68,37 @@
             </div>
 
 
-            <div class="w3-container">
+           <!-- <div class="w3-container">
                 <div class="w3-row">
                     <div class="w3-twothird">
                         <h3>Meeteenheden</h3>
                     </div>
-                    <div class="w3-third">
+                    <div class="w3-quarter">
                         <h3>Waarde</h3>
                     </div>
                 </div>
             </div>
-
+			-->
+			
             <div class="w3-container">
                 <div class="w3-row">
                     <div class="w3-col s7 w3-padding-8 w3-container">
                         <h5>Luchtkwaliteit</h5>
                     </div>
-                    <!--<div class="w3-col s2 w3-padding-16">
-                        <button>...</button>
-                    </div>
-					-->
+                    <!--
                     <div class="w3-col s2 w3-padding-16">
                         <img src="slidebox.png" width="150" height="20">
                     </div>
                     <div class="w3-col s2">
                         <img src="slidbox-marker.png" width="20" height="20">
                     </div>
+					-->
                 </div>
             </div>
 
 			
 			
-            <div class="w3-container">
+            <!-- <div class="w3-container">
                 <div class="w3-row">
                     <div class="w3-right-align">
                         <div class="w3-col s8 w3-container">
@@ -110,7 +110,8 @@
                     </div>
                 </div>
             </div>
-
+			-->
+			
             <div class="w3-container">
                 <div id="table1">
                     <table class="w3-table w3-bordered w3-striped">
@@ -124,13 +125,12 @@
                         <tbody>
                         {{#each data.gasses}}
                         <tr>
-                        <td>{{ parameters.phenomenon.label }}</td>
-                        <td>{{ lastValue.value }} {{ uom }}</td>
-                         <td>nvt</td>
+							<td>{{ parameters.phenomenon.label }}</td>
+							<td>{{ lastValue.value }} {{ uom }}</td>
+							<td>nvt</td>
                         {{/each}}
                         </tr>
-
-			</tbody>
+						</tbody>
                     </table>
                 </div>
             </div>
@@ -140,37 +140,38 @@
                 <div class="w3-row">
                     <div class="w3-col s7 w3-padding-8 w3-container">
                         <h5>Geluid</h5>
-                        <p>
-                            {{#if data.audio.[0]}}
-                            {{ data.audio.[0].lastValue.value }} {{ data.audio.[0].uom }}
-                              {{/if}}
-
-                            {{#if data.audio.[1]}}
-                            - Niveau {{ data.audio.[1].lastValue.value }} van 5
-                              {{/if}}
-                        </p>
                     </div>
 
                     <div class="w3-col s2 w3-padding-16" >
                         <img src="slidebox.png" width="150" height="20">
                     </div>
                     <div class="w3-col s2">
-                        <img src="slidbox-marker.png" width="20" height="20">
+                        <img src="slidbox-marker.png" width="20" height="20">					
                     </div>
                 </div>
             </div>
 
             <div class="w3-container">
                 <div class="w3-row">
-                    <div class="w3-right-align">
-                        <div class="w3-col s8 w3-container">
-                            <p>Zacht</p>
-                        </div>
-                        <div class="w3-container">
-                            <p>Hard</p>
-                        </div>
-                    </div>
-                </div>
+					<div class="w3-col s6 w3-container">
+						<p>
+							{{#if data.audio.[0]}}
+							{{ data.audio.[0].lastValue.value }} {{ data.audio.[0].uom }}
+							{{/if}}
+
+							{{#if data.audio.[1]}}
+							- Niveau {{ data.audio.[1].lastValue.value }} van 5
+							{{/if}}
+						</p>
+					</div>
+					
+					<div class="w3-col s5 w3-container">
+						<p>Zacht</p>
+					</div>
+					<div class="w3-col s1">
+						<p>Hard</p>
+					</div>
+				</div>	
             </div>
 
             <div class="w3-container">
@@ -187,7 +188,6 @@
                          <tr>
                              <th>Meeteenheden</th>
                              <th>Waarde station {{ station.properties.id }}</th>
-                             <th>Waarde KNMI</th>
                          </tr>
                          </thead>
                          <tbody>
@@ -195,11 +195,10 @@
                          <tr>
                          <td>{{ parameters.phenomenon.label }}</td>
                          <td>{{ lastValue.value }} {{ uom }}</td>
-                          <td>nvt</td>
                          {{/each}}
                          </tr>
 
- 						</tbody>
+ 			</tbody>
                      </table>
                  </div>
              </div>
