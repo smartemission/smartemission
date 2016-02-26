@@ -28,6 +28,7 @@
         h1 {
             text-align: center;
             font-size: 40px;
+			color: white;
         }
     </style>
 	
@@ -36,81 +37,59 @@
     <script id="entry-template" type="text/x-handlebars-template">
 	    <div>
             <header class="w3-container w3-cyan">
-                <h1>Station {{ station.properties.id }}</h1>
+                <h1>Smart Emission</h1>
             </header>
-
+			
+			<div class="w3-container">
+                <div class="w3-row">
+                    <div class="w3-container w3-center">
+						<img src="logo.png" width="375" height="55">
+                    </div>
+                </div>
+				<hr>
+            </div>
+			
             <div class="w3-container">
-                <hr>
                 <div class="w3-row">
                     <div class="w3-quarter">
                         <img src="locatie-icon.png" width="40" height="70">
                     </div>
                     <div class="w3-col s8">
-                        <h2>Locatie</h2>
-                        <h5>{{ station.geometry.coordinates.[1] }}, {{ station.geometry.coordinates.[0] }} </h5>
+						<h4>Station {{ station.properties.id }}</h4>
+                        <h6>{{ station.geometry.coordinates.[1] }}, {{ station.geometry.coordinates.[0] }} </h6>
                     </div>
                 </div>
-                <hr>
             </div>
 			
 			
 		    <div class="w3-container">
                 <div class="w3-row">
+				<hr>
                     <div class="w3-quarter">
-                        <img src="clock.png" width="60" height="60 	">
+                        <img src="clock.png" width="60" height="60">
                     </div>
                     <div class="w3-col s8">
-                        <h2>Laatste meting </h2>
-                        <h5>{{ station.properties.last_update }}</h5>
+                        <h4>Laatste meting </h4>
+                        <h6>{{ station.properties.last_update }}</h6>
                     </div>
                 </div>
 				<hr>
             </div>
 
-
-           <!-- <div class="w3-container">
-                <div class="w3-row">
-                    <div class="w3-twothird">
-                        <h3>Meeteenheden</h3>
-                    </div>
-                    <div class="w3-quarter">
-                        <h3>Waarde</h3>
-                    </div>
+			<div class="w3-container">
+                <div class="w3-container w3-center">
+                    <p>LET OP: dit zijn indicatieve waarden</p>
+				<hr>
                 </div>
             </div>
-			-->
 			
             <div class="w3-container">
-                <div class="w3-row">
-                    <div class="w3-col s7 w3-padding-8 w3-container">
+				<div class="w3-row">
+                    <div class="w3-container">
                         <h5>Luchtkwaliteit</h5>
                     </div>
-                    <!--
-                    <div class="w3-col s2 w3-padding-16">
-                        <img src="slidebox.png" width="150" height="20">
-                    </div>
-                    <div class="w3-col s2">
-                        <img src="slidbox-marker.png" width="20" height="20">
-                    </div>
-					-->
                 </div>
             </div>
-
-			
-			
-            <!-- <div class="w3-container">
-                <div class="w3-row">
-                    <div class="w3-right-align">
-                        <div class="w3-col s8 w3-container">
-                            <p>Goed</p>
-                        </div>
-                        <div class="w3-container">
-                            <p>Slecht</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-			-->
 			
             <div class="w3-container">
                 <div id="table1">
@@ -138,7 +117,7 @@
 
             <div class="w3-container">
                 <div class="w3-row">
-                    <div class="w3-col s7 w3-padding-8 w3-container">
+                    <div class="w3-col s7 w3-container">
                         <h5>Geluid</h5>
                     </div>
 
@@ -158,10 +137,6 @@
 							{{#if data.audio.[0]}}
 							{{ data.audio.[0].lastValue.value }} {{ data.audio.[0].uom }}
 							{{/if}}
-
-							{{#if data.audio.[1]}}
-							- Niveau {{ data.audio.[1].lastValue.value }} van 5
-							{{/if}}
 						</p>
 					</div>
 					
@@ -175,10 +150,8 @@
             </div>
 
             <div class="w3-container">
-                <div class="w3-row">
-                    <div class="w3-col s7 w3-padding-8 w3-container">
-                        <h5>Meteo</h5>
-                    </div>
+				<div class="w3-container">
+                    <h5>Meteo</h5>
                 </div>
             </div>
             <div class="w3-container">
@@ -198,7 +171,7 @@
                          {{/each}}
                          </tr>
 
- 			</tbody>
+ 						</tbody>
                      </table>
                  </div>
              </div>
