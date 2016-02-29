@@ -78,6 +78,10 @@ $(document).ready(function () {
                         } else if (audioLabels.indexOf(label) >= 0) {
                             // Is it a audio?
                             audio.push(component);
+
+                            if (label == 'Audio/Noise Level 1-5') {
+                                component['offset'] = parseInt(component.lastValue.value) * 20 - 10;
+                            }
                         }
                     }
 

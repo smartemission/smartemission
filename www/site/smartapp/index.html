@@ -115,39 +115,42 @@
             </div>
             <br>
 
+            {{#if data.audio.[0]}}
             <div class="w3-container">
                 <div class="w3-row">
                     <div class="w3-col s7 w3-container">
                         <h5>Geluid</h5>
                     </div>
-
-                    <div class="w3-col s2 w3-padding-16" >
-                        <img src="slidebox.png" width="150" height="20">
+                    <!-- <div class="w3-col s2 w3-padding-16" >
+                        <img src="slidebox.png" width="150" height="20" >
                     </div>
                     <div class="w3-col s2">
-                        <img src="slidbox-marker.png" width="20" height="20">					
-                    </div>
-                </div>
+                        <img src="slidbox-marker.png" width="20" height="20" style="padding-left: 10%">
+                    </div> -->
+                 </div>
             </div>
 
             <div class="w3-container">
                 <div class="w3-row">
 					<div class="w3-col s6 w3-container">
 						<p>
-							{{#if data.audio.[0]}}
 							{{ data.audio.[0].lastValue.value }} {{ data.audio.[0].uom }}
-							{{/if}}
 						</p>
 					</div>
-					
-					<div class="w3-col s5 w3-container">
+
+                    <div class="w3-col s5 w3-container">
+               						<p>Niveau {{ data.audio.[1].lastValue.value }} van 5</p>
+               					</div>
+
+					<!-- <div class="w3-col s5 w3-container">
 						<p>Zacht</p>
 					</div>
 					<div class="w3-col s1">
 						<p>Hard</p>
-					</div>
+					</div>   -->
 				</div>	
             </div>
+            {{/if}}
 
             <div class="w3-container">
 				<div class="w3-container">
