@@ -2,6 +2,7 @@ import time
 from calendar import timegm
 from datetime import datetime
 import re
+import math
 
 # According to CityGIS the units are defined as follows. ::
 #
@@ -203,15 +204,7 @@ def calc_audio_level(db):
     return level_num
 
 # Converts audio var and populates virtual max value vars
-# Logaritmisch optellen van de waarden per frequentieband voor het verkrijgen van de totaalwaarde:
-#
-# 10^(waarde/10)
-# En dat voor de waarden van alle frequenties en bij elkaar tellen.
-# Daar de log van en x10
-#
-# Normaal tellen wij op van 31,5 Hz tot 8 kHz. In totaal 9 oktaafanden. 31,5  63  125  250  500  1000  2000  4000 en 8000 Hz
-#
-# Of 27   1/3 oktaafbanden: 25, 31.5, 40, 50, 63, 80, enz
+# NB not used: now taking average of max values, see convert_audio_avg_max()
 def convert_audio_max(value, json_obj, name):
     # For each audio observation:
     # decode into 3 bands (0,1,2)
@@ -262,33 +255,42 @@ def convert_audio_avg_max(value, json_obj, name):
     # determine audio_level (1-5) from current t_audiomax
 
     # Extract values for bands 0-2
-    bands = [value & 255, (value >> 8) & 255, (value >> 16) & 255]
+    bands = [float(value & 255), float((value >> 8) & 255), float((value >> 16) & 255)]
 
     band_avg = 0
+    band_cnt = 0
     for i in range(0, len(bands)):
-        band_avg += bands[i]
-        # print '%s : band[%d]=%d band_avg=%d' %(name, i, bands[i], band_avg)
+        band_val  = bands[i]
+        if band_val < 1 or band_val > 150:
+            continue
+        band_cnt += 1
+        band_avg += math.pow(10, band_val / 10)
+        # print '%s : band[%d]=%f band_avg=%f' %(name, i, bands[i], band_avg)
 
-    band_avg /= 3
+    if band_cnt == 0:
+        return None
+
+    band_avg = math.log10(band_avg / float(band_cnt)) * 10.0
+
     # print '%s : avg=%d' %(name, band_avg)
 
-    if band_avg == 0:
+    if band_avg < 1 or band_avg > 150:
         return None
 
     # Initialize  max value to first average calc
     if 't_audiomax' not in json_obj:
         json_obj['t_audiomax'] = band_avg
-        json_obj['t_audiomax_total'] = band_avg
+        json_obj['t_audiomax_total'] = math.pow(10, band_avg / 10)
         json_obj['t_audiomax_cnt'] = 1
     else:
         json_obj['t_audiomax_cnt'] += 1
-        json_obj['t_audiomax_total'] += band_avg
-        json_obj['t_audiomax'] = json_obj['t_audiomax_total'] / json_obj['t_audiomax_cnt']
+        json_obj['t_audiomax_total'] += math.pow(10, band_avg / 10)
+        json_obj['t_audiomax'] = int(round(math.log10(json_obj['t_audiomax_total'] / json_obj['t_audiomax_cnt']) * 10.0))
 
 
     # Determine octave nr from var name
     json_obj['t_audiolevel'] = calc_audio_level(band_avg)
-    # print 'Unit %s - db=%d level=%d' % (json_obj['p_unitserialnumber'], band_avg, json_obj['t_audiolevel'] )
+    print 'Unit %s - %s band_db=%f avg_db=%d level=%d' % (json_obj['p_unitserialnumber'], name, band_avg, json_obj['t_audiomax'], json_obj['t_audiolevel'] )
     return band_avg
 
 CONVERTERS = {
