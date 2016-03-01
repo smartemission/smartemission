@@ -22,12 +22,23 @@
 #  4     80-90 truck with muffler orange
 #  5     90-up severe: pneumatic drill, artillery,  red
 
+# Peter vd Voorn:
+# Voor het categoriseren van de meetwaarden kunnen we het beste beginnen bij de 20 dB(A).
+# De hoogte waarde zal 95 dB(A) zijn. Bijvoorbeeld een vogel van heel dichtbij.
+# Je kunt dit nu gewoon lineair verdelen in 5 categorieen. Ieder 15 dB. Het betreft buiten meetwaarden.
+# 20 fluister stil
+# 35 rustige woonwijk in een stad
+# 50 drukke woonwijk in een stad
+# 65 wonen op korte afstand van het spoor
+# 80 live optreden van een band aan het einde van het publieksdeel. Praten is mogelijk.
+# 95 live optreden van een band midden op een plein. Praten is onmogelijk.
+
 -->
             <!-- A FeatureTypeStyle for rendering points -->
             <FeatureTypeStyle>
                 <Rule>
-                    <Name>0 - 20 dB(A)</Name>
-                    <Title>0 - 20 dB(A)</Title>
+                    <Name>20-35 dB(A) - Stil</Name>
+                    <Title>20-35 dB(A)- Stil</Title>
                     <ogc:Filter>
                         <ogc:PropertyIsEqualTo>
                             <ogc:PropertyName>sample_value</ogc:PropertyName>
@@ -52,8 +63,8 @@
                     </PointSymbolizer>
                 </Rule>
                 <Rule>
-                    <Name>20-40 dB(A)</Name>
-                    <Title>20-40 dB(A)</Title>
+                    <Name>35-50 dB(A) - Rustige woonwijk</Name>
+                    <Title>35-50 dB(A)- Rustige woonwijk</Title>
                     <ogc:Filter>
                         <ogc:PropertyIsEqualTo>
                             <ogc:PropertyName>sample_value</ogc:PropertyName>
@@ -77,8 +88,8 @@
                     </PointSymbolizer>
                 </Rule>
                 <Rule>
-                    <Name>40-80 dB(A)</Name>
-                    <Title>40-80 dB(A)</Title>
+                    <Name>50-65 dB(A) - Drukke woonwijk</Name>
+                    <Title>50-65 dB(A) - Drukke woonwijk</Title>
                     <ogc:Filter>
                         <ogc:PropertyIsEqualTo>
                              <ogc:PropertyName>sample_value</ogc:PropertyName>
@@ -102,8 +113,8 @@
                     </PointSymbolizer>
                 </Rule>
                 <Rule>
-                    <Name>80-90 dB(A)</Name>
-                    <Title>80-90 dB(A)</Title>
+                    <Name>65-80 dB(A) - Bij spoor</Name>
+                    <Title>65-80 dB(A)- Bij spoor</Title>
                     <ogc:Filter>
                         <ogc:PropertyIsEqualTo>
                             <ogc:PropertyName>sample_value</ogc:PropertyName>
@@ -127,8 +138,8 @@
                     </PointSymbolizer>
                 </Rule>
                 <Rule>
-                    <Name>90+ dB(A)</Name>
-                    <Title>90+ dB(A)</Title>
+                    <Name>80-90 dB(A) - Rockband</Name>
+                    <Title>80-90 dB(A) - Rockband</Title>
                      <ogc:Filter>
                         <ogc:PropertyIsEqualTo>
                              <ogc:PropertyName>sample_value</ogc:PropertyName>
