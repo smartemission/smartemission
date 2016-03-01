@@ -197,7 +197,7 @@ def convert_none(value, json_obj, name):
 def calc_audio_level(db):
     levels = [20, 35, 50, 65, 80, 95]
     level_num = 1
-    for i in range(0, len(levels)-1):
+    for i in range(0, len(levels)):
         if db > levels[i]:
             level_num = i + 1
 
@@ -289,7 +289,7 @@ def convert_audio_avg_max(value, json_obj, name):
 
 
     # Determine octave nr from var name
-    json_obj['t_audiolevel'] = calc_audio_level(band_avg)
+    json_obj['t_audiolevel'] = calc_audio_level(json_obj['t_audiomax'])
     print 'Unit %s - %s band_db=%f avg_db=%d level=%d' % (json_obj['p_unitserialnumber'], name, band_avg, json_obj['t_audiomax'], json_obj['t_audiolevel'] )
     return band_avg
 
