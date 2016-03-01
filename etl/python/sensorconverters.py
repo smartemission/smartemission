@@ -182,16 +182,36 @@ def convert_none(value, json_obj, name):
 #  3     40-80 up to noisy class, alarm clock, police whistle
 #  4     80-90 truck with muffler
 #  5     90-up severe: pneumatic drill, artillery,
-def calc_audio_level(max_db):
-    levels = [0, 20, 40, 80, 90]
+#
+# Peter vd Voorn:
+# Voor het categoriseren van de meetwaarden kunnen we het beste beginnen bij de 20 dB(A).
+# De hoogte waarde zal 95 dB(A) zijn. Bijvoorbeeld een vogel van heel dichtbij.
+# Je kunt dit nu gewoon lineair verdelen in 5 categorieen. Ieder 15 dB. Het betreft buiten meetwaarden.
+# 20 fluister stil
+# 35 rustige woonwijk in een stad
+# 50 drukke woonwijk in een stad
+# 65 wonen op korte afstand van het spoor
+# 80 live optreden van een band aan het einde van het publieksdeel. Praten is mogelijk.
+# 95 live optreden van een band midden op een plein. Praten is onmogelijk.
+def calc_audio_level(db):
+    levels = [20, 35, 50, 65, 80, 95]
     level_num = 1
     for i in range(0, len(levels)-1):
-        if max_db > levels[i]:
+        if db > levels[i]:
             level_num = i + 1
 
     return level_num
 
 # Converts audio var and populates virtual max value vars
+# Logaritmisch optellen van de waarden per frequentieband voor het verkrijgen van de totaalwaarde:
+#
+# 10^(waarde/10)
+# En dat voor de waarden van alle frequenties en bij elkaar tellen.
+# Daar de log van en x10
+#
+# Normaal tellen wij op van 31,5 Hz tot 8 kHz. In totaal 9 oktaafanden. 31,5  63  125  250  500  1000  2000  4000 en 8000 Hz
+#
+# Of 27   1/3 oktaafbanden: 25, 31.5, 40, 50, 63, 80, enz
 def convert_audio_max(value, json_obj, name):
     # For each audio observation:
     # decode into 3 bands (0,1,2)
@@ -204,7 +224,7 @@ def convert_audio_max(value, json_obj, name):
 
     band_max = 0
     band_num = 0
-    for i in range(0, len(bands)-1):
+    for i in range(0, len(bands)):
         if band_max < bands[i] < 255:
             band_max = bands[i]
             band_num = i
@@ -224,6 +244,53 @@ def convert_audio_max(value, json_obj, name):
 
     return band_max
 
+# Converts audio var and populates average max
+# Logaritmisch optellen van de waarden per frequentieband voor het verkrijgen van de totaalwaarde:
+#
+# 10^(waarde/10)
+# En dat voor de waarden van alle frequenties en bij elkaar tellen.
+# Daar de log van en x10
+#
+# Normaal tellen wij op van 31,5 Hz tot 8 kHz. In totaal 9 oktaafanden. 31,5  63  125  250  500  1000  2000  4000 en 8000 Hz
+#
+# Of 27   1/3 oktaafbanden: 25, 31.5, 40, 50, 63, 80, enz
+def convert_audio_avg_max(value, json_obj, name):
+    # For each audio observation:
+    # decode into 3 bands (0,1,2)
+    # determine max of these  bands
+    # determine if this is greater than current t_audiomax
+    # determine audio_level (1-5) from current t_audiomax
+
+    # Extract values for bands 0-2
+    bands = [value & 255, (value >> 8) & 255, (value >> 16) & 255]
+
+    band_avg = 0
+    for i in range(0, len(bands)):
+        band_avg += bands[i]
+        # print '%s : band[%d]=%d band_avg=%d' %(name, i, bands[i], band_avg)
+
+    band_avg /= 3
+    # print '%s : avg=%d' %(name, band_avg)
+
+    if band_avg == 0:
+        return None
+
+    # Initialize  max value to first average calc
+    if 't_audiomax' not in json_obj:
+        json_obj['t_audiomax'] = band_avg
+        json_obj['t_audiomax_total'] = band_avg
+        json_obj['t_audiomax_cnt'] = 1
+    else:
+        json_obj['t_audiomax_cnt'] += 1
+        json_obj['t_audiomax_total'] += band_avg
+        json_obj['t_audiomax'] = json_obj['t_audiomax_total'] / json_obj['t_audiomax_cnt']
+
+
+    # Determine octave nr from var name
+    json_obj['t_audiolevel'] = calc_audio_level(band_avg)
+    # print 'Unit %s - db=%d level=%d' % (json_obj['p_unitserialnumber'], band_avg, json_obj['t_audiolevel'] )
+    return band_avg
+
 CONVERTERS = {
     's_co': ppb_co_to_ugm3,
     's_co2': ppb_co2_to_ppm,
@@ -235,17 +302,28 @@ CONVERTERS = {
     's_latitude': convert_coord,
     's_longitude': convert_coord,
     'time': convert_timestamp,
-    't_audio0': convert_audio_max,
-    't_audioplus1': convert_audio_max,
-    't_audioplus2': convert_audio_max,
-    't_audioplus3': convert_audio_max,
-    't_audioplus4': convert_audio_max,
-    't_audioplus5': convert_audio_max,
-    't_audioplus6': convert_audio_max,
-    't_audioplus7': convert_audio_max,
-    't_audioplus8': convert_audio_max,
-    't_audioplus9': convert_audio_max,
-    't_audioplus10': convert_audio_max,
+    # 't_audio0': convert_audio_max,
+    # 't_audioplus1': convert_audio_max,
+    # 't_audioplus2': convert_audio_max,
+    # 't_audioplus3': convert_audio_max,
+    # 't_audioplus4': convert_audio_max,
+    # 't_audioplus5': convert_audio_max,
+    # 't_audioplus6': convert_audio_max,
+    # 't_audioplus7': convert_audio_max,
+    # 't_audioplus8': convert_audio_max,
+    # 't_audioplus9': convert_audio_max,
+    # 't_audioplus10': convert_audio_max,
+    't_audio0': convert_audio_avg_max,
+    't_audioplus1': convert_audio_avg_max,
+    't_audioplus2': convert_audio_avg_max,
+    't_audioplus3': convert_audio_avg_max,
+    't_audioplus4': convert_audio_avg_max,
+    't_audioplus5': convert_audio_avg_max,
+    't_audioplus6': convert_audio_avg_max,
+    't_audioplus7': convert_audio_avg_max,
+    't_audioplus8': convert_audio_avg_max,
+    't_audioplus9': convert_audio_avg_max,
+    't_audioplus10': convert_audio_avg_max,
     # These are assigned already in t_audioplusN conversions
     't_audiomax': convert_none,
     't_audiomax_octave': convert_none,
