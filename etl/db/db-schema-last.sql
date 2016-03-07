@@ -93,3 +93,9 @@ CREATE VIEW smartem_rt.v_last_measurements_audio_max AS
     name, value_raw, value_stale, time AT TIME ZONE 'GMT' AS sample_time, value as sample_value, point, gid, unique_id
   FROM smartem_rt.last_device_output WHERE value_stale = 0 AND name = 't_audiolevel' ORDER BY device_id, gid DESC;
 
+DROP VIEW IF EXISTS smartem_rt.v_last_measurements_audio_avg;
+CREATE VIEW smartem_rt.v_last_measurements_audio_avg AS
+  SELECT device_id, device_name, id, label, unit,
+    name, value_raw, value_stale, time AT TIME ZONE 'GMT' AS sample_time, value as sample_value, point, gid, unique_id
+  FROM smartem_rt.last_device_output WHERE value_stale = 0 AND name = 'v_audiolevel' ORDER BY device_id, gid DESC;
+

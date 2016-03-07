@@ -1135,10 +1135,10 @@ Heron.options.map.layers = [
     ),
 
     /*
-     * Smart Emission: Meteo: Current Audio/Noise Level
+     * Smart Emission: Audio: Current Audio/Noise Level
      */
     new OpenLayers.Layer.WMS(
-        "Smart Emission - Current Audio Level",
+        "Smart Emission - Current Audio Level Average",
         Heron.scratch.urls.SOSPILOT_OWS,
         {layers: "last_measurements_au_level_smartem", format: "image/png", transparent: true},
         {
@@ -2267,7 +2267,7 @@ Heron.options.layertree.tree = [
     },
     {
         text: 'Smart Emission - Audio', expanded: true, children: [
-        {nodeType: "gx_layer", layer: "Smart Emission - Current Audio Level"}
+        {nodeType: "gx_layer", layer: "Smart Emission - Current Audio Level Average"}
     ]
     }
     //{
