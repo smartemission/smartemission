@@ -79,7 +79,7 @@ $(document).ready(function () {
                             // Is it a audio?
                             audio.push(component);
 
-                            if (label == 'Audio/Noise Level 1-5') {
+                            if (label == 'Average Audio/Noise Level 1-5') {
                                 component['offset'] = parseInt(component.lastValue.value) * 20 - 10;
                             }
                         }
