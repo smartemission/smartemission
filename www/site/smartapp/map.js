@@ -36,7 +36,7 @@ $(document).ready(function () {
     // Split into categories for ease of templating: gasses, meteo and audio
     var gasLabels = 'CO2,CO,NO2,O3,NH3';
     var meteoLabels = 'Temperatuur,Luchtdruk,Luchtvochtigheid';
-    var audioLabels = 'Audio Maxvalue,Audio/Noise Level 1-5';
+    var audioLabels = 'Audio Average Value,Average Audio/Noise Level 1-5';
 
     // First get stations JSON object via REST
     $.getJSON(stationsUrl, function (data) {

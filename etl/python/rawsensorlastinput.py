@@ -69,94 +69,82 @@ class RawSensorLastInput(HttpInput):
                 'unit': 'Procent'
             },
             {
-                'name': 't_audio0',
+                'name': 'v_audio0',
                 'id': 8,
                 'label': 'Audio 0-40Hz',
                 'unit': 'dB(A)'
             },
             {
-                'name': 't_audioplus1',
+                'name': 'v_audioplus1',
                 'id': 9,
                 'label': 'Audio 40-80Hz',
                 'unit': 'dB(A)'
             },
             {
-                'name': 't_audioplus2',
+                'name': 'v_audioplus2',
                 'id': 10,
                 'label': 'Audio 80-160Hz',
                 'unit': 'dB(A)'
             },
             {
-                'name': 't_audioplus3',
+                'name': 'v_audioplus3',
                 'id': 11,
                 'label': 'Audio 160-315Hz',
                 'unit': 'dB(A)'
             },
             {
-                'name': 't_audioplus4',
+                'name': 'v_audioplus4',
                 'id': 12,
                 'label': 'Audio 315-630Hz',
                 'unit': 'dB(A)'
             },
             {
-                'name': 't_audioplus5',
+                'name': 'v_audioplus5',
                 'id': 13,
                 'label': 'Audio 630Hz-1.25kHz',
                 'unit': 'dB(A)'
             },
             {
-                'name': 't_audioplus6',
+                'name': 'v_audioplus6',
                 'id': 14,
                 'label': 'Audio 1.25-2.5kHz',
                 'unit': 'dB(A)'
             },
             {
-                'name': 't_audioplus7',
+                'name': 'v_audioplus7',
                 'id': 15,
                 'label': 'Audio 2.5-5kHz',
                 'unit': 'dB(A)'
             },
             {
-                'name': 't_audioplus8',
+                'name': 'v_audioplus8',
                 'id': 16,
                 'label': 'Audio 5-10kHz',
                 'unit': 'dB(A)'
             },
             {
-                'name': 't_audioplus9',
+                'name': 'v_audioplus9',
                 'id': 17,
                 'label': 'Audio 10-20kHz',
                 'unit': 'dB(A)'
             },
             {
-                'name': 't_audioplus10',
+                'name': 'v_audioplus10',
                 'id': 18,
                 'label': 'Audio 20-25kHz',
                 'unit': 'dB(A)'
             },
             # Virtual outputs, i.e. added here for ease of interpretation
             {
-                'name': 't_audiomax',
+                'name': 'v_audioavg',
                 'id': 19,
-                'label': 'Audio Maxvalue',
+                'label': 'Audio Average Value',
                 'unit': 'dB(A)'
             },
             {
-                'name': 't_audiomax_octave',
-                'id': 20,
-                'label': 'Audio Maxvalue Octave',
-                'unit': 'int'
-            },
-            {
-                'name': 't_audiomax_octband',
-                'id': 21,
-                'label': 'Audio Maxvalue Band in Octave',
-                'unit': 'int'
-            },
-            {
-                'name': 't_audiolevel',
+                'name': 'v_audiolevel',
                 'id': 22,
-                'label': 'Audio/Noise Level 1-5',
+                'label': 'Average Audio/Noise Level 1-5',
                 'unit': 'int'
             }
         ]

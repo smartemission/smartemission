@@ -204,7 +204,7 @@ def calc_audio_level(db):
     return level_num
 
 # Converts audio var and populates virtual max value vars
-# NB not used: now taking average of max values, see convert_audio_avg_max()
+# NB not used: now taking average of max values, see convert_audio_avg()
 def convert_audio_max(value, json_obj, name):
     # For each audio observation:
     # decode into 3 bands (0,1,2)
@@ -237,7 +237,7 @@ def convert_audio_max(value, json_obj, name):
 
     return band_max
 
-# Converts audio var and populates average max
+# Converts audio var and populates average
 # Logaritmisch optellen van de waarden per frequentieband voor het verkrijgen van de totaalwaarde:
 #
 # 10^(waarde/10)
@@ -247,29 +247,33 @@ def convert_audio_max(value, json_obj, name):
 # Normaal tellen wij op van 31,5 Hz tot 8 kHz. In totaal 9 oktaafanden. 31,5  63  125  250  500  1000  2000  4000 en 8000 Hz
 #
 # Of 27   1/3 oktaafbanden: 25, 31.5, 40, 50, 63, 80, enz
-def convert_audio_avg_max(value, json_obj, name):
+def convert_audio_avg(value, json_obj, name):
     # For each audio observation:
     # decode into 3 bands (0,1,2)
-    # determine max of these  bands
-    # determine if this is greater than current t_audiomax
-    # determine audio_level (1-5) from current t_audiomax
+    # determine average of these  bands
+    # determine overall average of all average bands
 
     # Extract values for bands 0-2
     bands = [float(value & 255), float((value >> 8) & 255), float((value >> 16) & 255)]
 
+    # determine average of these 3 bands
     band_avg = 0
     band_cnt = 0
     for i in range(0, len(bands)):
         band_val  = bands[i]
+        # outliers
         if band_val < 1 or band_val > 150:
             continue
         band_cnt += 1
+        
+        # convert band value Decibel to Bel and then get "real" value (power 10)
         band_avg += math.pow(10, band_val / 10)
         # print '%s : band[%d]=%f band_avg=%f' %(name, i, bands[i], band_avg)
 
     if band_cnt == 0:
         return None
-
+    
+    # Take average of "real" values and convert back to Bel via log10 and Decibel via *10
     band_avg = math.log10(band_avg / float(band_cnt)) * 10.0
 
     # print '%s : avg=%d' %(name, band_avg)
@@ -277,20 +281,19 @@ def convert_audio_avg_max(value, json_obj, name):
     if band_avg < 1 or band_avg > 150:
         return None
 
-    # Initialize  max value to first average calc
-    if 't_audiomax' not in json_obj:
-        json_obj['t_audiomax'] = band_avg
-        json_obj['t_audiomax_total'] = math.pow(10, band_avg / 10)
-        json_obj['t_audiomax_cnt'] = 1
+    # Initialize  average value to first average calc
+    if 'v_audioavg' not in json_obj:
+        json_obj['v_audioavg'] = band_avg
+        json_obj['v_audioavg_total'] = math.pow(10, band_avg / 10)
+        json_obj['v_audioavg_cnt'] = 1
     else:
-        json_obj['t_audiomax_cnt'] += 1
-        json_obj['t_audiomax_total'] += math.pow(10, band_avg / 10)
-        json_obj['t_audiomax'] = int(round(math.log10(json_obj['t_audiomax_total'] / json_obj['t_audiomax_cnt']) * 10.0))
-
+        json_obj['v_audioavg_cnt'] += 1
+        json_obj['v_audioavg_total'] += math.pow(10, band_avg / 10)
+        json_obj['v_audioavg'] = int(round(math.log10(json_obj['v_audioavg_total'] / json_obj['v_audioavg_cnt']) * 10.0))
 
     # Determine octave nr from var name
-    json_obj['t_audiolevel'] = calc_audio_level(json_obj['t_audiomax'])
-    print 'Unit %s - %s band_db=%f avg_db=%d level=%d' % (json_obj['p_unitserialnumber'], name, band_avg, json_obj['t_audiomax'], json_obj['t_audiolevel'] )
+    json_obj['v_audiolevel'] = calc_audio_level(json_obj['v_audioavg'])
+    print 'Unit %s - %s band_db=%f avg_db=%d level=%d' % (json_obj['p_unitserialnumber'], name, band_avg, json_obj['v_audioavg'], json_obj['v_audiolevel'] )
     return band_avg
 
 CONVERTERS = {
@@ -315,22 +318,38 @@ CONVERTERS = {
     # 't_audioplus8': convert_audio_max,
     # 't_audioplus9': convert_audio_max,
     # 't_audioplus10': convert_audio_max,
-    't_audio0': convert_audio_avg_max,
-    't_audioplus1': convert_audio_avg_max,
-    't_audioplus2': convert_audio_avg_max,
-    't_audioplus3': convert_audio_avg_max,
-    't_audioplus4': convert_audio_avg_max,
-    't_audioplus5': convert_audio_avg_max,
-    't_audioplus6': convert_audio_avg_max,
-    't_audioplus7': convert_audio_avg_max,
-    't_audioplus8': convert_audio_avg_max,
-    't_audioplus9': convert_audio_avg_max,
-    't_audioplus10': convert_audio_avg_max,
+    't_audio0': convert_audio_max,
+    't_audioplus1': convert_audio_max,
+    't_audioplus2': convert_audio_max,
+    't_audioplus3': convert_audio_max,
+    't_audioplus4': convert_audio_max,
+    't_audioplus5': convert_audio_max,
+    't_audioplus6': convert_audio_max,
+    't_audioplus7': convert_audio_max,
+    't_audioplus8': convert_audio_max,
+    't_audioplus9': convert_audio_max,
+    't_audioplus10': convert_audio_max,
+    'v_audio0': convert_audio_avg,
+    'v_audioplus1': convert_audio_avg,
+    'v_audioplus2': convert_audio_avg,
+    'v_audioplus3': convert_audio_avg,
+    'v_audioplus4': convert_audio_avg,
+    'v_audioplus5': convert_audio_avg,
+    'v_audioplus6': convert_audio_avg,
+    'v_audioplus7': convert_audio_avg,
+    'v_audioplus8': convert_audio_avg,
+    'v_audioplus9': convert_audio_avg,
+    'v_audioplus10': convert_audio_avg,
     # These are assigned already in t_audioplusN conversions
     't_audiomax': convert_none,
     't_audiomax_octave': convert_none,
     't_audiomax_octband': convert_none,
-    't_audiolevel': convert_none
+    't_audiolevel': convert_none,
+    # These are assigned already in t_audioplusN conversions
+     'v_audioavg': convert_none,
+     'v_audioavg_octave': convert_none,
+     'v_audioavg_octband': convert_none,
+     'v_audiolevel': convert_none
 }
 
 def convert(json_obj, name):
