@@ -299,9 +299,9 @@ class RawSensorLastInput(HttpInput):
                 if record['value'] is None:
                     continue
 
-                if name == 't_audiolevel':
-                    # highest dB value
-                    record['value_raw'] = json_obj['t_audiomax']
+                if name == 'v_audiolevel':
+                    # average dB value as raw value
+                    record['value_raw'] = json_obj['v_audioavg']
 
                 result.append(record)
 
