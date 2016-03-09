@@ -120,7 +120,8 @@ Heron.scratch.urls = {
     MAP5_WMS: 'http://s.map5.nl/map/gast/service?',
     OPENBASISKAART_TMS: 'http://openbasiskaart.nl/mapcache/tms/',
     RO_WMS: 'http://afnemers.ruimtelijkeplannen.nl/afnemers/services?',
-    KNMI_ACT_10MIN: 'https://data.knmi.nl/wms/cgi-bin/wms.cgi?%26source%3D%2FActuele10mindataKNMIstations%2F1%2Fnoversion%2F2014%2F11%2F04%2FKMDS__OPER_P___10M_OBS_L2%2Enc%26'
+    // KNMI_ACT_10MIN: 'https://data.knmi.nl/wms/cgi-bin/wms.cgi?%26source%3D%2FActuele10mindataKNMIstations%2F1%2Fnoversion%2F2014%2F11%2F04%2FKMDS__OPER_P___10M_OBS_L2%2Enc%26'
+    KNMI_INSPIRE_WMS: 'http://geoservices.knmi.nl/cgi-bin/inspireviewservice.cgi?DATASET=urn:xkdc:ds:nl.knmi::Actuele10mindataKNMIstations/1/'
 };
 
 Heron.PDOK.urls = {
@@ -425,7 +426,7 @@ Heron.options.map.layers = [
      */
     new OpenLayers.Layer.WMS(
         "KNMI - Current Temperatures",
-        Heron.scratch.urls.KNMI_ACT_10MIN,
+        Heron.scratch.urls.KNMI_INSPIRE_WMS,
         {layers: "ta", format: "image/png", transparent: true},
         {
             isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
@@ -438,7 +439,7 @@ Heron.options.map.layers = [
      */
     new OpenLayers.Layer.WMS(
         "KNMI - Current Wind Forces",
-        Heron.scratch.urls.KNMI_ACT_10MIN,
+        Heron.scratch.urls.KNMI_INSPIRE_WMS,
         {layers: "ff", format: "image/png", transparent: true},
         {
             isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
@@ -451,8 +452,21 @@ Heron.options.map.layers = [
      */
     new OpenLayers.Layer.WMS(
         "KNMI - Current Wind Directions",
-        Heron.scratch.urls.KNMI_ACT_10MIN,
+        Heron.scratch.urls.KNMI_INSPIRE_WMS,
         {layers: "dd", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize'
+        }
+    ),
+
+    /*
+     * KNMI: Actual Wind Vectors (Forces+Directions)
+     */
+    new OpenLayers.Layer.WMS(
+        "KNMI - Current Wind Vectors",
+        Heron.scratch.urls.KNMI_INSPIRE_WMS,
+        {layers: "ff_dd", format: "image/png", transparent: true},
         {
             isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
             featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize'
@@ -464,7 +478,7 @@ Heron.options.map.layers = [
      */
     new OpenLayers.Layer.WMS(
         "KNMI - Current Air Pressures",
-        Heron.scratch.urls.KNMI_ACT_10MIN,
+        Heron.scratch.urls.KNMI_INSPIRE_WMS,
         {layers: "pp", format: "image/png", transparent: true},
         {
             isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
@@ -1204,7 +1218,7 @@ Heron.options.map.layers = [
         }
     ),
 
-        /*
+    /*
      * RIVM: APS2RASTER TEST PM10
      */
     new OpenLayers.Layer.WMS(
@@ -1226,7 +1240,7 @@ Heron.options.map.layers = [
         }
     ),
 
-      /* END APS2RASTER */
+    /* END APS2RASTER */
 
 
     /* START GEONOVUM WEATHER */
@@ -2001,7 +2015,7 @@ Heron.options.map.layers = [
             opacity: 0.7
         }
     ),
-    /** NGSI10 Entity Layer from Fiware Orion Context Broker. */
+/** NGSI10 Entity Layer from Fiware Orion Context Broker. */
     new OpenLayers.Layer.Vector('Fiware Entities', {
         strategies: [new OpenLayers.Strategy.Fixed()],
         visibility: false,
@@ -2260,14 +2274,18 @@ Heron.options.layertree.tree = [
 
     {
         text: 'Smart Emission - Meteo', expanded: true, children: [
-        {nodeType: "gx_layer", layer: "Smart Emission - Current Temperature"},
-        {nodeType: "gx_layer", layer: "Smart Emission - Current Barometer"},
-        {nodeType: "gx_layer", layer: "Smart Emission - Current Humidity"}
+        {nodeType: "gx_layer", layer: "Smart Emission - Current Temperature", text: "Current Temperature"},
+        {nodeType: "gx_layer", layer: "Smart Emission - Current Barometer", text: "Current Air Pressure"},
+        {nodeType: "gx_layer", layer: "Smart Emission - Current Humidity", text: "Current Humidity"}
     ]
     },
     {
         text: 'Smart Emission - Audio', expanded: true, children: [
-        {nodeType: "gx_layer", layer: "Smart Emission - Current Audio Level Average"}
+        {
+            nodeType: "gx_layer",
+            layer: "Smart Emission - Current Audio Level Average",
+            text: "Current Audio Level Average"
+        }
     ]
     }
     //{
@@ -2282,15 +2300,16 @@ Heron.options.layertree.tree = [
     //    {nodeType: "gx_layer", layer: "Fiware Entities", text: "Fiware Entities (Geonovum)"}
     //]
     //},
-    //{
-    //    text: 'KNMI - Meteorology', expanded: false, children: [
-    //    {nodeType: "gx_layer", layer: "KNMI - Current Temperatures"},
-    //    {nodeType: "gx_layer", layer: "KNMI - Current Wind Forces"},
-    //    {nodeType: "gx_layer", layer: "KNMI - Current Wind Directions"},
-    //    {nodeType: "gx_layer", layer: "KNMI - Current Air Pressures"},
-    //    {nodeType: "gx_layer", layer: "KNMI - Rain Radar (Color)"}
-    //]
-    //}
+    , {
+        text: 'KNMI - Meteorology', expanded: false, children: [
+            {nodeType: "gx_layer", layer: "KNMI - Current Temperatures"},
+            {nodeType: "gx_layer", layer: "KNMI - Current Wind Forces"},
+            {nodeType: "gx_layer", layer: "KNMI - Current Wind Directions"},
+            {nodeType: "gx_layer", layer: "KNMI - Current Wind Vectors"},
+            {nodeType: "gx_layer", layer: "KNMI - Current Air Pressures"},
+            {nodeType: "gx_layer", layer: "KNMI - Rain Radar (Color)"}
+        ]
+    }
     //{
     //    text: 'Kadaster', expanded: false, children: [
     //
