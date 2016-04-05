@@ -13,8 +13,8 @@ Contents:
    architecture.rst
    data.rst
    services.rst
-   administration.rst
    installation.rst
+   administration.rst
    dissemination.rst
    contact.rst
    links.rst
