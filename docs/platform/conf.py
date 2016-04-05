@@ -230,7 +230,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'smartplat', u'Smart Emission Data Platform Documentation',
+    ('index', 'smartplatform', u'Smart Emission Data Platform Documentation',
      [u'Thijs Brentjens, Just van den Broecke, Michel Grothe'], 1)
 ]
 
