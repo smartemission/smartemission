@@ -10,7 +10,3 @@ All development is done via GitHub: see https://github.com/Geonovum/smartemissio
 Developers are Thijs Brentjens and Just van den Broecke
 
 Contact Michel Grothe at Geonovum via email at michel AT geonovum.nl
-
-
-
-

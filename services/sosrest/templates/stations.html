@@ -13,6 +13,7 @@
             <th>Station Id</th>
             <th>Station Naam</th>
             <th>Laatste Update</th>
+            <th>Inactief ?</th>
             <th>Laatste Observaties</th>
         </tr>
         </thead>
@@ -26,6 +27,9 @@
                 </td>
                 <td>
                     {{ station['last_update'] }}
+                </td>
+                <td>
+                    {{ station['value_stale'] }}
                 </td>
                 <td>
                     <a href="{{ url_for('timeseries') }}?station={{ station['device_id'] }}&format=html">Observaties &gt;&gt;</a>
