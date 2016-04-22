@@ -13,3 +13,5 @@ Note that full paths are required.
 
 	cd test/1_copystd
 	docker run -v `pwd`:`pwd` -w `pwd`  -t -i geonovum/stetl -c etl.cfg   
+
+Many Stetl configs require a connection to PostGIS.

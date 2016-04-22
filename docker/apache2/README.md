@@ -10,7 +10,7 @@ docker build -t geonovum/apache2 .
 
 ## Running
 
-     docker run -p 2222:22 -p 8081:80 -t -i  geonovum/apache2
+     docker run -p 2222:22 -p 80:80 -t -i  geonovum/apache2
 
 This runs the image and exposes ports 2222 and 8081 mappoing these to the standard
 ports 22 and 80 within the container.

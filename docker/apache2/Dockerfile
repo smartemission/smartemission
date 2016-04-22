@@ -6,7 +6,7 @@ MAINTAINER just@justobjects.nl
 RUN export DEBIAN_FRONTEND=noninteractive TERM=linux && \
   echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && \
   apt-get update && \
-  apt-get upgrade
+  apt-get -y upgrade
 
 RUN apt-get install -y openssh-server apache2 supervisor
 
