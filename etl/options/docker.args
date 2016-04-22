@@ -2,8 +2,8 @@
 
 raw_device_url=http://whale.citygis.nl/sensors/v1
 
-# pg_host=172.17.0.1
-pg_host=postgis2
+# postgis docker container IP is mapped by docker via --link option
+pg_host=postgis
 pg_user=docker
 pg_password=docker
 pg_port=5432

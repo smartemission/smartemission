@@ -333,3 +333,19 @@ PostGIS from Kartoza, see https://hub.docker.com/r/kartoza/postgis/ and https://
     template_postgis | postgres | UTF8      | C       | C     |
    (5 rows)
 
+ETL - Last Measurements
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Uses the ``geonovum/stetl`` image with Stetl config from GitHub.  ::
+
+   # build stetl image
+   cd ~/git/docker/stetl
+   sudo docker build -t geonovum/stetl .
+
+   # run last measurements ETL, linking to postgis image
+   cd ~/git/etl
+   ./last.sh
+
+   # may first do ./db-init.sh to create DB schema and tables
+
+
