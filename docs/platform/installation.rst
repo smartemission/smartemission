@@ -209,6 +209,53 @@ Then access Apache from local system via ``localhost:8081``.
 
    *Access Apache running with Docker externally*
 
+Same for Stetl, build and test: ::
+
+   $ cd ~/git/docker/stetl
+   $ sudo docker build -t geonovum/stetl .
+   $ cd test/1_copystd
+   $ sudo docker run -v `pwd`:`pwd` -w `pwd`  -t -i geonovum/stetl -c etl.cfg
+
+   2016-04-22 19:09:29,705 util INFO Found cStringIO, good!
+   2016-04-22 19:09:29,774 util INFO Found lxml.etree, native XML parsing, fabulous!
+   2016-04-22 19:09:29,926 util INFO Found GDAL/OGR Python bindings, super!!
+   2016-04-22 19:09:29,952 main INFO Stetl version = 1.0.9rc3
+   2016-04-22 19:09:29,961 ETL INFO INIT - Stetl version is 1.0.9rc3
+   2016-04-22 19:09:29,965 ETL INFO Config/working dir = /home/vagrant/git/docker/stetl/test/1_copystd
+   2016-04-22 19:09:29,966 ETL INFO Reading config_file = etl.cfg
+   2016-04-22 19:09:29,968 ETL INFO START
+   2016-04-22 19:09:29,968 util INFO Timer start: total ETL
+   2016-04-22 19:09:29,969 chain INFO Assembling Chain: input_xml_file|output_std...
+   2016-04-22 19:09:29,987 input INFO cfg = {'class': 'inputs.fileinput.XmlFileInput', 'file_path': 'input/cities.xml'}
+   2016-04-22 19:09:29,993 fileinput INFO file_list=['input/cities.xml']
+   2016-04-22 19:09:29,995 output INFO cfg = {'class': 'outputs.standardoutput.StandardXmlOutput'}
+   2016-04-22 19:09:29,996 chain INFO Running Chain: input_xml_file|output_std
+   2016-04-22 19:09:29,996 fileinput INFO Read/parse for start for file=input/cities.xml....
+   2016-04-22 19:09:30,008 fileinput INFO Read/parse ok for file=input/cities.xml
+   2016-04-22 19:09:30,014 fileinput INFO all files done
+   <?xml version='1.0' encoding='utf-8'?>
+   <cities>
+       <city>
+           <name>Amsterdam</name>
+           <lat>52.4</lat>
+           <lon>4.9</lon>
+       </city>
+       <city>
+           <name>Bonn</name>
+           <lat>50.7</lat>
+           <lon>7.1</lon>
+       </city>
+       <city>
+           <name>Rome</name>
+           <lat>41.9</lat>
+           <lon>12.5</lon>
+       </city>
+   </cities>
+
+   2016-04-22 19:09:30,024 chain INFO DONE - 1 rounds - chain=input_xml_file|output_std
+   2016-04-22 19:09:30,024 util INFO Timer end: total ETL time=0.0 sec
+   2016-04-22 19:09:30,026 ETL INFO ALL DONE
+
 Install Docker
 --------------
 
@@ -260,4 +307,29 @@ Easiest via Python ``pip``. ::
 
 See also CLI utils for ``docker-compose``: https://docs.docker.com/v1.5/compose/cli/
 Now our system is ready to roll out Docker images.
+
+Docker Images
+-------------
+
+PostGIS
+~~~~~~~
+
+PostGIS from Kartoza, see https://hub.docker.com/r/kartoza/postgis/ and https://github.com/kartoza/docker-postgis  ::
+
+   $ sudo docker pull kartoza/postgis:9.4-2.1
+   $ sudo docker run --name "postgis" -p 5432:5432 -d -t kartoza/postgis:9.4-2.1
+   $ sudo apt-get install postgresql-client-9.3
+   $ psql -h localhost -U docker  -l
+   Password for user docker: (also 'docker')
+                                    List of databases
+          Name       |  Owner   | Encoding  | Collate | Ctype |   Access privileges
+   ------------------+----------+-----------+---------+-------+-----------------------
+    gis              | docker   | UTF8      | C       | C     |
+    postgres         | postgres | SQL_ASCII | C       | C     |
+    template0        | postgres | SQL_ASCII | C       | C     | =c/postgres          +
+                     |          |           |         |       | postgres=CTc/postgres
+    template1        | postgres | SQL_ASCII | C       | C     | =c/postgres          +
+                     |          |           |         |       | postgres=CTc/postgres
+    template_postgis | postgres | UTF8      | C       | C     |
+   (5 rows)
 

@@ -2,11 +2,12 @@
 
 raw_device_url=http://whale.citygis.nl/sensors/v1
 
-pg_host=localhost
-pg_user=postgres
-pg_password=postgres
+# pg_host=172.17.0.1
+pg_host=postgis2
+pg_user=docker
+pg_password=docker
 pg_port=5432
-pg_database=sensors
+pg_database=gis
 pg_schema=smartem
 pg_schema_rt=smartem_rt
 
