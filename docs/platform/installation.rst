@@ -45,15 +45,17 @@ Local - Vagrant
 ---------------
 
 Docker can be run in various ways. On Linux it can be installed directly (see next). On Mac and Windows
-Docker needs to be run within a VM itself. On these platform `Docker Toolbox` needs to be installed. This
-basically installs a small (Linux) VM that runs in VirtualBox. Within this Linux VM the actual Docker Engine runs. A sort
+Docker needs to be run within a VM itself. On these
+platforms `Docker Toolbox <https://docs.docker.com/engine/installation/mac/>`_ needs to be installed. This
+basically installs a small (Linux) VM (with a ``boot2docker`` iso) that runs in VirtualBox.
+Within this Linux VM the actual Docker Engine runs. A sort
 of `Matroska` construction. Via local commandline tools like ``docker-machine`` and ``docker``, Docker images
 can be managed.
 
 However, the above setup creates some hard-to-solve issues when combining Docker images and especially when
 trying to use local storage and networking. Also the setup will be different than the actual deployment
 on the Fiware platform. For these reasons we will run a local standard Ubuntu VM via VirtualBox. On this VM
-we will install Docker, run tour images etc. To facilitate working with VirtualBox VMs we will
+we will install Docker, run our Docker images etc. To facilitate working with VirtualBox VMs we will
 use `Vagrant <https://www.vagrantup.com/>`_. Via Vagrant it is very easy to setup a "Ubuntu Box" and integrate this
 with the local environment. A further plus is that within the Ubuntu Box, the installation steps
 will (mostly) be identical to those on the Fiware platform.
@@ -61,7 +63,8 @@ will (mostly) be identical to those on the Fiware platform.
 Docker with Vagrant
 ~~~~~~~~~~~~~~~~~~~
 
-The following steps are performed after having `VirtualBox` and `Vagrant` installed. ::
+The following steps are performed after having `VirtualBox <https://www.virtualbox.org>`_
+and `Vagrant <https://www.vagrantup.com/>`_ installed. ::
 
    # Create a UbuntuBox
    $ vagrant init ubuntu/trusty64
@@ -70,7 +73,7 @@ The following steps are performed after having `VirtualBox` and `Vagrant` instal
    the comments in the Vagrantfile as well as documentation on
    `vagrantup.com` for more information on using Vagrant.
 
-This creates a default ``Vagrantfile`` within the directory of execution, here with mods:  ::
+This creates a default ``Vagrantfile`` within the directory of execution, here with some mods for port mapping:  ::
 
    # -*- mode: ruby -*-
    # vi: set ft=ruby :
@@ -144,9 +147,9 @@ This creates a default ``Vagrantfile`` within the directory of execution, here w
      # SHELL
    end
 
-Later we can tweak this file, in particular to integrate easily with the local host (Mac/Windows)
-environment, in particular directory (e.g. Dockerfiles from GitHub) and local ports (to test
-web services). Next, is starting up the Ubuntu Box (UB): ::
+Later we can modify `Vagrantfile` further, in particular to integrate with the local host (Mac/Windows)
+environment, in particular with our directories (e.g. Dockerfiles from GitHub) and local ports (to test
+web services). Next, we start up the Ubuntu Box (UB) with ``vagrant up``: ::
 
    $ vagrant up
 
@@ -174,7 +177,7 @@ We see that SSH port 22 is mapped to localhost:2222. Login to the box: ::
    # but easier is to use vagrant
    vagrant ssh
 
-Our local directory is also mounted in the UB: ::
+Our local directory is also automatically mounted in the UB so we can have access to our development files (in GitHub): ::
 
    vagrant@vagrant-ubuntu-trusty-64:~$ ls /vagrant/
    contrib  data  doc  git  Vagrantfile
@@ -183,13 +186,13 @@ Our local directory is also mounted in the UB: ::
    vagrant@vagrant-ubuntu-trusty-64:~$ ls /vagrant/git/docker
    apache2  boot2docker-fw.sh  postgis  stetl
 
-Within the UB we are on a standard Ubuntu commandline, running: ::
+Within the UB we are on a standard Ubuntu commandline, running a general Ubuntu upgrade first: ::
 
    $ sudo apt-get update
-   $ sudo apt-get -y install
+   $ sudo apt-get -y upgrade
 
-The next steps are standard Docker install (see next section). After that the following works.
-Getting easy access to your Dockerfiles, for example: ::
+The next steps are standard Docker install (see next section). After the setup is tested by building and running one of
+our Docker files. Getting access to our Dockerfiles is easy, for example: ::
 
    sudo ln -s /vagrant/git ~/git
    cd ~/git/docker/apache2
@@ -211,7 +214,6 @@ Install Docker
 
 This installation is for both the local Vagrant environment or on Fiware Ubuntu VM.
 See https://docs.docker.com/engine/installation/linux/ubuntulinux/.
-Install via Docker APT repo.
 
 Steps. ::
 
@@ -250,10 +252,12 @@ Steps. ::
    $ sudo docker rm -v $(sudo docker ps -a -q -f status=exited)
    $ sudo docker rmi $(sudo docker images -f "dangling=true" -q)
 
-Docker-compose. https://docs.docker.com/compose/install. Easiest via ``pip``. ::
+Install Docker-compose, for later combining Docker-images, see https://docs.docker.com/compose/install.
+Easiest via Python ``pip``. ::
 
     $ sudo apt-get install python-pip
     $ sudo pip install docker-compose
 
 See also CLI utils for ``docker-compose``: https://docs.docker.com/v1.5/compose/cli/
+Now our system is ready to roll out Docker images.
 
