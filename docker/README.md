@@ -1,6 +1,10 @@
 # Docker
 
-Below the Docker image recipes.
+Below the generic Docker image recipes. To make a standard UBuntu system ready for using
+Docker, run the bootstrap.sh script as a user with sudo-root rights (not root itself!).
+
+Each of the generic docker images is used by the ETL and services. Via volume mappings
+dynamic and configuration data is kept on the host.
 
 ## Shorthands
 

@@ -263,47 +263,15 @@ Install Docker
 This installation is for both the local Vagrant environment or on Fiware Ubuntu VM.
 See https://docs.docker.com/engine/installation/linux/ubuntulinux/.
 
-Steps. ::
+Steps are all done by executing the script https://github.com/Geonovum/smartemission/blob/master/docker/bootstrap.sh :
 
-   $ sudo apt-get update
-   $ sudo apt-get install apt-transport-https ca-certificates  # usually already installed
+.. literalinclude:: ../../docker/bootstrap.sh
+    :language: bash
 
-   # Add key
-   sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
-
-   # Add to repo by putting this line in /etc/apt/sources.list.d/docker.list
-   deb https://apt.dockerproject.org/repo ubuntu-trusty main
-
-   $ sudo apt-get update
-
-   # check we get from right repo
-   $ apt-cache policy docker-engine
-
-   # The linux-image-extra package allows you use the aufs storage driver.
-   $ sudo apt-get install linux-image-extra-$(uname -r)
-
-   # If you are installing on Ubuntu 14.04 or 12.04, apparmor is required.
-   # You can install it using (usually already installed)
-   $ sudo apt-get install apparmor
-
-   # install docker engine
-   $ sudo apt-get install docker-engine
-
-   # Start the docker daemon.
-   $ sudo service docker start
-
-   # test
-   $ sudo docker run hello-world
-   $ sudo docker run -it ubuntu bash
-
-Install Docker-compose, for later combining Docker-images, see https://docs.docker.com/compose/install.
-Easiest via Python ``pip``. ::
-
-    $ sudo apt-get install python-pip
-    $ sudo pip install docker-compose
+Includes also the install for Docker-compose, for later combining Docker-images, see https://docs.docker.com/compose/install.
 
 See also CLI utils for ``docker-compose``: https://docs.docker.com/v1.5/compose/cli/
-Now our system is ready to roll out Docker images.
+Now our system is ready to roll out Docker images!
 
 Handy Commands
 ~~~~~~~~~~~~~~

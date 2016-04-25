@@ -41,7 +41,11 @@ sudo service docker start
 # test
 # sudo docker run hello-world
 
-# Emacs
+# Also Docker Compose
+sudo apt-get install -y python-pip
+sudo pip install docker-compose
+
+# Utils like Emacs and Postgres client to connect to PG DB
 sudo apt-get install -y emacs24-nox
 sudo apt-get install -y postgresql-client-9.3
 
