@@ -36,6 +36,7 @@ class PostGIS:
             log.debug("Connected to database %s" % (self.config['database']))
         except Exception, e:
             log.error("Cannot connect to database '%s'" % (self.config['database']))
+            raise
 
     def disconnect(self):
         self.e = None
@@ -50,7 +51,7 @@ class PostGIS:
     # Do the whole thing: connecting, query, and conversion of result to array of dicts (records)
     def do_query(self, query_str, table):
         self.connect()
-    
+
         column_names = self.get_column_names(table, self.config.get('schema'))
         # print('cols=' + str(column_names))
     

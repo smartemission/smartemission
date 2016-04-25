@@ -296,10 +296,6 @@ Steps. ::
    $ sudo docker run hello-world
    $ sudo docker run -it ubuntu bash
 
-   # cleanup non-running images
-   $ sudo docker rm -v $(sudo docker ps -a -q -f status=exited)
-   $ sudo docker rmi $(sudo docker images -f "dangling=true" -q)
-
 Install Docker-compose, for later combining Docker-images, see https://docs.docker.com/compose/install.
 Easiest via Python ``pip``. ::
 
@@ -309,13 +305,65 @@ Easiest via Python ``pip``. ::
 See also CLI utils for ``docker-compose``: https://docs.docker.com/v1.5/compose/cli/
 Now our system is ready to roll out Docker images.
 
+Handy Commands
+~~~~~~~~~~~~~~
+
+Some handly Docker commands: ::
+
+   # cleanup non-running images
+   $ sudo docker rm -v $(sudo docker ps -a -q -f status=exited)
+   $ sudo docker rmi $(sudo docker images -f "dangling=true" -q)
+
+   # go into docker image named apache2 to bash prompt
+   sudo docker exec -it apache2 bash
+
 Docker Images
 -------------
 
 Apache2
 ~~~~~~~
 
-PostGIS from Kartoza, see https://hub.docker.com/r/kartoza/postgis/ and https://github.com/kartoza/docker-postgis  ::
+Uses the generic ``geonovum/apache2`` image from GitHub. It contains the standard Apache2 server with various
+modules enabled to be able to run Python and act as a proxy to bachend service. To build: ::
+
+   # build apache2 image
+   cd ~/git/docker/apache2
+   sudo docker build -t geonovum/apache2 .
+
+The Bash-script at ``~/git/services/apache2/run-apache2.sh``  will re(run) the generic
+Apache2 Docker image with mappings to local directories of the host for the  Apache2 config, webcontent and logfiles.
+It will also link to the PostGIS container (for the Flask Python app):
+
+.. literalinclude:: ../../services/apache2/run-apache2.sh
+    :language: bash
+
+To run locally, e.g. with Vagrant, hardcode the DNS mapping in ``/etc/hosts`` : ::
+
+   127.0.0.1	local.smartemission.nl
+   127.0.0.1	local.api.smartemission.nl
+
+Inspect logfiles within the host ``/var/smartem/log/apache2`` : ::
+
+   tail -f   /var/smartem/log/apache2/api.smartem-error.log
+
+Debugging, start/stop Apache quickly within container: ::
+
+   # go into docker image named apache2 to bash prompt
+   sudo docker exec -it apache2 bash
+
+   # Kill running Apache parent process instance
+   root@ed393501ed58:/# ps -al
+   F S   UID   PID  PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+   4 S     0     8     1  0  80   0 - 15344 poll_s ?        00:00:00 sshd
+   4 S     0     9     1  0  80   0 - 23706 poll_s ?        00:00:00 apache2
+   5 S    33    10     9  0  80   0 - 23641 skb_re ?        00:00:00 apache2
+   5 S    33    11     9  0  80   0 - 96540 pipe_w ?        00:00:01 apache2
+   5 S    33    12     9  0  80   0 - 112940 pipe_w ?       00:00:01 apache2
+   0 R     0    94    81  0  80   0 -  1783 -      ?        00:00:00 ps
+   root@ed393501ed58:/# kill 9
+
+   # Start Apache from commandline
+   /bin/bash -c "source /etc/apache2/envvars && exec /usr/sbin/apache2 -DFOREGROUND"
 
 PostGIS
 ~~~~~~~

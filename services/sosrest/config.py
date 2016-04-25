@@ -1,9 +1,9 @@
 # local config, change on server for real config
 config = {
-    'database': 'sensors',
-    'host': 'localhost',
+    'database': 'gis',
+    'host': 'postgis',
     'port': '5432',
     'schema': 'smartem_rt',
-    'user': 'postgres',
-    'password': 'postgres'
+    'user': 'docker',
+    'password': 'docker'
 }
