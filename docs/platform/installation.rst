@@ -336,7 +336,11 @@ Uses the ``geonovum/stetl`` image with Stetl config from GitHub.  ::
    # before first run do ./db-init.sh to create DB schema and tables
 
 The ``last.sh`` script is a wrapper to run the generic Docker ``geonovum/stetl`` with our
-local ETL-config and PostGIS.
+local ETL-config and PostGIS:
+
+.. literalinclude:: ../../etl/last.sh
+    :language: bash
+
 
 Apache2
 ~~~~~~~

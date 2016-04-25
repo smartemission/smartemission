@@ -8,7 +8,7 @@ SMARTEM=/opt/geonovum/smartem/git
 # m  h dom mon dow user command
 
 # Run last measurements Smartemission
-*/3 * * * * cd $SMARTEM/etl; ./last.sh > /var/smartem/log/smartem_last.log 2>&1
+*/3 * * * * cd $SMARTEM/etl; ./last.sh > /var/smartem/log/etl/smartem_last.log 2>&1
 
 # refresh smartem website
 # */4 * * * * cd $SMARTEM; ./refresh-git.sh
