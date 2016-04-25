@@ -40,6 +40,7 @@ See the popup image above, do the following selections in the various tabs:
 * `Access&Security` tab: select keypair just created and enable all `security groups`
 * `Networking` tab: assign both ``floating-IP`` and ``shared-net`` to `selected networks`
 * other tabs: leave as is
+* login via ``ssh -i <privkey_from_keypair>.pem ubuntu@<IP_address>``
 
 Local - Vagrant
 ---------------
@@ -310,6 +311,11 @@ Now our system is ready to roll out Docker images.
 
 Docker Images
 -------------
+
+Apache2
+~~~~~~~
+
+PostGIS from Kartoza, see https://hub.docker.com/r/kartoza/postgis/ and https://github.com/kartoza/docker-postgis  ::
 
 PostGIS
 ~~~~~~~
