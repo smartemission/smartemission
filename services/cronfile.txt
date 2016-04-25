@@ -1,0 +1,14 @@
+# Cronfile for ETL processes
+
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+SMARTEM=/opt/geonovum/smartem/git
+
+# Run ETL
+# m  h dom mon dow user command
+
+# Run last measurements Smartemission
+*/3 * * * * cd $SMARTEM/etl; ./last.sh > /var/smartem/log/smartem_last.log 2>&1
+
+# refresh smartem website
+# */4 * * * * cd $SMARTEM; ./refresh-git.sh
