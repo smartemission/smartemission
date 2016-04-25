@@ -49,8 +49,12 @@ sudo pip install docker-compose
 sudo apt-get install -y emacs24-nox
 sudo apt-get install -y postgresql-client-9.3
 
-sudo mkdir -p /var/smartem/log
+sudo mkdir -p /var/smartem/log/etl
+sudo chmod 777 /var/smartem/log/etl
 
+# Postfix: choose Local System
+sudo apt-get install postfix
+# view tail -f /va
 # The rest
 # Github
 sudo mkdir -p /opt/geonovum/smartem

@@ -12,4 +12,4 @@ NAME="stetl"
 sudo docker stop ${NAME} > /dev/null 2>&1
 sudo docker rm ${NAME} > /dev/null 2>&1
 
-sudo docker run --name ${NAME} --link ${PG_HOST}:${PG_HOST} -v ${WORK_DIR}:${WORK_DIR} -w ${WORK_DIR} -t -i geonovum/stetl ${STETL_ARGS}
+sudo docker run --name ${NAME} --link ${PG_HOST}:${PG_HOST} -v ${WORK_DIR}:${WORK_DIR} -w ${WORK_DIR}  geonovum/stetl ${STETL_ARGS}
