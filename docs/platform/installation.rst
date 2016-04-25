@@ -355,6 +355,12 @@ PostGIS from Kartoza, see https://hub.docker.com/r/kartoza/postgis/ and https://
     template_postgis | postgres | UTF8      | C       | C     |
    (5 rows)
 
+
+This shorthand script ``~/git/services/postgis/run-postgis.sh`` will (re)run the ``postgis`` container.
+
+.. literalinclude:: ../../services/postgis/run-postgis.sh
+    :language: bash
+
 ETL - Last Measurements
 ~~~~~~~~~~~~~~~~~~~~~~~
 
