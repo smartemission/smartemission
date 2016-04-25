@@ -18,7 +18,8 @@ this chapter will describe the actual "hands-on" installation steps.
 Bootstrap
 =========
 
-In order to start installing Docker images and other tooling we need to "bootstrap" the system.
+In order to start installing Docker images and other tooling we need to "bootstrap" the system
+within the Fiware environment. For development purposes we also setup a "Local" system using Vagrant.
 
 Fiware Lab NL
 -------------
@@ -192,7 +193,7 @@ Within the UB we are on a standard Ubuntu commandline, running a general Ubuntu 
    $ sudo apt-get update
    $ sudo apt-get -y upgrade
 
-The next steps are standard Docker install (see next section). After the setup is tested by building and running one of
+The next steps are standard Docker install (see next section below). After the setup is tested by building and running one of
 our Docker files. Getting access to our Dockerfiles is easy, for example: ::
 
    sudo ln -s /vagrant/git ~/git
@@ -288,6 +289,55 @@ Some handly Docker commands: ::
 Docker Images
 -------------
 
+Below the Docker images: how they are built/acquired and how they are run using local mappings, data and configs.
+
+PostGIS
+~~~~~~~
+
+PostGIS Docke image from Kartoza (Tim Sutton, QGIS lead),
+see https://hub.docker.com/r/kartoza/postgis/ and https://github.com/kartoza/docker-postgis  ::
+
+   $ sudo docker pull kartoza/postgis:9.4-2.1
+   $ sudo docker run --name "postgis" -p 5432:5432 -d -t kartoza/postgis:9.4-2.1
+   $ sudo apt-get install postgresql-client-9.3
+   $ psql -h localhost -U docker  -l
+   Password for user docker: (also 'docker')
+                                    List of databases
+          Name       |  Owner   | Encoding  | Collate | Ctype |   Access privileges
+   ------------------+----------+-----------+---------+-------+-----------------------
+    gis              | docker   | UTF8      | C       | C     |
+    postgres         | postgres | SQL_ASCII | C       | C     |
+    template0        | postgres | SQL_ASCII | C       | C     | =c/postgres          +
+                     |          |           |         |       | postgres=CTc/postgres
+    template1        | postgres | SQL_ASCII | C       | C     | =c/postgres          +
+                     |          |           |         |       | postgres=CTc/postgres
+    template_postgis | postgres | UTF8      | C       | C     |
+   (5 rows)
+
+
+This shorthand script ``~/git/services/postgis/run-postgis.sh`` will (re)run the ``postgis`` container.
+
+.. literalinclude:: ../../services/postgis/run-postgis.sh
+    :language: bash
+
+ETL - Last Measurements
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Uses the ``geonovum/stetl`` image with Stetl config from GitHub.  ::
+
+   # build stetl image
+   cd ~/git/docker/stetl
+   sudo docker build -t geonovum/stetl .
+
+   # run last measurements ETL, linking to postgis image
+   cd ~/git/etl
+   ./last.sh
+
+   # before first run do ./db-init.sh to create DB schema and tables
+
+The ``last.sh`` script is a wrapper to run the generic Docker ``geonovum/stetl`` with our
+local ETL-config and PostGIS.
+
 Apache2
 ~~~~~~~
 
@@ -332,48 +382,4 @@ Debugging, start/stop Apache quickly within container: ::
 
    # Start Apache from commandline
    /bin/bash -c "source /etc/apache2/envvars && exec /usr/sbin/apache2 -DFOREGROUND"
-
-PostGIS
-~~~~~~~
-
-PostGIS from Kartoza, see https://hub.docker.com/r/kartoza/postgis/ and https://github.com/kartoza/docker-postgis  ::
-
-   $ sudo docker pull kartoza/postgis:9.4-2.1
-   $ sudo docker run --name "postgis" -p 5432:5432 -d -t kartoza/postgis:9.4-2.1
-   $ sudo apt-get install postgresql-client-9.3
-   $ psql -h localhost -U docker  -l
-   Password for user docker: (also 'docker')
-                                    List of databases
-          Name       |  Owner   | Encoding  | Collate | Ctype |   Access privileges
-   ------------------+----------+-----------+---------+-------+-----------------------
-    gis              | docker   | UTF8      | C       | C     |
-    postgres         | postgres | SQL_ASCII | C       | C     |
-    template0        | postgres | SQL_ASCII | C       | C     | =c/postgres          +
-                     |          |           |         |       | postgres=CTc/postgres
-    template1        | postgres | SQL_ASCII | C       | C     | =c/postgres          +
-                     |          |           |         |       | postgres=CTc/postgres
-    template_postgis | postgres | UTF8      | C       | C     |
-   (5 rows)
-
-
-This shorthand script ``~/git/services/postgis/run-postgis.sh`` will (re)run the ``postgis`` container.
-
-.. literalinclude:: ../../services/postgis/run-postgis.sh
-    :language: bash
-
-ETL - Last Measurements
-~~~~~~~~~~~~~~~~~~~~~~~
-
-Uses the ``geonovum/stetl`` image with Stetl config from GitHub.  ::
-
-   # build stetl image
-   cd ~/git/docker/stetl
-   sudo docker build -t geonovum/stetl .
-
-   # run last measurements ETL, linking to postgis image
-   cd ~/git/etl
-   ./last.sh
-
-   # may first do ./db-init.sh to create DB schema and tables
-
 
