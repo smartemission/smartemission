@@ -9,6 +9,8 @@ It can always be found at `smartplatform.readthedocs.org <http://smartplatform.r
 
 The home page for the Smart Emission project is http://www.smartemission.nl
 
+The home page for the Smart Emission Data Platform project is http://data.smartemission.nl
+
 The project GitHub repository is at https://github.com/Geonovum/smartemission.
 
 Background reading also via the SOSPilot project via http://sensors.geonovum.nl.

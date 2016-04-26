@@ -35,8 +35,12 @@ Docker Containers
 
 The following Docker Containers are deployed. Also their related Docker Image is listed.
 
-* ``web`` - web and webapps, proxy to backend - image: ``geonovum/apache2''
+* ``web`` - web and webapps, proxy to backend - image: ``geonovum/apache2``
 * ``postgis`` - PostgreSQL w PostGIS - image: ``kartoza/postgis:9.4-2.1``
 * ``stetl`` - All ETL tasks - image: ``geonovum/stetl``
 * ``geoserver`` - GeoServer web app - image:  ``kartoza/geoserver`` (TBD)
-* ``sos52`` - 52NOrth SOS web app: ``kartoza/geoserver`` (TBD)
+* ``sos52`` - 52North SOS web app: ``kartoza/geoserver`` (TBD)
+
+See https://github.com/Geonovum/smartemission/blob/master/docker for the generic images
+and https://github.com/Geonovum/smartemission/blob/master/etl and https://github.com/Geonovum/smartemission/blob/master/services
+for their use in Docker Containers:
