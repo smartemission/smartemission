@@ -54,6 +54,10 @@ sudo chmod 777 /var/smartem/log/etl
 
 # Postfix: choose Local System
 sudo apt-get install postfix
+
+# Set timezone right
+sudo dpkg-reconfigure tzdata
+
 # view tail -f /va
 # The rest
 # Github

@@ -286,15 +286,15 @@ Some handly Docker commands: ::
    # go into docker image named apache2 to bash prompt
    sudo docker exec -it apache2 bash
 
-Docker Images
--------------
+Docker Containers
+-----------------
 
-Below the Docker images: how they are built/acquired and how they are run using local mappings, data and configs.
+Below the Docker Containers: how their generic Docker Images are built/acquired and how they are run using local mappings, data and configs.
 
-PostGIS
-~~~~~~~
+postgis - PostGIS Database
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-PostGIS Docke image from Kartoza (Tim Sutton, QGIS lead),
+Uses PostGIS Docker image from Kartoza (Tim Sutton, QGIS lead),
 see https://hub.docker.com/r/kartoza/postgis/ and https://github.com/kartoza/docker-postgis  ::
 
    $ sudo docker pull kartoza/postgis:9.4-2.1
@@ -320,8 +320,8 @@ This shorthand script ``~/git/services/postgis/run-postgis.sh`` will (re)run the
 .. literalinclude:: ../../services/postgis/run-postgis.sh
     :language: bash
 
-ETL - Last Measurements
-~~~~~~~~~~~~~~~~~~~~~~~
+stetl - ETL for Measurements
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Uses the ``geonovum/stetl`` image with Stetl config from GitHub.  ::
 
@@ -342,31 +342,31 @@ local ETL-config and PostGIS:
     :language: bash
 
 
-Apache2
-~~~~~~~
+web - Web Container
+~~~~~~~~~~~~~~~~~~~
 
-Uses the generic ``geonovum/apache2`` image from GitHub. It contains the standard Apache2 server with various
-modules enabled to be able to run Python and act as a proxy to bachend service. To build: ::
+Uses the generic ``geonovum/apache2`` Docker Image from GitHub. It contains the standard Apache2 server with various
+modules enabled to be able to run Python and act as a proxy to backend services. To build: ::
 
    # build apache2 image
    cd ~/git/docker/apache2
    sudo docker build -t geonovum/apache2 .
 
-The Bash-script at ``~/git/services/apache2/run-apache2.sh``  will re(run) the generic
+The Bash-script at ``~/git/services/web/run-web.sh``  will re(run) the generic
 Apache2 Docker image with mappings to local directories of the host for the  Apache2 config, webcontent and logfiles.
-It will also link to the PostGIS container (for the Flask Python app):
+It will also link to the PostGIS Container (for the Flask Python app):
 
-.. literalinclude:: ../../services/apache2/run-apache2.sh
+.. literalinclude:: ../../services/web/run-web.sh
     :language: bash
 
 To run locally, e.g. with Vagrant, hardcode the DNS mapping in ``/etc/hosts`` : ::
 
    127.0.0.1	local.smartemission.nl
-   127.0.0.1	local.api.smartemission.nl
+   127.0.0.1	local.data.smartemission.nl
 
 Inspect logfiles within the host ``/var/smartem/log/apache2`` : ::
 
-   tail -f   /var/smartem/log/apache2/api.smartem-error.log
+   tail -f   /var/smartem/log/apache2/data.smartem-error.log
 
 Debugging, start/stop Apache quickly within container: ::
 
