@@ -1,13 +1,12 @@
 #!/bin/bash
 #
-# Run the Apache2 server with mapping to local config
+# Run the Apache2 webserver with mapping to local config
 #
 
 GIT="/opt/geonovum/smartem/git"
-WWW="${GIT}/www"
-CONFIG="${GIT}/services/apache2"
+CONFIG="${GIT}/services/web"
 LOG="/var/smartem/log"
-NAME="apache2"
+NAME="web"
 IMAGE="geonovum/apache2"
 
 VOL_MAP="-v ${CONFIG}/sites-enabled:/etc/apache2/sites-enabled -v ${GIT}:${GIT} -v ${LOG}/apache2:/var/log/apache2"
