@@ -248,6 +248,8 @@ class RawSensorLastInput(HttpInput):
 
         # Parse JSON from data string fetched by base method read()
         json_obj = self.parse_json_str(data)
+        if 'p_unitserialnumber' not in json_obj:
+            return []
 
         # Base data for all records
         base_record = {}

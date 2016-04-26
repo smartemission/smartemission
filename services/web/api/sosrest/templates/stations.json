@@ -1,0 +1,24 @@
+[
+  {% for station in stations %}
+  {
+    "properties": {
+      "id": "{{ station['device_id'] }}",
+      "label": "{{ station['device_name'] }}",
+      "altitude": "{{ station['altitude'] }}",
+      "last_update": "{{ station['last_update'] }}",
+      "value_stale": "{{ station['value_stale'] }}"
+    },
+    "geometry": {
+      "coordinates": [
+        {{ station['lon'] }},
+        {{ station['lat'] }}
+      ],
+      "type": "Point"
+    },
+    "type": "Feature"
+  }
+  {% if not loop.last %}
+      ,
+  {% endif %}
+  {% endfor %}
+]
