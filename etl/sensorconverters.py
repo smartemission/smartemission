@@ -3,6 +3,9 @@ from calendar import timegm
 from datetime import datetime
 import re
 import math
+from stetl.util import Util
+
+log = Util.get_log("SensorConverters")
 
 # According to CityGIS the units are defined as follows. ::
 #
@@ -116,6 +119,10 @@ def ppb_no2_to_ugm3(input, json_obj, name):
 
 def ppb_o3_to_ugm3(input, json_obj, name):
     return ppb_to_ugm3('o3', input)
+
+
+def ohm_to_kohm(input, json_obj, name):
+    return int(round(input/1000))
 
 
 def convert_temperature(input, json_obj, name):
@@ -301,6 +308,9 @@ CONVERTERS = {
     's_co2': ppb_co2_to_ppm,
     's_no2': ppb_no2_to_ugm3,
     's_o3': ppb_o3_to_ugm3,
+    's_coresistance': ohm_to_kohm,
+    's_no2resistance': ohm_to_kohm,
+    's_o3resistance': ohm_to_kohm,
     's_temperatureambient': convert_temperature,
     's_barometer': convert_barometer,
     's_humidity': convert_humidity,
@@ -342,4 +352,8 @@ CONVERTERS = {
 }
 
 def convert(json_obj, name):
+    if name not in CONVERTERS:
+        log.error('Cannot find converter for %s' % name)
+        return None
+
     return CONVERTERS[name](json_obj[name], json_obj, name)

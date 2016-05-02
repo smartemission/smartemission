@@ -146,6 +146,24 @@ class RawSensorLastInput(HttpInput):
                 'id': 22,
                 'label': 'Average Audio/Noise Level 1-5',
                 'unit': 'int'
+            },
+            {
+                'name': 's_o3resistance',
+                'id': 23,
+                'label': 'O3 Resistance',
+                'unit': 'kOhm'
+            },
+            {
+                'name': 's_no2resistance',
+                'id': 24,
+                'label': 'NO2 Resistance',
+                'unit': 'kOhm'
+            },
+            {
+                'name': 's_coresistance',
+                'id': 25,
+                'label': 'CO Resistance',
+                'unit': 'kOhm'
             }
         ]
 
