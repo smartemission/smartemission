@@ -150,19 +150,19 @@ class RawSensorLastInput(HttpInput):
             {
                 'name': 's_o3resistance',
                 'id': 23,
-                'label': 'O3 Resistance',
+                'label': 'O3',
                 'unit': 'kOhm'
             },
             {
                 'name': 's_no2resistance',
                 'id': 24,
-                'label': 'NO2 Resistance',
+                'label': 'NO2',
                 'unit': 'kOhm'
             },
             {
                 'name': 's_coresistance',
                 'id': 25,
-                'label': 'CO Resistance',
+                'label': 'CO',
                 'unit': 'kOhm'
             }
         ]
