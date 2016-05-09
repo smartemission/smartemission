@@ -1,6 +1,7 @@
 # Apache2 Docker
 
-Inspired by https://docs.docker.com/engine/admin/using_supervisord/.
+Inspired by https://docs.docker.com/engine/admin/using_supervisord/ and
+https://github.com/jacksoncage/phppgadmin-docker/blob/master/Dockerfile (PHP and locales).
 
 Docker image runs both Apache2 and SSH daemons.
 

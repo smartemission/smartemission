@@ -58,7 +58,7 @@ Notes from raw install as Python WSGI app, see also http://istsos.org/en/latest/
 
 Add WSGI app to Apache conf.
 
-.. literalinclude:: ../../services/config/api.smartemission.conf
+.. literalinclude:: ../../services/web/config/sites-enabled/000-default.conf
     :language: text
 
 Setup the PostGIS database. ::

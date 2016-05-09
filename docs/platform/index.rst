@@ -1,6 +1,6 @@
 
-Smart Emission Platform
-=======================
+Smart Emission Data Platform
+============================
 
 Contents:
 
