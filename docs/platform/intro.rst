@@ -48,6 +48,16 @@ and SensorThings and FIWARE APIs. FIWARE is used as the supporting computing and
 (SmartApp, Heron) are developed to visualize the data. All this is part of the Smart Emission Data Platform whose technicalities
 are the subject of this document.
 
+Partners
+========
+
+.. figure:: _static/se-partners.jpg
+   :align: center
+
+   *Smart Emission Project Partners*
+
+More on: http://smartemission.ruhosting.nl/over-ons/
+
 Documentation Technology
 ========================
 
