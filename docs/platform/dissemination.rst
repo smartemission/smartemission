@@ -40,3 +40,17 @@ Some interactive visualisation examples "via Google" were also shown like made w
 
 * Visualization of Beijing Air Pollution: http://vis.pku.edu.cn/course/Visualization_2012F/assignment2/Chengye
 * More can be found here http://vis.pku.edu.cn/wiki/public_course/visclass_f12/assignment/a02/websites/start (click "Alive Version" for each)
+
+Citizen Meetup 26 may 2016
+==========================
+
+Meeting held in Nijmegen, on May 26 2016.
+
+Slides
+------
+
+The agenda and presentation slides, all in PDF, can be found here:
+
+* `Agenda <_static/dissemination/bewoners-26mei2016/bewoners-bijeen-260516-agenda.pdf>`_
+* `Data, Viewers, Standards - 10 min talk <_static/dissemination/bewoners-26mei2016/bewoners-bijeen-260516-data.pdf>`_
+
