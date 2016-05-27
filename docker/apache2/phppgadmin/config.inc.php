@@ -24,7 +24,7 @@
 	// Possible options: disable, allow, prefer, require
 	// To require SSL on older servers use option: legacy
 	// To ignore the SSL mode, use option: unspecified
-	$conf['servers'][0]['sslmode'] = 'allow';
+	// $conf['servers'][0]['sslmode'] = 'allow';
 
 	// Change the default database only if you cannot connect to template1.
 	// For a PostgreSQL 8.1+ server, you can set this to 'postgres'.
