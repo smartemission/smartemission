@@ -120,3 +120,8 @@ RUN if [ "$TOMCAT_EXTRAS" = false ]; then \
 
 # Delete resources after installation
 RUN rm -rf /tmp/resources
+
+# set time right
+# Configure timezone and locale
+RUN echo "Europe/Amsterdam" > /etc/timezone && \
+	dpkg-reconfigure -f noninteractive tzdata

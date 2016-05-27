@@ -16,9 +16,8 @@ RUN export LANGUAGE=en_US.UTF-8 && \
 	echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && \
 	dpkg-reconfigure locales && \
 	apt-get update && \
-	apt-get -y upgrade
-
-RUN apt-get install -y openssh-server apache2 supervisor libapache2-mod-wsgi python-flask python-psycopg2
+	apt-get -y upgrade && \
+    apt-get install -y openssh-server apache2 supervisor libapache2-mod-wsgi python-flask python-psycopg2 phppgadmin
 
 RUN mkdir -p /var/lock/apache2 /var/run/apache2 /var/run/sshd /var/log/supervisor
 

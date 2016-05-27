@@ -3,6 +3,10 @@ FROM ubuntu:14.04
 
 MAINTAINER just@justobjects.nl
 
+# Configure timezone and locale
+RUN echo "Europe/Amsterdam" > /etc/timezone && \
+	dpkg-reconfigure -f noninteractive tzdata
+
 # Use local cached debs from host (saves your bandwidth!)
 # Change ip below to that of your apt-cacher-ng host
 # Or comment this line out if you do not with to use caching
