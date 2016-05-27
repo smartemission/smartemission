@@ -168,6 +168,19 @@ def convert_coord(input, json_obj, name):
         result = None
     return result
 
+def convert_latitude(input, json_obj, name):
+    res = convert_coord(input, json_obj, name)
+    if res is not None and (res < -90.0 or res > 90.0):
+        log.error('Invalid latitude %d' % res)
+        return None
+    return res
+
+def convert_longitude(input, json_obj, name):
+    res = convert_coord(input, json_obj, name)
+    if res is not None and (res < -180.0 or res > 180.0):
+        log.error('Invalid longitude %d' % res)
+        return None
+    return res
 
 # https://aboutsimon.com/blog/2013/06/06/Datetime-hell-Time-zone-aware-to-UNIX-timestamp.html
 def convert_timestamp(iso_str, json_obj, name):
@@ -314,8 +327,8 @@ CONVERTERS = {
     's_temperatureambient': convert_temperature,
     's_barometer': convert_barometer,
     's_humidity': convert_humidity,
-    's_latitude': convert_coord,
-    's_longitude': convert_coord,
+    's_latitude': convert_latitude,
+    's_longitude': convert_longitude,
     'time': convert_timestamp,
     't_audio0': convert_audio_max,
     't_audioplus1': convert_audio_max,

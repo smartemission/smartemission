@@ -1,6 +1,9 @@
 #--------- Generic stuff all our Dockerfiles should start with so we get caching ------------
+# Based on : https://github.com/kartoza/docker-geoserver/blob/master/Dockerfile
+# Enhancements to be added there !!
 FROM tomcat:8.0
-MAINTAINER Tim Sutton<tim@linfiniti.com>
+# MAINTAINER Tim Sutton<tim@linfiniti.com>
+MAINTAINER Just van den Broecke<just@justobjects.nl>
 
 RUN  export DEBIAN_FRONTEND=noninteractive
 ENV  DEBIAN_FRONTEND noninteractive
@@ -16,11 +19,14 @@ RUN apt-get -y update
 
 #-------------Application Specific Stuff ----------------------------------------------------
 
-ENV GS_VERSION 2.8.2
+ENV GS_VERSION 2.8.3
 ENV GEOSERVER_DATA_DIR /opt/geoserver/data_dir
+ENV TC_DEPLOY_DIR $CATALINA_HOME/webapps
+# ENV TC_DEPLOY_DIR /opt/geoserver/webapps
 
 # RUN mkdir -p $GEOSERVER_DATA_DIR
 RUN mkdir -p /opt/geoserver
+RUN mkdir -p $TC_DEPLOY_DIR
 
 # Unset Java related ENVs since they may change with Oracle JDK
 ENV JAVA_VERSION=
@@ -83,15 +89,15 @@ RUN if [ ! -f /tmp/resources/geoserver.zip ]; then \
       -O /tmp/resources/geoserver.zip; \
     fi; \
     unzip /tmp/resources/geoserver.zip -d /tmp/geoserver \
-    && unzip /tmp/geoserver/geoserver.war -d $CATALINA_HOME/webapps/geoserver \
-    && cp -r $CATALINA_HOME/webapps/geoserver/data $GEOSERVER_DATA_DIR && rm -rf $CATALINA_HOME/webapps/geoserver/data \
+    && unzip /tmp/geoserver/geoserver.war -d $TC_DEPLOY_DIR/geoserver \
+    && cp -r $TC_DEPLOY_DIR/geoserver/data $GEOSERVER_DATA_DIR && rm -rf $TC_DEPLOY_DIR/geoserver/data \
     && rm -rf /tmp/geoserver
 
 # Install any plugin zip files in resources/plugins
 RUN if ls /tmp/resources/plugins/*.zip > /dev/null 2>&1; then \
       for p in /tmp/resources/plugins/*.zip; do \
         unzip $p -d /tmp/gs_plugin \
-        && mv /tmp/gs_plugin/*.jar $CATALINA_HOME/webapps/geoserver/WEB-INF/lib/ \
+        && mv /tmp/gs_plugin/*.jar $TC_DEPLOY_DIR/geoserver/WEB-INF/lib/ \
         && rm -rf /tmp/gs_plugin; \
       done; \
     fi
@@ -105,11 +111,11 @@ RUN rm /tmp/resources/overlays/README.txt && \
 # Optionally remove Tomcat manager, docs, and examples
 ARG TOMCAT_EXTRAS=true
 RUN if [ "$TOMCAT_EXTRAS" = false ]; then \
-    rm -rf $CATALINA_HOME/webapps/ROOT && \
-    rm -rf $CATALINA_HOME/webapps/docs && \
-    rm -rf $CATALINA_HOME/webapps/examples && \
-    rm -rf $CATALINA_HOME/webapps/host-manager && \
-    rm -rf $CATALINA_HOME/webapps/manager; \
+    rm -rf $TC_DEPLOY_DIR/ROOT && \
+    rm -rf $TC_DEPLOY_DIR/docs && \
+    rm -rf $TC_DEPLOY_DIR/examples && \
+    rm -rf $TC_DEPLOY_DIR/host-manager && \
+    rm -rf $TC_DEPLOY_DIR/manager; \
   fi;
 
 # Delete resources after installation
