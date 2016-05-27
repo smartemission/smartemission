@@ -5,6 +5,16 @@ https://github.com/jacksoncage/phppgadmin-docker/blob/master/Dockerfile (PHP and
 
 Docker image runs both Apache2 and SSH daemons.
 
+## Configuring
+
+To use admin features a file "htpasswd" should be created in this directory. 
+Create by using the command:
+
+htpasswd -c htpasswd <username>
+
+It will ask for a password twice. Obviously the file "htpasswd" should not be in GitHub
+but created locally.
+
 ## Building
 
 sudo docker build -t geonovum/apache2 .

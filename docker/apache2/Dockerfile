@@ -19,8 +19,13 @@ RUN export LANGUAGE=en_US.UTF-8 && \
 	apt-get -y upgrade && \
     apt-get install -y openssh-server apache2 supervisor libapache2-mod-wsgi python-flask python-psycopg2 phppgadmin
 
+# DB admin
+COPY phppgadmin/phppgadmin.conf /etc/apache2/conf-available
+COPY phppgadmin/config.inc.php  /etc/phppgadmin
+
 RUN mkdir -p /var/lock/apache2 /var/run/apache2 /var/run/sshd /var/log/supervisor
 
+RUN a2enconf phppgadmin
 RUN a2enmod headers
 RUN a2enmod wsgi
 RUN a2enmod proxy
@@ -28,7 +33,9 @@ RUN a2enmod proxy_ajp
 RUN a2enmod proxy_http
 RUN a2enmod cgi
 
+
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY htpasswd /etc/apache2/.htpasswd
 
 EXPOSE 22 80
 
