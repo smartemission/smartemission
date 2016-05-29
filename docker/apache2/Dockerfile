@@ -16,9 +16,8 @@ RUN export LANGUAGE=en_US.UTF-8 && \
 	echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && \
 	dpkg-reconfigure locales && \
 	apt-get update && \
-	apt-get -y upgrade && \
+	apt-get -y upgrade  && \
     apt-get install -y openssh-server apache2 supervisor libapache2-mod-wsgi python-flask python-psycopg2 phppgadmin
-
 
 RUN mkdir -p /var/lock/apache2 /var/run/apache2 /var/run/sshd /var/log/supervisor
 
@@ -30,12 +29,13 @@ RUN a2enmod proxy_http
 RUN a2enmod cgi
 
 # DB admin
-COPY phppgadmin/phppgadmin.conf /etc/apache2/conf-available
-COPY phppgadmin/config.inc.txt  /etc/phppgadmin/config.inc.php
-RUN a2enconf phppgadmin
+# COPY phppgadmin/phppgadmin.conf /etc/apache2/conf-available
+# COPY phppgadmin/config.inc.php  /etc/phppgadmin
+# RUN a2enconf phppgadmin
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY htpasswd /etc/apache2/.htpasswd
+
+# COPY htpasswd /etc/apache2/.htpasswd
 
 EXPOSE 22 80
 
