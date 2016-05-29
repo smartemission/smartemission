@@ -149,7 +149,7 @@ Containers may be distributed over VM-instances. Another aspect in our Docker-ap
 is that all data, logging, configuration and custom code/(web)content is maintained
 *Local*, i.e. outside Docker Containers/images. This will make the Docker Containers
 more reusable and will provide better control, backup, and monitoring facilities.
-An *Administrative Docker Component* is also planned. Code, content and configuration
+An *Administrative Docker Component* is also present. Code, content and configuration
 is maintained/synced in/with GitHub (see below).  Custom(ized) Docker Containers will
 be published to the Docker Hub, to facilitate immediate reuse.
 
@@ -164,9 +164,20 @@ The list of Docker Containers, each with their related Docker Image:
 * ``web`` - web and webapps, proxy to backend - image: ``geonovum/apache2``
 * ``postgis`` - PostgreSQL w PostGIS - image: ``kartoza/postgis:9.4-2.1``
 * ``stetl`` - All ETL tasks - image: ``geonovum/stetl``
-* ``geoserver`` - GeoServer web app - image:  ``kartoza/geoserver`` (TBD)
-* ``sos52`` - 52North SOS web app: ``kartoza/geoserver`` (TBD)
+* ``geoserver`` - GeoServer web app - image: ``geonovum/geoserver`` based on ``kartoza/geoserver``
+* ``sos52`` - 52North SOS web app: (TBD)
 
 See https://github.com/Geonovum/smartemission/blob/master/docker for the generic images
 and https://github.com/Geonovum/smartemission/blob/master/etl and https://github.com/Geonovum/smartemission/blob/master/services
-for their use in Docker Containers:
+for their use in Docker Containers.
+
+Test and Production
+-------------------
+
+In order to provide a continuous/uninterrupted service both a Test and Production deployment will be
+setup within the FIWARE Lab environment. For local development on PC/Mac/Linux
+a Vagrant environment with Docker can be setup.
+
+The Test and Production environments will also have separate IP-adresses and domains:
+``data.test.smartemission.nl`` and  ``data.smartemission.nl`` respectively.
+

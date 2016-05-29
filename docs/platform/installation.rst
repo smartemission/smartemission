@@ -387,3 +387,30 @@ Debugging, start/stop Apache quickly within container: ::
    # Start Apache from commandline
    /bin/bash -c "source /etc/apache2/envvars && exec /usr/sbin/apache2 -DFOREGROUND"
 
+geoserver - GeoServer
+~~~~~~~~~~~~~~~~~~~~~
+
+GeoServer is run from a Docker image based on Kartoza's GeoServer Dockerfile:
+https://github.com/kartoza/docker-geoserver/blob/master/Dockerfile.
+This Dockerfile is very versatile, as it allows to tune Tomcat parameters
+and add GeoServer plugins.
+
+Some local modifications were required, thus a customized Docker image ``geonovum/geoserver``
+has been developed. See https://github.com/Geonovum/smartemission/tree/master/docker/geoserver.
+
+GeoServer can then be run with the bash-script:
+https://github.com/Geonovum/smartemission/blob/master/services/geoserver/run-geoserver.sh
+
+This script maps the local directory ``/var/smartem/data/geoserver`` as the GeoServer data-dir, thus
+keeping it outside the Docker container. Also the mapping is provided to the PostGIS Docker container
+``postgis``, thus PostGIS Stores within the GeoServer config can be accessed using the CNAME Host ``postgis``.
+
+GeoServer is accessed via the ``web`` container via the AJP Apache2 proxy (port 8009).
+
+sos - 52North  SOS
+~~~~~~~~~~~~~~~~~~
+
+TBS, will be similar to GeoServer: Tomcat with .war file and keeping config outside Docker container
+and mapping DB to ``postgis`` container.
+
+

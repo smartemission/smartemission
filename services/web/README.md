@@ -3,6 +3,10 @@
 This service configures and runs the generic Docker (Apache2) web services.
 This is the front-end for the entire SE Data Platform. 
 
+## Running
+
+Use the command ./run-web.sh
+
 ## Services
 
 Several service endpoints are available:
