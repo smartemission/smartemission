@@ -148,7 +148,7 @@ def ohm_o3_to_ugm3(input, json_obj, name):
     s_o3resistance = ohm_to_kohm(json_obj['s_o3resistance'])
     device = json_obj['p_unitserialnumber']
     try:
-        s_no2resistance = ohm_to_kohm(json_obj['s_coresistance'])
+        s_no2resistance = ohm_to_kohm(json_obj['s_no2resistance'])
         s_coresistance = ohm_to_kohm(json_obj['s_coresistance'])
         s_temperatureambient = convert_temperature(json_obj['s_temperatureambient'])
         s_temperatureunit = convert_temperature(json_obj['s_temperatureunit'])
