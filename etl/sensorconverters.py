@@ -135,28 +135,53 @@ def ppb_o3_to_ugm3(input, json_obj, name):
 # 	+ 0.008435412 * s.temperature.unit * sqrt(s.no2resistance)
 #
 def ohm_o3_to_ugm3(input, json_obj, name):
+    # Ik doe als eerst een aantal preprocess stappen:
+    # - gassen in kOhm
+    # - Temperatuur in celcius (zowel ambient als unit)
+    # - Humidity in %, dus ook delen door 1000
+    # - barometer / 100
+    # - Ik doe niets met lightsensor_bottom
 
-    val1 = 89.1177 + 0.03420626 * json_obj['s_coresistance']  * math.log(json_obj['s_o3resistance'] )
-    val2 = - 0.008836714 * json_obj['s_lightsensorbottom']
-    val3 = - 0.02934928 * json_obj['s_coresistance']  * json_obj['s_temperatureambient']
-    val4 = - 1.439367 * json_obj['s_temperatureambient'] * math.log(json_obj['s_coresistance'] )
-    val5 = 1.26521 * math.log(json_obj['s_coresistance'] ) * math.sqrt(json_obj['s_coresistance'] )
-    val6 = - 0.000343098 * json_obj['s_coresistance']  * json_obj['s_no2resistance'] 
-    val7 = 0.02761877 * json_obj['s_no2resistance']  * math.log(json_obj['s_o3resistance'] )
-    val8 = - 0.0002260495 * json_obj['s_barometer'] * json_obj['s_coresistance'] 
-    val9 = 0.0699428 * json_obj['s_humidity']
-    val10 = 0.008435412 * json_obj['s_temperatureunit'] * math.sqrt(json_obj['s_no2resistance'] )
+    val = None
+    try:
+        s_no2resistance = ohm_to_kohm(json_obj['s_coresistance'])
+        s_o3resistance = ohm_to_kohm(json_obj['s_o3resistance'])
+        s_coresistance = ohm_to_kohm(json_obj['s_coresistance'])
+        s_temperatureambient = convert_temperature(json_obj['s_temperatureambient'])
+        s_temperatureunit = convert_temperature(json_obj['s_temperatureunit'])
+        s_humidity = convert_humidity(json_obj['s_humidity'])
+        s_barometer = convert_barometer(json_obj['s_barometer'])
 
-    val = val1 + val2 + val3 + val4 + val5 + val6 + val7 + val8 + val9 + val10
-    print '%s : ohm=%d ugm3=%d' %(name, input, val)
+        val1 = 89.1177 + 0.03420626 * s_coresistance  * math.log(s_o3resistance )
+        val2 = - 0.008836714 * json_obj['s_lightsensorbottom']
+        val3 = - 0.02934928 * s_coresistance  * s_temperatureambient
+        val4 = - 1.439367 * s_temperatureambient * math.log(s_coresistance )
+        val5 = 1.26521 * math.log(s_coresistance ) * math.sqrt(s_coresistance )
+        val6 = - 0.000343098 * s_coresistance  * s_no2resistance
+        val7 = 0.02761877 * s_no2resistance  * math.log(s_o3resistance )
+        val8 = - 0.0002260495 * s_barometer * s_coresistance
+        val9 = 0.0699428 * s_humidity
+        val10 = 0.008435412 * s_temperatureunit * math.sqrt(s_no2resistance )
+        val = val1 + val2 + val3 + val4 + val5 + val6 + val7 + val8 + val9 + val10
+
+        if val < 0:
+            val = -val
+        print '%s : ohm=%d ugm3=%d' %(name, input, val)
+        if val > 400:
+            val = None
+    except Exception, e:
+        log.error('Error converting %s, err= %s' % (name, str(e)))
+
+    if val is not None:
+        json_obj['s_o3'] = val
     return val
 
 
-def ohm_to_kohm(input, json_obj, name):
+def ohm_to_kohm(input, json_obj=None, name=None):
     return int(round(input/1000))
 
 
-def convert_temperature(input, json_obj, name):
+def convert_temperature(input, json_obj=None, name=None):
     if input == 0:
         return None
 
@@ -167,14 +192,14 @@ def convert_temperature(input, json_obj, name):
     return tempC
 
 
-def convert_barometer(input, json_obj, name):
+def convert_barometer(input, json_obj=None, name=None):
     result = float(input) / 100.0
     if result > 2000:
         return None
     return int(round(result))
 
 
-def convert_humidity(input, json_obj, name):
+def convert_humidity(input, json_obj=None, name=None):
     humPercent = int(round(float(input) / 1000.0))
     if humPercent > 100:
         return None
@@ -354,8 +379,8 @@ CONVERTERS = {
     's_o3': ppb_o3_to_ugm3,
     's_coresistance': ohm_to_kohm,
     's_no2resistance': ohm_to_kohm,
-    's_o3resistance': ohm_to_kohm,
-    # 's_o3resistance': ohm_o3_to_ugm3,
+    # 's_o3resistance': ohm_to_kohm,
+    's_o3resistance': ohm_o3_to_ugm3,
     's_temperatureambient': convert_temperature,
     's_barometer': convert_barometer,
     's_humidity': convert_humidity,

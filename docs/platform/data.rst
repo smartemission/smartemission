@@ -21,6 +21,77 @@ measured values: temperature, relative humidity, pressure and even the concentra
 other gasses! For example O3 and NO2. A great deal of scientific literature is already devoted
 to the sensor calibration issue.
 
+The units are: ::
+
+	S.TemperatureUnit		milliKelvin
+	S.TemperatureAmbient	milliKelvin
+	S.Humidity				%mRH
+	S.LightsensorTop		Lux
+	S.LightsensorBottom		Lux
+	S.Barometer				Pascal
+	S.Altimeter				Meter
+	S.CO					ppb
+	S.NO2					ppb
+	S.AcceleroX				2 ~ +2G (0x200 = midscale)
+	S.AcceleroY				2 ~ +2G (0x200 = midscale)
+	S.AcceleroZ				2 ~ +2G (0x200 = midscale)
+	S.LightsensorRed		Lux
+	S.LightsensorGreen		Lux
+	S.LightsensorBlue		Lux
+	S.RGBColor				8 bit R, 8 bit G, 8 bit B
+	S.BottomSwitches		?
+	S.O3					ppb
+	S.CO2					ppb
+	v3: S.ExternalTemp		milliKelvin
+	v3: S.COResistance		Ohm
+	v3: S.No2Resistance		Ohm
+	v3: S.O3Resistance		Ohm
+	S.AudioMinus5			Octave -5 in dB(A)
+	S.AudioMinus4			Octave -4 in dB(A)
+	S.AudioMinus3			Octave -3 in dB(A)
+	S.AudioMinus2			Octave -2 in dB(A)
+	S.AudioMinus1			Octave -1 in dB(A)
+	S.Audio0				Octave 0 in dB(A)
+	S.AudioPlus1			Octave +1 in dB(A)
+	S.AudioPlus2			Octave +2 in dB(A)
+	S.AudioPlus3			Octave +3 in dB(A)
+	S.AudioPlus4			Octave +4 in dB(A)
+	S.AudioPlus5			Octave +5 in dB(A)
+	S.AudioPlus6			Octave +6 in dB(A)
+	S.AudioPlus7			Octave +7 in dB(A)
+	S.AudioPlus8			Octave +8 in dB(A)
+	S.AudioPlus9			Octave +9 in dB(A)
+	S.AudioPlus10			Octave +10 in dB(A)
+	S.SatInfo
+	S.Latitude				nibbles: n1:0=East/North, 8=West/South; n2&n3: whole degrees (0-180); n4-n8: degree fraction (max 999999)
+	S.Longitude				nibbles: n1:0=East/North, 8=West/South; n2&n3: whole degrees (0-180); n4-n8: degree fraction (max 999999)
+
+	P.Powerstate					Power State
+	P.BatteryVoltage				Battery Voltage (milliVolts)
+	P.BatteryTemperature			Battery Temperature (milliKelvin)
+	P.BatteryGauge					Get Battery Gauge, BFFF = Battery full, 1FFF = Battery fail, 0000 = No Battery Installed
+	P.MuxStatus						Mux Status (0-7=channel,F=inhibited)
+	P.ErrorStatus					Error Status (0=OK)
+	P.BaseTimer						BaseTimer (seconds)
+	P.SessionUptime					Session Uptime (seconds)
+	P.TotalUptime					Total Uptime (minutes)
+	v3: P.COHeaterMode				CO heater mode
+	P.COHeater						Powerstate CO heater (0/1)
+	P.NO2Heater						Powerstate NO2 heater (0/1)
+	P.O3Heater						Powerstate O3 heater (0/1)
+	v3: P.CO2Heater					Powerstate CO2 heater (0/1)
+	P.UnitSerialnumber				Serialnumber of unit
+	P.TemporarilyEnableDebugLeds	Debug leds (0/1)
+	P.TemporarilyEnableBaseTimer	Enable BaseTime (0/1)
+	P.ControllerReset				WIFI reset
+	P.FirmwareUpdate				Firmware update, reboot to bootloader
+
+	Unknown at this moment (decimal):
+	P.11
+	P.16
+	P.17
+	P.18
+
 Below are typical values as obtained via the raw sensor API ::
 
 	# General
@@ -117,6 +188,7 @@ Below are typical values as obtained via the raw sensor API ::
 	p_18: 167772549,
 	p_17: 167772549,
 
+
 Below each of these sensor values are elaborated. All conversions are implemented in this Python script and
 used in various ETL-chains:
 https://github.com/Geonovum/smartemission/blob/master/etl/sensorconverters.py
@@ -134,7 +206,7 @@ https://github.com/pietermarsman/smartemission_calibration .
 By using the R-language, reports in PDF are generated.
 
 O3 Calibration
---------------
+~~~~~~~~~~~~~~
 
 O3 seems to be the most linear. See the resulting `O3 PDF report <_static/calibration/O3.pdf>`_.
 
@@ -152,5 +224,110 @@ From the linear model comes the following formula for the conversion from resist
 	+ 0.0699428 * s.humidity
 	+ 0.008435412 * s.temperature.unit * sqrt(s.no2resistance)
 
+GPS Data
+--------
 
+See https://github.com/Geonovum/sospilot/issues/22
+
+Example: ::
+
+	07/24/2015 07:27:36,S.Longitude,5914103
+	07/24/2015 07:27:36,S.Latitude,53949937
+	wordt
+
+	Longitude: 5914103 --> 0x005a3df7
+	0x05 --> 5 graden (n2 en n3),
+	0xa3df7 --> 671223 (n4-n8) fractie --> 0.671223
+	dus 5.671223 graden
+
+	Latitude: 53949937 --> 0x033735f1
+	0x33 --> 51 graden
+	0x735f1 --> 472561 --> 0.472561
+	dus 51.472561
+	n0=0 klopt met East/North.
+	5.671223, 51.472561
+
+	komt precies uit in de Marshallstraat in Helmond bij Intemo, dus alles lijkt te kloppen!!
+
+	In TypeScript:
+
+	/*
+	        8 nibbles:
+	        MSB                  LSB
+	        n1 n2 n3 n4 n5 n6 n7 n8
+	        n1: 0 of 8, 0=East/North, 8=West/South
+	        n2 en n3: whole degrees (0-180)
+	        n4-n8: fraction of degrees (max 999999)
+	*/
+	private convert(input: number): number {
+	 var sign = input >> 28 ? -1 : +1;
+	 var deg = (input >> 20) & 255;
+	 var dec = input & 1048575;
+
+	 return (deg + dec / 1000000) * sign;
+	}
+
+In Python: ::
+
+	# Lat or longitude conversion
+	# 8 nibbles:
+	# MSB                  LSB
+	# n1 n2 n3 n4 n5 n6 n7 n8
+	# n1: 0 of 8, 0=East/North, 8=West/South
+	# n2 en n3: whole degrees (0-180)
+	# n4-n8: fraction of degrees (max 999999)
+	def convert_coord(input, json_obj, name):
+	    sign = 1.0
+	    if input >> 28:
+	        sign = -1.0
+	    deg = float((input >> 20) & 255)
+	    dec = float(input & 1048575)
+
+	    result = (deg + dec / 1000000.0) * sign
+	    if result == 0.0:
+	        result = None
+	    return result
+
+	def convert_latitude(input, json_obj, name):
+	    res = convert_coord(input, json_obj, name)
+	    if res is not None and (res < -90.0 or res > 90.0):
+	        log.error('Invalid latitude %d' % res)
+	        return None
+	    return res
+
+	def convert_longitude(input, json_obj, name):
+	    res = convert_coord(input, json_obj, name)
+	    if res is not None and (res < -180.0 or res > 180.0):
+	        log.error('Invalid longitude %d' % res)
+	        return None
+	    return res
+
+Meteo Data
+----------
+
+Python code: ::
+
+	def convert_temperature(input, json_obj, name):
+	    if input == 0:
+	        return None
+
+	    tempC = int(round(float(input)/1000.0 - 273.1))
+	    if tempC > 100:
+	        return None
+
+	    return tempC
+
+
+	def convert_barometer(input, json_obj, name):
+	    result = float(input) / 100.0
+	    if result > 2000:
+	        return None
+	    return int(round(result))
+
+
+	def convert_humidity(input, json_obj, name):
+	    humPercent = int(round(float(input) / 1000.0))
+	    if humPercent > 100:
+	        return None
+	    return humPercent
 
