@@ -23,6 +23,7 @@ Data
 
 Linux Server
 ------------
+
 .. [UbuntuGeo] Algemene handleiding Ubuntu FOSS Geo inrichting: http://docs.kademo.nl/project/geolinuxserver.html
 
 Demos and Servers

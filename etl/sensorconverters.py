@@ -113,6 +113,7 @@ def ppb_co2_to_ugm3(input, json_obj, name):
 def ppb_co2_to_ppm(input, json_obj, name):
     return input/1000
 
+
 def ppb_no2_to_ugm3(input, json_obj, name):
     return ppb_to_ugm3('no2', input)
 
