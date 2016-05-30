@@ -7,6 +7,7 @@ from stetl.util import Util
 
 log = Util.get_log("SensorConverters")
 
+
 # According to CityGIS the units are defined as follows. ::
 #
 # S.TemperatureUnit		milliKelvin
@@ -111,7 +112,7 @@ def ppb_co2_to_ugm3(input, json_obj, name):
 
 
 def ppb_co2_to_ppm(input, json_obj, name):
-    return input/1000
+    return input / 1000
 
 
 def ppb_no2_to_ugm3(input, json_obj, name):
@@ -121,11 +122,12 @@ def ppb_no2_to_ugm3(input, json_obj, name):
 def ppb_o3_to_ugm3(input, json_obj, name):
     return int(input)
 
+
 # http://smartplatform.readthedocs.io/en/latest/data.html#o3-calibration
 # O3 = 89.1177
 # 	+ 0.03420626 * s.coresistance * log(s.o3resistance)
 # 	- 0.008836714 * s.light.sensor.bottom
-# 	- 0.02934928 s.coresistance * s.temperature.ambient
+# 	- 0.02934928 * s.coresistance * s.temperature.ambient
 # 	- 1.439367 * s.temperature.ambient * log(s.coresistance)
 # 	+ 1.26521 * log(s.coresistance) * sqrt(s.coresistance)
 # 	- 0.000343098 * s.coresistance * s.no2resistance
@@ -137,55 +139,61 @@ def ppb_o3_to_ugm3(input, json_obj, name):
 def ohm_o3_to_ugm3(input, json_obj, name):
     # Ik doe als eerst een aantal preprocess stappen:
     # - gassen in kOhm
-    # - Temperatuur in celcius (zowel ambient als unit)
+    # - Temperatuur in celsius (zowel ambient als unit)
     # - Humidity in %, dus ook delen door 1000
     # - barometer / 100
     # - Ik doe niets met lightsensor_bottom
 
     val = None
+    s_o3resistance = ohm_to_kohm(json_obj['s_o3resistance'])
+    device = json_obj['p_unitserialnumber']
     try:
         s_no2resistance = ohm_to_kohm(json_obj['s_coresistance'])
-        s_o3resistance = ohm_to_kohm(json_obj['s_o3resistance'])
         s_coresistance = ohm_to_kohm(json_obj['s_coresistance'])
         s_temperatureambient = convert_temperature(json_obj['s_temperatureambient'])
         s_temperatureunit = convert_temperature(json_obj['s_temperatureunit'])
         s_humidity = convert_humidity(json_obj['s_humidity'])
         s_barometer = convert_barometer(json_obj['s_barometer'])
 
-        val1 = 89.1177 + 0.03420626 * s_coresistance  * math.log(s_o3resistance )
+        val1 = 89.1177 + 0.03420626 * s_coresistance * math.log(s_o3resistance)
         val2 = - 0.008836714 * json_obj['s_lightsensorbottom']
-        val3 = - 0.02934928 * s_coresistance  * s_temperatureambient
-        val4 = - 1.439367 * s_temperatureambient * math.log(s_coresistance )
-        val5 = 1.26521 * math.log(s_coresistance ) * math.sqrt(s_coresistance )
-        val6 = - 0.000343098 * s_coresistance  * s_no2resistance
-        val7 = 0.02761877 * s_no2resistance  * math.log(s_o3resistance )
+        val3 = - 0.02934928 * s_coresistance * s_temperatureambient
+        val4 = - 1.439367 * s_temperatureambient * math.log(s_coresistance)
+        val5 = 1.26521 * math.log(s_coresistance) * math.sqrt(s_coresistance)
+        val6 = - 0.000343098 * s_coresistance * s_no2resistance
+        val7 = 0.02761877 * s_no2resistance * math.log(s_o3resistance)
         val8 = - 0.0002260495 * s_barometer * s_coresistance
         val9 = 0.0699428 * s_humidity
-        val10 = 0.008435412 * s_temperatureunit * math.sqrt(s_no2resistance )
+        val10 = 0.008435412 * s_temperatureunit * math.sqrt(s_no2resistance)
         val = val1 + val2 + val3 + val4 + val5 + val6 + val7 + val8 + val9 + val10
 
         if val < 0:
             val = -val
-        print '%s : ohm=%d ugm3=%d' %(name, input, val)
+        print 'device: %d : O3 : ohm=%d ugm3=%d' % (device, input, val)
+
+        # Remove outliers
         if val > 400:
             val = None
     except Exception, e:
-        log.error('Error converting %s, err= %s' % (name, str(e)))
+        log.error('Error converting device=%d %s, err= %s' % (device, name, str(e)))
 
     if val is not None:
-        json_obj['s_o3'] = val
-    return val
+        # Create new var
+        json_obj['s_o3'] = int(round(val))
+
+    # Keep original value as kOhm
+    return s_o3resistance
 
 
 def ohm_to_kohm(input, json_obj=None, name=None):
-    return int(round(input/1000))
+    return int(round(float(input) / 1000.0))
 
 
 def convert_temperature(input, json_obj=None, name=None):
     if input == 0:
         return None
 
-    tempC = int(round(float(input)/1000.0 - 273.1))
+    tempC = int(round(float(input) / 1000.0 - 273.1))
     if tempC > 100:
         return None
 
@@ -204,6 +212,7 @@ def convert_humidity(input, json_obj=None, name=None):
     if humPercent > 100:
         return None
     return humPercent
+
 
 # Lat or longitude conversion
 # 8 nibbles:
@@ -224,19 +233,22 @@ def convert_coord(input, json_obj, name):
         result = None
     return result
 
+
 def convert_latitude(input, json_obj, name):
     res = convert_coord(input, json_obj, name)
     if res is not None and (res < -90.0 or res > 90.0):
-        log.error('Invalid latitude %d' % res)
+        log.error('Invalid latitude device=%d : %d' % (json_obj['p_unitserialnumber'], res))
         return None
     return res
+
 
 def convert_longitude(input, json_obj, name):
     res = convert_coord(input, json_obj, name)
     if res is not None and (res < -180.0 or res > 180.0):
-        log.error('Invalid longitude %d' % res)
+        log.error('Invalid longitude device=%d : %d' % (json_obj['p_unitserialnumber'], res))
         return None
     return res
+
 
 # https://aboutsimon.com/blog/2013/06/06/Datetime-hell-Time-zone-aware-to-UNIX-timestamp.html
 def convert_timestamp(iso_str, json_obj, name):
@@ -249,8 +261,10 @@ def convert_timestamp(iso_str, json_obj, name):
     # print '-> %s' % datetime.utcfromtimestamp(timestamp).isoformat()
     return datetime.strptime(iso_str, '%Y-%m-%dT%H:%M:%SGMT')
 
+
 def convert_none(value, json_obj, name):
     return value
+
 
 # From https://www.teachengineering.org/view_activity.php?url=collection/nyu_/activities/nyu_noise/nyu_noise_activity1.xml
 # level dB(A)
@@ -278,6 +292,7 @@ def calc_audio_level(db):
             level_num = i + 1
 
     return level_num
+
 
 # Converts audio var and populates virtual max value vars
 # NB not used: now taking average of max values, see convert_audio_avg()
@@ -310,8 +325,8 @@ def convert_audio_max(value, json_obj, name):
         json_obj['t_audiomax_octband'] = band_num
         json_obj['t_audiolevel'] = calc_audio_level(band_max)
 
-
     return band_max
+
 
 # Converts audio var and populates average
 # Logaritmisch optellen van de waarden per frequentieband voor het verkrijgen van de totaalwaarde:
@@ -336,19 +351,19 @@ def convert_audio_avg(value, json_obj, name):
     band_avg = 0
     band_cnt = 0
     for i in range(0, len(bands)):
-        band_val  = bands[i]
+        band_val = bands[i]
         # outliers
         if band_val < 1 or band_val > 150:
             continue
         band_cnt += 1
-        
+
         # convert band value Decibel to Bel and then get "real" value (power 10)
         band_avg += math.pow(10, band_val / 10)
         # print '%s : band[%d]=%f band_avg=%f' %(name, i, bands[i], band_avg)
 
     if band_cnt == 0:
         return None
-    
+
     # Take average of "real" values and convert back to Bel via log10 and Decibel via *10
     band_avg = math.log10(band_avg / float(band_cnt)) * 10.0
 
@@ -365,18 +380,21 @@ def convert_audio_avg(value, json_obj, name):
     else:
         json_obj['v_audioavg_cnt'] += 1
         json_obj['v_audioavg_total'] += math.pow(10, band_avg / 10)
-        json_obj['v_audioavg'] = int(round(math.log10(json_obj['v_audioavg_total'] / json_obj['v_audioavg_cnt']) * 10.0))
+        json_obj['v_audioavg'] = int(
+            round(math.log10(json_obj['v_audioavg_total'] / json_obj['v_audioavg_cnt']) * 10.0))
 
     # Determine octave nr from var name
     json_obj['v_audiolevel'] = calc_audio_level(json_obj['v_audioavg'])
     # print 'Unit %s - %s band_db=%f avg_db=%d level=%d' % (json_obj['p_unitserialnumber'], name, band_avg, json_obj['v_audioavg'], json_obj['v_audiolevel'] )
     return band_avg
 
+
 CONVERTERS = {
     's_co': ppb_co_to_ugm3,
     's_co2': ppb_co2_to_ppm,
     's_no2': ppb_no2_to_ugm3,
-    's_o3': ppb_o3_to_ugm3,
+    # Calculated from  s_o3resistance
+    's_o3': convert_none,
     's_coresistance': ohm_to_kohm,
     's_no2resistance': ohm_to_kohm,
     # 's_o3resistance': ohm_to_kohm,
@@ -415,11 +433,12 @@ CONVERTERS = {
     't_audiomax_octband': convert_none,
     't_audiolevel': convert_none,
     # These are assigned already in t_audioplusN conversions
-     'v_audioavg': convert_none,
-     'v_audioavg_octave': convert_none,
-     'v_audioavg_octband': convert_none,
-     'v_audiolevel': convert_none
+    'v_audioavg': convert_none,
+    'v_audioavg_octave': convert_none,
+    'v_audioavg_octband': convert_none,
+    'v_audiolevel': convert_none
 }
+
 
 def convert(json_obj, name):
     if name not in CONVERTERS:

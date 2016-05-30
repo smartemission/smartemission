@@ -27,28 +27,22 @@ class RawSensorLastInput(HttpInput):
         # Outputs to be gathered, with some metadata
         self.outputs = [
             {
-                'name': 's_co',
-                'id': 1,
-                'label': 'CO',
-                'unit': 'ug/m3'
+                'name': 's_o3resistance',
+                'id': 23,
+                'label': 'O3Raw',
+                'unit': 'kOhm'
             },
             {
-                'name': 's_co2',
-                'id': 2,
-                'label': 'CO2',
-                'unit': 'ppm'
-            },
-            {
-                'name': 's_no2',
-                'id': 3,
+                'name': 's_no2resistance',
+                'id': 24,
                 'label': 'NO2',
-                'unit': 'ug/m3'
+                'unit': 'kOhm'
             },
             {
-                'name': 's_o3',
-                'id': 4,
-                'label': 'O3',
-                'unit': 'ug/m3'
+                'name': 's_coresistance',
+                'id': 25,
+                'label': 'CO',
+                'unit': 'kOhm'
             },
             {
                 'name': 's_temperatureambient',
@@ -147,23 +141,29 @@ class RawSensorLastInput(HttpInput):
                 'label': 'Average Audio/Noise Level 1-5',
                 'unit': 'int'
             },
+            # {
+            #     'name': 's_co',
+            #     'id': 1,
+            #     'label': 'CO',
+            #     'unit': 'ug/m3'
+            # },
             {
-                'name': 's_o3resistance',
-                'id': 23,
+                'name': 's_co2',
+                'id': 2,
+                'label': 'CO2',
+                'unit': 'ppm'
+            },
+            # {
+            #     'name': 's_no2',
+            #     'id': 3,
+            #     'label': 'NO2',
+            #     'unit': 'ug/m3'
+            # },
+            {
+                'name': 's_o3',
+                'id': 4,
                 'label': 'O3',
-                'unit': 'kOhm'
-            },
-            {
-                'name': 's_no2resistance',
-                'id': 24,
-                'label': 'NO2',
-                'unit': 'kOhm'
-            },
-            {
-                'name': 's_coresistance',
-                'id': 25,
-                'label': 'CO',
-                'unit': 'kOhm'
+                'unit': 'ug/m3'
             }
         ]
 
@@ -268,6 +268,11 @@ class RawSensorLastInput(HttpInput):
         json_obj = self.parse_json_str(data)
         if 'p_unitserialnumber' not in json_obj:
             return []
+
+        # Init gasses ug/m3 as some old units may send wrong values
+        json_obj['s_o3'] = None
+        json_obj['s_no2'] = None
+        json_obj['s_co'] = None
 
         # Base data for all records
         base_record = {}
