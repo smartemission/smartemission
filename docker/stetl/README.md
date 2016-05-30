@@ -16,3 +16,5 @@ Note that full paths are required.
 
 Many Stetl configs require a connection to PostGIS. This can be effected with a linked container: ``--link postgis``, or
 better using Docker networking.
+
+See ../etl for examples.

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Run the Postgresql server with PostGIS and default database "gis".
+# Run the GeoServer Docker image with local and PostGIS Docker mappings.
 #
 
 GIT="/opt/geonovum/smartem/git"
@@ -11,6 +11,11 @@ NAME="geoserver"
 IMAGE="geonovum/geoserver"
 PG_HOST="postgis"
 DATA_DIR="/var/smartem/data/geoserver"
+
+# First time: may make emtpy dirs. Docker will fill these once with
+# values in container and leave them in subsequent runs. Hence the GeoServer
+# data dir can be maintained on the host. Loosing/rebuilding the Docker image will thus
+# never result in loss of data.
 if [ ! -d ${DATA_DIR} ]
 then
  sudo mkdir -p ${DATA_DIR}
@@ -20,6 +25,7 @@ then
  sudo mkdir -p ${TC_LOG}
 fi
 
+# Define the mappings for local dirs, ports and PostGIS Docker container
 VOL_MAP="-v ${DATA_DIR}:/opt/geoserver/data_dir -v ${TC_LOG}:/usr/local/tomcat/logs"
 PORT_MAP="-p 8080:8080"
 LINK_MAP="--link ${PG_HOST}:${PG_HOST}"
@@ -28,9 +34,9 @@ LINK_MAP="--link ${PG_HOST}:${PG_HOST}"
 sudo docker kill ${NAME} > /dev/null 2>&1
 sudo docker rm ${NAME} > /dev/null 2>&1
 
-# Finally run
+# Finally run with all mappings
 sudo docker run --name ${NAME} ${LINK_MAP} ${PORT_MAP} ${VOL_MAP} -d ${IMAGE}
 
-# get into container with bash
+# When running: get into container with bash
 # sudo docker exec -it geoserver  bash
 
