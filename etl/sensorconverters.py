@@ -119,7 +119,37 @@ def ppb_no2_to_ugm3(input, json_obj, name):
 
 
 def ppb_o3_to_ugm3(input, json_obj, name):
-    return ppb_to_ugm3('o3', input)
+    return int(input)
+
+# http://smartplatform.readthedocs.io/en/latest/data.html#o3-calibration
+# O3 = 89.1177
+# 	+ 0.03420626 * s.coresistance * log(s.o3resistance)
+# 	- 0.008836714 * s.light.sensor.bottom
+# 	- 0.02934928 s.coresistance * s.temperature.ambient
+# 	- 1.439367 * s.temperature.ambient * log(s.coresistance)
+# 	+ 1.26521 * log(s.coresistance) * sqrt(s.coresistance)
+# 	- 0.000343098 * s.coresistance * s.no2resistance
+# 	+ 0.02761877 * s.no2resistance * log(s.o3resistance)
+# 	- 0.0002260495 * s.barometer * s.coresistance
+# 	+ 0.0699428 * s.humidity
+# 	+ 0.008435412 * s.temperature.unit * sqrt(s.no2resistance)
+#
+def ohm_o3_to_ugm3(input, json_obj, name):
+
+    val1 = 89.1177 + 0.03420626 * json_obj['s_coresistance']  * math.log(json_obj['s_o3resistance'] )
+    val2 = - 0.008836714 * json_obj['s_lightsensorbottom']
+    val3 = - 0.02934928 * json_obj['s_coresistance']  * json_obj['s_temperatureambient']
+    val4 = - 1.439367 * json_obj['s_temperatureambient'] * math.log(json_obj['s_coresistance'] )
+    val5 = 1.26521 * math.log(json_obj['s_coresistance'] ) * math.sqrt(json_obj['s_coresistance'] )
+    val6 = - 0.000343098 * json_obj['s_coresistance']  * json_obj['s_no2resistance'] 
+    val7 = 0.02761877 * json_obj['s_no2resistance']  * math.log(json_obj['s_o3resistance'] )
+    val8 = - 0.0002260495 * json_obj['s_barometer'] * json_obj['s_coresistance'] 
+    val9 = 0.0699428 * json_obj['s_humidity']
+    val10 = 0.008435412 * json_obj['s_temperatureunit'] * math.sqrt(json_obj['s_no2resistance'] )
+
+    val = val1 + val2 + val3 + val4 + val5 + val6 + val7 + val8 + val9 + val10
+    print '%s : ohm=%d ugm3=%d' %(name, input, val)
+    return val
 
 
 def ohm_to_kohm(input, json_obj, name):
@@ -314,7 +344,7 @@ def convert_audio_avg(value, json_obj, name):
 
     # Determine octave nr from var name
     json_obj['v_audiolevel'] = calc_audio_level(json_obj['v_audioavg'])
-    print 'Unit %s - %s band_db=%f avg_db=%d level=%d' % (json_obj['p_unitserialnumber'], name, band_avg, json_obj['v_audioavg'], json_obj['v_audiolevel'] )
+    # print 'Unit %s - %s band_db=%f avg_db=%d level=%d' % (json_obj['p_unitserialnumber'], name, band_avg, json_obj['v_audioavg'], json_obj['v_audiolevel'] )
     return band_avg
 
 CONVERTERS = {
@@ -325,6 +355,7 @@ CONVERTERS = {
     's_coresistance': ohm_to_kohm,
     's_no2resistance': ohm_to_kohm,
     's_o3resistance': ohm_to_kohm,
+    # 's_o3resistance': ohm_o3_to_ugm3,
     's_temperatureambient': convert_temperature,
     's_barometer': convert_barometer,
     's_humidity': convert_humidity,
