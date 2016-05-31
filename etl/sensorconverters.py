@@ -172,17 +172,13 @@ def ohm_o3_to_ugm3(input, json_obj, name):
 
         # Sum all intermediate vals
         val = val1 + val2 + val3 + val4 + val5 + val6 + val7 + val8 + val9 + val10
-        # print 'device: %d : O3 : ohm=%d ugm3=%d' % (device, input, val)
-
-        # Somehow result is always negative: why?
-        if val < 0:
-            val = 0.0
 
         print 'device: %d : O3 : ohm=%d ugm3=%d' % (device, input, val)
 
         # Remove outliers
-        if val > 400:
+        if val < 0 or val > 400:
             val = None
+
     except Exception, e:
         log.error('Error converting device=%d %s, err= %s' % (device, name, str(e)))
 
