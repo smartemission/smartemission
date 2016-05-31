@@ -261,7 +261,9 @@ Same for Stetl, build and test: ::
 Install Docker
 --------------
 
-This installation is for both the local Vagrant environment or on Fiware Ubuntu VM.
+This installation is for both the local Vagrant environment or on Fiware Ubuntu VM or in fact any bare Ubuntu system.
+The whole stack can be up and running within 15 minutes!
+
 See https://docs.docker.com/engine/installation/linux/ubuntulinux/.
 
 Steps are all done by executing the script https://github.com/Geonovum/smartemission/blob/master/docker/bootstrap.sh :
@@ -269,10 +271,27 @@ Steps are all done by executing the script https://github.com/Geonovum/smartemis
 .. literalinclude:: ../../docker/bootstrap.sh
     :language: bash
 
+Confirm interactive choices: postfix "Local".
+
 Includes also the install for Docker-compose, for later combining Docker-images, see https://docs.docker.com/compose/install.
 
 See also CLI utils for ``docker-compose``: https://docs.docker.com/v1.5/compose/cli/
 Now our system is ready to roll out Docker images!
+
+Running within 15 mins
+~~~~~~~~~~~~~~~~~~~~~~
+
+Below the steps to get the complete stack and ETL running within 15 minutes on a bare Ubuntu system:
+
+* run https://github.com/Geonovum/smartemission/blob/master/docker/bootstrap.sh
+* build Docker images: ``cd /opt/geonovum/smartem/git/docker`` and call ``./build.sh`` in each subdir
+* run the system: ``cd /opt/geonovum/smartem/git/services`` and call ``./run-all.sh`
+* create the database schema's: (first time only!!): ``cd /opt/geonovum/smartem/git/etl`` and call ``./db-init.sh``
+* schedule the ETL: ``crontab /opt/geonovum/smartem/git/services/cronfile.txt``
+* create a HTTP admin password file in: ``/opt/geonovum/smartem/git/services/web/config/admin/htpasswd`` (see README.TXT there)
+* go to domain admin site ``/adm`` and change GeoServer default password
+
+Check log files under ``/var/log/smartem/log``.
 
 Handy Commands
 ~~~~~~~~~~~~~~
