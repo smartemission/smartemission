@@ -1,12 +1,11 @@
 import time
 from calendar import timegm
-from datetime import datetime
+from datetime import datetime, tzinfo, timedelta
 import re
 import math
 from stetl.util import Util
 
 log = Util.get_log("SensorConverters")
-
 
 # According to CityGIS the units are defined as follows. ::
 #
@@ -261,17 +260,33 @@ def convert_longitude(input, json_obj, name):
         return None
     return res
 
-
 # https://aboutsimon.com/blog/2013/06/06/Datetime-hell-Time-zone-aware-to-UNIX-timestamp.html
-def convert_timestamp(iso_str, json_obj, name):
-    # iso_str : '2016-02-03T16:47:51.3844629Z'
-    iso_str = iso_str.split('.')[0] + 'GMT'
+# Somehow need to force timezone in....TODO: may use dateutil external package
+class UTC(tzinfo):
+    """UTC"""
+
+    def utcoffset(self, dt):
+        return timedelta(0)
+
+    def tzname(self, dt):
+        return "UTC"
+
+    def dst(self, dt):
+        return timedelta(0)
+
+utc = UTC()
+
+def convert_timestamp(input, json_obj, name):
+    # input: 2016-05-31T15:55:33.2014241Z
+    # iso_str : '2016-05-31T15:55:33GMT'
+    iso_str = input.split('.')[0] + 'GMT'
     # timestamp = timegm(
     #         time.strptime(iso_str, '%Y-%m-%dT%H:%M:%SGMT')
     # )
     # print timestamp
     # print '-> %s' % datetime.utcfromtimestamp(timestamp).isoformat()
-    return datetime.strptime(iso_str, '%Y-%m-%dT%H:%M:%SGMT')
+
+    return datetime.strptime(iso_str, '%Y-%m-%dT%H:%M:%SGMT').replace(tzinfo=utc)
 
 
 def convert_none(value, json_obj, name):
