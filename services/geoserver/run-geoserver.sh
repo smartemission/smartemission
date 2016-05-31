@@ -16,14 +16,9 @@ DATA_DIR="/var/smartem/data/geoserver"
 # values in container and leave them in subsequent runs. Hence the GeoServer
 # data dir can be maintained on the host. Loosing/rebuilding the Docker image will thus
 # never result in loss of data.
-if [ ! -d ${DATA_DIR} ]
-then
- sudo mkdir -p ${DATA_DIR}
-fi
-if [ ! -d ${TC_LOG} ]
-then
- sudo mkdir -p ${TC_LOG}
-fi
+
+sudo mkdir -p ${DATA_DIR}
+sudo mkdir -p ${TC_LOG}
 
 # Define the mappings for local dirs, ports and PostGIS Docker container
 VOL_MAP="-v ${DATA_DIR}:/opt/geoserver/data_dir -v ${TC_LOG}:/usr/local/tomcat/logs"
