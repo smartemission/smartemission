@@ -145,16 +145,20 @@ def ohm_o3_to_ugm3(input, json_obj, name):
     # - Ik doe niets met lightsensor_bottom
 
     val = None
+
+    # Original value in kOhm
+
     s_o3resistance = ohm_to_kohm(json_obj['s_o3resistance'])
     device = json_obj['p_unitserialnumber']
     try:
-        s_no2resistance = ohm_to_kohm(json_obj['s_no2resistance'])
+        s_no2resistance = ohm_no2_to_kohm(json_obj['s_no2resistance'])
         s_coresistance = ohm_to_kohm(json_obj['s_coresistance'])
         s_temperatureambient = convert_temperature(json_obj['s_temperatureambient'])
         s_temperatureunit = convert_temperature(json_obj['s_temperatureunit'])
         s_humidity = convert_humidity(json_obj['s_humidity'])
         s_barometer = convert_barometer(json_obj['s_barometer'])
 
+        # Use separate val vars for debugging
         val1 = 89.1177 + 0.03420626 * s_coresistance * math.log(s_o3resistance)
         val2 = - 0.008836714 * json_obj['s_lightsensorbottom']
         val3 = - 0.02934928 * s_coresistance * s_temperatureambient
@@ -165,10 +169,15 @@ def ohm_o3_to_ugm3(input, json_obj, name):
         val8 = - 0.0002260495 * s_barometer * s_coresistance
         val9 = 0.0699428 * s_humidity
         val10 = 0.008435412 * s_temperatureunit * math.sqrt(s_no2resistance)
-        val = val1 + val2 + val3 + val4 + val5 + val6 + val7 + val8 + val9 + val10
 
+        # Sum all intermediate vals
+        val = val1 + val2 + val3 + val4 + val5 + val6 + val7 + val8 + val9 + val10
+        # print 'device: %d : O3 : ohm=%d ugm3=%d' % (device, input, val)
+
+        # Somehow result is always negative: why?
         if val < 0:
             val = -val
+
         print 'device: %d : O3 : ohm=%d ugm3=%d' % (device, input, val)
 
         # Remove outliers
@@ -189,12 +198,19 @@ def ohm_to_kohm(input, json_obj=None, name=None):
     return int(round(float(input) / 1000.0))
 
 
+def ohm_no2_to_kohm(input, json_obj=None, name=None):
+    val = ohm_to_kohm(input, json_obj, name)
+    if val > 2000:
+        return None
+    return val
+
+
 def convert_temperature(input, json_obj=None, name=None):
     if input == 0:
         return None
 
     tempC = int(round(float(input) / 1000.0 - 273.1))
-    if tempC > 100:
+    if tempC > 100 or tempC < -40:
         return None
 
     return tempC
@@ -202,7 +218,7 @@ def convert_temperature(input, json_obj=None, name=None):
 
 def convert_barometer(input, json_obj=None, name=None):
     result = float(input) / 100.0
-    if result > 2000:
+    if result > 1100.0:
         return None
     return int(round(result))
 
@@ -396,7 +412,7 @@ CONVERTERS = {
     # Calculated from  s_o3resistance
     's_o3': convert_none,
     's_coresistance': ohm_to_kohm,
-    's_no2resistance': ohm_to_kohm,
+    's_no2resistance': ohm_no2_to_kohm,
     # 's_o3resistance': ohm_to_kohm,
     's_o3resistance': ohm_o3_to_ugm3,
     's_temperatureambient': convert_temperature,
