@@ -324,6 +324,10 @@ class RawSensorLastInput(HttpInput):
                 if record['value'] is None:
                     continue
 
+                if name == 's_o3':
+                    # average dB value as raw value
+                    record['value_raw'] = json_obj['s_o3resistance']
+
                 if name == 'v_audiolevel':
                     # average dB value as raw value
                     record['value_raw'] = json_obj['v_audioavg']
