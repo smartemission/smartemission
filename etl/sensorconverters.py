@@ -161,7 +161,7 @@ def ohm_o3_to_ugm3(input, json_obj, name):
         # Use separate val vars for debugging
         val1 = 89.1177 + 0.03420626 * s_coresistance * math.log(s_o3resistance)
         val2 = - 0.008836714 * json_obj['s_lightsensorbottom']
-        val3 = - 0.02934928 * s_coresistance * s_temperatureambient
+        val3 = 0.02934928 * s_coresistance * s_temperatureambient
         val4 = - 1.439367 * s_temperatureambient * math.log(s_coresistance)
         val5 = 1.26521 * math.log(s_coresistance) * math.sqrt(s_coresistance)
         val6 = - 0.000343098 * s_coresistance * s_no2resistance
@@ -176,7 +176,7 @@ def ohm_o3_to_ugm3(input, json_obj, name):
 
         # Somehow result is always negative: why?
         if val < 0:
-            val = -val
+            val = 0.0
 
         print 'device: %d : O3 : ohm=%d ugm3=%d' % (device, input, val)
 
