@@ -404,7 +404,7 @@ def convert_audio_avg(value, json_obj, name):
     # print 'Unit %s - %s band_db=%f avg_db=%d level=%d' % (json_obj['p_unitserialnumber'], name, band_avg, json_obj['v_audioavg'], json_obj['v_audiolevel'] )
     return band_avg
 
-
+# Basically a Jump Table to call the appropriate conversion function by sensor-name
 CONVERTERS = {
     's_co': ppb_co_to_ugm3,
     's_co2': ppb_co2_to_ppm,
@@ -453,6 +453,254 @@ CONVERTERS = {
     'v_audioavg_octave': convert_none,
     'v_audioavg_octband': convert_none,
     'v_audiolevel': convert_none
+}
+
+# Allowed min/max values for sensor-names
+# See e.g. http://whale.citygis.nl//sensors/v1/devices/20
+# TODO apply before conversion i.s.o. ad-hoc checks, even better one generic dict with all sensor metadata
+#
+RAW_RANGE_FILTERS = {
+    # outputs: [
+    # {
+    # name: "s_temperatureunit",
+    # label: "Unit Temperature",
+    # chart: "True",
+    # unit: "milliKelvin",
+    # min: "233150",
+    # max: "398150"
+    # },
+    # {
+    # name: "s_temperatureambient",
+    # label: "Ambient Temperature",
+    # chart: "True",
+    # unit: "milliKelvin",
+    # min: "233150",
+    # max: "398150"
+    # },
+    # {
+    # name: "s_humidity",
+    # label: "Relative Humidity",
+    # chart: "True",
+    # unit: "m%RH",
+    # min: "20",
+    # max: "100"
+    # },
+    # {
+    # name: "s_lightsensortop",
+    # label: "Light Top",
+    # chart: "True",
+    # unit: "Lux",
+    # min: "0",
+    # max: "65535"
+    # },
+    # {
+    # name: "s_lightsensorbottom",
+    # label: "Light Bottom",
+    # chart: "True",
+    # unit: "Lux",
+    # min: "0",
+    # max: "65535"
+    # },
+    # {
+    # name: "s_barometer",
+    # label: "Air Pressure",
+    # chart: "True",
+    # unit: "mPascal",
+    # min: "20000",
+    # max: "110000"
+    # },
+    # {
+    # name: "s_altimeter",
+    # label: "Height",
+    # chart: "True",
+    # unit: "Meter",
+    # min: "0",
+    # max: "4000"
+    # },
+    # {
+    # name: "s_co",
+    # label: "CO Concentration",
+    # chart: "True",
+    # unit: "ppb",
+    # min: "0",
+    # max: "1000"
+    # },
+    # {
+    # name: "s_no2",
+    # label: "NO2 Concentration",
+    # chart: "True",
+    # unit: "ppb",
+    # min: "50",
+    # max: "1000"
+    # },
+    # {
+    # name: "s_accelerox",
+    # label: "Acceleration in the X-axis",
+    # chart: "True",
+    # unit: "oG",
+    # min: "0",
+    # max: "1024"
+    # },
+    # {
+    # name: "s_acceleroy",
+    # label: "Acceleration in the Y-axis",
+    # chart: "True",
+    # unit: "oG",
+    # min: "0",
+    # max: "1024"
+    # },
+    # {
+    # name: "s_acceleroz",
+    # label: "Acceleration in the Z-axis",
+    # chart: "True",
+    # unit: "oG",
+    # min: "0",
+    # max: "1024"
+    # },
+    # {
+    # name: "s_lightsensorred",
+    # label: "Red Light",
+    # chart: "True",
+    # unit: "Lux",
+    # min: "0",
+    # max: "65535"
+    # },
+    # {
+    # name: "s_lightsensorgreen",
+    # label: "Green Light",
+    # chart: "True",
+    # unit: "Lux",
+    # min: "0",
+    # max: "65535"
+    # },
+    # {
+    # name: "s_lightsensorblue",
+    # label: "Blue Light",
+    # chart: "True",
+    # unit: "Lux",
+    # min: "0",
+    # max: "65535"
+    # },
+    # {
+    # name: "s_rgbcolor",
+    # label: "RGB Light",
+    # chart: "True",
+    # unit: "RGB8",
+    # min: "0",
+    # max: "16777215"
+    # },
+    # {
+    # name: "s_bottomswitches",
+    # label: "Bottom Switches",
+    # chart: "False",
+    # unit: "?",
+    # min: "0",
+    # max: "3"
+    # },
+    # {
+    # name: "s_o3",
+    # label: "O3 Concentration",
+    # chart: "True",
+    # unit: "ppb",
+    # min: "10",
+    # max: "1000"
+    # },
+    # {
+    # name: "s_co2",
+    # label: "CO2 Concentration",
+    # chart: "True",
+    # unit: "ppb",
+    # min: "0",
+    # max: "5000000"
+    # },
+    # {
+    # name: "s_rain",
+    # label: "Rain",
+    # chart: "True",
+    # unit: "Rain value",
+    # min: "0",
+    # max: "15"
+    # },
+    # {
+    # name: "s_externaltemp",
+    # label: "External Temperature",
+    # chart: "True",
+    # unit: "milliKelvin",
+    # min: "-55",
+    # max: "125"
+    # },
+    # {
+    # name: "s_coresistance",
+    # label: "CO Resistance",
+    # chart: "True",
+    # unit: "Ohm",
+    # min: "100000",
+    # max: "1500000"
+    # },
+    # {
+    # name: "s_no2resistance",
+    # label: "NO2 Resistance",
+    # chart: "True",
+    # unit: "Ohm",
+    # min: "800",
+    # max: "20000"
+    # },
+    # {
+    # name: "s_o3resistance",
+    # label: "O3 Resistance",
+    # chart: "True",
+    # unit: "Ohm",
+    # min: "3000",
+    # max: "60000"
+    # },
+    # {
+    # name: "s_pm10",
+    # label: "PM 10",
+    # chart: "True",
+    # unit: "ng/m3",
+    # min: "0",
+    # max: "80000"
+    # },
+    # {
+    # name: "s_pm2_5",
+    # label: "PM 2.5",
+    # chart: "True",
+    # unit: "ng/m3",
+    # min: "0",
+    # max: "80000"
+    # },
+    # {
+    # name: "s_pm1",
+    # label: "PM 1",
+    # chart: "True",
+    # unit: "ng/m3",
+    # min: "0",
+    # max: "80000"
+    # },
+    # {
+    # name: "s_tsp",
+    # label: "Total Suspended Particles",
+    # chart: "True",
+    # unit: "ng/m3",
+    # min: "0",
+    # max: "80000"
+    # },
+    # {
+    # name: "s_windspeed",
+    # label: "Wind Speed",
+    # chart: "True",
+    # unit: "mm/s",
+    # min: "0",
+    # max: "200000"
+    # },
+    # {
+    # name: "s_windheading",
+    # label: "Wind Heading",
+    # chart: "True",
+    # unit: "mDegrees",
+    # min: "0",
+    # max: "360000"
+    # }
 }
 
 
