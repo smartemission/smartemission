@@ -14,22 +14,13 @@ RUN echo "Europe/Amsterdam" > /etc/timezone && \
 RUN export DEBIAN_FRONTEND=noninteractive TERM=linux && \
   echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
-RUN apt-get -y update
-RUN apt-get install -y software-properties-common
+RUN apt-get update && \
+	apt-get install -y software-properties-common
+
+# Use UbuntuGIS for latest GDAL etc
 RUN apt-add-repository ppa:ubuntugis/ubuntugis-unstable
-RUN apt-get -y update
-
-#-------------Application Specific Stuff ----------------------------------------------------
-
-#     python-imaging \
-#      python-yaml \
-#    libjpeg-dev \
-#    zlib1g-dev \
-#    libfreetype6-dev \
-#    python-virtualenv
-
-RUN apt-get install -y \
-	git \
+RUN apt-get update && \
+	apt-get install -y git \
     libproj0 \
     libgeos-dev \
     python-lxml \
@@ -39,10 +30,11 @@ RUN apt-get install -y \
     python-dev \
     python-setuptools
 
-# ADD start.sh /start.sh
-# RUN chmod 0755 /start.sh
+# Get latest Stetl from git
 RUN git clone https://github.com/justb4/stetl /opt/stetl
 
+# Use Stetl installer
 RUN cd /opt/stetl; python setup.py install
 
+# Allow docker run
 ENTRYPOINT ["/usr/local/bin/stetl"]
