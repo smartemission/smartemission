@@ -1,4 +1,6 @@
 -- Database defs for last values of Smart Emission data
+ALTER DATABASE gis SET timezone TO 'Europe/Amsterdam';
+ALTER DATABASE postgres SET timezone TO 'Europe/Amsterdam';
 
 DROP SCHEMA IF EXISTS smartem_rt CASCADE;
 CREATE SCHEMA smartem_rt;

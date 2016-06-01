@@ -22,11 +22,12 @@ sudo mkdir -p ${TC_LOG}
 
 # Define the mappings for local dirs, ports and PostGIS Docker container
 VOL_MAP="-v ${DATA_DIR}:/opt/geoserver/data_dir -v ${TC_LOG}:/usr/local/tomcat/logs"
-PORT_MAP="-p 8080:8080"
+# PORT_MAP="-p 8080:8080"
+PORT_MAP=""
 LINK_MAP="--link ${PG_HOST}:${PG_HOST}"
 
 # Stop and remove possibly old containers
-sudo docker kill ${NAME} > /dev/null 2>&1
+sudo docker stop ${NAME} > /dev/null 2>&1
 sudo docker rm ${NAME} > /dev/null 2>&1
 
 # Finally run with all mappings

@@ -12,7 +12,8 @@ PG_HOST="postgis"
 GS_HOST="geoserver"
 
 VOL_MAP="-v ${CONFIG}/admin:/etc/apache2/admin -v ${CONFIG}/phppgadmin:/etc/phppgadmin -v ${CONFIG}/sites-enabled:/etc/apache2/sites-enabled -v ${GIT}:${GIT} -v ${LOG}/apache2:/var/log/apache2"
-PORT_MAP="-p 2222:22 -p 80:80"
+# PORT_MAP="-p 2222:22 -p 80:80"
+PORT_MAP="-p 80:80"
 LINK_MAP="--link ${PG_HOST}:${PG_HOST} --link ${GS_HOST}:${GS_HOST}"
 
 # Stop and remove possibly old containers
