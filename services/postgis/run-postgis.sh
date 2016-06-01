@@ -10,7 +10,8 @@ NAME="postgis"
 IMAGE="geonovum/postgis"
 
 VOL_MAP="-v /var/smartem/data/postgresql:/var/lib/postgresql -v ${LOG}/postgresql:/var/log/postgresql"
-PORT_MAP="-p 5432:5432"
+# PORT_MAP="-p 5432:5432"
+PORT_MAP=""
 
 # Stop and remove possibly old containers
 sudo docker stop ${NAME} > /dev/null 2>&1

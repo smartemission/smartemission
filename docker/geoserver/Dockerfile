@@ -17,9 +17,14 @@ RUN  dpkg-divert --local --rename --add /sbin/initctl
 
 RUN apt-get -y update
 
+ARG IMAGE_TIMEZONE="Europe/Amsterdam"
+# set time right adn configure timezone and locale
+RUN echo "$IMAGE_TIMEZONE" > /etc/timezone && \
+	dpkg-reconfigure -f noninteractive tzdata
+
 #-------------Application Specific Stuff ----------------------------------------------------
 
-ENV GS_VERSION 2.8.3
+ENV GS_VERSION 2.9.0
 ENV GEOSERVER_DATA_DIR /opt/geoserver/data_dir
 ENV TC_DEPLOY_DIR $CATALINA_HOME/webapps
 # ENV TC_DEPLOY_DIR /opt/geoserver/webapps
@@ -89,8 +94,10 @@ RUN if [ ! -f /tmp/resources/geoserver.zip ]; then \
       -O /tmp/resources/geoserver.zip; \
     fi; \
     unzip /tmp/resources/geoserver.zip -d /tmp/geoserver \
-    && unzip /tmp/geoserver/geoserver.war -d $TC_DEPLOY_DIR/geoserver \
-    && cp -r $TC_DEPLOY_DIR/geoserver/data $GEOSERVER_DATA_DIR && rm -rf $TC_DEPLOY_DIR/geoserver/data \
+    && unzip /tmp/geoserver/geoserver.war -d /tmp/geoserver/geoserver \
+    && cp -r /tmp/geoserver/geoserver/data $GEOSERVER_DATA_DIR \
+    && rm -rf /tmp/geoserver/geoserver/data \
+    && cp -r /tmp/geoserver/geoserver $TC_DEPLOY_DIR/geoserver \
     && rm -rf /tmp/geoserver
 
 # Install any plugin zip files in resources/plugins
@@ -120,8 +127,3 @@ RUN if [ "$TOMCAT_EXTRAS" = false ]; then \
 
 # Delete resources after installation
 RUN rm -rf /tmp/resources
-
-# set time right
-# Configure timezone and locale
-RUN echo "Europe/Amsterdam" > /etc/timezone && \
-	dpkg-reconfigure -f noninteractive tzdata

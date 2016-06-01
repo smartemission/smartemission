@@ -2,8 +2,10 @@ FROM ubuntu:14.04
 
 MAINTAINER just@justobjects.nl
 
-# Configure timezone and locale
-RUN echo "Europe/Amsterdam" > /etc/timezone && \
+ARG IMAGE_TIMEZONE="Europe/Amsterdam"
+
+# set time right adn configure timezone and locale
+RUN echo "$IMAGE_TIMEZONE" > /etc/timezone && \
 	dpkg-reconfigure -f noninteractive tzdata
 
 # Silence warnings   and set locales
