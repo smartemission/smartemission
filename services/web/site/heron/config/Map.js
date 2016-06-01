@@ -996,7 +996,7 @@ Heron.options.map.layers = [
     //),
 
     /*
-     * Smart Emission: Current CO
+     * Smart Emission: Current CO Raw
      */
     new OpenLayers.Layer.WMS(
         "Smart Emission - Current CO Raw",
@@ -1062,6 +1062,28 @@ Heron.options.map.layers = [
     ),
 
     /*
+     * Smart Emission: Current NO2 Raw
+     */
+    new OpenLayers.Layer.WMS(
+        "Smart Emission - Current NO2 Raw",
+        Heron.scratch.urls.SMARTEM_OWS,
+        {layers: "smartem:last_measurements_no2_raw", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
+            metadata: {
+                wfs: {
+                    protocol: 'fromWMSLayer',
+                    outputFormat: 'GML2',
+                    featurePrefix: 'sensors',
+                    featureNS: 'http://smartem.geonovum.nl',
+                    downloadFormats: Heron.options.wfs.downloadFormats
+                }
+            }
+        }
+    ),
+
+    /*
      * Smart Emission: Measurements O3
      */
     //new OpenLayers.Layer.WMS(
@@ -1090,6 +1112,28 @@ Heron.options.map.layers = [
         "Smart Emission - Current O3",
         Heron.scratch.urls.SMARTEM_OWS,
         {layers: "smartem:last_measurements_o3", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
+            metadata: {
+                wfs: {
+                    protocol: 'fromWMSLayer',
+                    outputFormat: 'GML2',
+                    featurePrefix: 'sensors',
+                    featureNS: 'http://smartem.geonovum.nl',
+                    downloadFormats: Heron.options.wfs.downloadFormats
+                }
+            }
+        }
+    ),
+
+    /*
+     * Smart Emission: Current O3 Raw
+     */
+    new OpenLayers.Layer.WMS(
+        "Smart Emission - Current O3 Raw",
+        Heron.scratch.urls.SMARTEM_OWS,
+        {layers: "smartem:last_measurements_o3_raw", format: "image/png", transparent: true},
         {
             isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
             featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
