@@ -2093,12 +2093,12 @@ Heron.options.layertree.tree = [
     },
 
     {
-        text: 'Sensoren', expanded: true, children: [
-        {nodeType: "gx_layer", layer: "RIVM - All Stations", text: "RIVM AQ Stations (WMS)"},
-        {nodeType: "gx_layer", layer: "RIVM - Active Stations", text: "RIVM AQ LML Stations"},
-        {nodeType: "gx_layer", layer: "RIVM - Active Stations (WFS)", text: "RIVM AQ Stations (WFS)"},
-        {nodeType: "gx_layer", layer: "Zones and Agglomerations", text: "RIVM Zones and Agglomerations (WMS)"},
-        {nodeType: "gx_layer", layer: "Smart Emission - Stations", text: "Smart Emission - Stations (WMS)"}
+        text: 'Stations', expanded: true, children: [
+        {nodeType: "gx_layer", layer: "RIVM - All Stations", text: "RIVM Stations (WMS)"},
+        //{nodeType: "gx_layer", layer: "RIVM - Active Stations", text: "RIVM AQ LML Stations"},
+        //{nodeType: "gx_layer", layer: "RIVM - Active Stations (WFS)", text: "RIVM AQ Stations (WFS)"},
+        //{nodeType: "gx_layer", layer: "Zones and Agglomerations", text: "RIVM Zones and Agglomerations (WMS)"},
+        {nodeType: "gx_layer", layer: "Smart Emission - Stations", text: "Smart Emission Stations (WMS)"}
     ]
     },
     {
