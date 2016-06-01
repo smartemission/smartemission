@@ -13,7 +13,7 @@ BACKUP_DIR=/var/smartem/backup
 mkdir -p ${BACKUP_DIR}
 
 # GeoServer data
-GS_DIR=/var/smartem/data/geoserver
+GS_DIR=/var/smartem/data
 pushd ${GS_DIR}
   tar -cvzf ${BACKUP_DIR}/geoserver_data.tar.gz geoserver
 popd
@@ -23,7 +23,7 @@ export PGUSER=docker
 export PGPASSWORD=docker
 export PGHOST=`sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' postgis`
 
-LOG_FILE=${BACKUP_DIR}/db_backup.log
+LOG_FILE=${BACKUP_DIR}/backup_db.log
 
 #
 # Function : dump_db

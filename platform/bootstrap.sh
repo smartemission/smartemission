@@ -48,7 +48,14 @@ sudo apt-get install -y python-pip
 sudo pip install docker-compose
 
 # Utils like Emacs and Postgres client to connect to PG DB
-sudo apt-get install -y emacs24-nox apache2-utils postgresql-client-9.3
+# https://www.postgresql.org/download/linux/ubuntu/
+
+# Need 9.4 version of PG client, not in Ubuntu 14.4, so get from PG Repo
+sudo echo "deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+sudo apt-get update
+
+sudo apt-get install -y emacs24-nox apache2-utils apt-show-versions postgresql-client-9.4
 
 sudo mkdir -p /var/smartem/log/etl
 sudo chmod 777 /var/smartem/log/etl
@@ -66,7 +73,7 @@ sudo dpkg-reconfigure tzdata
 # Github
 sudo mkdir -p /opt/geonovum/smartem
 
-sudo chown -R ${USER}:${USER} /opt/geonovum
+# sudo chown -R ${USER}:${USER} /opt/geonovum
 
 cd /opt/geonovum/smartem
 
