@@ -112,6 +112,7 @@ Heron.options.map.settings = {
 Ext.namespace("Heron.scratch");
 Heron.scratch.urls = {
     SOSPILOT_OWS: 'http://sensors.geonovum.nl/gs/ows?',
+    SMARTEM_OWS: '/geoserver/ows?',
     PDOK: 'http://geodata.nationaalgeoregister.nl',
     KADEMO_WFS: 'http://kademo.nl/gs2/wfs?',
     KADEMO_OWS: 'http://kademo.nl/gs2/ows?',
@@ -911,8 +912,8 @@ Heron.options.map.layers = [
      */
     new OpenLayers.Layer.WMS(
         "Smart Emission - Stations",
-        Heron.scratch.urls.SOSPILOT_OWS,
-        {layers: "stations_smartem", format: "image/png", transparent: true},
+        Heron.scratch.urls.SMARTEM_OWS,
+        {layers: "smartem:stations", format: "image/png", transparent: true},
         {
             isBaseLayer: false, singleTile: true, visibility: true, alpha: true,
             featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
@@ -921,7 +922,7 @@ Heron.options.map.layers = [
                     protocol: 'fromWMSLayer',
                     outputFormat: 'GML2',
                     featurePrefix: 'sensors',
-                    featureNS: 'http://sensors.geonovum.nl',
+                    featureNS: 'http://smartem.geonovum.nl',
                     downloadFormats: Heron.options.wfs.downloadFormats
                 }
             }
@@ -931,32 +932,32 @@ Heron.options.map.layers = [
     /*
      * Smart Emission: Measurements CO
      */
-    new OpenLayers.Layer.WMS(
-        "Smart Emission - History CO",
-        Heron.scratch.urls.SOSPILOT_OWS,
-        {layers: "measurements_co_smartem", format: "image/png", transparent: true},
-        {
-            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
-            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
-            metadata: {
-                wfs: {
-                    protocol: 'fromWMSLayer',
-                    outputFormat: 'GML2',
-                    featurePrefix: 'sensors',
-                    featureNS: 'http://sensors.geonovum.nl',
-                    downloadFormats: Heron.options.wfs.downloadFormats
-                }
-            }
-        }
-    ),
+    //new OpenLayers.Layer.WMS(
+    //    "Smart Emission - History CO",
+    //    Heron.scratch.urls.SMARTEM_OWS,
+    //    {layers: "measurements_co", format: "image/png", transparent: true},
+    //    {
+    //        isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+    //        featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
+    //        metadata: {
+    //            wfs: {
+    //                protocol: 'fromWMSLayer',
+    //                outputFormat: 'GML2',
+    //                featurePrefix: 'sensors',
+    //                featureNS: 'http://smartem.geonovum.nl',
+    //                downloadFormats: Heron.options.wfs.downloadFormats
+    //            }
+    //        }
+    //    }
+    //),
 
     /*
      * Smart Emission: Current CO
      */
     new OpenLayers.Layer.WMS(
         "Smart Emission - Current CO",
-        Heron.scratch.urls.SOSPILOT_OWS,
-        {layers: "last_measurements_co_smartem", format: "image/png", transparent: true},
+        Heron.scratch.urls.SMARTEM_OWS,
+        {layers: "smartem:last_measurements_co", format: "image/png", transparent: true},
         {
             isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
             featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
@@ -965,7 +966,7 @@ Heron.options.map.layers = [
                     protocol: 'fromWMSLayer',
                     outputFormat: 'GML2',
                     featurePrefix: 'sensors',
-                    featureNS: 'http://sensors.geonovum.nl',
+                    featureNS: 'http://smartem.geonovum.nl',
                     downloadFormats: Heron.options.wfs.downloadFormats
                 }
             }
@@ -977,8 +978,8 @@ Heron.options.map.layers = [
      */
     new OpenLayers.Layer.WMS(
         "Smart Emission - Current CO2",
-        Heron.scratch.urls.SOSPILOT_OWS,
-        {layers: "last_measurements_co2_smartem", format: "image/png", transparent: true},
+        Heron.scratch.urls.SMARTEM_OWS,
+        {layers: "smartem:last_measurements_co2", format: "image/png", transparent: true},
         {
             isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
             featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
@@ -987,7 +988,7 @@ Heron.options.map.layers = [
                     protocol: 'fromWMSLayer',
                     outputFormat: 'GML2',
                     featurePrefix: 'sensors',
-                    featureNS: 'http://sensors.geonovum.nl',
+                    featureNS: 'http://smartem.geonovum.nl',
                     downloadFormats: Heron.options.wfs.downloadFormats
                 }
             }
@@ -997,32 +998,32 @@ Heron.options.map.layers = [
     /*
      * Smart Emission: Measurements NO2
      */
-    new OpenLayers.Layer.WMS(
-        "Smart Emission - History NO2",
-        Heron.scratch.urls.SOSPILOT_OWS,
-        {layers: "measurements_no2_smartem", format: "image/png", transparent: true},
-        {
-            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
-            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
-            metadata: {
-                wfs: {
-                    protocol: 'fromWMSLayer',
-                    outputFormat: 'GML2',
-                    featurePrefix: 'sensors',
-                    featureNS: 'http://sensors.geonovum.nl',
-                    downloadFormats: Heron.options.wfs.downloadFormats
-                }
-            }
-        }
-    ),
+    //new OpenLayers.Layer.WMS(
+    //    "Smart Emission - History NO2",
+    //    Heron.scratch.urls.SMARTEM_OWS,
+    //    {layers: "smartem:measurements_no2", format: "image/png", transparent: true},
+    //    {
+    //        isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+    //        featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
+    //        metadata: {
+    //            wfs: {
+    //                protocol: 'fromWMSLayer',
+    //                outputFormat: 'GML2',
+    //                featurePrefix: 'sensors',
+    //                featureNS: 'http://smartem.geonovum.nl',
+    //                downloadFormats: Heron.options.wfs.downloadFormats
+    //            }
+    //        }
+    //    }
+    //),
 
     /*
      * Smart Emission: Current NO2
      */
     new OpenLayers.Layer.WMS(
         "Smart Emission - Current NO2",
-        Heron.scratch.urls.SOSPILOT_OWS,
-        {layers: "last_measurements_no2_smartem", format: "image/png", transparent: true},
+        Heron.scratch.urls.SMARTEM_OWS,
+        {layers: "smartem:last_measurements_no2", format: "image/png", transparent: true},
         {
             isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
             featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
@@ -1031,7 +1032,7 @@ Heron.options.map.layers = [
                     protocol: 'fromWMSLayer',
                     outputFormat: 'GML2',
                     featurePrefix: 'sensors',
-                    featureNS: 'http://sensors.geonovum.nl',
+                    featureNS: 'http://smartem.geonovum.nl',
                     downloadFormats: Heron.options.wfs.downloadFormats
                 }
             }
@@ -1041,32 +1042,32 @@ Heron.options.map.layers = [
     /*
      * Smart Emission: Measurements O3
      */
-    new OpenLayers.Layer.WMS(
-        "Smart Emission - History O3",
-        Heron.scratch.urls.SOSPILOT_OWS,
-        {layers: "measurements_o3_smartem", format: "image/png", transparent: true},
-        {
-            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
-            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
-            metadata: {
-                wfs: {
-                    protocol: 'fromWMSLayer',
-                    outputFormat: 'GML2',
-                    featurePrefix: 'sensors',
-                    featureNS: 'http://sensors.geonovum.nl',
-                    downloadFormats: Heron.options.wfs.downloadFormats
-                }
-            }
-        }
-    ),
+    //new OpenLayers.Layer.WMS(
+    //    "Smart Emission - History O3",
+    //    Heron.scratch.urls.SMARTEM_OWS,
+    //    {layers: "smartem:measurements_o3", format: "image/png", transparent: true},
+    //    {
+    //        isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+    //        featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
+    //        metadata: {
+    //            wfs: {
+    //                protocol: 'fromWMSLayer',
+    //                outputFormat: 'GML2',
+    //                featurePrefix: 'sensors',
+    //                featureNS: 'http://smartem.geonovum.nl',
+    //                downloadFormats: Heron.options.wfs.downloadFormats
+    //            }
+    //        }
+    //    }
+    //),
 
     /*
      * Smart Emission: Current O3
      */
     new OpenLayers.Layer.WMS(
         "Smart Emission - Current O3",
-        Heron.scratch.urls.SOSPILOT_OWS,
-        {layers: "last_measurements_o3_smartem", format: "image/png", transparent: true},
+        Heron.scratch.urls.SMARTEM_OWS,
+        {layers: "smartem:last_measurements_o3", format: "image/png", transparent: true},
         {
             isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
             featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
@@ -1075,7 +1076,7 @@ Heron.options.map.layers = [
                     protocol: 'fromWMSLayer',
                     outputFormat: 'GML2',
                     featurePrefix: 'sensors',
-                    featureNS: 'http://sensors.geonovum.nl',
+                    featureNS: 'http://smartem.geonovum.nl',
                     downloadFormats: Heron.options.wfs.downloadFormats
                 }
             }
@@ -1087,8 +1088,8 @@ Heron.options.map.layers = [
      */
     new OpenLayers.Layer.WMS(
         "Smart Emission - Current Temperature",
-        Heron.scratch.urls.SOSPILOT_OWS,
-        {layers: "last_measurements_temperature_smartem", format: "image/png", transparent: true},
+        Heron.scratch.urls.SMARTEM_OWS,
+        {layers: "smartem:last_measurements_temperature", format: "image/png", transparent: true},
         {
             isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
             featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
@@ -1097,7 +1098,7 @@ Heron.options.map.layers = [
                     protocol: 'fromWMSLayer',
                     outputFormat: 'GML2',
                     featurePrefix: 'sensors',
-                    featureNS: 'http://sensors.geonovum.nl',
+                    featureNS: 'http://smartem.geonovum.nl',
                     downloadFormats: Heron.options.wfs.downloadFormats
                 }
             }
@@ -1109,8 +1110,8 @@ Heron.options.map.layers = [
      */
     new OpenLayers.Layer.WMS(
         "Smart Emission - Current Barometer",
-        Heron.scratch.urls.SOSPILOT_OWS,
-        {layers: "last_measurements_barometer_smartem", format: "image/png", transparent: true},
+        Heron.scratch.urls.SMARTEM_OWS,
+        {layers: "smartem:last_measurements_barometer", format: "image/png", transparent: true},
         {
             isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
             featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
@@ -1119,7 +1120,7 @@ Heron.options.map.layers = [
                     protocol: 'fromWMSLayer',
                     outputFormat: 'GML2',
                     featurePrefix: 'sensors',
-                    featureNS: 'http://sensors.geonovum.nl',
+                    featureNS: 'http://smartem.geonovum.nl',
                     downloadFormats: Heron.options.wfs.downloadFormats
                 }
             }
@@ -1131,8 +1132,8 @@ Heron.options.map.layers = [
      */
     new OpenLayers.Layer.WMS(
         "Smart Emission - Current Humidity",
-        Heron.scratch.urls.SOSPILOT_OWS,
-        {layers: "last_measurements_humidity_smartem", format: "image/png", transparent: true},
+        Heron.scratch.urls.SMARTEM_OWS,
+        {layers: "smartem:last_measurements_humidity", format: "image/png", transparent: true},
         {
             isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
             featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
@@ -1141,7 +1142,7 @@ Heron.options.map.layers = [
                     protocol: 'fromWMSLayer',
                     outputFormat: 'GML2',
                     featurePrefix: 'sensors',
-                    featureNS: 'http://sensors.geonovum.nl',
+                    featureNS: 'http://smartem.geonovum.nl',
                     downloadFormats: Heron.options.wfs.downloadFormats
                 }
             }
@@ -1153,8 +1154,8 @@ Heron.options.map.layers = [
      */
     new OpenLayers.Layer.WMS(
         "Smart Emission - Current Audio Level Average",
-        Heron.scratch.urls.SOSPILOT_OWS,
-        {layers: "last_measurements_au_level_smartem", format: "image/png", transparent: true},
+        Heron.scratch.urls.SMARTEM_OWS,
+        {layers: "smartem:last_measurements_au_level", format: "image/png", transparent: true},
         {
             isBaseLayer: false, singleTile: true, visibility: true, alpha: true,
             featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
@@ -1163,7 +1164,7 @@ Heron.options.map.layers = [
                     protocol: 'fromWMSLayer',
                     outputFormat: 'GML2',
                     featurePrefix: 'sensors',
-                    featureNS: 'http://sensors.geonovum.nl',
+                    featureNS: 'http://smartem.geonovum.nl',
                     downloadFormats: Heron.options.wfs.downloadFormats
                 }
             }
@@ -2199,78 +2200,6 @@ Heron.options.layertree.tree = [
     ]
     },
 
-    //{
-    //    text: 'RIVM LML', expanded: false, children: [
-    //    {
-    //        text: 'Carbon monoxide (CO) - WMS', expanded: false, children: [
-    //        {nodeType: "gx_layer", layer: "RIVM - Current CO", text: "Current CO"},
-    //        {nodeType: "gx_layer", layer: "RIVM - History CO", text: "Time Series Measurements CO"}
-    //    ]
-    //    },
-    //    {
-    //        text: 'Ammonia (NH3) - WMS', expanded: false, children: [
-    //        {nodeType: "gx_layer", layer: "RIVM - Current NH3", text: "Current NH3"},
-    //        {nodeType: "gx_layer", layer: "RIVM - History NH3", text: "Time Series Measurements NH3"}
-    //    ]
-    //    },
-    //    {
-    //        text: 'Nitrogen Oxide (NO) - WMS', expanded: false, children: [
-    //        {nodeType: "gx_layer", layer: "RIVM - Current NO", text: "Current NO"},
-    //        {nodeType: "gx_layer", layer: "RIVM - History NO", text: "Time Series Measurements NO"}
-    //    ]
-    //    },
-    //    {
-    //        text: 'Nitrogen Dioxide (NO2) - WMS', expanded: true, children: [
-    //        {nodeType: "gx_layer", layer: "RIVM - Current NO2", text: "Current NO2"},
-    //        {nodeType: "gx_layer", layer: "RIVM - History NO2", text: "Time Series Measurements NO2"}
-    //    ]
-    //    },
-    //    {
-    //        text: 'Ozone (O3) - WMS', expanded: true, children: [
-    //        {nodeType: "gx_layer", layer: "RIVM - Current O3", text: "Current O3"},
-    //        {nodeType: "gx_layer", layer: "RIVM - History O3", text: "Time Series Measurements O3"}
-    //    ]
-    //    },
-    //    {
-    //        text: 'Particulate Matter (PM10) - WMS', expanded: true, children: [
-    //        {nodeType: "gx_layer", layer: "RIVM - Current PM10", text: "Current PM10"},
-    //        {nodeType: "gx_layer", layer: "RIVM - History PM10", text: "Time Series Measurements PM10"}
-    //
-    //    ]
-    //    },
-    //    {
-    //        text: 'Sulfur Dioxide (SO2) - WMS', expanded: false, children: [
-    //        {nodeType: "gx_layer", layer: "RIVM - Current SO2", text: "Current SO2"},
-    //        {nodeType: "gx_layer", layer: "RIVM - History SO2", text: "Time Series Measurements SO2"}
-    //
-    //    ]
-    //    }
-    //]
-    //},
-    //{
-    //    text: 'Smart Emission (Citygis.nl)', expanded: false, children: [
-    //    {nodeType: "gx_layer", layer: "Smart Emission - Sensors", text: "Smart Emission - Sensors (WMS)"},
-    //    //{nodeType: "gx_layer", layer: "SmartEm - Active Stations (WFS)", text: "AQ Stations (Active WFS)" },
-    //    {
-    //        text: 'Carbon monoxide (CO) - WMS', expanded: false, children: [
-    //        {nodeType: "gx_layer", layer: "Smart Emission - Current CO", text: "Current CO"},
-    //        {nodeType: "gx_layer", layer: "Smart Emission - History CO", text: "Time Series Measurements CO"}
-    //    ]
-    //    },
-    //    {
-    //        text: 'Nitrogen Dioxide (NO2) - WMS', expanded: true, children: [
-    //        {nodeType: "gx_layer", layer: "Smart Emission - Current NO2", text: "Current NO2"},
-    //        {nodeType: "gx_layer", layer: "Smart Emission - History NO2", text: "Time Series Measurements NO2"}
-    //    ]
-    //    },
-    //    {
-    //        text: 'Ozone (O3) - WMS', expanded: true, children: [
-    //        {nodeType: "gx_layer", layer: "Smart Emission - Current O3", text: "Current O3"},
-    //        {nodeType: "gx_layer", layer: "Smart Emission - History O3", text: "Time Series Measurements O3"}
-    //    ]
-    //    }
-    //]
-    //},
 
     {
         text: 'Smart Emission - Meteo', expanded: true, children: [
