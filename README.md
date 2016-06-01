@@ -9,4 +9,4 @@ This repo contains sources for ETL, docs and apps for the Smart Emission Data Pl
 See more via the landing page http://smartemission.nl for more info and apps.
 
 Documentation for the Smartemission Data Platform is generated from this repo and
-can be found at: http://smartplatform.readthedocs.org/
+can be found at: http://smartplatform.readthedocs.org

@@ -266,9 +266,9 @@ The whole stack can be up and running within 15 minutes!
 
 See https://docs.docker.com/engine/installation/linux/ubuntulinux/.
 
-Steps are all done by executing the script https://github.com/Geonovum/smartemission/blob/master/docker/bootstrap.sh :
+Steps are all done by executing the script https://github.com/Geonovum/smartemission/blob/master/platform/bootstrap.sh :
 
-.. literalinclude:: ../../docker/bootstrap.sh
+.. literalinclude:: ../../platform/bootstrap.sh
     :language: bash
 
 Confirm interactive choices: postfix "Local".
@@ -283,11 +283,11 @@ Running within 15 mins
 
 Below the steps to get the complete SE platform stack and ETL running within 15 minutes on a bare Ubuntu system:
 
-* run https://github.com/Geonovum/smartemission/blob/master/docker/bootstrap.sh
+* ``cd /opt/geonovum/smartem/git/platform`` run ``./bootstrap.sh``
 * build Docker images: ``cd /opt/geonovum/smartem/git/docker`` and call ``./build.sh`` in each subdir
 * run the system: ``cd /opt/geonovum/smartem/git/services`` and call ``./run-all.sh``
 * create the database schema's: (first time only, destroys DB!!): ``cd /opt/geonovum/smartem/git/etl`` and call ``./db-init.sh``
-* schedule the ETL: ``crontab /opt/geonovum/smartem/git/services/cronfile.txt``
+* schedule recurring tasks like ETL: ``crontab /opt/geonovum/smartem/git/platform/cronfile.txt``
 * create a HTTP admin password file in: ``/opt/geonovum/smartem/git/services/web/config/admin/htpasswd`` (see README.TXT there)
 * go to domain admin site ``/adm`` and change GeoServer default password
 

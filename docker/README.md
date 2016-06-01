@@ -7,9 +7,10 @@ A complete open geostack system can be setup in minutes!
 
 ## Getting Started
 
-To make a standard UBuntu system ready for using
-Docker, run the bootstrap.sh script as a user with sudo-root rights (not root itself!).
-Then call build.sh on each of the Docker images in the subdirs.
+To make a standard Ubuntu (14.4+) system ready for using
+Docker, run the ../platform/bootstrap.sh script as a user with sudo-root rights (not root itself!).
+Then call build.sh on each of the Docker images in the subdirs. Or build all within
+../platform calling ./build.sh there.
 
 ## Usage in ETL and Services
 

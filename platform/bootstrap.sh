@@ -5,6 +5,8 @@
 # NB DO NOT RUN THIS AS root !!
 #
 # NB2 On Fiware lab VM: add "127.0.0.1 localhost hostname" to /etc/hosts
+#
+# Just van den Broecke - 2016
 
 sudo apt-get update
 sudo apt-get -y upgrade
