@@ -2199,7 +2199,7 @@ Heron.options.layertree.tree = [
         {
             text: 'Ozone (O3) - WMS', expanded: true, children: [
             {nodeType: "gx_layer", layer: "RIVM - Current O3", text: "RIVM - ug/m3"},
-            {nodeType: "gx_layer", layer: "Smart Emission - Current O3", text: "RIVM - ug/m3"},
+            {nodeType: "gx_layer", layer: "Smart Emission - Current O3", text: "Smart Emission - ug/m3"},
             {nodeType: "gx_layer", layer: "Smart Emission - Current O3 Raw", text: "Smart Emission RAW - kOhm"}
         ]
         },

@@ -54,13 +54,16 @@
 
                         <Font>
                             <CssParameter name="font-family">
-                                <ogc:Literal>Lucida Sans Demibold</ogc:Literal>
+                                <ogc:Literal>SansSerif</ogc:Literal>
                             </CssParameter>
 
                             <CssParameter name="font-size">
                                 <ogc:Literal>14</ogc:Literal>
                             </CssParameter>
 
+                            <CssParameter name="font-weight">
+                                <ogc:Literal>bold</ogc:Literal>
+                            </CssParameter>
                         </Font>
                         <LabelPlacement>
                             <PointPlacement>
@@ -115,13 +118,16 @@
 
                         <Font>
                             <CssParameter name="font-family">
-                                <ogc:Literal>Lucida Sans Demibold</ogc:Literal>
+                                <ogc:Literal>SansSerif</ogc:Literal>
                             </CssParameter>
 
                             <CssParameter name="font-size">
                                 <ogc:Literal>12</ogc:Literal>
                             </CssParameter>
 
+                            <CssParameter name="font-weight">
+                                 <ogc:Literal>bold</ogc:Literal>
+                             </CssParameter>
                         </Font>
                         <LabelPlacement>
                             <PointPlacement>
@@ -176,11 +182,14 @@
 
                         <Font>
                             <CssParameter name="font-family">
-                                <ogc:Literal>Lucida Sans Demibold</ogc:Literal>
+                                <ogc:Literal>SansSerif</ogc:Literal>
                             </CssParameter>
 
                             <CssParameter name="font-size">
                                 <ogc:Literal>14</ogc:Literal>
+                            </CssParameter>
+                            <CssParameter name="font-weight">
+                                <ogc:Literal>bold</ogc:Literal>
                             </CssParameter>
 
                         </Font>
