@@ -25,7 +25,7 @@ LINK_MAP="--link ${PG_HOST}:${PG_HOST}"
 
 # Restart with volume mapping(s) provided in $1
 function restart_gs() {
-  VOL_MAP=$1
+  VOL_MAP="$@"
 
   # Stop and remove possibly old containers
   sudo docker stop ${NAME} > /dev/null 2>&1
