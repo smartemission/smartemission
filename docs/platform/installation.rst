@@ -281,12 +281,12 @@ Now our system is ready to roll out Docker images!
 Running within 15 mins
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Below the steps to get the complete stack and ETL running within 15 minutes on a bare Ubuntu system:
+Below the steps to get the complete SE platform stack and ETL running within 15 minutes on a bare Ubuntu system:
 
 * run https://github.com/Geonovum/smartemission/blob/master/docker/bootstrap.sh
 * build Docker images: ``cd /opt/geonovum/smartem/git/docker`` and call ``./build.sh`` in each subdir
-* run the system: ``cd /opt/geonovum/smartem/git/services`` and call ``./run-all.sh`
-* create the database schema's: (first time only!!): ``cd /opt/geonovum/smartem/git/etl`` and call ``./db-init.sh``
+* run the system: ``cd /opt/geonovum/smartem/git/services`` and call ``./run-all.sh``
+* create the database schema's: (first time only, destroys DB!!): ``cd /opt/geonovum/smartem/git/etl`` and call ``./db-init.sh``
 * schedule the ETL: ``crontab /opt/geonovum/smartem/git/services/cronfile.txt``
 * create a HTTP admin password file in: ``/opt/geonovum/smartem/git/services/web/config/admin/htpasswd`` (see README.TXT there)
 * go to domain admin site ``/adm`` and change GeoServer default password
@@ -298,12 +298,17 @@ Handy Commands
 
 Some handly Docker commands: ::
 
-   # cleanup non-running images
-   $ sudo docker rm -v $(sudo docker ps -a -q -f status=exited)
-   $ sudo docker rmi $(sudo docker images -f "dangling=true" -q)
+    # cleanup non-running images
+    $ sudo docker rm -v $(sudo docker ps -a -q -f status=exited)
+    $ sudo docker rmi $(sudo docker images -f "dangling=true" -q)
 
-   # go into docker image named apache2 to bash prompt
-   sudo docker exec -it apache2 bash
+    # go into docker image named apache2 to bash prompt
+    sudo docker exec -it apache2 bash
+
+    # Find local Docker Bridge address of running container
+    docker inspect --format '{{ .NetworkSettings.IPAddress }}' postgis
+    # Example: psql to local postgis container
+    psql -h `docker inspect --format '{{ .NetworkSettings.IPAddress }}' postgis` -U docker -W gis
 
 Docker Containers
 -----------------
@@ -316,28 +321,28 @@ postgis - PostGIS Database
 Uses PostGIS Docker image from Kartoza (Tim Sutton, QGIS lead),
 see https://hub.docker.com/r/kartoza/postgis/ and https://github.com/kartoza/docker-postgis  ::
 
-   $ sudo docker pull kartoza/postgis:9.4-2.1
-   $ sudo docker run --name "postgis" -p 5432:5432 -d -t kartoza/postgis:9.4-2.1
-   $ sudo apt-get install postgresql-client-9.3
-   $ psql -h localhost -U docker  -l
-   Password for user docker: (also 'docker')
-                                    List of databases
-          Name       |  Owner   | Encoding  | Collate | Ctype |   Access privileges
-   ------------------+----------+-----------+---------+-------+-----------------------
-    gis              | docker   | UTF8      | C       | C     |
-    postgres         | postgres | SQL_ASCII | C       | C     |
-    template0        | postgres | SQL_ASCII | C       | C     | =c/postgres          +
-                     |          |           |         |       | postgres=CTc/postgres
-    template1        | postgres | SQL_ASCII | C       | C     | =c/postgres          +
-                     |          |           |         |       | postgres=CTc/postgres
-    template_postgis | postgres | UTF8      | C       | C     |
-   (5 rows)
-
-
 This shorthand script ``~/git/services/postgis/run-postgis.sh`` will (re)run the ``postgis`` container.
 
 .. literalinclude:: ../../services/postgis/run-postgis.sh
     :language: bash
+
+To connect with ``psql`` from host using PG client package on host: ::
+
+    # sudo apt-get install postgresql-client-9.3
+    psql -h `docker inspect --format '{{ .NetworkSettings.IPAddress }}' postgis` -U docker -W -l
+
+    Password for user docker:
+                                     List of databases
+           Name       |  Owner   | Encoding  | Collate | Ctype |   Access privileges
+    ------------------+----------+-----------+---------+-------+-----------------------
+     gis              | docker   | UTF8      | C       | C     |
+     postgres         | postgres | SQL_ASCII | C       | C     |
+     template0        | postgres | SQL_ASCII | C       | C     | =c/postgres          +
+                      |          |           |         |       | postgres=CTc/postgres
+     template1        | postgres | SQL_ASCII | C       | C     | =c/postgres          +
+                      |          |           |         |       | postgres=CTc/postgres
+     template_postgis | postgres | UTF8      | C       | C     |
+    (5 rows)
 
 stetl - ETL for Measurements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
