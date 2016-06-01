@@ -177,7 +177,7 @@
 
                         <Font>
                             <CssParameter name="font-family">
-                                <ogc:Literal>Lucida Sans Regular</ogc:Literal>
+                                <ogc:Literal>SansSerif</ogc:Literal>
                             </CssParameter>
 
                             <CssParameter name="font-size">

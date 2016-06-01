@@ -7,22 +7,24 @@
 
     <!-- a Named Layer is the basic building block of an SLD document -->
     <NamedLayer>
-        <Name>last_measurements_co_smartem</Name>
+        <Name>Raw Measurements</Name>
         <UserStyle>
             <!-- Styles can have names, titles and abstracts -->
-            <Title>Smart Emission measurements_co</Title>
-            <Abstract>Smart Emission measurements_co style</Abstract>
+            <Title>Smart Emission Raw Measurements</Title>
+            <Abstract>Smart Emission Raw Measurements Style</Abstract>
             <IsDefault>1</IsDefault>
             <!-- FeatureTypeStyles describe how to render different features -->
             <!-- A FeatureTypeStyle for rendering points -->
             <FeatureTypeStyle>
                 <Rule>
+                    <Name>Raw Values in kOhm</Name>
+                    <Title>Raw Values in kOhm</Title>
                     <PointSymbolizer>
                         <Graphic>
                             <Mark>
                                 <WellKnownName>circle</WellKnownName>
                                 <Fill>
-                                    <CssParameter name="fill">#8b0a50</CssParameter>
+                                    <CssParameter name="fill">#280a8b</CssParameter>
                                     <CssParameter name="fill-opacity">1.0</CssParameter>
                                 </Fill>
                                 <Stroke>
@@ -51,7 +53,7 @@
                             <CssParameter name="font-size">
                                 <ogc:Literal>10</ogc:Literal>
                             </CssParameter>
-                            <CssParameter name="font-weight">
+                           <CssParameter name="font-weight">
                                 <ogc:Literal>bold</ogc:Literal>
                             </CssParameter>
                         </Font>

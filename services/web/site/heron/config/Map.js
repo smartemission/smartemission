@@ -215,8 +215,25 @@ Heron.options.map.layers = [
      * ==================================
      */
 
+    new OpenLayers.Layer.TMS("OpenBasisKaart OSM",
+        Heron.scratch.urls.OPENBASISKAART_TMS,
+        {
+            layername: 'osm@rd',
+            type: "png",
+            isBaseLayer: true,
+            transparent: true,
+            bgcolor: "0xffffff",
+            visibility: true,
+            singleTile: false,
+            serverResolutions: Heron.options.serverResolutions.zoom_0_13,
+            alpha: true,
+            opacity: 1.0,
+            attribution: "(C) <a href='http://openbasiskaart.nl'>OpenBasisKaart</a><br/>Data <a href='http://www.openstreetmap.org/copyright'>ODbL</a> <a href='http://openstreetmap.org/'>OpenStreetMap</a> ",
+            transitionEffect: 'resize'
+        }),
+
     /*
-     * Areal images PDOK.
+     * Arial images PDOK.
      */
     new OpenLayers.Layer.TMS(
         "Luchtfoto (PDOK)",
@@ -226,7 +243,7 @@ Heron.options.map.layers = [
             type: 'jpeg',
             serverResolutions: Heron.options.serverResolutions.zoom_0_13,
             isBaseLayer: true,
-            visibility: true
+            visibility: false
         }
     ),
 
@@ -244,23 +261,6 @@ Heron.options.map.layers = [
             alpha: true,
             opacity: 1.0,
             attribution: "CC by CA <a href='http://opentopo.nl'>OpenTopo</a> <br/>Data <a href='http://www.openstreetmap.org/copyright'>ODbL</a> <a href='http://openstreetmap.org/'>OpenStreetMap</a> ",
-            transitionEffect: 'resize'
-        }),
-
-    new OpenLayers.Layer.TMS("OpenBasisKaart OSM",
-        Heron.scratch.urls.OPENBASISKAART_TMS,
-        {
-            layername: 'osm@rd',
-            type: "png",
-            isBaseLayer: true,
-            transparent: true,
-            bgcolor: "0xffffff",
-            visibility: false,
-            singleTile: false,
-            serverResolutions: Heron.options.serverResolutions.zoom_0_13,
-            alpha: true,
-            opacity: 1.0,
-            attribution: "(C) <a href='http://openbasiskaart.nl'>OpenBasisKaart</a><br/>Data <a href='http://www.openstreetmap.org/copyright'>ODbL</a> <a href='http://openstreetmap.org/'>OpenStreetMap</a> ",
             transitionEffect: 'resize'
         }),
 
@@ -952,12 +952,12 @@ Heron.options.map.layers = [
     //),
 
     /*
-     * Smart Emission: Current CO
+     * Smart Emission: Current CO2
      */
     new OpenLayers.Layer.WMS(
-        "Smart Emission - Current CO",
+        "Smart Emission - Current CO2",
         Heron.scratch.urls.SMARTEM_OWS,
-        {layers: "smartem:last_measurements_co", format: "image/png", transparent: true},
+        {layers: "smartem:last_measurements_co2", format: "image/png", transparent: true},
         {
             isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
             featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
@@ -974,12 +974,34 @@ Heron.options.map.layers = [
     ),
 
     /*
-     * Smart Emission: Current CO2
+     * Smart Emission: Current CO
+     */
+    //new OpenLayers.Layer.WMS(
+    //    "Smart Emission - Current CO",
+    //    Heron.scratch.urls.SMARTEM_OWS,
+    //    {layers: "smartem:last_measurements_co", format: "image/png", transparent: true},
+    //    {
+    //        isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+    //        featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
+    //        metadata: {
+    //            wfs: {
+    //                protocol: 'fromWMSLayer',
+    //                outputFormat: 'GML2',
+    //                featurePrefix: 'sensors',
+    //                featureNS: 'http://smartem.geonovum.nl',
+    //                downloadFormats: Heron.options.wfs.downloadFormats
+    //            }
+    //        }
+    //    }
+    //),
+
+    /*
+     * Smart Emission: Current CO
      */
     new OpenLayers.Layer.WMS(
-        "Smart Emission - Current CO2",
+        "Smart Emission - Current CO Raw",
         Heron.scratch.urls.SMARTEM_OWS,
-        {layers: "smartem:last_measurements_co2", format: "image/png", transparent: true},
+        {layers: "smartem:last_measurements_co_raw", format: "image/png", transparent: true},
         {
             isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
             featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
@@ -2102,50 +2124,50 @@ Heron.options.layertree.tree = [
     ]
     },
     {
-        text: 'Chemische Componenten (Current)', expanded: true, children: [
+        text: 'Chemische Componenten (Laatste)', expanded: true, children: [
         {
-            text: 'Carbon monoxide (CO, ug/m3)', expanded: true, children: [
-            {nodeType: "gx_layer", layer: "RIVM - Current CO"},
-            {nodeType: "gx_layer", layer: "Smart Emission - Current CO"}
+            text: 'Carbon Monoxide (CO)', expanded: true, children: [
+            {nodeType: "gx_layer", layer: "RIVM - Current CO", text: "RIVM - ug/m3"},
+            {nodeType: "gx_layer", layer: "Smart Emission - Current CO Raw", text: "Smart Emission RAW - kOhm"}
+        ]
+        },
+        {
+            text: 'Carbon Dioxide (CO2)', expanded: true, children: [
+            {nodeType: "gx_layer", layer: "Smart Emission - Current CO2", text: "Smart Emission - ppm"}
+        ]
+        },
+        {
+            text: 'Ammonia (NH3) - WMS', expanded: false, children: [
+            {nodeType: "gx_layer", layer: "RIVM - Current NH3", text: "RIVM - ug/m3"}
+        ]
+        },
+        {
+            text: 'Nitrogen Oxide (NO) - WMS', expanded: false, children: [
+            {nodeType: "gx_layer", layer: "RIVM - Current NO", text: "RIVM - ug/m3"}
+        ]
+        },
+        {
+            text: 'Nitrogen Dioxide (NO2) - WMS', expanded: true, children: [
+            {nodeType: "gx_layer", layer: "RIVM - Current NO2", text: "RIVM - ug/m3"},
+            {nodeType: "gx_layer", layer: "Smart Emission - Current NO2 Raw", text: "Smart Emission RAW - kOhm"}
+        ]
+        },
+        {
+            text: 'Ozone (O3) - WMS', expanded: true, children: [
+            {nodeType: "gx_layer", layer: "RIVM - Current O3", text: "RIVM - ug/m3"},
+            {nodeType: "gx_layer", layer: "Smart Emission - Current O3", text: "RIVM - ug/m3"},
+            {nodeType: "gx_layer", layer: "Smart Emission - Current O3 Raw", text: "Smart Emission RAW - kOhm"}
+        ]
+        },
+        {
+            text: 'Particulate Matter (PM10) - WMS', expanded: false, children: [
+            {nodeType: "gx_layer", layer: "RIVM - Current PM10", text: "RIVM - ug/m3"}
 
         ]
         },
         {
-            text: 'Carbon dioxide (CO2, ppm)', expanded: true, children: [
-            {nodeType: "gx_layer", layer: "Smart Emission - Current CO2"}
-        ]
-        },
-        {
-            text: 'Ammonia (NH3, ug/m3) - WMS', expanded: false, children: [
-            {nodeType: "gx_layer", layer: "RIVM - Current NH3"}
-        ]
-        },
-        {
-            text: 'Nitrogen Oxide (NO, ug/m3) - WMS', expanded: false, children: [
-            {nodeType: "gx_layer", layer: "RIVM - Current NO"}
-        ]
-        },
-        {
-            text: 'Nitrogen Dioxide (NO2, ug/m3) - WMS', expanded: true, children: [
-            {nodeType: "gx_layer", layer: "RIVM - Current NO2"},
-            {nodeType: "gx_layer", layer: "Smart Emission - Current NO2"}
-        ]
-        },
-        {
-            text: 'Ozone (O3, ug/m3) - WMS', expanded: true, children: [
-            {nodeType: "gx_layer", layer: "RIVM - Current O3"},
-            {nodeType: "gx_layer", layer: "Smart Emission - Current O3"}
-        ]
-        },
-        {
-            text: 'Particulate Matter (PM10, ug/m3) - WMS', expanded: false, children: [
-            {nodeType: "gx_layer", layer: "RIVM - Current PM10"}
-
-        ]
-        },
-        {
-            text: 'Sulfur Dioxide (SO2, ug/m3) - WMS', expanded: false, children: [
-            {nodeType: "gx_layer", layer: "RIVM - Current SO2"}
+            text: 'Sulfur Dioxide (SO2) - WMS', expanded: false, children: [
+            {nodeType: "gx_layer", layer: "RIVM - Current SO2", text: "RIVM - ug/m3"}
 
         ]
         }
