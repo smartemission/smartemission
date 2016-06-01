@@ -29,7 +29,6 @@ RUN echo "$IMAGE_TIMEZONE" > /etc/timezone && \
 
 ENV GS_VERSION 2.9.0
 ENV GEOSERVER_DATA_DIR /opt/geoserver/data_dir
-ENV GEOSERVER_DATA_ORIG_DIR /opt/geoserver/data_dir.orig
 
 ENV TC_DEPLOY_DIR $CATALINA_HOME/webapps
 # ENV TC_DEPLOY_DIR /opt/geoserver/webapps
@@ -101,7 +100,6 @@ RUN if [ ! -f /tmp/resources/geoserver.zip ]; then \
     unzip /tmp/resources/geoserver.zip -d /tmp/geoserver \
     && unzip /tmp/geoserver/geoserver.war -d /tmp/geoserver/geoserver \
     && cp -r /tmp/geoserver/geoserver/data $GEOSERVER_DATA_DIR \
-    && cp -r /tmp/geoserver/geoserver/data $GEOSERVER_DATA_ORIG_DIR \
     && rm -rf /tmp/geoserver/geoserver/data \
     && cp -r /tmp/geoserver/geoserver $TC_DEPLOY_DIR/geoserver \
     && rm -rf /tmp/geoserver
