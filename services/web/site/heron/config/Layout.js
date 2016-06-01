@@ -290,7 +290,7 @@ Heron.layout = {
                 {
                     xtype: 'hr_mappanel',
                     id: 'hr-map',
-                    title: '<a href="http://smartemission.nl">Smart Emission</a> - HeronViewer - Gemaakt met <a href="http://heron-mc.org">Heron</a> - <b>SE-metingen nog niet gekalibreerd!</b>',
+                    title: '<a href="http://smartemission.nl">Smart Emission</a> - HeronViewer - Gemaakt met <a href="http://heron-mc.org">Heron</a> - <b>SE-metingen nog niet gecalibreerd!</b>',
                     region: 'center',
                     collapsible: false,
                     border: false,
