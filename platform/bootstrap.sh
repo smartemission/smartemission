@@ -50,6 +50,8 @@ sudo apt-get install -y emacs24-nox apache2-utils postgresql-client-9.3
 
 sudo mkdir -p /var/smartem/log/etl
 sudo chmod 777 /var/smartem/log/etl
+sudo mkdir -p /var/smartem/data
+sudo mkdir -p /var/smartem/backup
 
 # Postfix: choose Local System
 sudo apt-get install postfix
