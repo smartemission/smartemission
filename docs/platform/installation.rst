@@ -294,7 +294,7 @@ You can run as root or a privileged sudo-user like "ubuntu" or "vagrant".
 * create a HTTP admin password file in: ``/opt/geonovum/smartem/git/services/web/config/admin/htpasswd`` (see README.TXT there)
 * go to domain admin site ``/adm`` and change GeoServer default password
 
-Check log files under ``/var/log/smartem/log``.
+Check log files under ``/var/smartem/log``.
 
 Handy Commands
 ~~~~~~~~~~~~~~

@@ -40,6 +40,36 @@ Checking status: ::
 	af79831923a3        geonovum/postgis           "/bin/sh -c /start-po"   11 minutes ago      Up 10 minutes       5432/tcp                     postgis
 
 
+Backup
+======
+
+Backup is automated: see Platform cronfile.txt and the backup.sh script.
+
+Only dynamic data is backed-up as all
+code is in GitHub and the entire platform can be rebuild in minutes.
+
+The last 7 days of data are backed-up by weekday (1 is monday), and then the last day of
+each year-month. Backups can be accessed via ``sftp`` : ::
+
+	$ sftp vps68271@backup
+	Connected to backup.
+	sftp> dir
+	SETEST-2016-06    SETEST-weekday-4
+	sftp> ls -l */*
+	-rw-r--r--    0 1120     1122       199611 Jun  1 20:52 SETEST-weekday-4/geoserver_data_init.tar.gz
+	-rw-r--r--    0 1120     1122        16345 Jun  2 00:00 SETEST-weekday-4/backup.log
+	-rw-r--r--    0 1120     1122       262846 Jun  2 16:39 SETEST-weekday-4/geoserver_data.tar.gz
+	-rw-r--r--    0 1120     1122          542 Jun  2 16:39 SETEST-weekday-4/postgres.sql.bz2
+	-rw-r--r--    0 1120     1122          308 Jun  2 16:39 SETEST-weekday-4/backup_db.log
+	-rw-r--r--    0 1120     1122        13570 Jun  2 16:39 SETEST-weekday-4/gis.sql.bz2
+	-rw-r--r--    0 1120     1122       199611 Jun  1 20:52 SETEST-2016-06/geoserver_data_init.tar.gz
+	-rw-r--r--    0 1120     1122        16345 Jun  2 00:00 SETEST-2016-06/backup.log
+	-rw-r--r--    0 1120     1122       262846 Jun  2 16:39 SETEST-2016-06/geoserver_data.tar.gz
+	-rw-r--r--    0 1120     1122          542 Jun  2 16:39 SETEST-2016-06/postgres.sql.bz2
+	-rw-r--r--    0 1120     1122          308 Jun  2 16:39 SETEST-2016-06/backup_db.log
+	-rw-r--r--    0 1120     1122        13570 Jun  2 16:39 SETEST-2016-06/gis.sql.bz2
+
+
 Data Management
 ===============
 
