@@ -2,9 +2,10 @@
 #
 # Stop all services (Docker Containers)
 
-CONTAINERS="web geoserver postgis sos52n"
+# CONTAINERS="web geoserver sos52n postgis"
+CONTAINERS="web geoserver postgis"
 for CONTAINER in ${CONTAINERS}
 do
-	sudo docker stop ${NAME} > /dev/null 2>&1
+  echo "stopping ${CONTAINER}"
+  sudo docker stop ${CONTAINER}
 done
-

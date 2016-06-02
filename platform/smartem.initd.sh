@@ -35,7 +35,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
 NAME=smartem
 DESC="Smart Emission Data Platform"
-SMARTEM_HOME=/opt/geonovum/smartem/git
+SMARTEM_HOME=/opt/geonovum/smartem/git/platform
 
 . /lib/lsb/init-functions
 
