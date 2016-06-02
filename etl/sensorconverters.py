@@ -123,7 +123,7 @@ def ppb_o3_to_ugm3(input, json_obj, name):
 
 
 # http://smartplatform.readthedocs.io/en/latest/data.html#o3-calibration
-# O3 = 89.1177
+# O3 = -89.1177
 # 	+ 0.03420626 * s.coresistance * log(s.o3resistance)
 # 	- 0.008836714 * s.light.sensor.bottom
 # 	- 0.02934928 * s.coresistance * s.temperature.ambient
@@ -158,7 +158,7 @@ def ohm_o3_to_ugm3(input, json_obj, name):
         s_barometer = convert_barometer(json_obj['s_barometer'])
 
         # Use separate val vars for debugging
-        val1 = 89.1177 + 0.03420626 * s_coresistance * math.log(s_o3resistance)
+        val1 = -89.1177 + 0.03420626 * s_coresistance * math.log(s_o3resistance)
         val2 = - 0.008836714 * json_obj['s_lightsensorbottom']
         val3 = 0.02934928 * s_coresistance * s_temperatureambient
         val4 = - 1.439367 * s_temperatureambient * math.log(s_coresistance)
