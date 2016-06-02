@@ -12,7 +12,7 @@ GeoExt.Lang.set("nl");
  * Check if bookmark passed in parms
  * TODO: move to heron core !!
  */
-Ext.onReady(function() {
+Ext.onReady(function () {
     // Bookmark e.g. http://sensors.geonovum.nl/heronviewer?bookmark=rivmriono2 may be passed in
     var queryParams = OpenLayers.Util.getParameters();
     var bookmark = (queryParams && queryParams['bookmark'] !== undefined) ? queryParams['bookmark'] : undefined;
@@ -105,7 +105,7 @@ Heron.options.searchPanelConfig = {
     height: 600,
     hropts: [
 
-           {
+        {
             searchPanel: {
                 xtype: 'hr_searchbydrawpanel',
                 name: __('Search by Drawing'),
@@ -116,7 +116,7 @@ Heron.options.searchPanelConfig = {
             resultPanel: {
                 xtype: 'hr_featuregridpanel',
                 id: 'hr-featuregridpanel',
-                displayPanels: ['Table','Detail'],
+                displayPanels: ['Table', 'Detail'],
                 header: false,
                 autoConfig: true,
                 autoConfigMaxSniff: 150,
@@ -174,7 +174,7 @@ Heron.options.searchPanelConfig = {
             resultPanel: {
                 xtype: 'hr_featuregridpanel',
                 id: 'hr-featuregridpanel',
-                displayPanels: ['Table','Detail'],
+                displayPanels: ['Table', 'Detail'],
                 header: false,
                 border: false,
                 autoConfig: true,
@@ -200,14 +200,15 @@ var entityType = 'thing';
 Heron.options.map.toolbar = [
     {type: "scale"},
     /* Leave out: see http://code.google.com/p/geoext-viewer/issues/detail?id=116 */
-    {type: "featureinfo", options: {
+    {
+        type: "featureinfo", options: {
         pressed: true,
         popupWindow: {
             width: 380,
             height: 400,
             featureInfoPanel: {
                 showTopToolbar: true,
-                displayPanels: ['Detail','Table'],
+                displayPanels: ['Detail', 'Table'],
 
                 // Export to download file. Option values are 'CSV', 'XLS', default is no export (results in no export menu).
                 exportFormats: Heron.options.exportFormats,
@@ -275,14 +276,15 @@ Heron.options.map.toolbar = [
             }
 
         }
-    }},
-    {type: "-"} ,
+    }
+    },
+    {type: "-"},
     {type: "pan"},
 //    {type: "pan", options: {iconCls: "icon-hand"}},
     {type: "zoomin"},
     {type: "zoomout"},
     {type: "zoomvisible"},
-    {type: "-"} ,
+    {type: "-"},
     {type: "zoomprevious"},
     {type: "zoomnext"},
     {type: "-"},
@@ -292,7 +294,8 @@ Heron.options.map.toolbar = [
     {type: "-"},
     {type: "printdialog", options: {url: 'http://kademo.nl/print/pdf28992.kadviewer'}},
     {type: "-"},
-    {type: "oleditor", options: {
+    {
+        type: "oleditor", options: {
         pressed: false,
 
         // Options for OLEditor
@@ -305,17 +308,67 @@ Heron.options.map.toolbar = [
             DownloadFeature: {
                 url: Heron.globals.serviceUrl,
                 formats: [
-                    {name: 'Well-Known-Text (WKT)', fileExt: '.wkt', mimeType: 'text/plain', formatter: 'OpenLayers.Format.WKT'},
-                    {name: 'Geographic Markup Language - v2 (GML2)', fileExt: '.gml', mimeType: 'text/xml', formatter: new OpenLayers.Format.GML.v2({featureType: 'oledit', featureNS: 'http://geops.de'})},
+                    {
+                        name: 'Well-Known-Text (WKT)',
+                        fileExt: '.wkt',
+                        mimeType: 'text/plain',
+                        formatter: 'OpenLayers.Format.WKT'
+                    },
+                    {
+                        name: 'Geographic Markup Language - v2 (GML2)',
+                        fileExt: '.gml',
+                        mimeType: 'text/xml',
+                        formatter: new OpenLayers.Format.GML.v2({featureType: 'oledit', featureNS: 'http://geops.de'})
+                    },
                     {name: 'GeoJSON', fileExt: '.json', mimeType: 'text/plain', formatter: 'OpenLayers.Format.GeoJSON'},
-                    {name: 'GPS Exchange Format (GPX)', fileExt: '.gpx', mimeType: 'text/xml', formatter: 'OpenLayers.Format.GPX', fileProjection: new OpenLayers.Projection('EPSG:4326')},
-                    {name: 'Keyhole Markup Language (KML)', fileExt: '.kml', mimeType: 'text/xml', formatter: 'OpenLayers.Format.KML', fileProjection: new OpenLayers.Projection('EPSG:4326')},
-                    {name: 'ESRI Shapefile (zipped, RD)', fileExt: '.zip', mimeType: 'application/zip', formatter: 'OpenLayers.Format.GeoJSON', targetFormat: 'ESRI Shapefile', fileProjection: new OpenLayers.Projection('EPSG:28992')},
+                    {
+                        name: 'GPS Exchange Format (GPX)',
+                        fileExt: '.gpx',
+                        mimeType: 'text/xml',
+                        formatter: 'OpenLayers.Format.GPX',
+                        fileProjection: new OpenLayers.Projection('EPSG:4326')
+                    },
+                    {
+                        name: 'Keyhole Markup Language (KML)',
+                        fileExt: '.kml',
+                        mimeType: 'text/xml',
+                        formatter: 'OpenLayers.Format.KML',
+                        fileProjection: new OpenLayers.Projection('EPSG:4326')
+                    },
+                    {
+                        name: 'ESRI Shapefile (zipped, RD)',
+                        fileExt: '.zip',
+                        mimeType: 'application/zip',
+                        formatter: 'OpenLayers.Format.GeoJSON',
+                        targetFormat: 'ESRI Shapefile',
+                        fileProjection: new OpenLayers.Projection('EPSG:28992')
+                    },
 //                    {name: 'ESRI Shapefile (zipped, ETRS89)', fileExt: '.zip', mimeType: 'application/zip', formatter: 'OpenLayers.Format.GeoJSON', targetFormat: 'ESRI Shapefile', fileProjection: new OpenLayers.Projection('EPSG:4258')},
-                    {name: 'ESRI Shapefile (zipped, WGS84)', fileExt: '.zip', mimeType: 'application/zip', formatter: 'OpenLayers.Format.GeoJSON', targetFormat: 'ESRI Shapefile', fileProjection: new OpenLayers.Projection('EPSG:4326')},
-                    {name: 'OGC GeoPackage (RD)', fileExt: '.gpkg', mimeType: 'application/binary', formatter: 'OpenLayers.Format.GeoJSON', targetFormat: 'GPKG', fileProjection: new OpenLayers.Projection('EPSG:28992')},
+                    {
+                        name: 'ESRI Shapefile (zipped, WGS84)',
+                        fileExt: '.zip',
+                        mimeType: 'application/zip',
+                        formatter: 'OpenLayers.Format.GeoJSON',
+                        targetFormat: 'ESRI Shapefile',
+                        fileProjection: new OpenLayers.Projection('EPSG:4326')
+                    },
+                    {
+                        name: 'OGC GeoPackage (RD)',
+                        fileExt: '.gpkg',
+                        mimeType: 'application/binary',
+                        formatter: 'OpenLayers.Format.GeoJSON',
+                        targetFormat: 'GPKG',
+                        fileProjection: new OpenLayers.Projection('EPSG:28992')
+                    },
 //                    {name: 'ESRI Shapefile (zipped, ETRS89)', fileExt: '.zip', mimeType: 'application/zip', formatter: 'OpenLayers.Format.GeoJSON', targetFormat: 'ESRI Shapefile', fileProjection: new OpenLayers.Projection('EPSG:4258')},
-                    {name: 'OGC GeoPackage (WGS84)', fileExt: '.gpkg', mimeType: 'application/binary', formatter: 'OpenLayers.Format.GeoJSON', targetFormat: 'GPKG', fileProjection: new OpenLayers.Projection('EPSG:4326')}
+                    {
+                        name: 'OGC GeoPackage (WGS84)',
+                        fileExt: '.gpkg',
+                        mimeType: 'application/binary',
+                        formatter: 'OpenLayers.Format.GeoJSON',
+                        targetFormat: 'GPKG',
+                        fileProjection: new OpenLayers.Projection('EPSG:4326')
+                    }
                 ],
                 // For custom projections use Proj4.js
                 fileProjection: new OpenLayers.Projection('EPSG:28992')
@@ -323,19 +376,75 @@ Heron.options.map.toolbar = [
             UploadFeature: {
                 url: Heron.globals.serviceUrl,
                 formats: [
-                    {name: 'Well-Known-Text (WKT)', fileExt: '.wkt', mimeType: 'text/plain', formatter: 'OpenLayers.Format.WKT'},
-                    {name: 'Geographic Markup Language - v2 (GML2)', fileExt: '.gml', mimeType: 'text/xml', formatter: 'OpenLayers.Format.GML'},
+                    {
+                        name: 'Well-Known-Text (WKT)',
+                        fileExt: '.wkt',
+                        mimeType: 'text/plain',
+                        formatter: 'OpenLayers.Format.WKT'
+                    },
+                    {
+                        name: 'Geographic Markup Language - v2 (GML2)',
+                        fileExt: '.gml',
+                        mimeType: 'text/xml',
+                        formatter: 'OpenLayers.Format.GML'
+                    },
                     {name: 'GeoJSON', fileExt: '.json', mimeType: 'text/plain', formatter: 'OpenLayers.Format.GeoJSON'},
-                    {name: 'GPS Exchange Format (GPX)', fileExt: '.gpx', mimeType: 'text/xml', formatter: 'OpenLayers.Format.GPX', fileProjection: new OpenLayers.Projection('EPSG:4326')},
-                    {name: 'Keyhole Markup Language (KML)', fileExt: '.kml', mimeType: 'text/xml', formatter: 'OpenLayers.Format.KML', fileProjection: new OpenLayers.Projection('EPSG:4326')},
-                    {name: 'CSV (alleen RD-punten, moet X,Y kolom hebben)', fileExt: '.csv', mimeType: 'text/plain', formatter: 'OpenLayers.Format.GeoJSON', fileProjection: new OpenLayers.Projection('EPSG:28992')},
-                    {name: 'CSV (idem, punten in WGS84)', fileExt: '.csv', mimeType: 'text/plain', formatter: 'OpenLayers.Format.GeoJSON', fileProjection: new OpenLayers.Projection('EPSG:4326')},
-                    {name: 'ESRI Shapefile (1 laag, gezipped in RD)', fileExt: '.zip', mimeType: 'text/plain', formatter: 'OpenLayers.Format.GeoJSON'},
+                    {
+                        name: 'GPS Exchange Format (GPX)',
+                        fileExt: '.gpx',
+                        mimeType: 'text/xml',
+                        formatter: 'OpenLayers.Format.GPX',
+                        fileProjection: new OpenLayers.Projection('EPSG:4326')
+                    },
+                    {
+                        name: 'Keyhole Markup Language (KML)',
+                        fileExt: '.kml',
+                        mimeType: 'text/xml',
+                        formatter: 'OpenLayers.Format.KML',
+                        fileProjection: new OpenLayers.Projection('EPSG:4326')
+                    },
+                    {
+                        name: 'CSV (alleen RD-punten, moet X,Y kolom hebben)',
+                        fileExt: '.csv',
+                        mimeType: 'text/plain',
+                        formatter: 'OpenLayers.Format.GeoJSON',
+                        fileProjection: new OpenLayers.Projection('EPSG:28992')
+                    },
+                    {
+                        name: 'CSV (idem, punten in WGS84)',
+                        fileExt: '.csv',
+                        mimeType: 'text/plain',
+                        formatter: 'OpenLayers.Format.GeoJSON',
+                        fileProjection: new OpenLayers.Projection('EPSG:4326')
+                    },
+                    {
+                        name: 'ESRI Shapefile (1 laag, gezipped in RD)',
+                        fileExt: '.zip',
+                        mimeType: 'text/plain',
+                        formatter: 'OpenLayers.Format.GeoJSON'
+                    },
 //                    {name: 'ESRI Shapefile (1 laag, gezipped in ETRS89)', fileExt: '.zip', mimeType: 'text/plain', formatter: 'OpenLayers.Format.GeoJSON', fileProjection: new OpenLayers.Projection('EPSG:4258')},
-                    {name: 'ESRI Shapefile (1 laag, gezipped in WGS84)', fileExt: '.zip', mimeType: 'text/plain', formatter: 'OpenLayers.Format.GeoJSON', fileProjection: new OpenLayers.Projection('EPSG:4326')},
-                    {name: 'OGC GeoPackage (1 laag, in RD)', fileExt: '.gpkg', mimeType: 'text/plain', formatter: 'OpenLayers.Format.GeoJSON'},
+                    {
+                        name: 'ESRI Shapefile (1 laag, gezipped in WGS84)',
+                        fileExt: '.zip',
+                        mimeType: 'text/plain',
+                        formatter: 'OpenLayers.Format.GeoJSON',
+                        fileProjection: new OpenLayers.Projection('EPSG:4326')
+                    },
+                    {
+                        name: 'OGC GeoPackage (1 laag, in RD)',
+                        fileExt: '.gpkg',
+                        mimeType: 'text/plain',
+                        formatter: 'OpenLayers.Format.GeoJSON'
+                    },
                     //                {name: 'ESRI Shapefile (1 laag, gezipped in ETRS89)', fileExt: '.zip', mimeType: 'text/plain', formatter: 'OpenLayers.Format.GeoJSON', fileProjection: new OpenLayers.Projection('EPSG:4258')},
-                    {name: 'OGC GeoPackage (1 laag, in WGS84)', fileExt: '.gpkg', mimeType: 'text/plain', formatter: 'OpenLayers.Format.GeoJSON', fileProjection: new OpenLayers.Projection('EPSG:4326')}
+                    {
+                        name: 'OGC GeoPackage (1 laag, in WGS84)',
+                        fileExt: '.gpkg',
+                        mimeType: 'text/plain',
+                        formatter: 'OpenLayers.Format.GeoJSON',
+                        fileProjection: new OpenLayers.Projection('EPSG:4326')
+                    }
                 ],
                 // For custom projections use Proj4.js
                 fileProjection: new OpenLayers.Projection('EPSG:28992')
@@ -343,41 +452,128 @@ Heron.options.map.toolbar = [
         }
     }
     },
-    {type: "upload", options: {
+    {
+        type: "upload", options: {
         upload: {
             layerName: 'Kladlaag',
             url: Heron.globals.serviceUrl,
             formats: [
-                {name: 'Well-Known-Text (WKT)', fileExt: '.wkt', mimeType: 'text/plain', formatter: 'OpenLayers.Format.WKT'},
-                {name: 'Geographic Markup Language - v2 (GML2)', fileExt: '.gml', mimeType: 'text/xml', formatter: 'OpenLayers.Format.GML'},
-                {name: 'Geographic Markup Language - v3 (GML3)', fileExt: '.gml', mimeType: 'text/xml', formatter: 'OpenLayers.Format.GML.v3'},
+                {
+                    name: 'Well-Known-Text (WKT)',
+                    fileExt: '.wkt',
+                    mimeType: 'text/plain',
+                    formatter: 'OpenLayers.Format.WKT'
+                },
+                {
+                    name: 'Geographic Markup Language - v2 (GML2)',
+                    fileExt: '.gml',
+                    mimeType: 'text/xml',
+                    formatter: 'OpenLayers.Format.GML'
+                },
+                {
+                    name: 'Geographic Markup Language - v3 (GML3)',
+                    fileExt: '.gml',
+                    mimeType: 'text/xml',
+                    formatter: 'OpenLayers.Format.GML.v3'
+                },
                 {name: 'GeoJSON', fileExt: '.json', mimeType: 'text/plain', formatter: 'OpenLayers.Format.GeoJSON'},
-                {name: 'GPS Exchange Format (GPX)', fileExt: '.gpx', mimeType: 'text/xml', formatter: 'OpenLayers.Format.GPX', fileProjection: new OpenLayers.Projection('EPSG:4326')},
-                {name: 'Keyhole Markup Language (KML)', fileExt: '.kml', mimeType: 'text/xml', formatter: 'OpenLayers.Format.KML', fileProjection: new OpenLayers.Projection('EPSG:4326')},
-                {name: 'CSV (alleen RD-punten, moet X,Y kolom hebben)', fileExt: '.csv', mimeType: 'text/plain', formatter: 'OpenLayers.Format.GeoJSON', fileProjection: new OpenLayers.Projection('EPSG:28992')},
-                {name: 'CSV (idem, punten in WGS84)', fileExt: '.csv', mimeType: 'text/plain', formatter: 'OpenLayers.Format.GeoJSON', fileProjection: new OpenLayers.Projection('EPSG:4326')},
-                {name: 'ESRI Shapefile (1 laag, gezipped in RD)', fileExt: '.zip', mimeType: 'text/plain', formatter: 'OpenLayers.Format.GeoJSON'},
+                {
+                    name: 'GPS Exchange Format (GPX)',
+                    fileExt: '.gpx',
+                    mimeType: 'text/xml',
+                    formatter: 'OpenLayers.Format.GPX',
+                    fileProjection: new OpenLayers.Projection('EPSG:4326')
+                },
+                {
+                    name: 'Keyhole Markup Language (KML)',
+                    fileExt: '.kml',
+                    mimeType: 'text/xml',
+                    formatter: 'OpenLayers.Format.KML',
+                    fileProjection: new OpenLayers.Projection('EPSG:4326')
+                },
+                {
+                    name: 'CSV (alleen RD-punten, moet X,Y kolom hebben)',
+                    fileExt: '.csv',
+                    mimeType: 'text/plain',
+                    formatter: 'OpenLayers.Format.GeoJSON',
+                    fileProjection: new OpenLayers.Projection('EPSG:28992')
+                },
+                {
+                    name: 'CSV (idem, punten in WGS84)',
+                    fileExt: '.csv',
+                    mimeType: 'text/plain',
+                    formatter: 'OpenLayers.Format.GeoJSON',
+                    fileProjection: new OpenLayers.Projection('EPSG:4326')
+                },
+                {
+                    name: 'ESRI Shapefile (1 laag, gezipped in RD)',
+                    fileExt: '.zip',
+                    mimeType: 'text/plain',
+                    formatter: 'OpenLayers.Format.GeoJSON'
+                },
 //                {name: 'ESRI Shapefile (1 laag, gezipped in ETRS89)', fileExt: '.zip', mimeType: 'text/plain', formatter: 'OpenLayers.Format.GeoJSON', fileProjection: new OpenLayers.Projection('EPSG:4258')},
-                {name: 'ESRI Shapefile (1 laag, gezipped in WGS84)', fileExt: '.zip', mimeType: 'text/plain', formatter: 'OpenLayers.Format.GeoJSON', fileProjection: new OpenLayers.Projection('EPSG:4326')},
-                {name: 'OGC GeoPackage (1 laag, in RD)', fileExt: '.gpkg', mimeType: 'text/plain', formatter: 'OpenLayers.Format.GeoJSON'},
+                {
+                    name: 'ESRI Shapefile (1 laag, gezipped in WGS84)',
+                    fileExt: '.zip',
+                    mimeType: 'text/plain',
+                    formatter: 'OpenLayers.Format.GeoJSON',
+                    fileProjection: new OpenLayers.Projection('EPSG:4326')
+                },
+                {
+                    name: 'OGC GeoPackage (1 laag, in RD)',
+                    fileExt: '.gpkg',
+                    mimeType: 'text/plain',
+                    formatter: 'OpenLayers.Format.GeoJSON'
+                },
 //                {name: 'ESRI Shapefile (1 laag, gezipped in ETRS89)', fileExt: '.zip', mimeType: 'text/plain', formatter: 'OpenLayers.Format.GeoJSON', fileProjection: new OpenLayers.Projection('EPSG:4258')},
-                {name: 'OGC GeoPackage (1 laag, in WGS84)', fileExt: '.gpkg', mimeType: 'text/plain', formatter: 'OpenLayers.Format.GeoJSON', fileProjection: new OpenLayers.Projection('EPSG:4326')}
+                {
+                    name: 'OGC GeoPackage (1 laag, in WGS84)',
+                    fileExt: '.gpkg',
+                    mimeType: 'text/plain',
+                    formatter: 'OpenLayers.Format.GeoJSON',
+                    fileProjection: new OpenLayers.Projection('EPSG:4326')
+                }
             ],
             // For custom projections use Proj4.js
             fileProjection: new OpenLayers.Projection('EPSG:28992')
         }
-    }},
+    }
+    },
     {type: "-"},
 //    {type: "coordinatesearch", options: {onSearchCompleteZoom: 8, localIconFile: 'redpin.png', projection: 'EPSG:28992', fieldLabelX: 'X', fieldLabelY: 'Y'}},
-    {type: "coordinatesearch", options: {
+    {
+        type: "coordinatesearch", options: {
 
         // === Full demo configuration ===
 
         // see ToolbarBuilder.js
-        formWidth: 320, formPageX: 15, formPageY: 100
+        formWidth: 320,
+        formPageX: 15,
+        formPageY: 100
         // see CoordSearchPanel.js
         // , title: 'My title'
-        , titleDescription: 'Kies eventueel een projectie systeem.<br>Voer dan X/Y-coordinaten (RD) of Lon/Lat-waarden in.<br>&nbsp;<br>', titleDescriptionStyle: 'font-size:11px; color:dimgrey;', bodyBaseCls: 'x-form-back', bodyItemCls: 'hr-html-panel-font-size-11', bodyCls: 'hr-html-panel-font-size-11', fieldMaxWidth: 200, fieldLabelWidth: 80, fieldStyle: 'color: red;', fieldLabelStyle: 'color: darkblue', layerName: 'Locatie NL - RD', onProjectionIndex: 1, onZoomLevel: -1, showProjection: true, showZoom: true, showAddMarkers: true, checkAddMarkers: true, showHideMarkers: true, checkHideMarkers: false, removeMarkersOnClose: true, showRemoveMarkersBtn: true, buttonAlign: 'center'		// left, center, right
+        ,
+        titleDescription: 'Kies eventueel een projectie systeem.<br>Voer dan X/Y-coordinaten (RD) of Lon/Lat-waarden in.<br>&nbsp;<br>',
+        titleDescriptionStyle: 'font-size:11px; color:dimgrey;',
+        bodyBaseCls: 'x-form-back',
+        bodyItemCls: 'hr-html-panel-font-size-11',
+        bodyCls: 'hr-html-panel-font-size-11',
+        fieldMaxWidth: 200,
+        fieldLabelWidth: 80,
+        fieldStyle: 'color: red;',
+        fieldLabelStyle: 'color: darkblue',
+        layerName: 'Locatie NL - RD',
+        onProjectionIndex: 1,
+        onZoomLevel: -1,
+        showProjection: true,
+        showZoom: true,
+        showAddMarkers: true,
+        checkAddMarkers: true,
+        showHideMarkers: true,
+        checkHideMarkers: false,
+        removeMarkersOnClose: true,
+        showRemoveMarkersBtn: true,
+        buttonAlign: 'center'		// left, center, right
         /*
          http://spatialreference.org/ref/epsg/4326/
          EPSG:4326
@@ -390,19 +586,47 @@ Heron.options.map.toolbar = [
          Amersfoort / RD New
          WGS84 Bounds: 3.3700, 50.7500, 7.2100, 53.4700
          Projected Bounds: 12628.0541, 308179.0423, 283594.4779, 611063.1429
-         */, hropts: [
+         */,
+        hropts: [
             {
-                projEpsg: 'EPSG:4326', projDesc: 'EPSG:4326 - WGS 84', fieldLabelX: 'Lon [Graden]', fieldLabelY: 'Lat [Graden]', fieldEmptyTextX: 'Voer lengtegraad (x.yz) in...', fieldEmptyTextY: 'Voer breedtegraad (x.yz) in...', fieldMinX: 3.3700, fieldMinY: 50.7500, fieldMaxX: 7.2100, fieldMaxY: 53.4700, iconWidth: 32, iconHeight: 32, localIconFile: 'bluepin.png', iconUrl: null
+                projEpsg: 'EPSG:4326',
+                projDesc: 'EPSG:4326 - WGS 84',
+                fieldLabelX: 'Lon [Graden]',
+                fieldLabelY: 'Lat [Graden]',
+                fieldEmptyTextX: 'Voer lengtegraad (x.yz) in...',
+                fieldEmptyTextY: 'Voer breedtegraad (x.yz) in...',
+                fieldMinX: 3.3700,
+                fieldMinY: 50.7500,
+                fieldMaxX: 7.2100,
+                fieldMaxY: 53.4700,
+                iconWidth: 32,
+                iconHeight: 32,
+                localIconFile: 'bluepin.png',
+                iconUrl: null
             },
             {
-                projEpsg: 'EPSG:28992', projDesc: 'EPSG:28992 - Amersfoort / RD New', fieldLabelX: 'X [m]', fieldLabelY: 'Y [m]', fieldEmptyTextX: 'Voer X-coordinaat in...', fieldEmptyTextY: 'Voer Y-coordinaat in...', fieldMinX: -285401.920, fieldMinY: 22598.080, fieldMaxX: 595401.920, fieldMaxY: 903401.920, iconWidth: 32, iconHeight: 32, localIconFile: 'redpin.png', iconUrl: null
+                projEpsg: 'EPSG:28992',
+                projDesc: 'EPSG:28992 - Amersfoort / RD New',
+                fieldLabelX: 'X [m]',
+                fieldLabelY: 'Y [m]',
+                fieldEmptyTextX: 'Voer X-coordinaat in...',
+                fieldEmptyTextY: 'Voer Y-coordinaat in...',
+                fieldMinX: -285401.920,
+                fieldMinY: 22598.080,
+                fieldMaxX: 595401.920,
+                fieldMaxY: 903401.920,
+                iconWidth: 32,
+                iconHeight: 32,
+                localIconFile: 'redpin.png',
+                iconUrl: null
             }
 
         ]
 
         // ====================================
 
-    }},
+    }
+    },
     {
         type: "searchcenter",
         // Options for SearchPanel window
@@ -444,93 +668,75 @@ Heron.options.map.toolbar = [
 //        fileName: 'heron_map',
 //        fileExt: '.cml'
 //    }},
-    {type: "help", options: {contentUrl: 'content/help.html', popupWindow: { width: 640, height: 540}}}
+    {type: "help", options: {contentUrl: 'content/help.html', popupWindow: {width: 640, height: 540}}}
 ];
 
 /** Values for BookmarksPanel (bookmarks to jump to specific layers/zoom/center on map. */
 Ext.namespace("Heron.options.bookmarks");
 Heron.options.bookmarks =
     [
+        //{
+        //    id: 'smartemco',
+        //    name: 'Smart Emission Latest CO',
+        //    desc: 'Current (Latest) values CO',
+        //    layers: ['OpenBasisKaart OSM', 'Smart Emission - Sensors', 'Smart Emission - Current CO'],
+        //    x: 187041,
+        //    y: 427900,
+        //    zoom: 8
+        //},
         {
-            id: 'rivmno2',
-            name: 'RIVM Current NO2',
-            desc: 'Current (Latest) values NO2',
-            layers: ['OpenBasisKaart OSM', 'RIVM - All Stations', 'RIVM - Current NO2'],
-            x: 155000,
-            y: 465000,
-            zoom: 3
+            id: 'smartemcoraw',
+            name: 'Smart Emission Latest CO Raw',
+            desc: 'Current (Latest) values CO Raw',
+            layers: ['OpenBasisKaart OSM', 'Smart Emission - Sensors', 'Smart Emission - Current CO Raw'],
+            x: 187041,
+            y: 427900,
+            zoom: 8
         },
         {
-            id: 'rivmo3',
-            name: 'RIVM Current O3',
-            desc: 'Current (Latest) values O3',
-            layers: ['OpenBasisKaart OSM', 'RIVM - All Stations', 'RIVM - Current O3'],
-            x: 155000,
-            y: 465000,
-            zoom: 3
+            id: 'smartemco2',
+            name: 'Smart Emission Latest CO2 ppm',
+            desc: 'Current (Latest) values CO2 ppm',
+            layers: ['OpenBasisKaart OSM', 'Smart Emission - Sensors', 'Smart Emission - Current CO2'],
+            x: 187041,
+            y: 427900,
+            zoom: 8
         },
+        //{
+        //    id: 'smartemno2',
+        //    name: 'Smart Emission Latest NO2',
+        //    desc: 'Current (Latest) values NO2',
+        //    layers: ['OpenSimpleTopo TMS', 'Smart Emission - Sensors', 'Smart Emission - Current NO2'],
+        //    x: 187041,
+        //    y: 427900,
+        //    zoom: 8
+        //},
         {
-            id: 'rivmpm10',
-            name: 'RIVM Current PM10',
-            desc: 'Current (Latest) values PM10',
-            layers: ['OpenBasisKaart OSM', 'RIVM - All Stations', 'RIVM - Current PM10'],
-            x: 155000,
-            y: 465000,
-            zoom: 3
-        },
-        {
-            id: 'smartemno2',
-            name: 'Smart Emissions Latest NO2',
-            desc: 'Current (Latest) values NO2',
-            layers: ['OpenSimpleTopo TMS', 'Smart Emission - Sensors', 'Smart Emission - Current NO2'],
-            x: 155000,
-            y: 465000,
-            zoom: 3
+            id: 'smartemno2raw',
+            name: 'Smart Emission Latest NO2 Raw',
+            desc: 'Current (Latest) values NO2 Raw',
+            layers: ['OpenBasisKaart OSM', 'Smart Emission - Sensors', 'Smart Emission - Current NO2 Raw'],
+            x: 187041,
+            y: 427900,
+            zoom: 8
         },
         {
             id: 'smartemo3',
-            name: 'Smart Emissions Latest O3',
-            desc: 'Current (Latest) values O3',
+            name: 'Smart Emission Latest O3 ug/m3',
+            desc: 'Smart Emission - Current O3',
             layers: ['OpenBasisKaart OSM', 'Smart Emission - Sensors', 'Smart Emission - Current O3'],
-            x: 155000,
-            y: 465000,
-            zoom: 3
+            x: 187041,
+            y: 427900,
+            zoom: 8
         },
         {
-            id: 'smartemco',
-            name: 'Smart Emissions Latest CO',
-            desc: 'Current (Latest) values CO',
-            layers: ['OpenBasisKaart OSM', 'Smart Emission - Sensors', 'Smart Emission - Current CO'],
-            x: 155000,
-            y: 465000,
-            zoom: 3
-        },
-        {
-            id: 'rivmriono2',
-            name: 'RIVM RIO NO2 Coverage',
-            desc: 'Current (Latest) values NO2',
-            layers: ['OpenBasisKaart OSM', 'TEST - RIO APS NO2'],
-            x: 155000,
-            y: 465000,
-            zoom: 3
-        },
-        {
-            id: 'rivmrioo3',
-            name: 'RIVM RIO O3 Coverage',
-            desc: 'Current (Latest) values O3',
-            layers: ['OpenBasisKaart OSM', 'TEST - RIO APS O3'],
-            x: 155000,
-            y: 465000,
-            zoom: 3
-        },
-        {
-            id: 'rivmriopm10',
-            name: 'RIVM RIO PM10 Coverage',
-            desc: 'Current (Latest) values PM10',
-            layers: ['OpenBasisKaart OSM', 'TEST - RIO APS PM10'],
-            x: 155000,
-            y: 465000,
-            zoom: 3
+            id: 'smartemo3raw',
+            name: 'Smart Emission Latest O3 Raw',
+            desc: 'Smart Emission - Current O3 Raw',
+            layers: ['OpenBasisKaart OSM', 'Smart Emission - Sensors', 'Smart Emission - Current O3 Raw'],
+            x: 187041,
+            y: 427900,
+            zoom: 8
         }
 
     ];
