@@ -2,24 +2,30 @@
 #
 # This prepares an empty Ubuntu system for running the SmartEmission Data Platform
 # run this script onze as the admin user with full sudo rights: usually "ubuntu" or "vagrant"
-# NB DO NOT RUN THIS AS root !!
 #
 # NB2 On Fiware lab VM: add "127.0.0.1 localhost hostname" to /etc/hosts
 #
 # Just van den Broecke - 2016
 
+# Bring system uptodate
+
+
 sudo apt-get update
 sudo apt-get -y upgrade
 sudo apt-get install -y apt-transport-https ca-certificates  # usually already installed
 
-# Add key
+# Add keys and extra repos
+# rm /etc/apt/sources.list.d/docker.list /etc/apt/sources.list.d/pgdg.list
+
+# Docker see https://docs.docker.com/engine/installation/linux/ubuntulinux/
 sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
 
 # Add to repo by putting this line in /etc/apt/sources.list.d/docker.list
-sudo echo "deb https://apt.dockerproject.org/repo ubuntu-trusty main" >  ~/docker.list
-sudo echo "" >> ~/docker.list
+sudo echo "deb https://apt.dockerproject.org/repo ubuntu-trusty main" >  /etc/apt/sources.list.d/docker.list
 
-sudo mv ~/docker.list /etc/apt/sources.list.d/docker.list
+# Need 9.4 version of PG client, not in Ubuntu 14.4, so get from PG Repo
+sudo echo "deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 
 sudo apt-get update
 
@@ -43,19 +49,15 @@ sudo service docker start
 # test
 # sudo docker run hello-world
 
-# Also Docker Compose
-sudo apt-get install -y python-pip
-sudo pip install docker-compose
 
 # Utils like Emacs and Postgres client to connect to PG DB
 # https://www.postgresql.org/download/linux/ubuntu/
-
 # Need 9.4 version of PG client, not in Ubuntu 14.4, so get from PG Repo
-sudo echo "deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main" > /etc/apt/sources.list.d/pgdg.list
-wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-sudo apt-get update
+sudo apt-get install -y  python-pip git emacs24-nox apache2-utils apt-show-versions postgresql-client-9.4
 
-sudo apt-get install -y emacs24-nox apache2-utils apt-show-versions postgresql-client-9.4
+# Also Docker Compose
+sudo pip install docker-compose
+
 
 sudo mkdir -p /var/smartem/log/etl
 sudo chmod 777 /var/smartem/log/etl
