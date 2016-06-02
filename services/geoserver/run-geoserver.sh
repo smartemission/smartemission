@@ -35,19 +35,18 @@ function restart_gs() {
   sudo docker run --name ${NAME} ${LINK_MAP} ${PORT_MAP} ${VOL_MAP} -d ${IMAGE}
 }
 
-# Some tricky stuff to avoid getting empty/half-empty GS data dir on host
+# Some tricky stuff to get full GS data dir on host when non-existing on host
 if [ ! -d "${GS_DATA_DIR}" ]; then
-   # First time: may make emtpy dirs. Docker will fill these once with
-   # values in container and leave them in subsequent runs. Hence the GeoServer
-   # data dir can be maintained on the host. Loosing/rebuilding the Docker image will thus
+   # First time: get full GS data dir. Loosing/rebuilding the Docker image will thus
    # never result in loss of data.
-   # For GeoServer we somehow need to copy the original data dir from the container
-   # to the host on first run. Strange issue, possibly related on how Tomcat/GS inits.
+   # For GeoServer we  need to copy the original data dir from the container
+   # to the host on first run.
    # See issue: https://github.com/kartoza/docker-geoserver/issues/2
+   # (not an issue anymore, see comments there)
    echo "${GS_DATA_DIR} empty: copy from original GS version and restart GS"
    restart_gs ${VOL_MAP_LOGS}
 
-   # Copy from original (somehow mapping render an empty dir!)
+   # Copy from original data dir in container and rename by moving on host
    sudo docker cp geoserver:/opt/geoserver/data_dir $DATA_DIR
    sudo rm -rf ${GS_DATA_DIR}
    sudo mv  ${DATA_DIR}/data_dir $GS_DATA_DIR
