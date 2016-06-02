@@ -6,7 +6,10 @@
 # Just van den Broecke - 2016
 #
 
-pushd ../services
+script_dir=${0%/*}
+
+pushd ${script_dir}/../services
 ./run-all.sh
 popd
-crontab cronfile.txt
+
+crontab ${script_dir}/cronfile.txt

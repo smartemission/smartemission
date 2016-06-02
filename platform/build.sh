@@ -18,4 +18,3 @@ do
   ./build.sh
   popd
 done
-
