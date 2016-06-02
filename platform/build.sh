@@ -18,3 +18,5 @@ do
   ./build.sh
   popd
 done
+
+echo "READY: now run ./install.sh install SE Data Platform system daemon"

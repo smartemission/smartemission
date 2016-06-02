@@ -5,6 +5,8 @@
 # Just van den Broecke - 2016
 #
 
+DATE=`date +%Y-%m-%d`
+YEAR=`date +%Y`
 WEEK_DAY=`date +%w`
 MONTH_DAY=`date +%d`
 MONTH=`date +%m`
@@ -46,5 +48,12 @@ done
 
 echo "END backup databases op `date`" >> ${LOG_FILE}
 
-
 # Now sync to backup server
+RSYNC="rsync -e ssh -alzvx --delete "
+BACKUP_HOST="vps68271@backup"
+
+# We will have last 7 days always
+${RSYNC} ${BACKUP_DIR}/ ${BACKUP_HOST}:`hostname`-weekday-${WEEK_DAY}/
+
+# At the start of each month we save the backup of the last day of previous month
+${RSYNC} ${BACKUP_DIR}/ ${BACKUP_HOST}:`hostname`-${YEAR}-${MONTH}/

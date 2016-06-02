@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # This prepares an empty Ubuntu system for running the SmartEmission Data Platform
-# run this script onze as the admin user with full sudo rights: usually "ubuntu" or "vagrant"
+# run this script once as root.
 #
 # NB2 On Fiware lab VM: add "127.0.0.1 localhost hostname" to /etc/hosts
 #
@@ -9,6 +9,8 @@
 
 # Bring system uptodate
 
+# set time right adn configure timezone and locale
+echo "Europe/Amsterdam" > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata
 
 sudo apt-get update
 sudo apt-get -y upgrade
@@ -49,15 +51,14 @@ sudo service docker start
 # test
 # sudo docker run hello-world
 
-
 # Utils like Emacs and Postgres client to connect to PG DB
 # https://www.postgresql.org/download/linux/ubuntu/
 # Need 9.4 version of PG client, not in Ubuntu 14.4, so get from PG Repo
-sudo apt-get install -y  python-pip git emacs24-nox apache2-utils apt-show-versions postgresql-client-9.4
+sudo apt-get install -y  python-pip libyaml-dev libpython2.7-dev git emacs24-nox apache2-utils apt-show-versions postgresql-client-9.4
 
 # Also Docker Compose
+sudo pip install pyyaml
 sudo pip install docker-compose
-
 
 sudo mkdir -p /var/smartem/log/etl
 sudo chmod 777 /var/smartem/log/etl
@@ -66,9 +67,6 @@ sudo mkdir -p /var/smartem/backup
 
 # Postfix: choose Local System
 sudo apt-get install postfix
-
-# Set timezone right
-sudo dpkg-reconfigure tzdata
 
 # view tail -f /va
 # The rest
@@ -81,4 +79,4 @@ cd /opt/geonovum/smartem
 
 git clone https://github.com/Geonovum/smartemission.git git
 
-echo "READY: now build and deploy components using Docker and Debian Packages"
+echo "READY: now run ./build.sh and ./install.sh to build and run SE Data Platform"

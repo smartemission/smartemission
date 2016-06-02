@@ -13,3 +13,5 @@ chmod +x /etc/init.d/smartem
 
 # Traditional TODO look into Upstart Way
 update-rc.d smartem defaults
+
+echo "READY: now start SE Data Platform using 'service smartem start'"
