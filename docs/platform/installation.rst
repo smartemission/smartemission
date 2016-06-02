@@ -284,7 +284,7 @@ Running within 15 mins
 Below the steps to get the complete SE platform stack and ETL running within 15 minutes on a bare Ubuntu system.
 You can run as root or a privileged sudo-user like "ubuntu" or "vagrant".
 
-* copy the file https://github.com/Geonovum/smartemission/blob/master/platform/bootstrap.sh to any dir
+* ``curl -O https://raw.githubusercontent.com/Geonovum/smartemission/master/platform/bootstrap.sh`` to any dir
 * ``./bootstrap.sh``
 * go git home dir: ``cd /opt/geonovum/smartem/git/platform``
 * build system (Docker images mainly): ``./build.sh``

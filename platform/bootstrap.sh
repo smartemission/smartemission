@@ -15,7 +15,7 @@ sudo apt-get -y upgrade
 sudo apt-get install -y apt-transport-https ca-certificates  # usually already installed
 
 # Add keys and extra repos
-# rm /etc/apt/sources.list.d/docker.list /etc/apt/sources.list.d/pgdg.list
+# /bin/rm /etc/apt/sources.list.d/docker.list /etc/apt/sources.list.d/pgdg.list
 
 # Docker see https://docs.docker.com/engine/installation/linux/ubuntulinux/
 sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
