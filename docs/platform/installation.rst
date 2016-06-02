@@ -281,13 +281,16 @@ Now our system is ready to roll out Docker images!
 Running within 15 mins
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Below the steps to get the complete SE platform stack and ETL running within 15 minutes on a bare Ubuntu system:
+Below the steps to get the complete SE platform stack and ETL running within 15 minutes on a bare Ubuntu system.
+You can run as root or a privileged sudo-user like "ubuntu" or "vagrant".
 
-* ``cd /opt/geonovum/smartem/git/platform`` run ``./bootstrap.sh``
-* build Docker images: ``cd /opt/geonovum/smartem/git/docker`` and call ``./build.sh`` in each subdir
-* run the system: ``cd /opt/geonovum/smartem/git/services`` and call ``./run-all.sh``
+* copy the file https://github.com/Geonovum/smartemission/blob/master/platform/bootstrap.sh to any dir
+* ``./bootstrap.sh``
+* go git home dir: ``cd /opt/geonovum/smartem/git/platform``
+* build system (Docker images mainly): ``./build.sh``
+* install system ``./install.sh`` (installs system service smartem)
+* start the system: ``service smartem start``
 * create the database schema's: (first time only, destroys DB!!): ``cd /opt/geonovum/smartem/git/etl`` and call ``./db-init.sh``
-* schedule recurring tasks like ETL: ``crontab /opt/geonovum/smartem/git/platform/cronfile.txt``
 * create a HTTP admin password file in: ``/opt/geonovum/smartem/git/services/web/config/admin/htpasswd`` (see README.TXT there)
 * go to domain admin site ``/adm`` and change GeoServer default password
 

@@ -162,7 +162,7 @@ the FIWARE Catalog as components for FIWARE Blueprints.
 The list of Docker Containers, each with their related Docker Image:
 
 * ``web`` - web and webapps, proxy to backend - image: ``geonovum/apache2``
-* ``postgis`` - PostgreSQL w PostGIS - image: ``kartoza/postgis:9.4-2.1``
+* ``postgis`` - PostgreSQL w PostGIS - image: ``geonovum/postgis`` based on ``kartoza/postgis:9.4-2.1``
 * ``stetl`` - All ETL tasks - image: ``geonovum/stetl``
 * ``geoserver`` - GeoServer web app - image: ``geonovum/geoserver`` based on ``kartoza/geoserver``
 * ``sos52`` - 52North SOS web app: (TBD)
@@ -177,6 +177,8 @@ Test and Production
 In order to provide a continuous/uninterrupted service both a Test and Production deployment will be
 setup within the FIWARE Lab environment. For local development on PC/Mac/Linux
 a Vagrant environment with Docker can be setup.
+
+NB since FIWARE is not yet available we run on standard VPS systems.
 
 The Test and Production environments will also have separate IP-adresses and domains:
 ``data.test.smartemission.nl`` and  ``data.smartemission.nl`` respectively.
