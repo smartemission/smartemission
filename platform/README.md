@@ -15,16 +15,16 @@ All is controlled using the systemd standard Linux service "smartem".
 
 From this dir do:
 
-./bootstrap.sh - makes empty Ubuntu system ready for Docker and Platform
-./build.sh  - builds all Docker images
-./install.sh  - installs system service "smartem"
+    ./bootstrap.sh - makes empty Ubuntu system ready for Docker and Platform
+    ./build.sh  - builds all Docker images
+    ./install.sh  - installs system service "smartem"
 
-Now use the standard Linux "service" commands:
+Then use the standard Linux "service" commands:
 
-service smartem status
-service smarted stop
-service smartem start
+    service smartem status
+    service smarted stop
+    service smartem start
+    etc
 
-etc
-or even /etc/init.d/smartem start| stop | status will work.
+Also /etc/init.d/smartem start| stop | status will work.
 

@@ -54,7 +54,7 @@ sudo service docker start
 # Utils like Emacs and Postgres client to connect to PG DB
 # https://www.postgresql.org/download/linux/ubuntu/
 # Need 9.4 version of PG client, not in Ubuntu 14.4, so get from PG Repo
-sudo apt-get install -y  python-pip libyaml-dev libpython2.7-dev git emacs24-nox apache2-utils apt-show-versions postgresql-client-9.4
+sudo apt-get install -y python-pip libyaml-dev libpython2.7-dev git emacs24-nox apache2-utils apt-show-versions postgresql-client-9.4
 
 # Also Docker Compose
 sudo pip install pyyaml
@@ -68,15 +68,11 @@ sudo mkdir -p /var/smartem/backup
 # Postfix: choose Local System
 sudo apt-get install postfix
 
-# view tail -f /va
-# The rest
-# Github
+# Smart Emission Github
 sudo mkdir -p /opt/geonovum/smartem
 
 # sudo chown -R ${USER}:${USER} /opt/geonovum
 
-cd /opt/geonovum/smartem
-
-git clone https://github.com/Geonovum/smartemission.git git
+sudo git clone https://github.com/Geonovum/smartemission.git /opt/geonovum/smartem/git
 
 echo "READY: now run ./build.sh and ./install.sh to build and run SE Data Platform"

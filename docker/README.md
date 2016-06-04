@@ -20,9 +20,11 @@ For example the Stetl Docker image is used in various ETL shell scripts.
 
 ## Examples
 
+See run-*.sh scripts under ../services/<service>
+
 Run postgis
 
-sudo docker run --name "postgis" -p 5432:5432 -d -t kartoza/postgis:9.4-2.1
+sudo docker run --name "postgis" -p 5432:5432 -d -t geonovum/postgis:9.4-2.1
 psql -h localhost -U docker  -l
 
 Remove images
