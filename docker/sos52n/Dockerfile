@@ -39,34 +39,34 @@ ENV JAVA_VERSION=
 ENV JAVA_DEBIAN_VERSION=
 
 # Set JAVA_HOME to /usr/lib/jvm/default-java and link it to OpenJDK installation
-RUN ln -s /usr/lib/jvm/java-8-openjdk-amd64 /usr/lib/jvm/default-java
+RUN ln -s /usr/lib/jvm/java-7-openjdk-amd64 /usr/lib/jvm/default-java
 ENV JAVA_HOME /usr/lib/jvm/default-java
 
 # ADD resources /tmp/resources
 RUN mkdir /tmp/resources
 
-# If a matching Oracle JDK tar.gz exists in /tmp/resources, move it to /var/cache/oracle-jdk8-installer
-# where oracle-java8-installer will detect it
+# If a matching Oracle JDK tar.gz exists in /tmp/resources, move it to /var/cache/oracle-jdk7-installer
+# where oracle-java7-installer will detect it
 RUN if ls /tmp/resources/*jdk-*-linux-x64.tar.gz > /dev/null 2>&1; then \
-      mkdir /var/cache/oracle-jdk8-installer && \
-      mv /tmp/resources/*jdk-*-linux-x64.tar.gz /var/cache/oracle-jdk8-installer/; \
+      mkdir /var/cache/oracle-jdk7-installer && \
+      mv /tmp/resources/*jdk-*-linux-x64.tar.gz /var/cache/oracle-jdk7-installer/; \
     fi;
 
 # Install Oracle JDK (and uninstall OpenJDK JRE) if the build-arg ORACLE_JDK = true or an Oracle tar.gz
 # was found in /tmp/resources
 ARG ORACLE_JDK=false
-RUN if ls /var/cache/oracle-jdk8-installer/*jdk-*-linux-x64.tar.gz > /dev/null 2>&1 || [ "$ORACLE_JDK" = true ]; then \
-       apt-get autoremove --purge -y openjdk-8-jre-headless && \
-       echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true \
+RUN if ls /var/cache/oracle-jdk7-installer/*jdk-*-linux-x64.tar.gz > /dev/null 2>&1 || [ "$ORACLE_JDK" = true ]; then \
+       apt-get autoremove --purge -y openjdk-7-jre-headless && \
+       echo oracle-java7-installer shared/accepted-oracle-license-v1-1 select true \
          | debconf-set-selections && \
        echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu precise main" \
          > /etc/apt/sources.list.d/webupd8team-java.list && \
        apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886 && \
        apt-get update && \
-       apt-get install -y oracle-java8-installer oracle-java8-set-default && \
-       ln -s --force /usr/lib/jvm/java-8-oracle /usr/lib/jvm/default-java && \
+       apt-get install -y oracle-java7-installer oracle-java7-set-default && \
+       ln -s --force /usr/lib/jvm/java-7-oracle /usr/lib/jvm/default-java && \
        rm -rf /var/lib/apt/lists/* && \
-       rm -rf /var/cache/oracle-jdk8-installer; \
+       rm -rf /var/cache/oracle-jdk7-installer; \
        if [ -f /tmp/resources/jce_policy.zip ]; then \
          unzip -j /tmp/resources/jce_policy.zip -d /tmp/jce_policy && \
          mv /tmp/jce_policy/*.jar $JAVA_HOME/jre/lib/security/; \
@@ -81,8 +81,8 @@ RUN if [ ! -f /tmp/resources/sos52n.zip ]; then \
 
 # unzips in sos52n/52n-sensorweb-sos-bundle-$SOS_VERSION/bin/target/52n-sos-webapp##4.3.6.war
 # hence mv to a Linux-friendly filename
-RUN unzip /tmp/resources/sos52n.zip -d /tmp/resources/sos52n
-#    && unzip '/tmp/resources/sos52n/52n-sensorweb-sos-bundle-4.3.6/bin/target/52n-sos-webapp##4.3.6.war' -d $TC_DEPLOY_DIR/sos52n
+RUN unzip /tmp/resources/sos52n.zip -d /tmp/resources/sos52n  \
+    && unzip '/tmp/resources/sos52n/52n-sensorweb-sos-bundle-4.3.6/bin/target/52n-sos-webapp##4.3.6.war' -d $TC_DEPLOY_DIR/sos52n
 
 # Optionally remove Tomcat manager, docs, and examples
 ARG TOMCAT_EXTRAS=true
