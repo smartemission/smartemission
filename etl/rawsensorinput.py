@@ -7,6 +7,8 @@
 import json
 import time
 from datetime import datetime, timedelta
+import random
+from stetl.component import Config
 from stetl.util import Util
 from stetl.inputs.httpinput import HttpInput
 from stetl.packet import FORMAT
@@ -338,18 +340,72 @@ class RawSensorLastInput(HttpInput):
 
 
 class RawSensorTimeSeriesInput(HttpInput):
+    @Config(ptype=int, default=None, required=True)
+    def max_proc_time_secs(self):
+        """
+        The maximum time in seconds we should continue processing input.
+
+        Required: True
+
+        Default: None
+        """
+        pass
+
     """
     Raw Sensor REST API (CityGIS) TimeSeries (History) fetcher/formatter.
+    
+    Fetching all timeseries data via the Raw Sensor API (RSA) from CityGIS server and putting 
+    these unaltered into Postgres DB. This is a continuus process.
+    Strategy is to use checkpointing: keep track of each sensor/timeseries how far we are
+    in harvesting.
+    
+    Algoritm:
+    - fetch all (sensor) devices from RSA
+    - for each device:
+    - if device is not in progress-table insert and set day,hour to 0
+    - if in progress-table fetch entry (day, hour)
+    - get timeseries (hours) available for that day
+    - fetch and store each, starting with the entry hour (as it may not be completely filled)
+    - stored entry: device_id, day, hour, last_flag, json blob
+    - finish: when all done or when max_proc_time_secs passed 
     """
 
     def __init__(self, configdict, section, produces=FORMAT.record_array):
         HttpInput.__init__(self, configdict, section, produces)
+        
+        # keep track of root base REST URL
+        self.base_url = self.url
+        self.url = None
+        
+        self.current_time_secs = lambda: int(round(time.time()))
         self.device_ids = []
-        self.base_url = self.url
+        self.device_ids_idx = -1
+        self.device_id = -1
 
-    def init(self):
-        # One time: get all device ids
-        self.base_url = self.url
+        self.days = []
+        self.days_idx = -1
+        self.day = -1
+        
+        self.hours = []
+        self.hours_idx = -1
+        self.hour = -1
+        
+        self.start_time_secs = self.current_time_secs()
+ 
+    def all_done(self):
+        if self.device_ids_idx < 0 and self.days_idx < 0 and self.hours_idx < 0:
+            return True
+        return False
+
+    def has_expired(self):
+        if (self.current_time_secs() - self.start_time_secs) > self.max_proc_time_secs:
+            return True
+        return False
+
+    def fetch_devices(self):
+        self.device_ids_idx = -1
+        self.device_ids = []
+        
         devices_url = self.base_url + '/devices'
         log.info('Init: fetching device list from URL: "%s" ...' % devices_url)
         json_str = self.read_from_url(devices_url)
@@ -358,23 +414,126 @@ class RawSensorTimeSeriesInput(HttpInput):
         for d in device_urls:
             self.device_ids.append(d.split('/')[-1])
 
-        self.device_idx = 0
+        if len(self.device_ids) > 0:
+            self.device_ids_idx = 0
+            
         log.info('Found %4d devices: %s' % (len(self.device_ids), str(self.device_ids)))
+
+    def fetch_ts_days(self):
+        self.days_idx = -1
+        self.days = []
+        
+        if len(self.device_ids) == 0:
+            return
+        
+        ts_days_url = self.base_url + '/devices/%s/timeseries' % self.device_id
+        log.info('Init: fetching timeseries days list from URL: "%s" ...' % ts_days_url)
+
+        json_str = self.read_from_url(ts_days_url)
+        json_obj = self.parse_json_str(json_str)
+        days_raw = json_obj['days']
+        for d in days_raw:
+            self.days.append(d.split('/')[-1])
+
+        if len(self.days) > 0:
+            self.days_idx = 0
+            
+        log.info('Found %d days for device %s' % (len(self.days), self.device_id))
+
+    def fetch_ts_hours(self):
+        self.hours_idx = -1
+        self.hours = []
+        if len(self.device_ids) == 0 or len(self.days) == 0:
+            return
+        
+        ts_hours_url = self.base_url + '/devices/%s/timeseries/%s' % (self.device_id, self.day)
+        log.info('Init: fetching timeseries hours list from URL: "%s" ...' % ts_hours_url)
+        # Set the next "last values" URL for device and increment to next
+        json_str = self.read_from_url(ts_hours_url)
+        json_obj = self.parse_json_str(json_str)
+        self.hours = json_obj['hours']
+        if len(self.hours) > 0:
+            self.hours_idx = 0
+        log.info('Found %d hours for device %s day %s' % (len(self.hours), self.device_id, self.day))
+
+    def init(self):
+        # One time: get all device ids
+        self.fetch_devices()
+        
+        # Pick a first device id
+        self.device_id, self.device_ids_idx = self.next_entry(self.device_ids, self.device_ids_idx)
+    
+        # Fetch timeseries days available for current device id
+        self.fetch_ts_days()
+        
+        # Pick a first day entry
+        self.day, self.days_idx = self.next_entry(self.days, self.days_idx)
+
+        # Fetch timeseries hours available for current device id/day
+        self.fetch_ts_hours()
+
+    def next_entry(self, a_list, idx):            
+        if len(a_list) == 0 or idx >= len(a_list):
+            idx = -1
+            entry = None
+        else:
+            entry = a_list[idx]
+            idx += 1
+            
+        return entry, idx
 
     def before_invoke(self, packet):
         """
         Called just before Component invoke.
         """
 
-        # Set the next "last values" URL for device and increment to next
-        self.url = self.base_url + '/devices/%s/last' % self.device_ids[self.device_idx]
-        self.device_idx += 1
+        # Per device check how far we are in fetching timeseries (day/hour)
 
-        # The base method read() will fetch self.url until it is set to None
-        if self.device_idx == len(self.device_ids):
-            # All devices read
+        self.url = None
+
+        if self.device_id is None:
+            log.info('Processing all devices done')
             self.url = None
+            return True
+        
+        # ASSERT : still device(s) to be done
 
+        # Pick an hour entry
+        self.hour, self.hours_idx = self.next_entry(self.hours, self.hours_idx)
+        
+        while self.hour is None:
+            # Pick a next day entry
+            self.day, self.days_idx = self.next_entry(self.days, self.days_idx)
+            
+            if self.day is None:
+                self.device_id, self.device_ids_idx = self.next_entry(self.device_ids, self.device_ids_idx)
+                if self.device_id is not None:
+                    self.day, self.days_idx = self.next_entry(self.days, self.days_idx)
+
+            if self.device_id is None:
+                log.info('Processing all devices done')
+                break
+
+            # Pick an hour entry
+            self.hour, self.hours_idx = self.next_entry(self.hours, self.hours_idx)
+
+        # Still hours?
+        if self.hour is not None:
+            # The base method read() will fetch self.url until it is set to None
+            # <base_url>/devices/14/timeseries/20160603/18
+            self.url = self.base_url + '/devices/%s/timeseries/%s/%s' % (self.device_id, self.day, self.hour)
+
+        return True
+
+    def after_invoke(self, packet):
+        """
+        Called just after Component invoke.
+        """
+        if self.has_expired() or self.all_done():
+            # All devices read or timer expiry
+            log.info('Processing halted: expired or all done')
+            self.url = None
+            return False
         return True
 
     def exit(self):
@@ -392,73 +551,34 @@ class RawSensorTimeSeriesInput(HttpInput):
 
         return json_obj
 
-    # Convert observations to array of records, one for each designated (see self.outputs) output
+    # Create a data record for timeseries of current device/day/hour
     def format_data(self, data):
 
-        # Convert/split response into an array of device_output records
-        # {u'p_basetimer': 6,
-        # u'p_coheatermode': 184549611,
-        # u'v_audioplus9': 2960427, u'v_audioplus8': 2763049, u's_audioplus4': 2368291,
-        # u's_audioplus2': 2433311, u'v_audioplus3': 2302754, u'v_audioplus2': 2236447, u'v_audioplus1': 2171422,
-        # u'v_audioplus7': 2631462, u'v_audioplus6': 2434084, u'v_audioplus5': 2631463, u'v_audioplus4': 2368034,
-        # u't_audioplus2': 2434339,
-        # u'p_errorstatus': 0,
-        # u's_rain': 0, u'id': u'25',
-        # u's_lightsensorbottom': 0, u't_audioplus4': 2565414, u'p_11': 35253,
-        # u's_temperatureunit': 289400,
-        # u'p_unitserialnumber': 25,
-        # u't_audioplus7': 2959143, u'p_17': 184549867, u'p_18': 184549867, u'p_19': 167772308,
-        # u't_audioplus6': 2500133, u'u_audio0': 1645568, u's_coresistance': 362528, u's_rgbcolor': 16771796,
-        # u's_audioplus8': 2828841, u's_lightsensorgreen': 11, u'p_totaluptime': 1741354, u'p_sessionuptime': 310354,
-        # u't_audioplus8': 2828842, u's_co': 35936, u's_satinfo': 99082,
-        # u's_latitude': 54345494, u't_audioplus1': 2369314,
-        # u's_audioplus1': 2368543, u't_audioplus3': 2434086, u's_audioplus3': 2434083, u't_audioplus5': 2697512,
-        # u's_audioplus5': 2697000, u's_audioplus6': 2434085, u's_audioplus7': 2762535, u't_audioplus9': 2960684,
-        # u's_audioplus9': 2960427, u'u_audioplus5': 2500133, u'p_powerstate': 1935, u'p_temporarilyenablebasetimer': 1,
-        # u's_o3': 39, u's_rtcdate': 1056819, u's_no2resistance': 549228, u's_barometer': 101788, u't_audio0': 2435072,
-        # u's_temperatureambient': 275962, u's_secondofday': 64127, u's_lightsensorblue': 10, u's_acceleroy': 527,
-        # u's_accelerox': 510, u's_humidity': 77961, u's_acceleroz': 763, u's_audio0': 1842688, u's_no2': 32,
-        # u's_longitude': 6113060, u'v_audio0': 1908736, u's_lightsensortop': 15, u's_co2': 418000,
-        # u'p_controllerreset': 322372921, u's_rtctime': 1126447, u'u_audioplus2': 1974301, u'u_audioplus3': 2170401,
-        # u'u_audioplus1': 1974556, u'u_audioplus6': 2433828, u'u_audioplus7': 2565925, u'u_audioplus4': 2171169,
-        # u'time': u'2016-02-03T16:47:51.3844629Z', u'u_audioplus8': 2763049, u'u_audioplus9': 2960427,
-        # u's_lightsensorred': 12, u's_o3resistance': 414489}
         #
         # -- Map this to
         # CREATE TABLE smartem_raw.timeseries (
-        # gid serial,
-        # device_id integer,
-        # day integer,
-        # hour integer,
-        # insert_time timestamp default current_timestamp,
-        # sample_time timestamp,
-        # data json,
-        # point geometry(Point,4326) default NULL,
-        # PRIMARY KEY (gid)
+        #   gid serial,
+        #   unique_id character varying (16),
+        #   insert_time timestamp with time zone default current_timestamp,
+        #   device_id integer,
+        #   day integer,
+        #   hour integer,
+        #   data json,
+        #   complete boolean default false,
+        #   PRIMARY KEY (gid)
         # );
 
-        # Parse JSON from data string fetched by base method read()
-        json_obj = self.parse_json_str(data)
-        if 'p_unitserialnumber' not in json_obj:
-            return []
 
         # Create record with JSON text blob with metadata
         record = dict()
-        record['device_id'] = json_obj['p_unitserialnumber']
+        record['unique_id'] = '%s-%s-%s' % (self.device_id, self.day, self.hour)
 
         # Timestamp of sample
-        record['time'] = convert(json_obj, 'time')
+        record['device_id'] = int(self.device_id)
+        record['day'] = int(self.day)
+        record['hour'] = int(self.hour)
 
-        # Point location
-        if 's_longitude' in json_obj and 's_latitude' in json_obj:
-            lon = convert(json_obj, 's_longitude')
-            lat = convert(json_obj, 's_latitude')
-            
-            # Only if both valid add Point attr
-            if lon is not None and lat is not None:
-                record['point'] = 'SRID=4326;POINT(%f %f)' % (lon, lat)
-        
-        # Add JSON text blob        
+        # Add JSON text blob
         record['data'] = data
 
         return record

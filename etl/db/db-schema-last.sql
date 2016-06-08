@@ -24,7 +24,7 @@ CREATE TABLE smartem_rt.last_device_output (
   altitude integer default 0,
   point geometry(Point,4326),
   PRIMARY KEY (gid)
-);
+) WITHOUT OIDS;
 
 DROP INDEX IF EXISTS last_device_output_uid_idx;
 CREATE UNIQUE INDEX last_device_output_uid_idx ON smartem_rt.last_device_output USING btree (unique_id) ;
