@@ -20,7 +20,7 @@ For example the Stetl Docker image is used in various ETL shell scripts.
 
 ## Examples
 
-See run-*.sh scripts under ../services/<service>
+See run.sh scripts under ../services/<service>
 
 Run postgis
 

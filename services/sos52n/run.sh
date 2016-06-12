@@ -5,14 +5,16 @@
 
 GIT="/opt/geonovum/smartem/git"
 LOG="/var/smartem/log"
+SOS_CONFIG_DIR="${GIT}/services/sos52n/config"
 TC_LOG="${LOG}/tomcat-sos52n"
 NAME="sos52n"
 IMAGE="geonovum/sos52n:4.3.6"
 PG_HOST="postgis"
+IMAGE_TC_DIR=/usr/local/tomcat
 
 # Define the mappings for local dirs, ports and PostGIS Docker container
 # VOL_MAP_DATA="-v ${GS_DATA_DIR}:/opt/sos52n/data_dir"
-VOL_MAP_LOGS="-v ${TC_LOG}:/usr/local/tomcat/logs"
+VOL_MAP_LOGS="-v ${SOS_CONFIG_DIR}:/opt/sosconfig -v ${TC_LOG}:${IMAGE_TC_DIR}/logs"
 VOL_MAP="${VOL_MAP_LOGS}"
 
 # If we need to expose 8080 from host, but we use Apache AJP
@@ -24,7 +26,10 @@ echo "Start ${NAME} with volumes: ${VOL_MAP}"
 # Stop and remove possibly old containers
 sudo docker stop ${NAME} > /dev/null 2>&1
 sudo docker rm ${NAME} > /dev/null 2>&1
+
 # Finally run with all mappings
+
+# Start container
 sudo docker run --name ${NAME} ${LINK_MAP} ${PORT_MAP} ${VOL_MAP} -d ${IMAGE}
 
 # When running: get into container with bash

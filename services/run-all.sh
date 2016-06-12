@@ -2,7 +2,13 @@
 #
 # Start/run all services  (Docker Containers)
 #
-postgis/run-postgis.sh
-geoserver/run-geoserver.sh
-sos52n/run.sh
-web/run-web.sh
+script_dir=${0%/*}
+
+CONTAINERS="postgis geoserver sos52n web"
+for CONTAINER in ${CONTAINERS}
+do
+  echo "starting ${CONTAINER}"
+  pushd ${script_dir}/${CONTAINER}
+    ./run.sh
+  popd
+done

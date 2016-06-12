@@ -365,7 +365,7 @@ class RawSensorTimeSeriesInput(HttpInput):
     - if device is not in progress-table insert and set day,hour to 0
     - if in progress-table fetch entry (day, hour)
     - get timeseries (hours) available for that day
-    - fetch and store each, starting with the entry hour (as it may not be completely filled)
+    - fetch and store each, starting with the last hour perviously stored (as it may not be completely filled)
     - stored entry: device_id, day, hour, last_flag, json blob
     - finish: when all done or when max_proc_time_secs passed 
     """
@@ -378,6 +378,8 @@ class RawSensorTimeSeriesInput(HttpInput):
         self.url = None
         
         self.current_time_secs = lambda: int(round(time.time()))
+        self.start_time_secs = self.current_time_secs()
+
         self.device_ids = []
         self.device_ids_idx = -1
         self.device_id = -1
@@ -389,9 +391,7 @@ class RawSensorTimeSeriesInput(HttpInput):
         self.hours = []
         self.hours_idx = -1
         self.hour = -1
-        
-        self.start_time_secs = self.current_time_secs()
- 
+
     def all_done(self):
         if self.device_ids_idx < 0 and self.days_idx < 0 and self.hours_idx < 0:
             return True
@@ -411,6 +411,9 @@ class RawSensorTimeSeriesInput(HttpInput):
         json_str = self.read_from_url(devices_url)
         json_obj = self.parse_json_str(json_str)
         device_urls = json_obj['devices']
+
+        # We need just the device id's
+        # array element is like "/sensors/v1/devices/8", so cut out the id
         for d in device_urls:
             self.device_ids.append(d.split('/')[-1])
 
@@ -422,8 +425,9 @@ class RawSensorTimeSeriesInput(HttpInput):
     def fetch_ts_days(self):
         self.days_idx = -1
         self.days = []
-        
-        if len(self.device_ids) == 0:
+        self.day = None
+
+        if self.device_id is None:
             return
         
         ts_days_url = self.base_url + '/devices/%s/timeseries' % self.device_id
@@ -431,6 +435,9 @@ class RawSensorTimeSeriesInput(HttpInput):
 
         json_str = self.read_from_url(ts_days_url)
         json_obj = self.parse_json_str(json_str)
+
+        # Typical entry is: "/sensors/v1/devices/8/timeseries/20160404"
+        # cut of last
         days_raw = json_obj['days']
         for d in days_raw:
             self.days.append(d.split('/')[-1])
@@ -443,7 +450,8 @@ class RawSensorTimeSeriesInput(HttpInput):
     def fetch_ts_hours(self):
         self.hours_idx = -1
         self.hours = []
-        if len(self.device_ids) == 0 or len(self.days) == 0:
+        self.hour = None
+        if self.device_id is None or self.day is None:
             return
         
         ts_hours_url = self.base_url + '/devices/%s/timeseries/%s' % (self.device_id, self.day)
@@ -459,56 +467,45 @@ class RawSensorTimeSeriesInput(HttpInput):
     def init(self):
         # One time: get all device ids
         self.fetch_devices()
-        
+
         # Pick a first device id
-        self.device_id, self.device_ids_idx = self.next_entry(self.device_ids, self.device_ids_idx)
-    
-        # Fetch timeseries days available for current device id
-        self.fetch_ts_days()
-        
-        # Pick a first day entry
-        self.day, self.days_idx = self.next_entry(self.days, self.days_idx)
+        # self.device_id, self.device_ids_idx = self.next_entry(self.device_ids, self.device_ids_idx)
 
-        # Fetch timeseries hours available for current device id/day
-        self.fetch_ts_hours()
-
-    def next_entry(self, a_list, idx):            
+    def next_entry(self, a_list, idx):
         if len(a_list) == 0 or idx >= len(a_list):
             idx = -1
             entry = None
         else:
             entry = a_list[idx]
             idx += 1
-            
+
         return entry, idx
 
-    def before_invoke(self, packet):
-        """
-        Called just before Component invoke.
-        """
+    def next_day(self):
+        # All days for current device done? Try next device
+        if self.day is None:
+            self.device_id, self.device_ids_idx = self.next_entry(self.device_ids, self.device_ids_idx)
 
-        # Per device check how far we are in fetching timeseries (day/hour)
+        # If not yet all devices done fetch days current device
+        if self.device_id is not None:
+            self.fetch_ts_days()
+            self.day, self.days_idx = self.next_entry(self.days, self.days_idx)
 
-        self.url = None
-
-        if self.device_id is None:
-            log.info('Processing all devices done')
-            self.url = None
-            return True
-        
-        # ASSERT : still device(s) to be done
+    def next_hour(self):
 
         # Pick an hour entry
         self.hour, self.hours_idx = self.next_entry(self.hours, self.hours_idx)
-        
+
         while self.hour is None:
+
             # Pick a next day entry
             self.day, self.days_idx = self.next_entry(self.days, self.days_idx)
-            
+
             if self.day is None:
-                self.device_id, self.device_ids_idx = self.next_entry(self.device_ids, self.device_ids_idx)
-                if self.device_id is not None:
-                    self.day, self.days_idx = self.next_entry(self.days, self.days_idx)
+                self.next_day()
+
+            if self.day is not None:
+                self.fetch_ts_hours()
 
             if self.device_id is None:
                 log.info('Processing all devices done')
@@ -516,6 +513,21 @@ class RawSensorTimeSeriesInput(HttpInput):
 
             # Pick an hour entry
             self.hour, self.hours_idx = self.next_entry(self.hours, self.hours_idx)
+
+    def before_invoke(self, packet):
+        """
+        Called just before Component invoke.
+        """
+
+        # Try to fill in: should point to next hour timeseries REST URL
+        self.url = None
+
+        if self.device_id is None:
+            log.info('Processing all devices done')
+            return True
+        
+        # ASSERT : still device(s) to be done get next hour to process
+        self.next_hour()
 
         # Still hours?
         if self.hour is not None:
@@ -534,6 +546,7 @@ class RawSensorTimeSeriesInput(HttpInput):
             log.info('Processing halted: expired or all done')
             self.url = None
             return False
+
         return True
 
     def exit(self):

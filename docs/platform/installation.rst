@@ -324,9 +324,9 @@ postgis - PostGIS Database
 Uses PostGIS Docker image from Kartoza (Tim Sutton, QGIS lead),
 see https://hub.docker.com/r/kartoza/postgis/ and https://github.com/kartoza/docker-postgis  ::
 
-This shorthand script ``~/git/services/postgis/run-postgis.sh`` will (re)run the ``postgis`` container.
+This shorthand script ``~/git/services/postgis/run.sh`` will (re)run the ``postgis`` container.
 
-.. literalinclude:: ../../services/postgis/run-postgis.sh
+.. literalinclude:: ../../services/postgis/run.sh
     :language: bash
 
 To connect with ``psql`` from host using PG client package on host: ::
@@ -379,11 +379,11 @@ modules enabled to be able to run Python and act as a proxy to backend services.
    cd ~/git/docker/apache2
    sudo docker build -t geonovum/apache2 .
 
-The Bash-script at ``~/git/services/web/run-web.sh``  will re(run) the generic
+The Bash-script at ``~/git/services/web/run.sh``  will re(run) the generic
 Apache2 Docker image with mappings to local directories of the host for the  Apache2 config, webcontent and logfiles.
 It will also link to the PostGIS Container (for the Flask Python app):
 
-.. literalinclude:: ../../services/web/run-web.sh
+.. literalinclude:: ../../services/web/run.sh
     :language: bash
 
 To run locally, e.g. with Vagrant, hardcode the DNS mapping in ``/etc/hosts`` : ::
@@ -426,7 +426,7 @@ Some local modifications were required, thus a customized Docker image ``geonovu
 has been developed. See https://github.com/Geonovum/smartemission/tree/master/docker/geoserver.
 
 GeoServer can then be run with the bash-script:
-https://github.com/Geonovum/smartemission/blob/master/services/geoserver/run-geoserver.sh
+https://github.com/Geonovum/smartemission/blob/master/services/geoserver/run.sh
 
 This script maps the local directory ``/var/smartem/data/geoserver`` as the GeoServer data-dir, thus
 keeping it outside the Docker container. Also the mapping is provided to the PostGIS Docker container

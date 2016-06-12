@@ -5,7 +5,7 @@ This is the front-end for the entire SE Data Platform.
 
 ## Running
 
-Use the command ./run-web.sh
+Use the command ./run.sh
 
 ## Services
 

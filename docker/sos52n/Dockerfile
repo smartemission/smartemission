@@ -29,7 +29,6 @@ RUN echo "$IMAGE_TIMEZONE" > /etc/timezone && \
 #  .zip file: http://52north.org/downloads/send/3-sos/484-52n-sensorweb-sos-bundle-4-3-6
 ENV SOS_VERSION 4.3.6
 ENV SOS_DL_URL http://52north.org/downloads/send/3-sos/484-52n-sensorweb-sos-bundle-4-3-6
-
 ENV TC_DEPLOY_DIR $CATALINA_HOME/webapps
 
 RUN mkdir -p $TC_DEPLOY_DIR
@@ -43,7 +42,7 @@ RUN ln -s /usr/lib/jvm/java-7-openjdk-amd64 /usr/lib/jvm/default-java
 ENV JAVA_HOME /usr/lib/jvm/default-java
 
 # ADD resources /tmp/resources
-RUN mkdir /tmp/resources
+ADD resources /tmp/resources
 
 # If a matching Oracle JDK tar.gz exists in /tmp/resources, move it to /var/cache/oracle-jdk7-installer
 # where oracle-java7-installer will detect it
@@ -83,6 +82,30 @@ RUN if [ ! -f /tmp/resources/sos52n.zip ]; then \
 # hence mv to a Linux-friendly filename
 RUN unzip /tmp/resources/sos52n.zip -d /tmp/resources/sos52n  \
     && unzip '/tmp/resources/sos52n/52n-sensorweb-sos-bundle-4.3.6/bin/target/52n-sos-webapp##4.3.6.war' -d $TC_DEPLOY_DIR/sos52n
+
+# Move all relevant settings files to a separate dir and provide symlinks
+# These can then be provided externally via a volume mount from the host to the container
+# Hence these files can be preserved outside the docker image/container, surviving restarts.
+ENV SOS_CONFIG_DIR  /opt/sosconfig
+ENV SOS_DEPLOY_DIR  $TC_DEPLOY_DIR/sos52n
+RUN mkdir -p $SOS_CONFIG_DIR
+RUN touch $SOS_CONFIG_DIR/configuration.db \
+    && ln -s $SOS_CONFIG_DIR/configuration.db $SOS_DEPLOY_DIR
+
+# Overlay files and directories in resources/overlays if they exist
+RUN if ls /tmp/resources/config/datasource.properties > /dev/null 2>&1; then \
+      cp -f /tmp/resources/config/datasource.properties $SOS_DEPLOY_DIR/WEB-INF; \
+    fi; \
+    if ls /tmp/resources/config/logback.xml > /dev/null 2>&1; then \
+      cp -f /tmp/resources/config/logback.xml $SOS_DEPLOY_DIR/WEB-INF/classes; \
+    fi;
+
+
+# Overlay files and directories in resources/overlays if they exist
+RUN rm /tmp/resources/overlays/README.txt && \
+    if ls /tmp/resources/overlays/* > /dev/null 2>&1; then \
+      cp -rf /tmp/resources/overlays/* /; \
+    fi;
 
 # Optionally remove Tomcat manager, docs, and examples
 ARG TOMCAT_EXTRAS=true
