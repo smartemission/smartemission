@@ -14,10 +14,11 @@ MONTH=`date +%m`
 BACKUP_DIR=/var/smartem/backup
 mkdir -p ${BACKUP_DIR}
 
-# GeoServer data
-GS_DIR=/var/smartem/data
-pushd ${GS_DIR}
+# GeoServer data and SOS52N config data
+SE_DATA_DIR=/var/smartem/data
+pushd ${SE_DATA_DIR}
   tar -cvzf ${BACKUP_DIR}/geoserver_data.tar.gz geoserver
+  tar -cvzf ${BACKUP_DIR}/sos52n_data.tar.gz sos52n
 popd
 
 # Databases
