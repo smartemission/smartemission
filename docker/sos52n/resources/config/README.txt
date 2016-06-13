@@ -1,9 +1,12 @@
-Place any config files here that are not possible to map via symlinks from host:
+Place 52NOrth SOS  config files here.
 
-Currently:
+These files are copied permanently into the Docker image
+as these are not possible to map via symlinks from host:
 
 - datasource.properties
 - logback.xml
 
-The third config file that the SOS needs is WEB-INF/configuration.db. Here symlinks
-do work, plus this file is changing more often. We supply this file within the services/sos52n.
+The third config file that the SOS needs is WEB-INF/configuration.db.
+A default version is provided here. However, to be able to maintain
+this file over reruns of the Docker image a Docker volume mount should be
+done within the service invokation. See services/sos52n.

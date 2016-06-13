@@ -86,20 +86,20 @@ RUN unzip /tmp/resources/sos52n.zip -d /tmp/resources/sos52n  \
 # Move all relevant settings files to a separate dir and provide symlinks
 # These can then be provided externally via a volume mount from the host to the container
 # Hence these files can be preserved outside the docker image/container, surviving restarts.
+# NB this cuerrently only works for configuration.db, the others need to be copied!
 ENV SOS_CONFIG_DIR  /opt/sosconfig
 ENV SOS_DEPLOY_DIR  $TC_DEPLOY_DIR/sos52n
 RUN mkdir -p $SOS_CONFIG_DIR
-RUN touch $SOS_CONFIG_DIR/configuration.db \
+RUN cp -f /tmp/resources/config/configuration.db $SOS_CONFIG_DIR \
     && ln -s $SOS_CONFIG_DIR/configuration.db $SOS_DEPLOY_DIR
 
-# Overlay files and directories in resources/overlays if they exist
+# Hard-copy the config files that we are not able to symlink
 RUN if ls /tmp/resources/config/datasource.properties > /dev/null 2>&1; then \
       cp -f /tmp/resources/config/datasource.properties $SOS_DEPLOY_DIR/WEB-INF; \
     fi; \
     if ls /tmp/resources/config/logback.xml > /dev/null 2>&1; then \
       cp -f /tmp/resources/config/logback.xml $SOS_DEPLOY_DIR/WEB-INF/classes; \
     fi;
-
 
 # Overlay files and directories in resources/overlays if they exist
 RUN rm /tmp/resources/overlays/README.txt && \
