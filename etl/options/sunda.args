@@ -13,7 +13,7 @@ pg_schema_rt=smartem_rt
 pg_schema_raw=smartem_raw
 
 # Maximum time spent in processing
-max_proc_time_secs=10
+max_proc_time_secs=300
 
 sos_host=sensors.geonovum.nl
 sos_port=80

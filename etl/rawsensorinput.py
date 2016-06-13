@@ -12,6 +12,7 @@ from stetl.component import Config
 from stetl.util import Util
 from stetl.inputs.httpinput import HttpInput
 from stetl.packet import FORMAT
+from stetl.postgis import PostGIS
 from sensorconverters import convert
 
 log = Util.get_log("RawSensorLastInput")
@@ -351,6 +352,17 @@ class RawSensorTimeSeriesInput(HttpInput):
         """
         pass
 
+    @Config(ptype=str, default=None, required=True)
+    def progress_query(self):
+        """
+        The query to perform on the progress table..
+
+        Required: True
+
+        Default: None
+        """
+        pass
+
     """
     Raw Sensor REST API (CityGIS) TimeSeries (History) fetcher/formatter.
     
@@ -391,6 +403,17 @@ class RawSensorTimeSeriesInput(HttpInput):
         self.hours = []
         self.hours_idx = -1
         self.hour = -1
+        self.db = None
+
+    def init(self):
+        self.db = PostGIS(self.cfg.get_dict())
+        self.db.connect()
+
+        # One time: get all device ids
+        self.fetch_devices()
+
+        # Pick a first device id
+        # self.device_id, self.device_ids_idx = self.next_entry(self.device_ids, self.device_ids_idx)
 
     def all_done(self):
         if self.device_ids_idx < 0 and self.days_idx < 0 and self.hours_idx < 0:
@@ -464,13 +487,6 @@ class RawSensorTimeSeriesInput(HttpInput):
             self.hours_idx = 0
         log.info('Found %d hours for device %s day %s' % (len(self.hours), self.device_id, self.day))
 
-    def init(self):
-        # One time: get all device ids
-        self.fetch_devices()
-
-        # Pick a first device id
-        # self.device_id, self.device_ids_idx = self.next_entry(self.device_ids, self.device_ids_idx)
-
     def next_entry(self, a_list, idx):
         if len(a_list) == 0 or idx >= len(a_list):
             idx = -1
@@ -534,6 +550,10 @@ class RawSensorTimeSeriesInput(HttpInput):
             # The base method read() will fetch self.url until it is set to None
             # <base_url>/devices/14/timeseries/20160603/18
             self.url = self.base_url + '/devices/%s/timeseries/%s/%s' % (self.device_id, self.day, self.hour)
+            log.info('self.url = ' + self.url)
+
+        # just pause to not overstress the RSA
+        time.sleep(4)
 
         return True
 

@@ -1,0 +1,146 @@
+Running /Users/just/project/stetl/git/stetl/main.py
+2016-06-13 15:37:41,841 util INFO Found cStringIO, good!
+2016-06-13 15:37:41,860 util INFO Found lxml.etree, native XML parsing, fabulous!
+2016-06-13 15:37:41,931 util INFO Found GDAL/OGR Python bindings, super!!
+2016-06-13 15:37:41,948 main INFO Stetl version = 1.0.9rc3
+2016-06-13 15:37:41,950 main INFO Found args file at: options/sunda.args
+2016-06-13 15:37:41,952 ETL INFO INIT - Stetl version is 1.0.9rc3
+2016-06-13 15:37:41,952 ETL INFO Config/working dir = /Users/just/project/sensors/smartem/git/etl
+2016-06-13 15:37:41,952 ETL INFO Reading config_file = harvester.cfg
+2016-06-13 15:37:41,952 ETL INFO Substituting 16 args in config file from args_dict: OrderedDict([('__name__', 'asection'), ('raw_device_url', 'http://whale.citygis.nl/sensors/v1'), ('pg_host', 'localhost'), ('pg_user', 'postgres'), ('pg_password', 'postgres'), ('pg_port', '5432'), ('pg_database', 'sensors'), ('pg_schema', 'smartem'), ('pg_schema_rt', 'smartem_rt'), ('pg_schema_raw', 'smartem_raw'), ('max_proc_time_secs', '300'), ('sos_host', 'sensors.geonovum.nl'), ('sos_port', '80'), ('sos_user', 'SOSUSER'), ('sos_password', 'SOSPASSWORD'), ('sos_path', '/sos/service')])
+2016-06-13 15:37:41,952 ETL INFO Substituting args OK
+2016-06-13 15:37:41,953 ETL INFO START
+2016-06-13 15:37:41,953 util INFO Timer start: total ETL
+2016-06-13 15:37:41,953 chain INFO Assembling Chain: input_raw_sensor_timeseries|output_postgres_insert...
+2016-06-13 15:37:42,074 util INFO Found cStringIO, good!
+2016-06-13 15:37:42,075 util INFO Found lxml.etree, native XML parsing, fabulous!
+2016-06-13 15:37:42,075 util INFO Found GDAL/OGR Python bindings, super!!
+2016-06-13 15:37:42,082 input INFO cfg = {'database': 'sensors', 'url': 'http://whale.citygis.nl/sensors/v1', 'host': 'localhost', 'user': 'postgres', 'max_proc_time_secs': '300', 'query': "SELECT * from raw_sensor_sysnc WHERE file_name = '%s'", 'password': 'postgres', 'class': 'rawsensorinput.RawSensorTimeSeriesInput', 'schema': 'smartem_raw'}
+2016-06-13 15:37:42,082 httpinput INFO url=http://whale.citygis.nl/sensors/v1 parameters=None
+2016-06-13 15:37:42,120 output INFO cfg = {'input_format': 'record_array', 'database': 'sensors', 'replace': 'False', 'host': 'localhost', 'user': 'postgres', 'key': 'unique_id', 'table': 'timeseries', 'password': 'postgres', 'class': 'outputs.dboutput.PostgresInsertOutput', 'schema': 'smartem_raw'}
+2016-06-13 15:37:42,120 chain INFO Running Chain: input_raw_sensor_timeseries|output_postgres_insert
+2016-06-13 15:37:42,120 RawSensorLastInput INFO Init: fetching device list from URL: "http://whale.citygis.nl/sensors/v1/devices" ...
+2016-06-13 15:37:42,357 RawSensorLastInput INFO Found   55 devices: [u'0', u'1', u'8', u'9', u'10', u'12', u'13', u'14', u'15', u'16', u'17', u'18', u'19', u'20', u'21', u'22', u'23', u'24', u'25', u'26', u'27', u'28', u'30', u'31', u'32', u'33', u'34', u'35', u'37', u'38', u'39', u'40', u'41', u'42', u'43', u'44', u'45', u'46', u'47', u'48', u'49', u'50', u'51', u'52', u'53', u'54', u'55', u'56', u'57', u'58', u'59', u'60', u'61', u'62', u'63']
+2016-06-13 15:37:42,357 dboutput INFO Init: connect to DB
+2016-06-13 15:37:42,357 postgis INFO Connecting to dbname=sensors user=postgres host=localhost port=5432
+2016-06-13 15:37:42,402 postgis DEBUG Connected to database sensors
+2016-06-13 15:37:42,402 RawSensorLastInput INFO Init: fetching timeseries days list from URL: "http://whale.citygis.nl/sensors/v1/devices/0/timeseries" ...
+2016-06-13 15:37:42,472 RawSensorLastInput INFO Found 1 days for device 0
+2016-06-13 15:37:42,472 RawSensorLastInput INFO Init: fetching timeseries hours list from URL: "http://whale.citygis.nl/sensors/v1/devices/0/timeseries/20160601" ...
+2016-06-13 15:37:42,530 RawSensorLastInput INFO Found 1 hours for device 0 day 20160601
+2016-06-13 15:37:42,530 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/0/timeseries/20160601/21
+2016-06-13 15:37:44,589 dboutput INFO query is INSERT INTO timeseries (hour,data,day,unique_id,device_id) VALUES (%s,%s,%s,%s,%s)
+2016-06-13 15:37:44,601 RawSensorLastInput INFO Init: fetching timeseries days list from URL: "http://whale.citygis.nl/sensors/v1/devices/1/timeseries" ...
+2016-06-13 15:37:44,726 RawSensorLastInput INFO Found 6 days for device 1
+2016-06-13 15:37:44,726 RawSensorLastInput INFO Init: fetching timeseries hours list from URL: "http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160425" ...
+2016-06-13 15:37:44,783 RawSensorLastInput INFO Found 1 hours for device 1 day 20160425
+2016-06-13 15:37:44,783 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160425/15
+2016-06-13 15:37:46,842 RawSensorLastInput INFO Init: fetching timeseries hours list from URL: "http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160426" ...
+2016-06-13 15:37:47,077 RawSensorLastInput INFO Found 12 hours for device 1 day 20160426
+2016-06-13 15:37:47,077 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160426/13
+2016-06-13 15:37:49,358 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160426/14
+2016-06-13 15:37:51,698 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160426/15
+2016-06-13 15:37:54,039 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160426/16
+2016-06-13 15:37:56,392 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160426/17
+2016-06-13 15:37:58,747 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160426/18
+2016-06-13 15:38:01,103 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160426/19
+2016-06-13 15:38:03,445 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160426/20
+2016-06-13 15:38:05,792 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160426/21
+2016-06-13 15:38:08,842 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160426/22
+2016-06-13 15:38:11,194 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160426/23
+2016-06-13 15:38:13,556 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160426/24
+2016-06-13 15:38:15,893 RawSensorLastInput INFO Init: fetching timeseries hours list from URL: "http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160427" ...
+2016-06-13 15:38:24,891 RawSensorLastInput INFO Found 24 hours for device 1 day 20160427
+2016-06-13 15:38:24,891 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160427/1
+2016-06-13 15:38:27,271 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160427/2
+2016-06-13 15:38:29,637 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160427/3
+2016-06-13 15:38:31,982 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160427/4
+2016-06-13 15:38:34,332 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160427/5
+2016-06-13 15:38:36,699 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160427/6
+2016-06-13 15:38:39,064 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160427/7
+2016-06-13 15:38:41,439 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160427/8
+2016-06-13 15:38:43,800 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160427/9
+2016-06-13 15:38:46,460 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160427/10
+2016-06-13 15:38:48,951 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160427/11
+2016-06-13 15:38:51,535 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160427/12
+2016-06-13 15:38:54,326 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160427/13
+2016-06-13 15:38:56,944 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160427/14
+2016-06-13 15:38:59,553 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160427/15
+2016-06-13 15:39:02,410 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160427/16
+2016-06-13 15:39:04,982 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160427/17
+2016-06-13 15:39:07,669 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160427/18
+2016-06-13 15:39:10,286 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160427/19
+2016-06-13 15:39:12,977 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160427/20
+2016-06-13 15:39:15,635 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160427/21
+2016-06-13 15:39:18,298 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160427/22
+2016-06-13 15:39:20,995 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160427/23
+2016-06-13 15:39:23,706 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160427/24
+2016-06-13 15:39:26,301 RawSensorLastInput INFO Init: fetching timeseries hours list from URL: "http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160428" ...
+2016-06-13 15:39:34,422 RawSensorLastInput INFO Found 24 hours for device 1 day 20160428
+2016-06-13 15:39:34,422 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160428/1
+2016-06-13 15:39:36,754 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160428/2
+2016-06-13 15:39:39,284 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160428/3
+2016-06-13 15:39:41,859 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160428/4
+2016-06-13 15:39:44,395 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160428/5
+2016-06-13 15:39:46,952 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160428/6
+2016-06-13 15:39:49,327 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160428/7
+2016-06-13 15:39:51,796 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160428/8
+2016-06-13 15:39:54,531 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160428/9
+2016-06-13 15:39:57,221 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160428/10
+2016-06-13 15:39:59,842 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160428/11
+2016-06-13 15:40:02,201 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160428/12
+2016-06-13 15:40:04,553 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160428/13
+2016-06-13 15:40:06,955 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160428/14
+2016-06-13 15:40:09,490 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160428/15
+2016-06-13 15:40:12,077 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160428/16
+2016-06-13 15:40:14,505 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160428/17
+2016-06-13 15:40:16,900 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160428/18
+2016-06-13 15:40:19,514 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160428/19
+2016-06-13 15:40:22,151 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160428/20
+2016-06-13 15:40:24,671 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160428/21
+2016-06-13 15:40:27,337 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160428/22
+2016-06-13 15:40:29,807 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160428/23
+2016-06-13 15:40:32,430 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160428/24
+2016-06-13 15:40:36,079 RawSensorLastInput INFO Init: fetching timeseries hours list from URL: "http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160429" ...
+2016-06-13 15:40:40,771 RawSensorLastInput INFO Found 14 hours for device 1 day 20160429
+2016-06-13 15:40:40,772 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160429/1
+2016-06-13 15:40:43,359 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160429/2
+2016-06-13 15:40:46,128 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160429/3
+2016-06-13 15:40:48,727 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160429/4
+2016-06-13 15:40:51,059 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160429/5
+2016-06-13 15:40:53,694 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160429/6
+2016-06-13 15:40:56,288 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160429/7
+2016-06-13 15:40:59,145 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160429/8
+2016-06-13 15:41:01,907 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160429/9
+2016-06-13 15:41:04,496 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160429/10
+2016-06-13 15:41:07,039 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160429/11
+2016-06-13 15:41:09,715 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160429/12
+2016-06-13 15:41:12,272 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160429/13
+2016-06-13 15:41:14,982 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160429/14
+2016-06-13 15:41:17,172 RawSensorLastInput INFO Init: fetching timeseries hours list from URL: "http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160520" ...
+2016-06-13 15:41:17,288 RawSensorLastInput INFO Found 1 hours for device 1 day 20160520
+2016-06-13 15:41:17,288 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/1/timeseries/20160520/11
+2016-06-13 15:41:19,348 RawSensorLastInput INFO Init: fetching timeseries days list from URL: "http://whale.citygis.nl/sensors/v1/devices/8/timeseries" ...
+2016-06-13 15:41:20,829 RawSensorLastInput INFO Found 57 days for device 8
+2016-06-13 15:41:20,829 RawSensorLastInput INFO Init: fetching timeseries hours list from URL: "http://whale.citygis.nl/sensors/v1/devices/8/timeseries/20160402" ...
+2016-06-13 15:41:26,827 RawSensorLastInput INFO Found 17 hours for device 8 day 20160402
+2016-06-13 15:41:26,827 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/8/timeseries/20160402/8
+2016-06-13 15:41:29,198 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/8/timeseries/20160402/9
+2016-06-13 15:41:31,779 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/8/timeseries/20160402/10
+2016-06-13 15:41:34,631 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/8/timeseries/20160402/11
+2016-06-13 15:41:37,235 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/8/timeseries/20160402/12
+2016-06-13 15:41:40,012 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/8/timeseries/20160402/13
+2016-06-13 15:41:42,641 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/8/timeseries/20160402/14
+2016-06-13 15:41:45,252 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/8/timeseries/20160402/15
+2016-06-13 15:41:47,792 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/8/timeseries/20160402/16
+2016-06-13 15:41:50,612 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/8/timeseries/20160402/17
+2016-06-13 15:41:52,931 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/8/timeseries/20160402/18
+2016-06-13 15:41:55,240 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/8/timeseries/20160402/19
+2016-06-13 15:41:57,549 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/8/timeseries/20160402/20
+2016-06-13 15:41:59,837 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/8/timeseries/20160402/21
+2016-06-13 15:42:02,128 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/8/timeseries/20160402/22
+2016-06-13 15:42:04,380 RawSensorLastInput INFO self.url = http://whale.citygis.nl/sensors/v1/devices/8/timeseries/20160402/23
+2016-06-13 15:44:07,530 httpinput ERROR HTTPError fetching from URL http://whale.citygis.nl/sensors/v1/devices/8/timeseries/20160402/23: code=500 e=HTTP Error 500: Internal Server Error
+2016-06-13 15:44:07,530 RawSensorLastInput INFO Exit
+2016-06-13 15:44:07,530 dboutput INFO Exit: disconnect from DB
+
