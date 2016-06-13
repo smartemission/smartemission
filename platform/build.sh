@@ -10,7 +10,7 @@ script_name=${0##*/}
 script_dir=${0%/*}
 
 DOCKER_HOME=${script_dir}/../docker
-DOCKERS="apache2 geoserver postgis stetl"
+DOCKERS="apache2 geoserver sos52n postgis stetl"
 
 for DOCK in ${DOCKERS}
 do

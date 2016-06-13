@@ -54,7 +54,7 @@ sudo service docker start
 # Utils like Emacs and Postgres client to connect to PG DB
 # https://www.postgresql.org/download/linux/ubuntu/
 # Need 9.4 version of PG client, not in Ubuntu 14.4, so get from PG Repo
-sudo apt-get install -y python-pip libyaml-dev libpython2.7-dev git emacs24-nox apache2-utils apt-show-versions postgresql-client-9.4
+sudo apt-get install -y python-pip libyaml-dev libpython2.7-dev git emacs24-nox apache2-utils apt-show-versions sqlite3 postgresql-client-9.4
 
 # Also Docker Compose
 sudo pip install pyyaml
