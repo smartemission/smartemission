@@ -55,6 +55,8 @@ if [ ! -d "${SOS_DATA_DIR}" ]; then
 
    # Rerun with full volume mapping
    restart_image ${VOL_MAP_FULL}
+
+   echo "THIS IS THE FIRST RUN WITH DEFAULT configuration.db - CHANGE YOUR SOS-PASSWORD"
 else
    echo "Ok, using existing 52NorthSOS data dir: $SOS_DATA_DIR on host"
    restart_image ${VOL_MAP_FULL}
