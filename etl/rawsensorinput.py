@@ -514,7 +514,7 @@ class RawSensorTimeSeriesInput(HttpInput):
         hours_all = json_obj['hours']
         for h in hours_all:
             hour = int(h)
-            if hour >= self.hour_last:
+            if self.day > self.day_last or (self.day == self.day_last and hour >= self.hour_last):
                 self.hours.append(hour)
 
         if len(self.hours) > 0:
