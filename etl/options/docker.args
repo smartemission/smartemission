@@ -16,7 +16,7 @@ pg_schema_raw=smartem_raw
 max_proc_time_secs=180
 
 # time between calling the REST API again
-api_interval_secs=3
+api_interval_secs=5
 
 sos_host=sos52n
 sos_port=80
