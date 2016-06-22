@@ -1,5 +1,6 @@
 FROM ubuntu:14.04
-# FROM python:2.7
+# FROM python:2.7  would be preferred but trickier
+# TODO: use a more lightweight Linux distro than Ubuntu
 
 MAINTAINER just@justobjects.nl
 
@@ -9,21 +10,21 @@ ARG IMAGE_TIMEZONE="Europe/Amsterdam"
 RUN echo "$IMAGE_TIMEZONE" > /etc/timezone && \
 	dpkg-reconfigure -f noninteractive tzdata
 
-# Use local cached debs from host (saves your bandwidth!)
+# Optional: Use local cached debs from host (saves your bandwidth!)
 # Change ip below to that of your apt-cacher-ng host
 # Or comment this line out if you do not with to use caching
 # ADD 71-apt-cacher-ng /etc/apt/apt.conf.d/71-apt-cacher-ng
+
 RUN export DEBIAN_FRONTEND=noninteractive TERM=linux && \
   echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
 RUN apt-get update && \
 	apt-get install -y software-properties-common
 
-# Use UbuntuGIS for latest GDAL etc
+# Use UbuntuGIS for latest GDAL, Proj.4, GEOS etc
 RUN apt-add-repository ppa:ubuntugis/ubuntugis-unstable
 RUN apt-get update && \
 	apt-get install -y git \
-    libproj0 \
     libgeos-dev \
     python-lxml \
     python-gdal \
