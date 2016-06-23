@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 #
-# RawSensorInput: harvest raw values from CityGIS Raw Sensor REST API.
+# RawSensorInput: fetch raw values from CityGIS Raw Sensor REST API.
 #
 # Author:Just van den Broecke
 
 import json
 import time
 from datetime import datetime, timedelta
-import random
 from stetl.component import Config
 from stetl.util import Util
 from stetl.inputs.httpinput import HttpInput
@@ -15,18 +14,111 @@ from stetl.packet import FORMAT
 from stetl.postgis import PostGIS
 from sensorconverters import convert
 
-log = Util.get_log("RawSensorLastInput")
+log = Util.get_log("RawSensorAPI")
 
+class RawSensorAPIInput(HttpInput):
+    """
+    Raw Sensor REST API (CityGIS) Base Class to fetch observations for devices.
+    """
 
-class RawSensorLastInput(HttpInput):
-    """
-    Raw Sensor REST API (CityGIS) version for HttpInput
-    """
+    @Config(ptype=int, default=0, required=False)
+    def api_interval_secs(self):
+        """
+        The time in seconds to wait before invoking the RSA API again.
+
+        Required: True
+
+        Default: 0
+        """
+        pass
 
     def __init__(self, configdict, section, produces=FORMAT.record_array):
         HttpInput.__init__(self, configdict, section, produces)
+
+        # Init all device id's
         self.device_ids = []
+        self.device_ids_idx = -1
+        self.device_id = -1
+
+        # Save the Base URL, specific URLs will be constructed in self.url later
         self.base_url = self.url
+        self.url = None
+
+    def init(self):
+        pass
+
+    def fetch_devices(self):
+        self.device_ids_idx = -1
+        self.device_ids = []
+        self.device_id = -1
+
+        devices_url = self.base_url + '/devices'
+        log.info('Init: fetching device list from URL: "%s" ...' % devices_url)
+        json_str = self.read_from_url(devices_url)
+        json_obj = self.parse_json_str(json_str)
+        device_urls = json_obj['devices']
+
+        # We need just the device id's
+        # array element is like "/sensors/v1/devices/8", so cut out the id
+        for d in device_urls:
+            self.device_ids.append(int(d.split('/')[-1]))
+
+        if len(self.device_ids) > 0:
+            self.device_ids_idx = 0
+
+        log.info('Found %4d devices: %s' % (len(self.device_ids), str(self.device_ids)))
+
+    def before_invoke(self, packet):
+        """
+        Called just before Component invoke.
+        """
+        return True
+
+    def after_invoke(self, packet):
+        """
+        Called just after Component invoke.
+        """
+
+        # just pause to not overstress the RSA
+        if self.api_interval_secs > 0:
+            time.sleep(self.api_interval_secs)
+
+        return True
+
+    def exit(self):
+        # done
+        log.info('Exit')
+
+    def next_entry(self, a_list, idx):
+        if len(a_list) == 0 or idx >= len(a_list):
+            idx = -1
+            entry = -1
+        else:
+            entry = a_list[idx]
+            idx += 1
+
+        return entry, idx
+
+    def parse_json_str(self, raw_str):
+        # Parse JSON from data string
+        json_obj = None
+        try:
+            json_obj = json.loads(raw_str)
+        except Exception, e:
+            log.error('Cannot parse JSON from %s, err= %s' % (raw_str, str(e)))
+            raise e
+
+        return json_obj
+
+
+class RawSensorLastInput(RawSensorAPIInput):
+    """
+    Raw Sensor REST API (CityGIS) to fetch last values for all devices.
+    """
+
+    def __init__(self, configdict, section, produces=FORMAT.record_array):
+        RawSensorAPIInput.__init__(self, configdict, section, produces)
+
         # Outputs to be gathered, with some metadata
         self.outputs = [
             {
@@ -172,48 +264,29 @@ class RawSensorLastInput(HttpInput):
 
     def init(self):
         # One time: get all device ids
-        self.base_url = self.url
-        devices_url = self.base_url + '/devices'
-        log.info('Init: fetching device list from URL: "%s" ...' % devices_url)
-        json_str = self.read_from_url(devices_url)
-        json_obj = self.parse_json_str(json_str)
-        device_urls = json_obj['devices']
-        for d in device_urls:
-            self.device_ids.append(d.split('/')[-1])
-
-        self.device_idx = 0
-        log.info('Found %4d devices: %s' % (len(self.device_ids), str(self.device_ids)))
+        self.fetch_devices()
 
     def before_invoke(self, packet):
         """
         Called just before Component invoke.
         """
 
-        # Set the next "last values" URL for device and increment to next
-        self.url = self.base_url + '/devices/%s/last' % self.device_ids[self.device_idx]
-        self.device_idx += 1
-
         # The base method read() will fetch self.url until it is set to None
-        if self.device_idx == len(self.device_ids):
-            # All devices read
+        self.device_id, self.device_ids_idx = self.next_entry(self.device_ids, self.device_ids_idx)
+
+        # Stop when all devices done
+        if self.device_id < 0:
             self.url = None
+            log.info('Processing halted: all devices done')
+            packet.set_end_of_stream()
+            return False
+
+        # ASSERT: still device(s) to be fetched
+
+        # Set the next "last values" URL for device and increment to next
+        self.url = self.base_url + '/devices/%d/last' % self.device_id
 
         return True
-
-    def exit(self):
-        # done
-        log.info('Exit')
-
-    def parse_json_str(self, raw_str):
-        # Parse JSON from data string
-        json_obj = None
-        try:
-            json_obj = json.loads(raw_str)
-        except Exception, e:
-            log.error('Cannot parse JSON from %s, err= %s' % (raw_str, str(e)))
-            raise e
-
-        return json_obj
 
     # Convert observations to array of records, one for each designated (see self.outputs) output
     def format_data(self, data):
@@ -340,7 +413,11 @@ class RawSensorLastInput(HttpInput):
         return result
 
 
-class RawSensorTimeSeriesInput(HttpInput):
+class RawSensorHarvesterInput(RawSensorAPIInput):
+    """
+    Raw Sensor REST API (CityGIS) to fetch (harvest) all timeseries for all devices.
+    """
+
     @Config(ptype=int, default=None, required=True)
     def max_proc_time_secs(self):
         """
@@ -363,18 +440,6 @@ class RawSensorTimeSeriesInput(HttpInput):
         """
         pass
 
-    @Config(ptype=int, default=None, required=True)
-    def api_interval_secs(self):
-        """
-        The time in seconds to wait before invoking the RSA API again.
-
-        Required: True
-
-        Default: None
-        """
-        pass
-
-
     """
     Raw Sensor REST API (CityGIS) TimeSeries (History) fetcher/formatter.
     
@@ -395,18 +460,13 @@ class RawSensorTimeSeriesInput(HttpInput):
     """
 
     def __init__(self, configdict, section, produces=FORMAT.record_array):
-        HttpInput.__init__(self, configdict, section, produces)
+        RawSensorAPIInput.__init__(self, configdict, section, produces)
         
         # keep track of root base REST URL
-        self.base_url = self.url
         self.url = None
         
         self.current_time_secs = lambda: int(round(time.time()))
         self.start_time_secs = self.current_time_secs()
-
-        self.device_ids = []
-        self.device_ids_idx = -1
-        self.device_id = -1
 
         self.days = []
         self.days_idx = -1
@@ -440,26 +500,6 @@ class RawSensorTimeSeriesInput(HttpInput):
         if (self.current_time_secs() - self.start_time_secs) > self.max_proc_time_secs:
             return True
         return False
-
-    def fetch_devices(self):
-        self.device_ids_idx = -1
-        self.device_ids = []
-        
-        devices_url = self.base_url + '/devices'
-        log.info('Init: fetching device list from URL: "%s" ...' % devices_url)
-        json_str = self.read_from_url(devices_url)
-        json_obj = self.parse_json_str(json_str)
-        device_urls = json_obj['devices']
-
-        # We need just the device id's
-        # array element is like "/sensors/v1/devices/8", so cut out the id
-        for d in device_urls:
-            self.device_ids.append(int(d.split('/')[-1]))
-
-        if len(self.device_ids) > 0:
-            self.device_ids_idx = 0
-            
-        log.info('Found %4d devices: %s' % (len(self.device_ids), str(self.device_ids)))
 
     def fetch_ts_days(self):
         self.days_idx = -1
@@ -520,16 +560,6 @@ class RawSensorTimeSeriesInput(HttpInput):
         if len(self.hours) > 0:
             self.hours_idx = 0
         log.info('%d processable hours for device %d day %d' % (len(self.hours), self.device_id, self.day))
-
-    def next_entry(self, a_list, idx):
-        if len(a_list) == 0 or idx >= len(a_list):
-            idx = -1
-            entry = -1
-        else:
-            entry = a_list[idx]
-            idx += 1
-
-        return entry, idx
 
     def next_day(self):
         # All days for current device done? Try next device
@@ -593,31 +623,6 @@ class RawSensorTimeSeriesInput(HttpInput):
 
         # ASSERT : still device(s) to be done get next hour to process
         return True
-
-    def after_invoke(self, packet):
-        """
-        Called just after Component invoke.
-        """
-
-        # just pause to not overstress the RSA
-        time.sleep(self.api_interval_secs)
-
-        return True
-
-    def exit(self):
-        # done
-        log.info('Exit')
-
-    def parse_json_str(self, raw_str):
-        # Parse JSON from data string
-        json_obj = None
-        try:
-            json_obj = json.loads(raw_str)
-        except Exception, e:
-            log.error('Cannot parse JSON from %s, err= %s' % (raw_str, str(e)))
-            raise e
-
-        return json_obj
 
     # Create a data record for timeseries of current device/day/hour
     def format_data(self, data):
