@@ -5,6 +5,7 @@
 # Author:Just van den Broecke
 
 from stetl.component import Config
+from stetl.packet import FORMAT
 from stetl.util import Util
 from stetl.inputs.dbinput import PostgresDbInput
 
@@ -30,7 +31,7 @@ class RawSensorDbInput(PostgresDbInput):
         pass
 
     def __init__(self, configdict, section):
-        PostgresDbInput.__init__(self, configdict, section)
+        PostgresDbInput.__init__(self, configdict, section, produces=FORMAT.record)
         self.progress_query = self.cfg.get('progress_query')
         self.db = None
 
