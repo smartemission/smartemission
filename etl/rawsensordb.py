@@ -31,7 +31,7 @@ class RawSensorDbInput(PostgresDbInput):
         pass
 
     def __init__(self, configdict, section):
-        PostgresDbInput.__init__(self, configdict, section, produces=FORMAT.record)
+        PostgresDbInput.__init__(self, configdict, section)
         self.progress_query = self.cfg.get('progress_query')
         self.db = None
 
@@ -57,15 +57,12 @@ class RawSensorDbInput(PostgresDbInput):
         self.last_id = 0
 
         # One time: get all gid's to be processed
-        ts_gid_recs = self.do_query(self.gids_query % self.last_id)
-
-        # Reset columns: we want all columns
-        self.column_names = None
-        self.columns = None
+        ts_gid_tuples = self.raw_query(self.gids_query % self.last_id)
+        ts_gid_recs = self.tuples_to_records(ts_gid_tuples, ['gid'])
 
         log.info('read timeseries_recs: %d' % len(ts_gid_recs))
-        for ts_gid_rec in ts_gid_recs:
-            self.ts_gids.append(ts_gid_rec['gid'])
+        for rec in ts_gid_recs:
+            self.ts_gids.append(rec['gid'])
 
         # Pick a first device id
         # self.device_id, self.device_ids_idx = self.next_entry(self.device_ids, self.device_ids_idx)
@@ -89,7 +86,7 @@ class RawSensorDbInput(PostgresDbInput):
 
         # Remember last id processed for next query     (automatically done via trigger)
 
-        packet.data = ts_data_rec[0]
-        log.info('data: %s' % str(packet.data))
+        packet.data = ts_data_rec
+        # log.info('data: %s' % str(packet.data))
 
         return packet
