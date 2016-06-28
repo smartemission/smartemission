@@ -18,7 +18,7 @@ max_proc_time_secs=15
 # time between calling the REST API again
 api_interval_secs=2
 
-sos_host=sensors.geonovum.nl
+sos_host=sos52n
 sos_port=80
 sos_user=SOSUSER
 sos_password=SOSPASSWORD
