@@ -320,6 +320,8 @@ def calc_audio_level(db):
 
     return level_num
 
+def convert_noise_level(value, json_obj, name):
+    return calc_audio_level(value)
 
 # Converts audio var and populates virtual max value vars
 # NB not used: now taking average of max values, see convert_audio_avg()

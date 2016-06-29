@@ -11,16 +11,14 @@ from stetl.filter import Filter
 from stetl.packet import FORMAT
 
 from datetime import datetime
-import json
-from sensordefs import OUTPUTS
-from sensorconverters import convert
+from sensordefs import *
 
 log = Util.get_log("RefineFilter")
 
 
 class RefineFilter(Filter):
     """
-    Filter to consume single raw record with sensor (hour) timeseries values and produce refined record.
+    Filter to consume single raw record with sensor (single hour) timeseries values and produce refined record for each component.
     Refinement entails: calibration (e.g. Ohm to ug/m3) and aggregation (hour-values).
     Input is a single timeseries record for a single hour with all sensorvalues for a single device within that hour.
     """
@@ -28,6 +26,12 @@ class RefineFilter(Filter):
     def __init__(self, configdict, section):
         Filter.__init__(self, configdict, section, consumes=FORMAT.record, produces=FORMAT.record_array)
         self.current_record = None
+
+    # M = M + (x-M)/n
+    # Here M is the (cumulative moving) average, x is the new value in the
+    # sequence, n is the count of values.
+    def moving_average(self, M, x, n):
+        return float(M) + (float(x)-float(M))/float(n)
 
     def invoke(self, packet):
         if packet.data is None or packet.is_end_of_doc() or packet.is_end_of_stream():
@@ -38,65 +42,82 @@ class RefineFilter(Filter):
         # list of output records
         records_out = {}
 
-        # ts_list is an array of dict, each dict containing sensro values
+        # ts_list (timeseries list) is an array of dict, each dict containing raw sensor values
         ts_list = record_in['data']['timeseries']
         for ts_dict in ts_list:
+            # Go through all the defined outputs we need to calc values for
             for output in OUTPUTS:
-                name = output['name']
-                value_avg = None
-                value_raw_avg = None
+
+                if 'input' not in output or 'converter' not in output:
+                    continue
+
+                # get raw input value(s)
+                # i.e. in some cases multiple inputs are required (e.g. audio bands)
+                input_name = output['input']
+                value_raw = get_raw_value(input_name, ts_dict)
+                if value_raw is None:
+                    # No use to proceed without raw input value(s)
+                    continue
 
                 # First all common attrs (device_id, time, staleness etc)
-                if name not in records_out:
-                    # Base data for all records
-                    record = {}
+                output_name = output['name']
+                value_avg = None
+                value_raw_avg = None
+                if output_name not in records_out:
+                    # Start new record with common data
+                    record = dict()
                     record['device_id'] = record_in['device_id']
                     record['day'] = record_in['day']
                     record['hour'] = record_in['hour']
-                    record['id'] = output['id']
-                    record['unique_id'] = '%d-%d' % (record['device_id'], record['id'])
-                    record['name'] = name
+                    record['name'] = output_name
                     record['label'] = output['label']
                     record['unit'] = output['unit']
                     record['sample_count'] = 0
-                    records_out[name] = record
                 else:
-                    record = records_out[name]
+                    # Record already exists: will add to average later
+                    record = records_out[output_name]
                     if 'value' in record:
                         value_avg = record['value']
                     if 'value_raw' in record:
                         value_raw_avg = record['value_raw']
 
-                if name in ts_dict:
-                    record['sample_count'] += 1
-                    sample_count = record['sample_count']
-                    cur_value_raw = ts_dict[name]
-                    if cur_value_raw is not None:
-                        if value_raw_avg is not None:
-                            record['value_raw'] = (value_raw_avg + cur_value_raw)/sample_count
-                        else:
-                            # First value for avg
-                            record['value_raw'] = cur_value_raw
+                # Calculate values, also keep raw value, min and max
+                record['sample_count'] += 1
+                if value_raw_avg is not None:
+                    # M = M + (x-M)/n
+                    # Here M is the (cumulative moving) average, x is the new value in the
+                    # sequence, n is the count of values.
+                    record['value_raw'] = self.moving_average(value_raw_avg, value_raw, record['sample_count'])
+                else:
+                    # First value for avg
+                    record['value_raw'] = value_raw
 
-                    cur_value = convert(ts_dict, name)
-                    if cur_value is not None:
-                        if value_avg is not None:
-                            # Recalc hour avg
-                            record['value'] = (value_avg + cur_value)/sample_count
-                        else:
-                            # First value for avg
-                            record['value'] = cur_value
+                value = output['converter'](value_raw, ts_dict, output_name)
+                if value is not None:
+                    if value_avg is not None:
+                        # Recalc avg
+                        record['value'] = self.moving_average(value_avg, value, record['sample_count'])
 
-                    if record['value'] is None:
-                        continue
+                        # Set min/max
+                        if value < record['value_min']:
+                            record['value_min'] = value
+                        if value > record['value_max']:
+                            record['value_max'] = value
+                    else:
+                        # First value for avg
+                        record['value'] = value
+                        record['value_min'] = value
+                        record['value_max'] = value
 
-                    if name == 's_o3' and 's_o3resistance' in ts_dict:
-                        # average dB value as raw value
-                        record['value_raw'] = ts_dict['s_o3resistance']
+                if record['value'] is not None:
+                    records_out[output_name] = record
 
-                    if name == 'v_audiolevel' and 'v_audioavg' in ts_list:
-                        # average dB value as raw value
-                        record['value_raw'] = ts_dict['v_audioavg']
+                # if output_name == 'v_audiolevel' and 'v_audioavg' in ts_list:
+                #     # average dB value as raw value
+                #     record['value_raw'] = ts_dict['v_audioavg']
 
         packet.data = records_out.values()
+        for rec in packet.data:
+            rec['value'] = int(round(rec['value']))
+            rec['value_raw'] = int(round(rec['value_raw']))
         return packet
