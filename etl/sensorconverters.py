@@ -151,7 +151,7 @@ def ohm_o3_to_ugm3(input, json_obj, name):
     device = -1
 
     if 'p_unitserialnumber' in json_obj:
-        device = ['p_unitserialnumber']
+        device = json_obj['p_unitserialnumber']
 
     try:
         s_no2resistance = ohm_no2_to_kohm(json_obj['s_no2resistance'])
