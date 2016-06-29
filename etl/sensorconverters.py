@@ -176,7 +176,7 @@ def ohm_o3_to_ugm3(input, json_obj, name):
         # Sum all intermediate vals
         val = val1 + val2 + val3 + val4 + val5 + val6 + val7 + val8 + val9 + val10
 
-        log.info('device: %d : O3 : ohm=%d ugm3=%d' % (device, input, val)))
+        # log.info('device: %d : O3 : ohm=%d ugm3=%d' % (device, input, val))
 
         # Remove outliers
         if val < 0 or val > 400:
