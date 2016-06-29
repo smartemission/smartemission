@@ -13,7 +13,7 @@ CREATE TABLE smartem_refined.timeseries (
   name character varying,
   label character varying,
   unit  character varying,
-  time timestamp with time zone,
+  time timestamp without time zone,
   day integer not null,
   hour integer not null,
   value_min integer,

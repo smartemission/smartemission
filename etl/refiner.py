@@ -84,7 +84,9 @@ class RefineFilter(Filter):
                     record['gid_raw'] = record_in['gid']
                     record['device_id'] = record_in['device_id']
                     record['day'] = record_in['day']
-                    record['hour'] = record_in['hour']
+                    record['hour'] = record_in['hour']-1
+                    day_hour = str(record['day']) + str(record['hour'])
+                    record['time'] = datetime.strptime('%sGMT' % day_hour, '%Y%m%d%HGMT').replace(tzinfo=utc)
                     record['name'] = sensor_name
                     record['label'] = sensor_def['label']
                     record['unit'] = sensor_def['unit']
