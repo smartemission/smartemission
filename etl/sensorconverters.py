@@ -148,7 +148,11 @@ def ohm_o3_to_ugm3(input, json_obj, name):
     # Original value in kOhm
 
     s_o3resistance = ohm_to_kohm(json_obj['s_o3resistance'])
-    device = json_obj['p_unitserialnumber']
+    device = -1
+
+    if 'p_unitserialnumber' in json_obj:
+        device = ['p_unitserialnumber']
+
     try:
         s_no2resistance = ohm_no2_to_kohm(json_obj['s_no2resistance'])
         s_coresistance = ohm_to_kohm(json_obj['s_coresistance'])
@@ -172,7 +176,7 @@ def ohm_o3_to_ugm3(input, json_obj, name):
         # Sum all intermediate vals
         val = val1 + val2 + val3 + val4 + val5 + val6 + val7 + val8 + val9 + val10
 
-        print 'device: %d : O3 : ohm=%d ugm3=%d' % (device, input, val)
+        log.info('device: %d : O3 : ohm=%d ugm3=%d' % (device, input, val)))
 
         # Remove outliers
         if val < 0 or val > 400:
