@@ -341,23 +341,23 @@ class RawSensorLastInput(RawSensorAPIInput):
         # );
 
         # Parse JSON from data string fetched by base method read()
-        json_obj = self.parse_json_str(data)
-        if 'p_unitserialnumber' not in json_obj:
+        sensor_vals = self.parse_json_str(data)
+        if 'p_unitserialnumber' not in sensor_vals:
             return []
 
         # Init gasses ug/m3 as some old units may send wrong values
-        json_obj['s_o3'] = None
-        json_obj['s_no2'] = None
-        json_obj['s_co'] = None
+        sensor_vals['s_o3'] = None
+        sensor_vals['s_no2'] = None
+        sensor_vals['s_co'] = None
 
         # Base data for all records
         base_record = {}
-        base_record['device_id'] = json_obj['p_unitserialnumber']
+        base_record['device_id'] = sensor_vals['p_unitserialnumber']
         base_record['device_name'] = 'station %d' % base_record['device_id']
 
         # Unix timestamp to calculate "stale state (0/1)" i.e. if a station has been
         # active over the last N hours (now 2). We keep all last values but flag inactive stations.
-        base_record['time'] = convert(json_obj, 'time')
+        base_record['time'] = convert(sensor_vals, 'time')
         utc_then = datetime.utcnow() - timedelta(hours=2)
         tstamp_sample = time.mktime(base_record['time'].timetuple())
         tstamp_then = time.mktime(utc_then.timetuple())
@@ -366,9 +366,9 @@ class RawSensorLastInput(RawSensorAPIInput):
             base_record['value_stale'] = 1
 
         # Point location
-        if 's_longitude' in json_obj and 's_latitude' in json_obj:
-            lon = convert(json_obj, 's_longitude')
-            lat = convert(json_obj, 's_latitude')
+        if 's_longitude' in sensor_vals and 's_latitude' in sensor_vals:
+            lon = convert(sensor_vals, 's_longitude')
+            lat = convert(sensor_vals, 's_latitude')
             if lon is None or lat is None:
                 return []
             base_record['point'] = 'SRID=4326;POINT(%f %f)' % (lon, lat)
@@ -379,8 +379,8 @@ class RawSensorLastInput(RawSensorAPIInput):
 
         # GPS height. TODO use air pressure
         base_record['altitude'] = 0
-        if 's_altimeter' in json_obj:
-            base_record['altitude'] = json_obj['s_altimeter']
+        if 's_altimeter' in sensor_vals:
+            base_record['altitude'] = sensor_vals['s_altimeter']
 
         # Gather result as array of records, one for each output-observation
         result = []
@@ -388,25 +388,25 @@ class RawSensorLastInput(RawSensorAPIInput):
             # First all common attrs (device_id, time, staleness etc)
             record = base_record.copy()
             name = output['name']
-            if name in json_obj:
+            if name in sensor_vals:
                 record['id'] = output['id']
                 record['unique_id'] = '%d-%d' % (record['device_id'], record['id'])
                 record['name'] = name
                 record['label'] = output['label']
                 record['unit'] = output['unit']
-                record['value_raw'] = json_obj[name]
-                record['value'] = convert(json_obj, name)
+                record['value_raw'] = sensor_vals[name]
+                record['value'] = convert(sensor_vals, name)
 
                 if record['value'] is None:
                     continue
 
                 if name == 's_o3':
                     # average dB value as raw value
-                    record['value_raw'] = json_obj['s_o3resistance']
+                    record['value_raw'] = sensor_vals['s_o3resistance']
 
                 if name == 'v_audiolevel':
                     # average dB value as raw value
-                    record['value_raw'] = json_obj['v_audioavg']
+                    record['value_raw'] = sensor_vals['v_audioavg']
 
                 result.append(record)
 

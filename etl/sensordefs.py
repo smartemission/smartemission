@@ -1,204 +1,398 @@
 from sensorconverters import *
 
-# Inputs from raw sensor
-INPUTS = [
-    {
-        'name': 's_o3resistance',
-        'id': 23,
-        'label': 'O3Raw',
-        'unit': 'kOhm'
-    },
-    {
-        'name': 's_no2resistance',
-        'id': 24,
-        'label': 'NO2',
-        'unit': 'kOhm'
-    },
-    {
-        'name': 's_coresistance',
-        'id': 25,
-        'label': 'CO',
-        'unit': 'kOhm'
-    },
-    {
-        'name': 's_temperatureambient',
-        'id': 5,
-        'label': 'Temperatuur',
-        'unit': 'Celsius'
-    },
-    {
-        'name': 's_barometer',
-        'id': 6,
-        'label': 'Luchtdruk',
-        'unit': 'HectoPascal'
-    },
-    {
-        'name': 's_humidity',
-        'id': 7,
-        'label': 'Luchtvochtigheid',
-        'unit': 'Procent'
-    },
-    {
-        'name': 'v_audio0',
-        'id': 8,
-        'label': 'Audio 0-40Hz',
-        'unit': 'dB(A)'
-    },
-    {
-        'name': 'v_audioplus1',
-        'id': 9,
-        'label': 'Audio 40-80Hz',
-        'unit': 'dB(A)'
-    },
-    {
-        'name': 'v_audioplus2',
-        'id': 10,
-        'label': 'Audio 80-160Hz',
-        'unit': 'dB(A)'
-    },
-    {
-        'name': 'v_audioplus3',
-        'id': 11,
-        'label': 'Audio 160-315Hz',
-        'unit': 'dB(A)'
-    },
-    {
-        'name': 'v_audioplus4',
-        'id': 12,
-        'label': 'Audio 315-630Hz',
-        'unit': 'dB(A)'
-    },
-    {
-        'name': 'v_audioplus5',
-        'id': 13,
-        'label': 'Audio 630Hz-1.25kHz',
-        'unit': 'dB(A)'
-    },
-    {
-        'name': 'v_audioplus6',
-        'id': 14,
-        'label': 'Audio 1.25-2.5kHz',
-        'unit': 'dB(A)'
-    },
-    {
-        'name': 'v_audioplus7',
-        'id': 15,
-        'label': 'Audio 2.5-5kHz',
-        'unit': 'dB(A)'
-    },
-    {
-        'name': 'v_audioplus8',
-        'id': 16,
-        'label': 'Audio 5-10kHz',
-        'unit': 'dB(A)'
-    },
-    {
-        'name': 'v_audioplus9',
-        'id': 17,
-        'label': 'Audio 10-20kHz',
-        'unit': 'dB(A)'
-    },
-    {
-        'name': 'v_audioplus10',
-        'id': 18,
-        'label': 'Audio 20-25kHz',
-        'unit': 'dB(A)'
-    },
-    # Virtual inputs, i.e. added here for ease of interpretation
-    {
-        'name': 'noiselevel',
-        'id': 22,
-        'label': 'Average Noise Level 1-5',
-        'unit': 'int'
-    }
-]
-
-# Outputs to be gathered, with some metadata
-OUTPUTS = [
-    {
-        'name': 'temperature',
-        'id': 1,
-        'label': 'Temperatuur',
-        'unit': 'Celsius',
-        'input': 's_temperatureambient',
-        'converter': convert_temperature,
-        'type': int
-    },
-    {
-        'name': 'pressure',
-        'id': 2,
-        'label': 'Luchtdruk',
-        'unit': 'HectoPascal',
-        'input': 's_barometer',
-        'converter': convert_barometer,
-        'type': int
-    },
-    {
-        'name': 'humidity',
-        'id': 3,
-        'label': 'Luchtvochtigheid',
-        'unit': 'Procent',
-        'input': 's_humidity',
-        'converter': convert_humidity,
-        'type': int
-    },
-    {
-        'name': 'noiseavg',
-        'id': 4,
-        'label': 'Average Noise',
-        'unit': 'dB(A)',
-        'input': 'v_audio0,v_audioplus1,v_audioplus2,v_audioplus3,v_audioplus4,v_audioplus5,v_audioplus6,v_audioplus7,v_audioplus8,v_audioplus9,v_audioplus10',
-        'converter': convert_audio_avg,
-        'type': int
-    },
-    {
-        'name': 'noiselevelavg',
-        'id': 5,
-        'label': 'Average Noise Level 1-5',
-        'unit': 'int',
-        'input': 'noiseavg',
-        'converter': convert_noise_level,
-        'type': int
-    },
-    {
-        'name': 'co2',
-        'id': 6,
-        'label': 'CO2',
-        'unit': 'ppm',
-        'input': 's_co2',
-        'converter': ppb_co2_to_ppm,
-        'type': int
-    },
+# Allowed min/max values for sensor-names
+# See e.g. http://whale.citygis.nl//sensors/v1/devices/20
+# TODO apply before conversion i.s.o. ad-hoc checks, even better one generic dict with all sensor metadata
+#
+RAW_RANGE_FILTERS = {
+    # outputs: [
     # {
-    #     'name': 's_co',
+
+}
+# All sensor definitions, both base sensors (Jose) and derived (virtual) sensors
+# Jose sensor defs have id starting with s_ or v_
+SENSOR_DEFS = {
+    # START GPS Jose
+    's_altimeter':
+        {
+            'label': 'Height',
+            'unit': 'Meter',
+            'min': '0',
+            'max': '4000'
+        },
+    # START Light Jose
+    's_lightsensortop':
+        {
+            'label': 'Light Top',
+            'unit': 'Lux',
+            'min': '0',
+            'max': '65535'
+        },
+    's_lightsensorbottom':
+        {
+            'label': 'Light Bottom',
+            'unit': 'Lux',
+            'min': '0',
+            'max': '65535'
+        },
+    's_lightsensorred':
+        {
+            'label': 'Red Light',
+            'unit': 'Lux',
+            'min': '0',
+            'max': '65535'
+        },
+    's_lightsensorgreen':
+        {
+            'label': 'Green Light',
+            'unit': 'Lux',
+            'min': '0',
+            'max': '65535'
+        },
+    's_lightsensorblue':
+        {
+            'label': 'Blue Light',
+            'unit': 'Lux',
+            'min': '0',
+            'max': '65535'
+        },
+    's_rgbcolor':
+        {
+            'label': 'RGB Light',
+            'unit': 'RGB8',
+            'min': '0',
+            'max': '16777215'
+        },
+    # START Accelometer Jose
+    's_accelerox':
+        {
+            'label': 'Acceleration in the X-axis',
+            'unit': 'oG',
+            'min': '0',
+            'max': '1024'
+        },
+    's_acceleroy':
+        {
+            'label': 'Acceleration in the Y-axis',
+            'unit': 'oG',
+            'min': '0',
+            'max': '1024'
+        },
+    's_acceleroz':
+        {
+            'label': 'Acceleration in the Z-axis',
+            'unit': 'oG',
+            'min': '0',
+            'max': '1024'
+        },
+    # START Diverse Jose
+    's_bottomswitches':
+        {
+            'label': 'Bottom Switches',
+            'unit': '?',
+            'min': '0',
+            'max': '3'
+        },
+    # START Gasses Jose
+    's_o3resistance':
+        {
+            'id': 23,
+            'label': 'O3Raw',
+            'unit': 'Ohm',
+            'min': '3000',
+            'max': '60000'
+        },
+    's_no2resistance':
+        {
+            'id': 24,
+            'label': 'NO2Raw',
+            'unit': 'Ohm',
+            'min': '800',
+            'max': '20000'
+        },
+    's_coresistance':
+        {
+            'id': 25,
+            'label': 'CO',
+            'unit': 'Ohm',
+            'min': '100000',
+            'max': '1500000'
+        },
+    's_co':
+        {
+            'label': 'CO Concentration',
+            'unit': 'ppb',
+            'min': '0',
+            'max': '1000'
+        },
+    's_no2':
+        {
+            'label': 'NO2 Concentration',
+            'unit': 'ppb',
+            'min': '50',
+            'max': '1000'
+        },
+    's_o3':
+        {
+            'label': 'O3 Concentration',
+            'unit': 'ppb',
+            'min': '10',
+            'max': '1000'
+        },
+    's_co2':
+        {
+            'label': 'CO2 Concentration',
+            'unit': 'ppb',
+            'min': '0',
+            'max': '5000000'
+        },
+    # START particles Jose
+    's_pm10':
+        {
+            'label': 'PM 10',
+
+            'unit': 'ng/m3',
+            'min': '0',
+            'max': '80000'
+        },
+    's_pm2_5':
+        {
+            'label': 'PM 2.5',
+            'unit': 'ng/m3',
+            'min': '0',
+            'max': '80000'
+        },
+    's_pm1':
+        {
+            'label': 'PM 1',
+            'unit': 'ng/m3',
+            'min': '0',
+            'max': '80000'
+        },
+    's_tsp':
+        {
+            'label': 'Total Suspended Particles',
+            'unit': 'ng/m3',
+            'min': '0',
+            'max': '80000'
+        },
+    # START Meteo Jose
+    's_temperatureunit':
+        {
+            'label': 'Unit Temperature',
+            'unit': 'milliKelvin',
+            'min': '233150',
+            'max': '398150'
+        },
+    's_temperatureambient':
+        {
+            'id': 5,
+            'label': 'Temperatuur',
+            'unit': 'milliKelvin',
+            'min': '233150',
+            'max': '398150'
+        },
+    's_barometer':
+        {
+            'id': 6,
+            'label': 'Luchtdruk',
+            'unit': 'HectoPascal',
+            'min': '20000',
+            'max': '110000'
+
+        },
+    's_humidity':
+        {
+            'id': 7,
+            'label': 'Relative Humidity',
+            'unit': 'm%RH',
+            'min': '20',
+            'max': '100'
+        },
+    's_rain':
+        {
+            'label': 'Rain',
+            'unit': 'Rain value',
+            'min': '0',
+            'max': '15'
+        },
+    's_externaltemp':
+        {
+            'label': 'External Temperature',
+            'unit': 'milliKelvin',
+            'min': '-55',
+            'max': '125'
+        },
+    's_windspeed':
+        {
+            'label': 'Wind Speed',
+            'unit': 'mm/s',
+            'min': '0',
+            'max': '200000'
+        },
+    's_windheading':
+        {
+            'label': 'Wind Heading',
+
+            'unit': 'mDegrees',
+            'min': '0',
+            'max': '360000'
+        },
+    # START Audio Jose
+    'v_audio0':
+        {
+            'id': 8,
+            'label': 'Audio 0-40Hz',
+            'unit': 'dB(A)'
+        },
+    'v_audioplus1':
+        {
+            'id': 9,
+            'label': 'Audio 40-80Hz',
+            'unit': 'dB(A)'
+        },
+    'v_audioplus2':
+        {
+            'id': 10,
+            'label': 'Audio 80-160Hz',
+            'unit': 'dB(A)'
+        },
+    'v_audioplus3':
+        {
+            'id': 11,
+            'label': 'Audio 160-315Hz',
+            'unit': 'dB(A)'
+        },
+    'v_audioplus4':
+        {
+            'id': 12,
+            'label': 'Audio 315-630Hz',
+            'unit': 'dB(A)'
+        },
+    'v_audioplus5':
+        {
+            'id': 13,
+            'label': 'Audio 630Hz-1.25kHz',
+            'unit': 'dB(A)'
+        },
+    'v_audioplus6':
+        {
+            'id': 14,
+            'label': 'Audio 1.25-2.5kHz',
+            'unit': 'dB(A)'
+        },
+    'v_audioplus7':
+        {
+            'id': 15,
+            'label': 'Audio 2.5-5kHz',
+            'unit': 'dB(A)'
+        },
+    'v_audioplus8':
+        {
+            'id': 16,
+            'label': 'Audio 5-10kHz',
+            'unit': 'dB(A)'
+        },
+    'v_audioplus9':
+        {
+            'id': 17,
+            'label': 'Audio 10-20kHz',
+            'unit': 'dB(A)'
+        },
+    'v_audioplus10':
+        {
+            'id': 18,
+            'label': 'Audio 20-25kHz',
+            'unit': 'dB(A)'
+        },
+    # START user-defined Sensors
+    'temperature':
+        {
+            'id': 1,
+            'label': 'Temperatuur',
+            'unit': 'Celsius',
+            'input': 's_temperatureambient',
+            'converter': convert_temperature,
+            'type': int
+        },
+    'pressure':
+        {
+            'id': 2,
+            'label': 'Luchtdruk',
+            'unit': 'HectoPascal',
+            'input': 's_barometer',
+            'converter': convert_barometer,
+            'type': int
+        },
+    'humidity':
+        {
+            'id': 3,
+            'label': 'Luchtvochtigheid',
+            'unit': 'Procent',
+            'input': 's_humidity',
+            'converter': convert_humidity,
+            'type': int
+        },
+    'noiseavg':
+        {
+            'id': 4,
+            'label': 'Average Noise',
+            'unit': 'dB(A)',
+            'input': 'v_audio0,v_audioplus1,v_audioplus2,v_audioplus3,v_audioplus4,v_audioplus5,v_audioplus6,v_audioplus7,v_audioplus8,v_audioplus9,v_audioplus10',
+            'converter': convert_audio_avg,
+            'type': int
+        },
+    'noiselevelavg':
+        {
+            'id': 5,
+            'label': 'Average Noise Level 1-5',
+            'unit': 'int',
+            'input': 'noiseavg',
+            'converter': convert_noise_level,
+            'type': int
+        },
+    'co2':
+        {
+            'id': 6,
+            'label': 'CO2',
+            'unit': 'ppm',
+            'input': 's_co2',
+            'converter': ppb_co2_to_ppm,
+            'type': int
+        },
+    #     'co':
+    # {
     #     'id': 7,
     #     'label': 'CO',
     #     'unit': 'ug/m3'
     # },
     # {
-    #     'name': 's_no2',
+    #     'no2',
     #     'id': 8,
     #     'label': 'NO2',
     #     'unit': 'ug/m3'
     # },
-    {
-        'name': 'o3',
-        'id': 9,
-        'label': 'O3',
-        'unit': 'ug/m3',
-        'input': 's_o3resistance',
-        'converter': ohm_o3_to_ugm3,
-        'type': int
-    }
-]
+    'o3':
+        {
+            'id': 9,
+            'label': 'O3',
+            'unit': 'ug/m3',
+            'input': 's_o3resistance',
+            'converter': ohm_o3_to_ugm3,
+            'type': int
+        }
+}
 
 
+# Get raw value or list of values
 def get_raw_value(name, val_dict):
     val = None
     if ',' not in name:
+        # name is single name
         if name in val_dict:
             val = val_dict[name]
     else:
+        # name is list of names
         names = name.split(',')
         for n in names:
             if name in val_dict:

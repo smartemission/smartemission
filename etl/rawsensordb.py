@@ -17,9 +17,16 @@ class RawSensorDbInput(PostgresDbInput):
     """
 
     @Config(ptype=str, required=True, default=None)
+    def last_gid_query(self):
+        """
+        The query (string) to fetch last gid that was processed.
+        """
+        pass
+
+    @Config(ptype=str, required=True, default=None)
     def gids_query(self):
         """
-        The query (string) to fetch all gid's (id's) to be processed..
+        The query (string) to fetch all gid's (id's) to be processed.
         """
         pass
 
@@ -39,6 +46,7 @@ class RawSensorDbInput(PostgresDbInput):
         self.ts_gids = []
         self.ts_gids_idx = 0
         self.ts_gid = -1
+        self.last_gid = 0
 
     def next_entry(self, a_list, idx):
         if len(a_list) == 0 or idx >= len(a_list):
@@ -54,10 +62,12 @@ class RawSensorDbInput(PostgresDbInput):
         PostgresDbInput.init(self)
 
         # get gid where to start
-        self.last_id = 0
+        last_gid_tuples = self.raw_query(self.last_gid_query)
+        if len(last_gid_tuples) == 1:
+            self.last_gid, = last_gid_tuples[0]
 
         # One time: get all gid's to be processed
-        ts_gid_tuples = self.raw_query(self.gids_query % self.last_id)
+        ts_gid_tuples = self.raw_query(self.gids_query % self.last_gid)
         ts_gid_recs = self.tuples_to_records(ts_gid_tuples, ['gid'])
 
         log.info('read timeseries_recs: %d' % len(ts_gid_recs))
@@ -72,7 +82,7 @@ class RawSensorDbInput(PostgresDbInput):
         # Get last processed id of measurementss table
         # rowcount = self.db.execute(self.progress_query)
         # progress_rec = self.db.cursor.fetchone()
-        # self.last_id = progress_rec[3]
+        # self.last_gid = progress_rec[3]
         # log.info('progress record: %s' % str(progress_rec))
         self.ts_gid, self.ts_gids_idx = self.next_entry(self.ts_gids, self.ts_gids_idx)
 

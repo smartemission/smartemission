@@ -11,7 +11,7 @@ pg_database=gis
 pg_schema=smartem
 pg_schema_rt=smartem_rt
 pg_schema_raw=smartem_raw
-pg_schema_meas=smartem_meas
+pg_schema_refined=smartem_refined
 
 # Maximum time spent in processing, safest is about half the time between runs
 max_proc_time_secs=600

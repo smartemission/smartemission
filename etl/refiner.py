@@ -9,6 +9,7 @@
 from stetl.util import Util
 from stetl.filter import Filter
 from stetl.packet import FORMAT
+from stetl.component import Config
 
 from datetime import datetime
 from sensordefs import *
@@ -22,6 +23,17 @@ class RefineFilter(Filter):
     Refinement entails: calibration (e.g. Ohm to ug/m3) and aggregation (hour-values).
     Input is a single timeseries record for a single hour with all sensorvalues for a single device within that hour.
     """
+
+    @Config(ptype=list, default=[], required=True)
+    def sensor_names(self):
+        """
+        The output sensor names to refine.
+
+        Required: True
+
+        Default: []
+        """
+        pass
 
     def __init__(self, configdict, section):
         Filter.__init__(self, configdict, section, consumes=FORMAT.record, produces=FORMAT.record_array)
@@ -45,37 +57,58 @@ class RefineFilter(Filter):
         # ts_list (timeseries list) is an array of dict, each dict containing raw sensor values
         ts_list = record_in['data']['timeseries']
         for ts_dict in ts_list:
-            # Go through all the defined outputs we need to calc values for
-            for output in OUTPUTS:
+            # Go through all the configured sensor outputs we need to calc values for
+            for sensor_name in self.sensor_names:
+                if sensor_name not in SENSOR_DEFS:
+                    log.warn('Sensor name %s not defined in SENSOR_DEFS' % sensor_name)
+                    continue
 
-                if 'input' not in output or 'converter' not in output:
+                sensor_def = SENSOR_DEFS[sensor_name]
+                if 'input' not in sensor_def or 'converter' not in sensor_def:
                     continue
 
                 # get raw input value(s)
                 # i.e. in some cases multiple inputs are required (e.g. audio bands)
-                input_name = output['input']
+                input_name = sensor_def['input']
                 value_raw = get_raw_value(input_name, ts_dict)
                 if value_raw is None:
                     # No use to proceed without raw input value(s)
                     continue
 
                 # First all common attrs (device_id, time, staleness etc)
-                output_name = output['name']
                 value_avg = None
                 value_raw_avg = None
-                if output_name not in records_out:
+                if sensor_name not in records_out:
                     # Start new record with common data
                     record = dict()
+                    record['gid_raw'] = record_in['gid']
                     record['device_id'] = record_in['device_id']
                     record['day'] = record_in['day']
                     record['hour'] = record_in['hour']
-                    record['name'] = output_name
-                    record['label'] = output['label']
-                    record['unit'] = output['unit']
+                    record['name'] = sensor_name
+                    record['label'] = sensor_def['label']
+                    record['unit'] = sensor_def['unit']
                     record['sample_count'] = 0
+                    # Point location TODO: average, but for now assume static
+                    if 's_longitude' in ts_dict and 's_latitude' in ts_dict:
+                        lon = convert(ts_dict, 's_longitude')
+                        lat = convert(ts_dict, 's_latitude')
+                        if lon is None or lat is None:
+                            continue
+                        record['point'] = 'SRID=4326;POINT(%f %f)' % (lon, lat)
+            
+                    # No 'point' proceeding without a location
+                    if 'point' not in record:
+                        continue
+            
+                    # GPS height. TODO use air pressure
+                    record['altitude'] = 0
+                    if 's_altimeter' in ts_dict:
+                        record['altitude'] = ts_dict['s_altimeter']
+
                 else:
                     # Record already exists: will add to average later
-                    record = records_out[output_name]
+                    record = records_out[sensor_name]
                     if 'value' in record:
                         value_avg = record['value']
                     if 'value_raw' in record:
@@ -92,7 +125,7 @@ class RefineFilter(Filter):
                     # First value for avg
                     record['value_raw'] = value_raw
 
-                value = output['converter'](value_raw, ts_dict, output_name)
+                value = sensor_def['converter'](value_raw, ts_dict, sensor_name)
                 if value is not None:
                     if value_avg is not None:
                         # Recalc avg
@@ -110,14 +143,18 @@ class RefineFilter(Filter):
                         record['value_max'] = value
 
                 if record['value'] is not None:
-                    records_out[output_name] = record
+                    records_out[sensor_name] = record
 
                 # if output_name == 'v_audiolevel' and 'v_audioavg' in ts_list:
                 #     # average dB value as raw value
                 #     record['value_raw'] = ts_dict['v_audioavg']
 
-        packet.data = records_out.values()
-        for rec in packet.data:
+        # make records into a list() and round all (raw) values
+        records_out = records_out.values()
+        for rec in records_out:
             rec['value'] = int(round(rec['value']))
             rec['value_raw'] = int(round(rec['value_raw']))
+
+        packet.data = records_out
+
         return packet
