@@ -11,7 +11,8 @@ from stetl.filter import Filter
 from stetl.packet import FORMAT
 from stetl.component import Config
 
-from datetime import datetime
+import datetime
+import pytz
 from sensordefs import *
 
 log = Util.get_log("RefineFilter")
@@ -86,7 +87,7 @@ class RefineFilter(Filter):
                     record['day'] = record_in['day']
                     record['hour'] = record_in['hour']-1
                     day_hour = str(record['day']) + str(record['hour'])
-                    record['time'] = datetime.strptime('%sGMT' % day_hour, '%Y%m%d%HGMT').replace(tzinfo=utc)
+                    record['time'] = datetime.strptime('%sGMT' % day_hour, '%Y%m%d%HGMT').replace(tzinfo=pytz.utc)
                     record['name'] = sensor_name
                     record['label'] = sensor_def['label']
                     record['unit'] = sensor_def['unit']

@@ -31,7 +31,14 @@ RUN apt-get update && \
     libgdal-dev \
     build-essential \
     python-dev \
-    python-setuptools
+    python-setuptools \
+    python-pip
+
+# For Python extra packages
+RUN sudo pip install --upgrade pip
+
+# Timezone support in Python
+RUN pip install pytz
 
 # Get latest Stetl from git
 RUN git clone https://github.com/justb4/stetl /opt/stetl
