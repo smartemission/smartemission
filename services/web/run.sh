@@ -6,6 +6,7 @@
 GIT="/opt/geonovum/smartem/git"
 CONFIG="${GIT}/services/web/config"
 LOG="/var/smartem/log"
+BACKUP="/var/smartem/backup"
 NAME="web"
 IMAGE="geonovum/apache2"
 
@@ -14,7 +15,7 @@ PG_HOST="postgis"
 GS_HOST="geoserver"
 SOS52N_HOST="sos52n"
 
-VOL_MAP="-v ${CONFIG}/admin:/etc/apache2/admin -v ${CONFIG}/phppgadmin:/etc/phppgadmin -v ${CONFIG}/sites-enabled:/etc/apache2/sites-enabled -v ${GIT}:${GIT} -v ${LOG}/apache2:/var/log/apache2 -v ${LOG}:/smartemlogs"
+VOL_MAP="-v ${CONFIG}/admin:/etc/apache2/admin -v ${CONFIG}/phppgadmin:/etc/phppgadmin -v ${CONFIG}/sites-enabled:/etc/apache2/sites-enabled -v ${GIT}:${GIT} -v ${LOG}/apache2:/var/log/apache2 -v ${LOG}:/smartemlogs -v ${BACKUP}:/smartembackups"
 # PORT_MAP="-p 2222:22 -p 80:80"
 PORT_MAP="-p 80:80"
 LINK_MAP="--link ${PG_HOST}:${PG_HOST} --link ${GS_HOST}:${GS_HOST} --link ${SOS52N_HOST}:${SOS52N_HOST}"

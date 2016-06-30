@@ -54,7 +54,10 @@ RSYNC="rsync -e ssh -alzvx --delete "
 BACKUP_HOST="vps68271@backup"
 
 # We will have last 7 days always
-${RSYNC} ${BACKUP_DIR}/ ${BACKUP_HOST}:`hostname`-weekday-${WEEK_DAY}/
+${RSYNC} ${BACKUP_DIR}/ ${BACKUP_HOST}:`hostname`-weekday-${WEEK_DAY}/  >> ${LOG_FILE}
 
 # At the start of each month we save the backup of the last day of previous month
-${RSYNC} ${BACKUP_DIR}/ ${BACKUP_HOST}:`hostname`-${YEAR}-${MONTH}/
+${RSYNC} ${BACKUP_DIR}/ ${BACKUP_HOST}:`hostname`-${YEAR}-${MONTH}/  >> ${LOG_FILE}
+
+# To inspect from admin
+cp ${LOG_FILE} /var/smartem/log
