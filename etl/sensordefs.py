@@ -17,81 +17,81 @@ SENSOR_DEFS = {
         {
             'label': 'Height',
             'unit': 'Meter',
-            'min': '0',
-            'max': '4000'
+            'min': 0,
+            'max': 4000
         },
     # START Light Jose
     's_lightsensortop':
         {
             'label': 'Light Top',
             'unit': 'Lux',
-            'min': '0',
-            'max': '65535'
+            'min': 0,
+            'max': 65535
         },
     's_lightsensorbottom':
         {
             'label': 'Light Bottom',
             'unit': 'Lux',
-            'min': '0',
-            'max': '65535'
+            'min': 0,
+            'max': 65535
         },
     's_lightsensorred':
         {
             'label': 'Red Light',
             'unit': 'Lux',
-            'min': '0',
-            'max': '65535'
+            'min': 0,
+            'max': 65535
         },
     's_lightsensorgreen':
         {
             'label': 'Green Light',
             'unit': 'Lux',
-            'min': '0',
-            'max': '65535'
+            'min': 0,
+            'max': 65535
         },
     's_lightsensorblue':
         {
             'label': 'Blue Light',
             'unit': 'Lux',
-            'min': '0',
-            'max': '65535'
+            'min': 0,
+            'max': 65535
         },
     's_rgbcolor':
         {
             'label': 'RGB Light',
             'unit': 'RGB8',
-            'min': '0',
-            'max': '16777215'
+            'min': 0,
+            'max': 16777215
         },
     # START Accelometer Jose
     's_accelerox':
         {
             'label': 'Acceleration in the X-axis',
             'unit': 'oG',
-            'min': '0',
-            'max': '1024'
+            'min': 0,
+            'max': 1024
         },
     's_acceleroy':
         {
             'label': 'Acceleration in the Y-axis',
             'unit': 'oG',
-            'min': '0',
-            'max': '1024'
+            'min': 0,
+            'max': 1024
         },
     's_acceleroz':
         {
             'label': 'Acceleration in the Z-axis',
             'unit': 'oG',
-            'min': '0',
-            'max': '1024'
+            'min': 0,
+            'max': 1024
         },
     # START Diverse Jose
     's_bottomswitches':
         {
             'label': 'Bottom Switches',
             'unit': '?',
-            'min': '0',
-            'max': '3'
+            'min': 0,
+            'max': 3
         },
     # START Gasses Jose
     's_o3resistance':
@@ -99,52 +99,52 @@ SENSOR_DEFS = {
             'id': 23,
             'label': 'O3Raw',
             'unit': 'Ohm',
-            'min': '3000',
-            'max': '60000'
+            'min': 3000,
+            'max': 60000
         },
     's_no2resistance':
         {
             'id': 24,
             'label': 'NO2Raw',
             'unit': 'Ohm',
-            'min': '800',
-            'max': '20000'
+            'min': 800,
+            'max': 20000
         },
     's_coresistance':
         {
             'id': 25,
             'label': 'CO',
             'unit': 'Ohm',
-            'min': '100000',
-            'max': '1500000'
+            'min': 100000,
+            'max': 1500000
         },
     's_co':
         {
             'label': 'CO Concentration',
             'unit': 'ppb',
-            'min': '0',
-            'max': '1000'
+            'min': 0,
+            'max': 1000
         },
     's_no2':
         {
             'label': 'NO2 Concentration',
             'unit': 'ppb',
-            'min': '50',
-            'max': '1000'
+            'min': 50,
+            'max': 1000
         },
     's_o3':
         {
             'label': 'O3 Concentration',
             'unit': 'ppb',
-            'min': '10',
-            'max': '1000'
+            'min': 10,
+            'max': 1000
         },
     's_co2':
         {
             'label': 'CO2 Concentration',
             'unit': 'ppb',
-            'min': '0',
-            'max': '5000000'
+            'min': 0,
+            'max': 5000000
         },
     # START particles Jose
     's_pm10':
@@ -152,53 +152,53 @@ SENSOR_DEFS = {
             'label': 'PM 10',
 
             'unit': 'ng/m3',
-            'min': '0',
-            'max': '80000'
+            'min': 0,
+            'max': 80000
         },
     's_pm2_5':
         {
             'label': 'PM 2.5',
             'unit': 'ng/m3',
-            'min': '0',
-            'max': '80000'
+            'min': 0,
+            'max': 80000
         },
     's_pm1':
         {
             'label': 'PM 1',
             'unit': 'ng/m3',
-            'min': '0',
-            'max': '80000'
+            'min': 0,
+            'max': 80000
         },
     's_tsp':
         {
             'label': 'Total Suspended Particles',
             'unit': 'ng/m3',
-            'min': '0',
-            'max': '80000'
+            'min': 0,
+            'max': 80000
         },
     # START Meteo Jose
     's_temperatureunit':
         {
             'label': 'Unit Temperature',
             'unit': 'milliKelvin',
-            'min': '233150',
-            'max': '398150'
+            'min': 233150,
+            'max': 398150
         },
     's_temperatureambient':
         {
             'id': 5,
             'label': 'Temperatuur',
             'unit': 'milliKelvin',
-            'min': '233150',
-            'max': '398150'
+            'min': 233150,
+            'max': 398150
         },
     's_barometer':
         {
             'id': 6,
             'label': 'Luchtdruk',
             'unit': 'HectoPascal',
-            'min': '20000',
-            'max': '110000'
+            'min': 20000,
+            'max': 110000
 
         },
     's_humidity':
@@ -206,37 +206,37 @@ SENSOR_DEFS = {
             'id': 7,
             'label': 'Relative Humidity',
             'unit': 'm%RH',
-            'min': '20',
-            'max': '100'
+            'min': 20000,
+            'max': 100000
         },
     's_rain':
         {
             'label': 'Rain',
             'unit': 'Rain value',
-            'min': '0',
-            'max': '15'
+            'min': 0,
+            'max': 15
         },
     's_externaltemp':
         {
             'label': 'External Temperature',
             'unit': 'milliKelvin',
-            'min': '-55',
-            'max': '125'
+            'min': 233150,
+            'max': 398150
         },
     's_windspeed':
         {
             'label': 'Wind Speed',
             'unit': 'mm/s',
-            'min': '0',
-            'max': '200000'
+            'min': 0,
+            'max': 200000
         },
     's_windheading':
         {
             'label': 'Wind Heading',
 
             'unit': 'mDegrees',
-            'min': '0',
-            'max': '360000'
+            'min': 0,
+            'max': 360000
         },
     # START Audio Jose
     'v_audio0':
@@ -313,7 +313,9 @@ SENSOR_DEFS = {
             'unit': 'Celsius',
             'input': 's_temperatureambient',
             'converter': convert_temperature,
-            'type': int
+            'type': int,
+            'min': -25,
+            'max': 60
         },
     'pressure':
         {
@@ -322,7 +324,9 @@ SENSOR_DEFS = {
             'unit': 'HectoPascal',
             'input': 's_barometer',
             'converter': convert_barometer,
-            'type': int
+            'type': int,
+            'min': 200,
+            'max': 1100
         },
     'humidity':
         {
@@ -331,14 +335,16 @@ SENSOR_DEFS = {
             'unit': 'Procent',
             'input': 's_humidity',
             'converter': convert_humidity,
-            'type': int
+            'type': int,
+            'min': 20,
+            'max': 100
         },
     'noiseavg':
         {
             'id': 4,
             'label': 'Average Noise',
             'unit': 'dB(A)',
-            'input': 'v_audio0,v_audioplus1,v_audioplus2,v_audioplus3,v_audioplus4,v_audioplus5,v_audioplus6,v_audioplus7,v_audioplus8,v_audioplus9,v_audioplus10',
+            'input': ['v_audio0','v_audioplus1','v_audioplus2','v_audioplus3','v_audioplus4','v_audioplus5','v_audioplus6','v_audioplus7','v_audioplus8','v_audioplus9','v_audioplus10'],
             'converter': convert_audio_avg,
             'type': int
         },
@@ -358,7 +364,9 @@ SENSOR_DEFS = {
             'unit': 'ppm',
             'input': 's_co2',
             'converter': ppb_co2_to_ppm,
-            'type': int
+            'type': int,
+            'min': 0,
+            'max': 5000
         },
     #     'co':
     # {
@@ -377,9 +385,11 @@ SENSOR_DEFS = {
             'id': 9,
             'label': 'O3',
             'unit': 'ug/m3',
-            'input': 's_o3resistance',
+            'input': ['s_o3resistance','s_no2resistance','s_coresistance','s_temperatureambient','s_temperatureunit','s_humidity','s_barometer','s_lightsensorbottom'],
             'converter': ohm_o3_to_ugm3,
-            'type': int
+            'type': int,
+            'min': 0,
+            'max': 400
         }
 }
 
@@ -387,17 +397,47 @@ SENSOR_DEFS = {
 # Get raw value or list of values
 def get_raw_value(name, val_dict):
     val = None
-    if ',' not in name:
-        # name is single name
-        if name in val_dict:
-            val = val_dict[name]
-    else:
+    if type(name) is list:
         # name is list of names
-        names = name.split(',')
-        for n in names:
-            if name in val_dict:
+        for n in name:
+            if n in val_dict:
                 if val is None:
                     val = []
                 val.append(val_dict[n])
+    else:
+        # name is single name
+        if name in val_dict:
+            val = val_dict[name]
 
+    return val
+
+
+# Check for valid input
+def check_value(name, val_dict, value=None):
+    val = None
+    if type(name) is list:
+        # name is list of names
+        for n in name:
+            check_value(n, val_dict)
+    else:
+        # name is single name
+        if name not in val_dict and value is None:
+            return False, '%s not present' % name
+        else:
+            if value is not None:
+                val = value
+            else:
+                val = val_dict[name]
+
+            if val is None:
+                return False, '%s is None' % name
+
+            name_def = SENSOR_DEFS[name]
+            if 'min' in name_def and val < name_def['min']:
+                return False, '%s: val(%s) < min(%s)' % (name, str(val), str(name_def['min']))
+
+            if 'max' in name_def and val > name_def['max']:
+                return False, '%s: val(%s) > max(%s)' % (name, str(val), str(name_def['max']))
+
+            return True, '%s OK' % name
     return val

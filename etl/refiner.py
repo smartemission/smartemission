@@ -44,7 +44,7 @@ class RefineFilter(Filter):
     # Here M is the (cumulative moving) average, x is the new value in the
     # sequence, n is the count of values. Using floats as not to loose precision.
     def moving_average(self, M, x, n):
-        return float(M) + (float(x)-float(M))/float(n)
+        return float(M) + (float(x) - float(M)) / float(n)
 
     def invoke(self, packet):
         if packet.data is None or packet.is_end_of_doc() or packet.is_end_of_stream():
@@ -60,12 +60,13 @@ class RefineFilter(Filter):
         ts_list = record_in['data']['timeseries']
         gid_raw = record_in['gid']
         device_id = record_in['device_id']
-        day  = record_in['day']
+        day = record_in['day']
         hour = record_in['hour']
 
         for ts_dict in ts_list:
             # Go through all the configured sensor outputs we need to calc values for
             for sensor_name in self.sensor_names:
+                record = None
                 try:
                     if sensor_name not in SENSOR_DEFS:
                         log.warn('Sensor name %s not defined in SENSOR_DEFS' % sensor_name)
@@ -78,6 +79,13 @@ class RefineFilter(Filter):
                     # get raw input value(s)
                     # i.e. in some cases multiple inputs are required (e.g. audio bands)
                     input_name = sensor_def['input']
+                    input_valid, reason = check_value(input_name, ts_dict)
+                    if not input_valid:
+                        log.warn('id=%d-%d-%d-%s gid_raw=%d: invalid input for %s: detail=%s' % (
+                        device_id, day, hour, sensor_name, gid_raw, str(input_name), reason))
+                        record = None
+                        continue
+
                     value_raw = get_raw_value(input_name, ts_dict)
                     if value_raw is None:
                         # No use to proceed without raw input value(s)
@@ -93,7 +101,7 @@ class RefineFilter(Filter):
                         record['gid_raw'] = gid_raw
                         record['device_id'] = device_id
                         record['day'] = day
-                        record['hour'] = hour-1
+                        record['hour'] = hour - 1
                         day_hour = str(record['day']) + str(record['hour'])
                         record['time'] = datetime.strptime('%sGMT' % day_hour, '%Y%m%d%HGMT').replace(tzinfo=pytz.utc)
                         record['name'] = sensor_name
@@ -137,34 +145,46 @@ class RefineFilter(Filter):
                         # First value for avg
                         record['value_raw'] = value_raw
 
-                    # Do the conversion/calibration
-                    value = sensor_def['converter'](value_raw, ts_dict, sensor_name)
-                    if value is not None:
-                        if value_avg is not None:
-                            # Recalc avg
-                            record['value'] = self.moving_average(value_avg, value, record['sample_count'])
+                    # Do the conversion/calibration in 3 steps
+                    # 1) check inputs (available and valid)
+                    # 2) convert
+                    # 3) check output (available and valid)
 
-                            # Set min/max
-                            if value < record['value_min']:
-                                record['value_min'] = value
-                            if value > record['value_max']:
-                                record['value_max'] = value
-                        else:
-                            # First value for avg
-                            record['value'] = value
+                    # 1) check inputs
+                    value = sensor_def['converter'](value_raw, ts_dict, sensor_name)
+                    output_valid, reason = check_value(sensor_name, ts_dict, value=value)
+                    if not output_valid:
+                        log.warn('id=%d-%d-%d-%s gid_raw=%d: invalid output for %s: detail=%s' % (
+                        device_id, day, hour, sensor_name, gid_raw, sensor_name, reason))
+                        record = None
+                        continue
+
+                    if value_avg is not None:
+                        # Recalc avg
+                        record['value'] = self.moving_average(value_avg, value, record['sample_count'])
+
+                        # Set min/max
+                        if value < record['value_min']:
                             record['value_min'] = value
+                        if value > record['value_max']:
                             record['value_max'] = value
+                    else:
+                        # First value for avg
+                        record['value'] = value
+                        record['value_min'] = value
+                        record['value_max'] = value
 
                 except Exception, e:
-                    log.error('Exception refining %s gid_raw=%d dev=%d day-hour=%d-%d, err=%s' % (sensor_name, gid_raw, device_id,  day, hour, str(e)))
+                    log.error('Exception refining %s gid_raw=%d dev=%d day-hour=%d-%d, err=%s' % (
+                    sensor_name, gid_raw, device_id, day, hour, str(e)))
                 else:
                     # No error and output value: assign record to result list
-                    if record['value'] is not None:
+                    if record and 'value' in record:
                         records_out[sensor_name] = record
 
-                # if output_name == 'v_audiolevel' and 'v_audioavg' in ts_list:
-                #     # average dB value as raw value
-                #     record['value_raw'] = ts_dict['v_audioavg']
+                        # if output_name == 'v_audiolevel' and 'v_audioavg' in ts_list:
+                        #     # average dB value as raw value
+                        #     record['value_raw'] = ts_dict['v_audioavg']
 
         # make records into a list() and round all (raw) values
         records_out = records_out.values()
