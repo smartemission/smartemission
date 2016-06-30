@@ -76,13 +76,15 @@ class RefineFilter(Filter):
                     if 'input' not in sensor_def or 'converter' not in sensor_def:
                         continue
 
+                    # if sensor_name == 'o3':
+                    #   print 'yes'
                     # get raw input value(s)
                     # i.e. in some cases multiple inputs are required (e.g. audio bands)
                     input_name = sensor_def['input']
                     input_valid, reason = check_value(input_name, ts_dict)
                     if not input_valid:
-                        log.warn('id=%d-%d-%d-%s gid_raw=%d: invalid input for %s: detail=%s' % (
-                        device_id, day, hour, sensor_name, gid_raw, str(input_name), reason))
+                        # log.warn('id=%d-%d-%d-%s gid_raw=%d: invalid input for %s: detail=%s' % (
+                        # device_id, day, hour, sensor_name, gid_raw, str(input_name), reason))
                         record = None
                         continue
 

@@ -398,12 +398,13 @@ SENSOR_DEFS = {
 def get_raw_value(name, val_dict):
     val = None
     if type(name) is list:
+        return get_raw_value(name[0], val_dict)
         # name is list of names
-        for n in name:
-            if n in val_dict:
-                if val is None:
-                    val = []
-                val.append(val_dict[n])
+        # for n in name:
+        #     if n in val_dict:
+        #         if val is None:
+        #             val = []
+        #         val.append(val_dict[n])
     else:
         # name is single name
         if name in val_dict:
@@ -418,7 +419,9 @@ def check_value(name, val_dict, value=None):
     if type(name) is list:
         # name is list of names
         for n in name:
-            check_value(n, val_dict)
+            result, reason = check_value(n, val_dict, value)
+            if result is False:
+                return result, reason
     else:
         # name is single name
         if name not in val_dict and value is None:
@@ -432,6 +435,9 @@ def check_value(name, val_dict, value=None):
             if val is None:
                 return False, '%s is None' % name
 
+            if name not in SENSOR_DEFS:
+                return False, '%s not in SENSOR_DEFS' % name
+
             name_def = SENSOR_DEFS[name]
             if 'min' in name_def and val < name_def['min']:
                 return False, '%s: val(%s) < min(%s)' % (name, str(val), str(name_def['min']))
@@ -439,5 +445,4 @@ def check_value(name, val_dict, value=None):
             if 'max' in name_def and val > name_def['max']:
                 return False, '%s: val(%s) > max(%s)' % (name, str(val), str(name_def['max']))
 
-            return True, '%s OK' % name
-    return val
+    return True, '%s OK' % name
