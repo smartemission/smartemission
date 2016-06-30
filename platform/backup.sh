@@ -34,17 +34,26 @@ LOG_FILE=${BACKUP_DIR}/backup_db.log
 #
 function dump_db() {
     DB=$1
-    echo "START Dump ${DB} op `date`"
-    pg_dump -h ${PGHOST} --clean ${DB} | bzip2 --best > ${BACKUP_DIR}/${DB}.sql.bz2
-    echo "END Dump ${DB} op `date`"
+    SCHEMA="all"
+	if [ $# -eq 2 ]
+	then
+        SCHEMA=$2
+        SCHEMA_ARG="--schema=${SCHEMA}"
+	fi
+
+    echo "START Dump ${DB} schema ${SCHEMA} op `date`"
+    pg_dump -h ${PGHOST} --clean ${SCHEMA_ARG} ${DB} | bzip2 --best > ${BACKUP_DIR}/${DB}-${SCHEMA}.sql.bz2
+    echo "END Dump ${DB} schema ${SCHEMA} op `date`"
 }
 
 echo "START backup databases on `date`" > ${LOG_FILE}
 
-DBS="postgres gis"
-for DB in ${DBS}
+dump_db postgres >> ${LOG_FILE} 2>&1
+
+SCHEMAS="smartem_rt smartem_raw smartem_refined"
+for SCHEMA in ${SCHEMAS}
 do
-    dump_db ${DB} >> ${LOG_FILE} 2>&1
+	dump_db gis ${SCHEMA} >> ${LOG_FILE} 2>&1
 done
 
 echo "END backup databases op `date`" >> ${LOG_FILE}
