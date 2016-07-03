@@ -96,7 +96,6 @@ SENSOR_DEFS = {
     # START Gasses Jose
     's_o3resistance':
         {
-            'id': 23,
             'label': 'O3Raw',
             'unit': 'Ohm',
             'min': 3000,
@@ -104,7 +103,6 @@ SENSOR_DEFS = {
         },
     's_no2resistance':
         {
-            'id': 24,
             'label': 'NO2RawOhm',
             'unit': 'Ohm',
             'min': 800,
@@ -112,7 +110,6 @@ SENSOR_DEFS = {
         },
     's_coresistance':
         {
-            'id': 25,
             'label': 'CORawOhm',
             'unit': 'Ohm',
             'min': 100000,
@@ -186,7 +183,6 @@ SENSOR_DEFS = {
         },
     's_temperatureambient':
         {
-            'id': 5,
             'label': 'Temperatuur',
             'unit': 'milliKelvin',
             'min': 233150,
@@ -194,7 +190,6 @@ SENSOR_DEFS = {
         },
     's_barometer':
         {
-            'id': 6,
             'label': 'Luchtdruk',
             'unit': 'HectoPascal',
             'min': 20000,
@@ -203,7 +198,6 @@ SENSOR_DEFS = {
         },
     's_humidity':
         {
-            'id': 7,
             'label': 'Relative Humidity',
             'unit': 'm%RH',
             'min': 20000,
@@ -241,74 +235,62 @@ SENSOR_DEFS = {
     # START Audio Jose
     'v_audio0':
         {
-            'id': 8,
             'label': 'Audio 0-40Hz',
             'unit': 'dB(A)'
         },
     'v_audioplus1':
         {
-            'id': 9,
             'label': 'Audio 40-80Hz',
             'unit': 'dB(A)'
         },
     'v_audioplus2':
         {
-            'id': 10,
             'label': 'Audio 80-160Hz',
             'unit': 'dB(A)'
         },
     'v_audioplus3':
         {
-            'id': 11,
             'label': 'Audio 160-315Hz',
             'unit': 'dB(A)'
         },
     'v_audioplus4':
         {
-            'id': 12,
             'label': 'Audio 315-630Hz',
             'unit': 'dB(A)'
         },
     'v_audioplus5':
         {
-            'id': 13,
             'label': 'Audio 630Hz-1.25kHz',
             'unit': 'dB(A)'
         },
     'v_audioplus6':
         {
-            'id': 14,
             'label': 'Audio 1.25-2.5kHz',
             'unit': 'dB(A)'
         },
     'v_audioplus7':
         {
-            'id': 15,
             'label': 'Audio 2.5-5kHz',
             'unit': 'dB(A)'
         },
     'v_audioplus8':
         {
-            'id': 16,
             'label': 'Audio 5-10kHz',
             'unit': 'dB(A)'
         },
     'v_audioplus9':
         {
-            'id': 17,
             'label': 'Audio 10-20kHz',
             'unit': 'dB(A)'
         },
     'v_audioplus10':
         {
-            'id': 18,
             'label': 'Audio 20-25kHz',
             'unit': 'dB(A)'
         },
     # START user-defined Sensors
     'temperature':
         {
-            'id': 100,
             'label': 'Temperatuur',
             'unit': 'Celsius',
             'input': 's_temperatureambient',
@@ -319,7 +301,6 @@ SENSOR_DEFS = {
         },
     'pressure':
         {
-            'id': 101,
             'label': 'Luchtdruk',
             'unit': 'HectoPascal',
             'input': 's_barometer',
@@ -330,7 +311,6 @@ SENSOR_DEFS = {
         },
     'humidity':
         {
-            'id': 103,
             'label': 'Luchtvochtigheid',
             'unit': 'Procent',
             'input': 's_humidity',
@@ -341,7 +321,6 @@ SENSOR_DEFS = {
         },
     'noiseavg':
         {
-            'id': 104,
             'label': 'Average Noise',
             'unit': 'dB(A)',
             'input': ['v_audio0', 'v_audioplus1', 'v_audioplus2', 'v_audioplus3', 'v_audioplus4', 'v_audioplus5',
@@ -351,7 +330,6 @@ SENSOR_DEFS = {
         },
     'noiselevelavg':
         {
-            'id': 1055,
             'label': 'Average Noise Level 1-5',
             'unit': 'int',
             'input': 'noiseavg',
@@ -360,7 +338,6 @@ SENSOR_DEFS = {
         },
     'co2':
         {
-            'id': 106,
             'label': 'CO2',
             'unit': 'ppm',
             'input': 's_co2',
@@ -371,7 +348,6 @@ SENSOR_DEFS = {
         },
     'coraw':
         {
-            'id': 107,
             'label': 'CORaw',
             'unit': 'kOhm',
             'input': ['s_coresistance'],
@@ -387,7 +363,6 @@ SENSOR_DEFS = {
     # },
     'no2raw':
         {
-            'id': 108,
             'label': 'NO2Raw',
             'unit': 'kOhm',
             'input': ['s_no2resistance'],
@@ -404,7 +379,6 @@ SENSOR_DEFS = {
     # },
     'o3raw':
         {
-            'id': 109,
             'label': 'O3Raw',
             'unit': 'kOhm',
             'input': ['s_o3resistance'],
@@ -414,7 +388,6 @@ SENSOR_DEFS = {
         },
     'o3':
         {
-            'id': 110,
             'label': 'O3',
             'unit': 'ug/m3',
             'input': ['s_o3resistance', 's_no2resistance', 's_coresistance', 's_temperatureambient',

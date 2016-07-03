@@ -17,6 +17,7 @@ from sensordefs import *
 
 log = Util.get_log("RawSensorAPI")
 
+
 class RawSensorAPIInput(HttpInput):
     """
     Raw Sensor REST API (CityGIS) Base Class to fetch observations for devices.
@@ -215,6 +216,8 @@ class RawSensorLastInput(RawSensorAPIInput):
         if 'p_unitserialnumber' not in sensor_vals:
             return []
 
+        sensor_name = 'none'
+        device_id = int(sensor_vals['p_unitserialnumber'])
         records_out = []
 
         # Go through all the configured sensor outputs we need to calc values for
@@ -252,13 +255,12 @@ class RawSensorLastInput(RawSensorAPIInput):
 
                 # Start new record with common data
                 record = {}
-                record['id'] = sensor_def['id']
-                record['device_id'] = sensor_vals['p_unitserialnumber']
-                record['device_name'] = 'station %d' % record['device_id']
                 record['name'] = sensor_name
+                record['device_id'] = device_id
+                record['device_name'] = 'station %d' % device_id
                 record['label'] = sensor_def['label']
                 record['unit'] = sensor_def['unit']
-                record['unique_id'] = '%d-%d' % (record['device_id'], record['id'])
+                record['unique_id'] = '%d-%s' % (device_id, record['name'])
 
                 # Point location TODO: average, but for now assume static
                 if 's_longitude' in sensor_vals and 's_latitude' in sensor_vals:
@@ -276,7 +278,6 @@ class RawSensorLastInput(RawSensorAPIInput):
                 record['altitude'] = 0
                 if 's_altimeter' in sensor_vals:
                     record['altitude'] = sensor_vals['s_altimeter']
-
 
                 # Calculate values
                 record['value_raw'] = value_raw
@@ -298,12 +299,12 @@ class RawSensorLastInput(RawSensorAPIInput):
                 record['value_stale'] = 0
                 if tstamp_sample < tstamp_then:
                     record['value_stale'] = 1
+
                 # Calculated value
                 record['value'] = value
 
             except Exception, e:
-                log.error('Exception refining %s gid_raw=%d dev=%d day-hour=%d-%d, err=%s' % (
-                sensor_name, gid_raw, device_id, day, hour, str(e)))
+                log.error('Exception refining %s dev=%d, err=%s' % (sensor_name, device_id, str(e)))
             else:
                 # No error and output value: assign record to result list
                 if record and 'value' in record:
