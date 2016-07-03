@@ -13,6 +13,7 @@ from stetl.inputs.httpinput import HttpInput
 from stetl.packet import FORMAT
 from stetl.postgis import PostGIS
 from sensorconverters import convert
+from sensordefs import *
 
 log = Util.get_log("RawSensorAPI")
 
@@ -116,151 +117,20 @@ class RawSensorLastInput(RawSensorAPIInput):
     Raw Sensor REST API (CityGIS) to fetch last values for all devices.
     """
 
+    @Config(ptype=list, default=[], required=True)
+    def sensor_names(self):
+        """
+        The output sensor names to refine.
+
+        Required: True
+
+        Default: []
+        """
+        pass
+
     def __init__(self, configdict, section, produces=FORMAT.record_array):
         RawSensorAPIInput.__init__(self, configdict, section, produces)
 
-        # Outputs to be gathered, with some metadata
-        self.outputs = [
-            {
-                'name': 's_o3resistance',
-                'id': 23,
-                'label': 'O3Raw',
-                'unit': 'kOhm'
-            },
-            {
-                'name': 's_no2resistance',
-                'id': 24,
-                'label': 'NO2',
-                'unit': 'kOhm'
-            },
-            {
-                'name': 's_coresistance',
-                'id': 25,
-                'label': 'CO',
-                'unit': 'kOhm'
-            },
-            {
-                'name': 's_temperatureambient',
-                'id': 5,
-                'label': 'Temperatuur',
-                'unit': 'Celsius'
-            },
-            {
-                'name': 's_barometer',
-                'id': 6,
-                'label': 'Luchtdruk',
-                'unit': 'HectoPascal'
-            },
-            {
-                'name': 's_humidity',
-                'id': 7,
-                'label': 'Luchtvochtigheid',
-                'unit': 'Procent'
-            },
-            {
-                'name': 'v_audio0',
-                'id': 8,
-                'label': 'Audio 0-40Hz',
-                'unit': 'dB(A)'
-            },
-            {
-                'name': 'v_audioplus1',
-                'id': 9,
-                'label': 'Audio 40-80Hz',
-                'unit': 'dB(A)'
-            },
-            {
-                'name': 'v_audioplus2',
-                'id': 10,
-                'label': 'Audio 80-160Hz',
-                'unit': 'dB(A)'
-            },
-            {
-                'name': 'v_audioplus3',
-                'id': 11,
-                'label': 'Audio 160-315Hz',
-                'unit': 'dB(A)'
-            },
-            {
-                'name': 'v_audioplus4',
-                'id': 12,
-                'label': 'Audio 315-630Hz',
-                'unit': 'dB(A)'
-            },
-            {
-                'name': 'v_audioplus5',
-                'id': 13,
-                'label': 'Audio 630Hz-1.25kHz',
-                'unit': 'dB(A)'
-            },
-            {
-                'name': 'v_audioplus6',
-                'id': 14,
-                'label': 'Audio 1.25-2.5kHz',
-                'unit': 'dB(A)'
-            },
-            {
-                'name': 'v_audioplus7',
-                'id': 15,
-                'label': 'Audio 2.5-5kHz',
-                'unit': 'dB(A)'
-            },
-            {
-                'name': 'v_audioplus8',
-                'id': 16,
-                'label': 'Audio 5-10kHz',
-                'unit': 'dB(A)'
-            },
-            {
-                'name': 'v_audioplus9',
-                'id': 17,
-                'label': 'Audio 10-20kHz',
-                'unit': 'dB(A)'
-            },
-            {
-                'name': 'v_audioplus10',
-                'id': 18,
-                'label': 'Audio 20-25kHz',
-                'unit': 'dB(A)'
-            },
-            # Virtual outputs, i.e. added here for ease of interpretation
-            {
-                'name': 'v_audioavg',
-                'id': 19,
-                'label': 'Audio Average Value',
-                'unit': 'dB(A)'
-            },
-            {
-                'name': 'v_audiolevel',
-                'id': 22,
-                'label': 'Average Audio/Noise Level 1-5',
-                'unit': 'int'
-            },
-            # {
-            #     'name': 's_co',
-            #     'id': 1,
-            #     'label': 'CO',
-            #     'unit': 'ug/m3'
-            # },
-            {
-                'name': 's_co2',
-                'id': 2,
-                'label': 'CO2',
-                'unit': 'ppm'
-            },
-            # {
-            #     'name': 's_no2',
-            #     'id': 3,
-            #     'label': 'NO2',
-            #     'unit': 'ug/m3'
-            # },
-            {
-                'name': 's_o3',
-                'id': 4,
-                'label': 'O3',
-                'unit': 'ug/m3'
-            }
-        ]
 
     def init(self):
         # One time: get all device ids
@@ -339,78 +209,107 @@ class RawSensorLastInput(RawSensorAPIInput):
         # point geometry(Point,4326),
         # PRIMARY KEY (gid)
         # );
-
+        
         # Parse JSON from data string fetched by base method read()
         sensor_vals = self.parse_json_str(data)
         if 'p_unitserialnumber' not in sensor_vals:
             return []
 
-        # Init gasses ug/m3 as some old units may send wrong values
-        sensor_vals['s_o3'] = None
-        sensor_vals['s_no2'] = None
-        sensor_vals['s_co'] = None
+        records_out = []
 
-        # Base data for all records
-        base_record = {}
-        base_record['device_id'] = sensor_vals['p_unitserialnumber']
-        base_record['device_name'] = 'station %d' % base_record['device_id']
-
-        # Unix timestamp to calculate "stale state (0/1)" i.e. if a station has been
-        # active over the last N hours (now 2). We keep all last values but flag inactive stations.
-        base_record['time'] = convert(sensor_vals, 'time')
-        utc_then = datetime.utcnow() - timedelta(hours=2)
-        tstamp_sample = time.mktime(base_record['time'].timetuple())
-        tstamp_then = time.mktime(utc_then.timetuple())
-        base_record['value_stale'] = 0
-        if tstamp_sample < tstamp_then:
-            base_record['value_stale'] = 1
-
-        # Point location
-        if 's_longitude' in sensor_vals and 's_latitude' in sensor_vals:
-            lon = convert(sensor_vals, 's_longitude')
-            lat = convert(sensor_vals, 's_latitude')
-            if lon is None or lat is None:
-                return []
-            base_record['point'] = 'SRID=4326;POINT(%f %f)' % (lon, lat)
-
-        # No use without a location
-        if 'point' not in base_record:
-            return []
-
-        # GPS height. TODO use air pressure
-        base_record['altitude'] = 0
-        if 's_altimeter' in sensor_vals:
-            base_record['altitude'] = sensor_vals['s_altimeter']
-
-        # Gather result as array of records, one for each output-observation
-        result = []
-        for output in self.outputs:
-            # First all common attrs (device_id, time, staleness etc)
-            record = base_record.copy()
-            name = output['name']
-            if name in sensor_vals:
-                record['id'] = output['id']
-                record['unique_id'] = '%d-%d' % (record['device_id'], record['id'])
-                record['name'] = name
-                record['label'] = output['label']
-                record['unit'] = output['unit']
-                record['value_raw'] = sensor_vals[name]
-                record['value'] = convert(sensor_vals, name)
-
-                if record['value'] is None:
+        # Go through all the configured sensor outputs we need to calc values for
+        # Do the conversion/calibration in 3 steps
+        # 1) check inputs (available and valid)
+        # 2) convert
+        # 3) check output (available and valid)
+        for sensor_name in self.sensor_names:
+            record = None
+            try:
+                if sensor_name not in SENSOR_DEFS:
+                    log.warn('Sensor name %s not defined in SENSOR_DEFS' % sensor_name)
                     continue
 
-                if name == 's_o3':
-                    # average dB value as raw value
-                    record['value_raw'] = sensor_vals['s_o3resistance']
+                sensor_def = SENSOR_DEFS[sensor_name]
+                if 'input' not in sensor_def or 'converter' not in sensor_def:
+                    continue
 
-                if name == 'v_audiolevel':
-                    # average dB value as raw value
-                    record['value_raw'] = sensor_vals['v_audioavg']
+                # if sensor_name == 'o3':
+                #   print 'yes'
+                # get raw input value(s)
+                # i.e. in some cases multiple inputs are required (e.g. audio bands)
+                input_name = sensor_def['input']
+                input_valid, reason = check_value(input_name, sensor_vals)
+                if not input_valid:
+                    # log.warn('id=%d-%d-%d-%s gid_raw=%d: invalid input for %s: detail=%s' % (
+                    # device_id, day, hour, sensor_name, gid_raw, str(input_name), reason))
+                    record = None
+                    continue
 
-                result.append(record)
+                value_raw = get_raw_value(input_name, sensor_vals)
+                if value_raw is None:
+                    # No use to proceed without raw input value(s)
+                    continue
 
-        return result
+                # Start new record with common data
+                record = {}
+                record['id'] = sensor_def['id']
+                record['device_id'] = sensor_vals['p_unitserialnumber']
+                record['device_name'] = 'station %d' % record['device_id']
+                record['name'] = sensor_name
+                record['label'] = sensor_def['label']
+                record['unit'] = sensor_def['unit']
+                record['unique_id'] = '%d-%d' % (record['device_id'], record['id'])
+
+                # Point location TODO: average, but for now assume static
+                if 's_longitude' in sensor_vals and 's_latitude' in sensor_vals:
+                    lon = convert(sensor_vals, 's_longitude')
+                    lat = convert(sensor_vals, 's_latitude')
+                    if lon is None or lat is None:
+                        continue
+                    record['point'] = 'SRID=4326;POINT(%f %f)' % (lon, lat)
+
+                # No 'point' proceeding without a location
+                if 'point' not in record:
+                    continue
+
+                # GPS height. TODO use air pressure
+                record['altitude'] = 0
+                if 's_altimeter' in sensor_vals:
+                    record['altitude'] = sensor_vals['s_altimeter']
+
+
+                # Calculate values
+                record['value_raw'] = value_raw
+
+                value = sensor_def['converter'](value_raw, sensor_vals, sensor_name)
+                output_valid, reason = check_value(sensor_name, sensor_vals, value=value)
+                if not output_valid:
+                    log.warn('id=%d-%d-%d-%s gid_raw=%d: invalid output for %s: detail=%s' % (
+                    device_id, day, hour, sensor_name, gid_raw, sensor_name, reason))
+                    record = None
+                    continue
+
+                # Unix timestamp to calculate "stale state (0/1)" i.e. if a station has been
+                # active over the last N hours (now 2). We keep all last values but flag inactive stations.
+                record['time'] = convert(sensor_vals, 'time')
+                utc_then = datetime.utcnow() - timedelta(hours=2)
+                tstamp_sample = time.mktime(record['time'].timetuple())
+                tstamp_then = time.mktime(utc_then.timetuple())
+                record['value_stale'] = 0
+                if tstamp_sample < tstamp_then:
+                    record['value_stale'] = 1
+                # Calculated value
+                record['value'] = value
+
+            except Exception, e:
+                log.error('Exception refining %s gid_raw=%d dev=%d day-hour=%d-%d, err=%s' % (
+                sensor_name, gid_raw, device_id, day, hour, str(e)))
+            else:
+                # No error and output value: assign record to result list
+                if record and 'value' in record:
+                    records_out.append(record)
+
+        return records_out
 
 
 class RawSensorHarvesterInput(RawSensorAPIInput):
