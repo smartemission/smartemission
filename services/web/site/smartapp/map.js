@@ -37,9 +37,9 @@ $(document).ready(function () {
     // Split into categories for ease of templating: gasses, meteo and audio
     // See https://github.com/Geonovum/smartemission/blob/master/etl/sensordefs.py for
     // sensor-component names
-    var gasNames = 'co2,coraw,no2raw,o3,o3raw,nh3';
-    var meteoNames = 'temperature,pressure,humidity';
-    var audioNames = 'noiseavg,noiselevelavg';
+    var gasIds = 'co2,coraw,no2raw,o3,o3raw,nh3';
+    var meteoIds = 'temperature,pressure,humidity';
+    var audioIds = 'noiseavg,noiselevelavg';
 
     // First get stations JSON object via REST
     $.getJSON(stationsUrl, function (data) {
@@ -67,22 +67,22 @@ $(document).ready(function () {
 
                     for (var idx in data) {
                         var component = data[idx];
-                        var compName = component.parameters.phenomenon.name;
+                        var componentId = component.id;
 
                         // Is it a gas?
-                        if (gasNames.indexOf(compName) >= 0) {
+                        if (gasIds.indexOf(componentId) >= 0) {
                             gasses.push(component);
 
                             // Is it a meteo?
-                        } else if (meteoNames.indexOf(compName) >= 0) {
+                        } else if (meteoIds.indexOf(componentId) >= 0) {
                             meteo.push(component);
 
                             // Is it audio?
-                        } else if (audioNames.indexOf(compName) >= 0) {
+                        } else if (audioIds.indexOf(componentId) >= 0) {
                             // Is it a audio?
                             audio.push(component);
 
-                            if (compName == 'noiselevelavg') {
+                            if (componentId == 'noiselevelavg') {
                                 component['offset'] = parseInt(component.lastValue.value) * 20 - 10;
                             }
                         }
