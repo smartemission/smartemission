@@ -105,7 +105,7 @@ SENSOR_DEFS = {
     's_no2resistance':
         {
             'id': 24,
-            'label': 'NO2Raw',
+            'label': 'NO2RawOhm',
             'unit': 'Ohm',
             'min': 800,
             'max': 20000
@@ -113,7 +113,7 @@ SENSOR_DEFS = {
     's_coresistance':
         {
             'id': 25,
-            'label': 'CO',
+            'label': 'CORawOhm',
             'unit': 'Ohm',
             'min': 100000,
             'max': 1500000
@@ -308,7 +308,7 @@ SENSOR_DEFS = {
     # START user-defined Sensors
     'temperature':
         {
-            'id': 1,
+            'id': 100,
             'label': 'Temperatuur',
             'unit': 'Celsius',
             'input': 's_temperatureambient',
@@ -319,7 +319,7 @@ SENSOR_DEFS = {
         },
     'pressure':
         {
-            'id': 2,
+            'id': 101,
             'label': 'Luchtdruk',
             'unit': 'HectoPascal',
             'input': 's_barometer',
@@ -330,7 +330,7 @@ SENSOR_DEFS = {
         },
     'humidity':
         {
-            'id': 3,
+            'id': 103,
             'label': 'Luchtvochtigheid',
             'unit': 'Procent',
             'input': 's_humidity',
@@ -341,16 +341,17 @@ SENSOR_DEFS = {
         },
     'noiseavg':
         {
-            'id': 4,
+            'id': 104,
             'label': 'Average Noise',
             'unit': 'dB(A)',
-            'input': ['v_audio0','v_audioplus1','v_audioplus2','v_audioplus3','v_audioplus4','v_audioplus5','v_audioplus6','v_audioplus7','v_audioplus8','v_audioplus9','v_audioplus10'],
+            'input': ['v_audio0', 'v_audioplus1', 'v_audioplus2', 'v_audioplus3', 'v_audioplus4', 'v_audioplus5',
+                      'v_audioplus6', 'v_audioplus7', 'v_audioplus8', 'v_audioplus9', 'v_audioplus10'],
             'converter': convert_audio_avg,
             'type': int
         },
     'noiselevelavg':
         {
-            'id': 5,
+            'id': 1055,
             'label': 'Average Noise Level 1-5',
             'unit': 'int',
             'input': 'noiseavg',
@@ -359,7 +360,7 @@ SENSOR_DEFS = {
         },
     'co2':
         {
-            'id': 6,
+            'id': 106,
             'label': 'CO2',
             'unit': 'ppm',
             'input': 's_co2',
@@ -368,24 +369,56 @@ SENSOR_DEFS = {
             'min': 0,
             'max': 5000
         },
+    'coraw':
+        {
+            'id': 107,
+            'label': 'CORaw',
+            'unit': 'kOhm',
+            'input': ['s_coresistance'],
+            'min': 100,
+            'max': 1500,
+            'converter': ohm_to_kohm
+        },
     #     'co':
     # {
     #     'id': 7,
     #     'label': 'CO',
     #     'unit': 'ug/m3'
     # },
+    'no2raw':
+        {
+            'id': 108,
+            'label': 'NO2Raw',
+            'unit': 'kOhm',
+            'input': ['s_no2resistance'],
+            'min': 8,
+            'max': 2000,
+            'converter': ohm_to_kohm
+        },
+    #     'co':
     # {
     #     'no2',
     #     'id': 8,
     #     'label': 'NO2',
     #     'unit': 'ug/m3'
     # },
+    'o3raw':
+        {
+            'id': 109,
+            'label': 'O3Raw',
+            'unit': 'kOhm',
+            'input': ['s_o3resistance'],
+            'min': 3,
+            'max': 60,
+            'converter': ohm_to_kohm
+        },
     'o3':
         {
-            'id': 9,
+            'id': 110,
             'label': 'O3',
             'unit': 'ug/m3',
-            'input': ['s_o3resistance','s_no2resistance','s_coresistance','s_temperatureambient','s_temperatureunit','s_humidity','s_barometer','s_lightsensorbottom'],
+            'input': ['s_o3resistance', 's_no2resistance', 's_coresistance', 's_temperatureambient',
+                      's_temperatureunit', 's_humidity', 's_barometer', 's_lightsensorbottom'],
             'converter': ohm_o3_to_ugm3,
             'type': int,
             'min': 0,

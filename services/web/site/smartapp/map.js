@@ -35,9 +35,11 @@ $(document).ready(function () {
     var oldMarkerId;
 
     // Split into categories for ease of templating: gasses, meteo and audio
-    var gasLabels = 'CO2,CO,NO2,O3,O3Raw,NH3';
-    var meteoLabels = 'Temperatuur,Luchtdruk,Luchtvochtigheid';
-    var audioLabels = 'Audio Average Value,Average Audio/Noise Level 1-5';
+    // See https://github.com/Geonovum/smartemission/blob/master/etl/sensordefs.py for
+    // sensor-component names
+    var gasNames = 'co2,coraw,no2raw,o3,o3raw,nh3';
+    var meteoNames = 'temperature,pressure,humidity';
+    var audioNames = 'noiseavg,noiselevelavg';
 
     // First get stations JSON object via REST
     $.getJSON(stationsUrl, function (data) {
@@ -65,22 +67,22 @@ $(document).ready(function () {
 
                     for (var idx in data) {
                         var component = data[idx];
-                        var label = component.parameters.phenomenon.label;
+                        var compName = component.parameters.phenomenon.name;
 
                         // Is it a gas?
-                        if (gasLabels.indexOf(label) >= 0) {
+                        if (gasNames.indexOf(compName) >= 0) {
                             gasses.push(component);
 
                             // Is it a meteo?
-                        } else if (meteoLabels.indexOf(label) >= 0) {
+                        } else if (meteoNames.indexOf(compName) >= 0) {
                             meteo.push(component);
 
                             // Is it audio?
-                        } else if (audioLabels.indexOf(label) >= 0) {
+                        } else if (audioNames.indexOf(compName) >= 0) {
                             // Is it a audio?
                             audio.push(component);
 
-                            if (label == 'Average Audio/Noise Level 1-5') {
+                            if (compName == 'noiselevelavg') {
                                 component['offset'] = parseInt(component.lastValue.value) * 20 - 10;
                             }
                         }
