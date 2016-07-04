@@ -7,78 +7,6 @@ from stetl.util import Util
 
 log = Util.get_log("SensorConverters")
 
-# According to CityGIS the units are defined as follows. ::
-#
-# S.TemperatureUnit		milliKelvin
-# S.TemperatureAmbient	milliKelvin
-# S.Humidity				%mRH
-# S.LightsensorTop		Lux
-# S.LightsensorBottom		Lux
-# S.Barometer				Pascal
-# S.Altimeter				Meter
-# S.CO					ppb
-# S.NO2					ppb
-# S.AcceleroX				2 ~ +2G (0x200 = midscale)
-# S.AcceleroY				2 ~ +2G (0x200 = midscale)
-# S.AcceleroZ				2 ~ +2G (0x200 = midscale)
-# S.LightsensorRed		Lux
-# S.LightsensorGreen		Lux
-# S.LightsensorBlue		Lux
-# S.RGBColor				8 bit R, 8 bit G, 8 bit B
-# S.BottomSwitches		?
-# S.O3					ppb
-# S.CO2					ppb
-# v3: S.ExternalTemp		milliKelvin
-# v3: S.COResistance		Ohm
-# v3: S.No2Resistance		Ohm
-# v3: S.O3Resistance		Ohm
-# S.AudioMinus5			Octave -5 in dB(A)
-# S.AudioMinus4			Octave -4 in dB(A)
-# S.AudioMinus3			Octave -3 in dB(A)
-# S.AudioMinus2			Octave -2 in dB(A)
-# S.AudioMinus1			Octave -1 in dB(A)
-# S.Audio0				Octave 0 in dB(A)
-# S.AudioPlus1			Octave +1 in dB(A)
-# S.AudioPlus2			Octave +2 in dB(A)
-# S.AudioPlus3			Octave +3 in dB(A)
-# S.AudioPlus4			Octave +4 in dB(A)
-# S.AudioPlus5			Octave +5 in dB(A)
-# S.AudioPlus6			Octave +6 in dB(A)
-# S.AudioPlus7			Octave +7 in dB(A)
-# S.AudioPlus8			Octave +8 in dB(A)
-# S.AudioPlus9			Octave +9 in dB(A)
-# S.AudioPlus10			Octave +10 in dB(A)
-# S.SatInfo
-# S.Latitude				nibbles: n1:0=East/North, 8=West/South; n2&n3: whole degrees (0-180); n4-n8: degree fraction (max 999999)
-# S.Longitude				nibbles: n1:0=East/North, 8=West/South; n2&n3: whole degrees (0-180); n4-n8: degree fraction (max 999999)
-#
-# P.Powerstate					Power State
-# P.BatteryVoltage				Battery Voltage (milliVolts)
-# P.BatteryTemperature			Battery Temperature (milliKelvin)
-# P.BatteryGauge					Get Battery Gauge, BFFF = Battery full, 1FFF = Battery fail, 0000 = No Battery Installed
-# P.MuxStatus						Mux Status (0-7=channel,F=inhibited)
-# P.ErrorStatus					Error Status (0=OK)
-# P.BaseTimer						BaseTimer (seconds)
-# P.SessionUptime					Session Uptime (seconds)
-# P.TotalUptime					Total Uptime (minutes)
-# v3: P.COHeaterMode				CO heater mode
-# P.COHeater						Powerstate CO heater (0/1)
-# P.NO2Heater						Powerstate NO2 heater (0/1)
-# P.O3Heater						Powerstate O3 heater (0/1)
-# v3: P.CO2Heater					Powerstate CO2 heater (0/1)
-# P.UnitSerialnumber				Serialnumber of unit
-# P.TemporarilyEnableDebugLeds	Debug leds (0/1)
-# P.TemporarilyEnableBaseTimer	Enable BaseTime (0/1)
-# P.ControllerReset				WIFI reset
-# P.FirmwareUpdate				Firmware update, reboot to bootloader
-#
-# Unknown at this moment (decimal):
-# P.11
-# P.16
-# P.17
-# P.18
-
-
 # Conversion functions for raw values from Josene sensors
 
 # Zie http://www.apis.ac.uk/unit-conversion
@@ -111,7 +39,7 @@ def ppb_co2_to_ugm3(input, json_obj, name):
 
 
 def ppb_co2_to_ppm(input, json_obj, name):
-    return input / 1000
+    return input / 1000.0
 
 
 def ppb_no2_to_ugm3(input, json_obj, name):
@@ -119,7 +47,7 @@ def ppb_no2_to_ugm3(input, json_obj, name):
 
 
 def ppb_o3_to_ugm3(input, json_obj, name):
-    return int(input)
+    return input
 
 
 # http://smartplatform.readthedocs.io/en/latest/data.html#o3-calibration
@@ -172,21 +100,11 @@ def ohm_o3_to_ugm3(input, json_obj, name):
     val = val1 + val2 + val3 + val4 + val5 + val6 + val7 + val8 + val9 + val10
 
     # log.info('device: %d : O3 : ohm=%d ugm3=%d' % (device, input, val))
-
-    # Remove outliers
-    if val < 0 or val > 400:
-        val = None
-
-    if val is not None:
-        # Create new var
-        json_obj['s_o3'] = int(round(val))
-
-    # Keep original value as kOhm
-    return s_o3resistance
+    return val
 
 
 def ohm_to_kohm(input, json_obj=None, name=None):
-    return int(round(float(input) / 1000.0))
+    return float(input) / 1000.0
 
 
 def ohm_no2_to_kohm(input, json_obj=None, name=None):
@@ -200,7 +118,7 @@ def convert_temperature(input, json_obj=None, name=None):
     if input == 0:
         return None
 
-    tempC = int(round(float(input) / 1000.0 - 273.1))
+    tempC = float(input) / 1000.0 - 273.1
     if tempC > 100 or tempC < -40:
         return None
 
@@ -211,11 +129,11 @@ def convert_barometer(input, json_obj=None, name=None):
     result = float(input) / 100.0
     if result > 1100.0:
         return None
-    return int(round(result))
+    return result
 
 
 def convert_humidity(input, json_obj=None, name=None):
-    humPercent = int(round(float(input) / 1000.0))
+    humPercent = float(input) / 1000.0
     if humPercent > 100:
         return None
     return humPercent
@@ -228,7 +146,7 @@ def convert_humidity(input, json_obj=None, name=None):
 # n1: 0 of 8, 0=East/North, 8=West/South
 # n2 en n3: whole degrees (0-180)
 # n4-n8: fraction of degrees (max 999999)
-def convert_coord(input, json_obj, name):
+def convert_coord(input, json_obj=None, name=None):
     sign = 1.0
     if input >> 28:
         sign = -1.0
@@ -242,7 +160,7 @@ def convert_coord(input, json_obj, name):
 
 
 def convert_latitude(input, json_obj, name):
-    res = convert_coord(input, json_obj, name)
+    res = convert_coord(input)
     if res is not None and (res < -90.0 or res > 90.0):
         log.error('Invalid latitude device=%d : %d' % (json_obj['p_unitserialnumber'], res))
         return None
@@ -250,7 +168,7 @@ def convert_latitude(input, json_obj, name):
 
 
 def convert_longitude(input, json_obj, name):
-    res = convert_coord(input, json_obj, name)
+    res = convert_coord(input)
     if res is not None and (res < -180.0 or res > 180.0):
         log.error('Invalid longitude device=%d : %d' % (json_obj['p_unitserialnumber'], res))
         return None
@@ -272,7 +190,8 @@ class UTC(tzinfo):
 
 utc = UTC()
 
-def convert_timestamp(input, json_obj, name):
+
+def convert_timestamp(input, json_obj=None, name=None):
     # input: 2016-05-31T15:55:33.2014241Z
     # iso_str : '2016-05-31T15:55:33GMT'
     iso_str = input.split('.')[0] + 'GMT'
@@ -285,7 +204,7 @@ def convert_timestamp(input, json_obj, name):
     return datetime.strptime(iso_str, '%Y-%m-%dT%H:%M:%SGMT').replace(tzinfo=utc)
 
 
-def convert_none(value, json_obj, name):
+def convert_none(value, json_obj=None, name=None):
     return value
 
 
@@ -412,62 +331,3 @@ def convert_audio_avg(value, json_obj, name):
     json_obj['v_audiolevel'] = calc_audio_level(json_obj['v_audioavg'])
     # print 'Unit %s - %s band_db=%f avg_db=%d level=%d' % (json_obj['p_unitserialnumber'], name, band_avg, json_obj['v_audioavg'], json_obj['v_audiolevel'] )
     return band_avg
-
-# Basically a Jump Table to call the appropriate conversion function by sensor-name
-CONVERTERS = {
-    's_co': ppb_co_to_ugm3,
-    's_co2': ppb_co2_to_ppm,
-    's_no2': ppb_no2_to_ugm3,
-    # Calculated from  s_o3resistance
-    's_o3': convert_none,
-    's_coresistance': ohm_to_kohm,
-    's_no2resistance': ohm_no2_to_kohm,
-    # 's_o3resistance': ohm_to_kohm,
-    's_o3resistance': ohm_o3_to_ugm3,
-    's_temperatureambient': convert_temperature,
-    's_barometer': convert_barometer,
-    's_humidity': convert_humidity,
-    's_latitude': convert_latitude,
-    's_longitude': convert_longitude,
-    'time': convert_timestamp,
-    't_audio0': convert_audio_max,
-    't_audioplus1': convert_audio_max,
-    't_audioplus2': convert_audio_max,
-    't_audioplus3': convert_audio_max,
-    't_audioplus4': convert_audio_max,
-    't_audioplus5': convert_audio_max,
-    't_audioplus6': convert_audio_max,
-    't_audioplus7': convert_audio_max,
-    't_audioplus8': convert_audio_max,
-    't_audioplus9': convert_audio_max,
-    't_audioplus10': convert_audio_max,
-    'v_audio0': convert_audio_avg,
-    'v_audioplus1': convert_audio_avg,
-    'v_audioplus2': convert_audio_avg,
-    'v_audioplus3': convert_audio_avg,
-    'v_audioplus4': convert_audio_avg,
-    'v_audioplus5': convert_audio_avg,
-    'v_audioplus6': convert_audio_avg,
-    'v_audioplus7': convert_audio_avg,
-    'v_audioplus8': convert_audio_avg,
-    'v_audioplus9': convert_audio_avg,
-    'v_audioplus10': convert_audio_avg,
-    # These are assigned already in t_audioplusN conversions
-    't_audiomax': convert_none,
-    't_audiomax_octave': convert_none,
-    't_audiomax_octband': convert_none,
-    't_audiolevel': convert_none,
-    # These are assigned already in t_audioplusN conversions
-    'v_audioavg': convert_none,
-    'v_audioavg_octave': convert_none,
-    'v_audioavg_octband': convert_none,
-    'v_audiolevel': convert_none
-}
-
-
-def convert(json_obj, name):
-    if name not in CONVERTERS:
-        log.error('Cannot find converter for %s' % name)
-        return None
-
-    return CONVERTERS[name](json_obj[name], json_obj, name)

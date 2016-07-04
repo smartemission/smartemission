@@ -12,7 +12,6 @@ from stetl.util import Util
 from stetl.inputs.httpinput import HttpInput
 from stetl.packet import FORMAT
 from stetl.postgis import PostGIS
-from sensorconverters import convert
 from sensordefs import *
 
 log = Util.get_log("RawSensorAPI")
@@ -236,8 +235,6 @@ class RawSensorLastInput(RawSensorAPIInput):
                 if 'input' not in sensor_def or 'converter' not in sensor_def:
                     continue
 
-                # if sensor_name == 'o3':
-                #   print 'yes'
                 # get raw input value(s)
                 # i.e. in some cases multiple inputs are required (e.g. audio bands)
                 input_name = sensor_def['input']
@@ -264,10 +261,20 @@ class RawSensorLastInput(RawSensorAPIInput):
 
                 # Point location TODO: average, but for now assume static
                 if 's_longitude' in sensor_vals and 's_latitude' in sensor_vals:
-                    lon = convert(sensor_vals, 's_longitude')
-                    lat = convert(sensor_vals, 's_latitude')
+                    lon = SENSOR_DEFS['longitude']['converter'](sensor_vals['s_longitude'])
+                    lat = SENSOR_DEFS['latitude']['converter'](sensor_vals['s_latitude'])
+
                     if lon is None or lat is None:
                         continue
+
+                    valid, reason = check_value('longitude', sensor_vals, value=lon)
+                    if not valid:
+                        continue
+
+                    valid, reason = check_value('latitude', sensor_vals, value=lat)
+                    if not valid:
+                        continue
+
                     record['point'] = 'SRID=4326;POINT(%f %f)' % (lon, lat)
 
                 # No 'point' proceeding without a location
@@ -277,7 +284,7 @@ class RawSensorLastInput(RawSensorAPIInput):
                 # GPS height. TODO use air pressure
                 record['altitude'] = 0
                 if 's_altimeter' in sensor_vals:
-                    record['altitude'] = sensor_vals['s_altimeter']
+                    record['altitude'] = SENSOR_DEFS['altitude']['converter'](sensor_vals['s_altimeter'])
 
                 # Calculate values
                 record['value_raw'] = value_raw
@@ -285,14 +292,14 @@ class RawSensorLastInput(RawSensorAPIInput):
                 value = sensor_def['converter'](value_raw, sensor_vals, sensor_name)
                 output_valid, reason = check_value(sensor_name, sensor_vals, value=value)
                 if not output_valid:
-                    log.warn('id=%d-%d-%d-%s gid_raw=%d: invalid output for %s: detail=%s' % (
-                    device_id, day, hour, sensor_name, gid_raw, sensor_name, reason))
+                    log.warn('id=%d-%s  invalid output for %s: detail=%s' % (
+                    device_id, sensor_name, sensor_name, reason))
                     record = None
                     continue
 
                 # Unix timestamp to calculate "stale state (0/1)" i.e. if a station has been
                 # active over the last N hours (now 2). We keep all last values but flag inactive stations.
-                record['time'] = convert(sensor_vals, 'time')
+                record['time'] = convert_timestamp(sensor_vals['time'])
                 utc_then = datetime.utcnow() - timedelta(hours=2)
                 tstamp_sample = time.mktime(record['time'].timetuple())
                 tstamp_then = time.mktime(utc_then.timetuple())
@@ -301,7 +308,7 @@ class RawSensorLastInput(RawSensorAPIInput):
                     record['value_stale'] = 1
 
                 # Calculated value
-                record['value'] = value
+                record['value'] = int(round(value))
 
             except Exception, e:
                 log.error('Exception refining %s dev=%d, err=%s' % (sensor_name, device_id, str(e)))

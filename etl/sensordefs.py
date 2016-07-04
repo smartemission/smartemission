@@ -1,14 +1,76 @@
 from sensorconverters import *
 
-# Allowed min/max values for sensor-names
-# See e.g. http://whale.citygis.nl//sensors/v1/devices/20
-# TODO apply before conversion i.s.o. ad-hoc checks, even better one generic dict with all sensor metadata
+# According to CityGIS the units are defined as follows. ::
 #
-RAW_RANGE_FILTERS = {
-    # outputs: [
-    # {
+# S.TemperatureUnit		milliKelvin
+# S.TemperatureAmbient	milliKelvin
+# S.Humidity				%mRH
+# S.LightsensorTop		Lux
+# S.LightsensorBottom		Lux
+# S.Barometer				Pascal
+# S.Altimeter				Meter
+# S.CO					ppb
+# S.NO2					ppb
+# S.AcceleroX				2 ~ +2G (0x200 = midscale)
+# S.AcceleroY				2 ~ +2G (0x200 = midscale)
+# S.AcceleroZ				2 ~ +2G (0x200 = midscale)
+# S.LightsensorRed		Lux
+# S.LightsensorGreen		Lux
+# S.LightsensorBlue		Lux
+# S.RGBColor				8 bit R, 8 bit G, 8 bit B
+# S.BottomSwitches		?
+# S.O3					ppb
+# S.CO2					ppb
+# v3: S.ExternalTemp		milliKelvin
+# v3: S.COResistance		Ohm
+# v3: S.No2Resistance		Ohm
+# v3: S.O3Resistance		Ohm
+# S.AudioMinus5			Octave -5 in dB(A)
+# S.AudioMinus4			Octave -4 in dB(A)
+# S.AudioMinus3			Octave -3 in dB(A)
+# S.AudioMinus2			Octave -2 in dB(A)
+# S.AudioMinus1			Octave -1 in dB(A)
+# S.Audio0				Octave 0 in dB(A)
+# S.AudioPlus1			Octave +1 in dB(A)
+# S.AudioPlus2			Octave +2 in dB(A)
+# S.AudioPlus3			Octave +3 in dB(A)
+# S.AudioPlus4			Octave +4 in dB(A)
+# S.AudioPlus5			Octave +5 in dB(A)
+# S.AudioPlus6			Octave +6 in dB(A)
+# S.AudioPlus7			Octave +7 in dB(A)
+# S.AudioPlus8			Octave +8 in dB(A)
+# S.AudioPlus9			Octave +9 in dB(A)
+# S.AudioPlus10			Octave +10 in dB(A)
+# S.SatInfo
+# S.Latitude				nibbles: n1:0=East/North, 8=West/South; n2&n3: whole degrees (0-180); n4-n8: degree fraction (max 999999)
+# S.Longitude				nibbles: n1:0=East/North, 8=West/South; n2&n3: whole degrees (0-180); n4-n8: degree fraction (max 999999)
+#
+# P.Powerstate					Power State
+# P.BatteryVoltage				Battery Voltage (milliVolts)
+# P.BatteryTemperature			Battery Temperature (milliKelvin)
+# P.BatteryGauge					Get Battery Gauge, BFFF = Battery full, 1FFF = Battery fail, 0000 = No Battery Installed
+# P.MuxStatus						Mux Status (0-7=channel,F=inhibited)
+# P.ErrorStatus					Error Status (0=OK)
+# P.BaseTimer						BaseTimer (seconds)
+# P.SessionUptime					Session Uptime (seconds)
+# P.TotalUptime					Total Uptime (minutes)
+# v3: P.COHeaterMode				CO heater mode
+# P.COHeater						Powerstate CO heater (0/1)
+# P.NO2Heater						Powerstate NO2 heater (0/1)
+# P.O3Heater						Powerstate O3 heater (0/1)
+# v3: P.CO2Heater					Powerstate CO2 heater (0/1)
+# P.UnitSerialnumber				Serialnumber of unit
+# P.TemporarilyEnableDebugLeds	Debug leds (0/1)
+# P.TemporarilyEnableBaseTimer	Enable BaseTime (0/1)
+# P.ControllerReset				WIFI reset
+# P.FirmwareUpdate				Firmware update, reboot to bootloader
+#
+# Unknown at this moment (decimal):
+# P.11
+# P.16
+# P.17
+# P.18
 
-}
 # All sensor definitions, both base sensors (Jose) and derived (virtual) sensors
 # Jose sensor defs have id starting with s_ or v_
 SENSOR_DEFS = {
@@ -19,6 +81,16 @@ SENSOR_DEFS = {
             'unit': 'Meter',
             'min': 0,
             'max': 4000
+        },
+    's_latitude':
+        {
+            'label': 'Latitude Raw',
+            'unit': 'int'
+        },
+    's_longitude':
+        {
+            'label': 'Longitude Raw',
+            'unit': 'int'
         },
     # START Light Jose
     's_lightsensortop':
@@ -99,14 +171,14 @@ SENSOR_DEFS = {
             'label': 'O3Raw',
             'unit': 'Ohm',
             'min': 3000,
-            'max': 60000
+            'max': 6000000
         },
     's_no2resistance':
         {
             'label': 'NO2RawOhm',
             'unit': 'Ohm',
             'min': 800,
-            'max': 20000
+            'max': 20000000
         },
     's_coresistance':
         {
@@ -288,7 +360,35 @@ SENSOR_DEFS = {
             'label': 'Audio 20-25kHz',
             'unit': 'dB(A)'
         },
-    # START user-defined Sensors
+    # START user-defined/derived Sensors
+    'altitude': {
+        'label': 'Hoogte',
+        'unit': 'Meters',
+        'input': 's_altitude',
+        'converter': convert_none,
+        'type': int,
+        'min': -200,
+        'max': 3000
+
+    },
+    'latitude': {
+        'label': 'Latitude',
+        'unit': 'Degrees',
+        'input': 's_latitude',
+        'converter': convert_coord,
+        'type': float,
+        'min': -90,
+        'max': 90
+    },
+    'longitude': {
+        'label': 'Longitude',
+        'unit': 'Degrees',
+        'input': 's_longitude',
+        'converter': convert_coord,
+        'type': float,
+        'min': -180,
+        'max': 180
+    },
     'temperature':
         {
             'label': 'Temperatuur',
@@ -334,7 +434,9 @@ SENSOR_DEFS = {
             'unit': 'int',
             'input': 'noiseavg',
             'converter': convert_noise_level,
-            'type': int
+            'type': int,
+            'min': 1,
+            'max': 5
         },
     'co2':
         {
@@ -367,7 +469,7 @@ SENSOR_DEFS = {
             'unit': 'kOhm',
             'input': ['s_no2resistance'],
             'min': 8,
-            'max': 2000,
+            'max': 4000,
             'converter': ohm_to_kohm
         },
     #     'co':
@@ -382,8 +484,8 @@ SENSOR_DEFS = {
             'label': 'O3Raw',
             'unit': 'kOhm',
             'input': ['s_o3resistance'],
-            'min': 3,
-            'max': 60,
+            'min': 0,
+            'max': 20000,
             'converter': ohm_to_kohm
         },
     'o3':
@@ -419,7 +521,7 @@ def get_raw_value(name, val_dict):
     return val
 
 
-# Check for valid input
+# Check for valid sensor value
 def check_value(name, val_dict, value=None):
     val = None
     if type(name) is list:
@@ -445,10 +547,10 @@ def check_value(name, val_dict, value=None):
                 return False, '%s not in SENSOR_DEFS' % name
 
             name_def = SENSOR_DEFS[name]
-            if 'min' in name_def and val < name_def['min']:
-                return False, '%s: val(%s) < min(%s)' % (name, str(val), str(name_def['min']))
+            if 'min' in name_def and val <= name_def['min']:
+                return False, '%s: val(%s) <= min(%s)' % (name, str(val), str(name_def['min']))
 
-            if 'max' in name_def and val > name_def['max']:
-                return False, '%s: val(%s) > max(%s)' % (name, str(val), str(name_def['max']))
+            if 'max' in name_def and val >= name_def['max']:
+                return False, '%s: val(%s) >= max(%s)' % (name, str(val), str(name_def['max']))
 
     return True, '%s OK' % name
