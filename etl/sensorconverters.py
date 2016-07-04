@@ -5,6 +5,13 @@ import re
 import math
 from stetl.util import Util
 
+running_mean_param = {'co': {'co': 0.005, 'no2': 0.005, 'o3': 0.005},
+                      'no2': {'co': 0.005, 'no2': 0.005, 'o3': 0.005},
+                      'o3': {'co': 0.005, 'no2': 0.005, 'o3': 0.005}}
+running_means = {'co': {'co': None, 'no2': None, 'o3': None},
+                 'no2': {'co': None, 'no2': None, 'o3': None},
+                 'o3': {'co': None, 'no2': None, 'o3': None}}
+
 log = Util.get_log("SensorConverters")
 
 # Conversion functions for raw values from Josene sensors
@@ -50,6 +57,62 @@ def ppb_o3_to_ugm3(input, json_obj, name):
     return input
 
 
+def running_mean(previous_val, new_val, alpha):
+    if previous_val is None:
+        previous_val = new_val
+    val = new_val * alpha + previous_val * (1.0 - alpha)
+    return val
+
+
+def ohm_co_to_ugm3(input, json_obj, name):
+    global running_means
+
+    val = None
+
+    # Original value in kOhm
+    s_o3resistance = ohm_to_kohm(json_obj['s_o3resistance'])
+    s_no2resistance = ohm_no2_to_kohm(json_obj['s_no2resistance'])
+    s_coresistance = ohm_to_kohm(json_obj['s_coresistance'])
+    s_temperatureambient = convert_temperature(json_obj['s_temperatureambient'])
+    s_temperatureunit = convert_temperature(json_obj['s_temperatureunit'])
+    s_humidity = convert_humidity(json_obj['s_humidity'])
+    s_barometer = convert_barometer(json_obj['s_barometer'])
+
+    # Filter value
+    co_running_means = running_means['co']
+    co_running_means_param = running_mean_param['co']
+    co_running_means['co'] = running_mean(co_running_means['co'], s_coresistance, co_running_means_param['co'])
+    co_running_means['no2'] = running_mean(co_running_means['no2'], s_no2resistance, co_running_means_param['no2'])
+    co_running_means['o3'] = running_mean(co_running_means['o3'], s_o3resistance, co_running_means_param['o3'])
+
+    return val
+
+
+def ohm_no2_to_ugm3(input, json_obj, name):
+    global running_means
+
+    val = None
+
+    # Original value in kOhm
+    s_o3resistance = ohm_to_kohm(json_obj['s_o3resistance'])
+    s_no2resistance = ohm_no2_to_kohm(json_obj['s_no2resistance'])
+    s_coresistance = ohm_to_kohm(json_obj['s_coresistance'])
+    s_temperatureambient = convert_temperature(json_obj['s_temperatureambient'])
+    s_temperatureunit = convert_temperature(json_obj['s_temperatureunit'])
+    s_humidity = convert_humidity(json_obj['s_humidity'])
+    s_barometer = convert_barometer(json_obj['s_barometer'])
+
+    # Filter value
+    no2_running_means = running_means['no2']
+    no2_running_means_param = running_mean_param['no2']
+    no2_running_means['co'] = running_mean(no2_running_means['co'], s_coresistance, no2_running_means_param['co'])
+    no2_running_means['no2'] = running_mean(no2_running_means['no2'], s_no2resistance, no2_running_means_param['no2'])
+    no2_running_means['o3'] = running_mean(no2_running_means['o3'], s_o3resistance, no2_running_means_param['o3'])
+
+    return val
+
+
+
 # http://smartplatform.readthedocs.io/en/latest/data.html#o3-calibration
 # O3 = -89.1177
 # 	+ 0.03420626 * s.coresistance * log(s.o3resistance)
@@ -71,18 +134,27 @@ def ohm_o3_to_ugm3(input, json_obj, name):
     # - barometer / 100
     # - Ik doe niets met lightsensor_bottom
 
+    global running_means
+
     val = None
 
     # Original value in kOhm
-
     s_o3resistance = ohm_to_kohm(json_obj['s_o3resistance'])
-
     s_no2resistance = ohm_no2_to_kohm(json_obj['s_no2resistance'])
     s_coresistance = ohm_to_kohm(json_obj['s_coresistance'])
     s_temperatureambient = convert_temperature(json_obj['s_temperatureambient'])
     s_temperatureunit = convert_temperature(json_obj['s_temperatureunit'])
     s_humidity = convert_humidity(json_obj['s_humidity'])
     s_barometer = convert_barometer(json_obj['s_barometer'])
+
+    # Filter value
+    o3_running_means = running_means['o3']
+    o3_running_means_param = running_mean_param['o3']
+    o3_running_means['co'] = running_mean(o3_running_means['co'], s_coresistance, o3_running_means_param['co'])
+    o3_running_means['no2'] = running_mean(o3_running_means['no2'], s_no2resistance, o3_running_means_param['no2'])
+    o3_running_means['o3'] = running_mean(o3_running_means['o3'], s_o3resistance, o3_running_means_param['o3'])
+
+    # TODO: Predict RIVM value
 
     # Use separate val vars for debugging
     val1 = -89.1177 + 0.03420626 * s_coresistance * math.log(s_o3resistance)
