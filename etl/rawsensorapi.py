@@ -264,17 +264,15 @@ class RawSensorLastInput(RawSensorAPIInput):
                     lon = SENSOR_DEFS['longitude']['converter'](sensor_vals['s_longitude'])
                     lat = SENSOR_DEFS['latitude']['converter'](sensor_vals['s_latitude'])
 
-                    if lon is None or lat is None:
+                    valid, reason = check_value('latitude', sensor_vals, value=lat)
+                    if not valid:
                         continue
 
                     valid, reason = check_value('longitude', sensor_vals, value=lon)
                     if not valid:
                         continue
 
-                    valid, reason = check_value('latitude', sensor_vals, value=lat)
-                    if not valid:
-                        continue
-
+                    # Both lat and lon are valid!
                     record['point'] = 'SRID=4326;POINT(%f %f)' % (lon, lat)
 
                 # No 'point' proceeding without a location
@@ -284,7 +282,13 @@ class RawSensorLastInput(RawSensorAPIInput):
                 # GPS height. TODO use air pressure
                 record['altitude'] = 0
                 if 's_altimeter' in sensor_vals:
-                    record['altitude'] = SENSOR_DEFS['altitude']['converter'](sensor_vals['s_altimeter'])
+                    altitude = SENSOR_DEFS['altitude']['converter'](sensor_vals['s_altimeter'])
+                    valid, reason = check_value('altitude', sensor_vals, value=altitude)
+                    if not valid:
+                        altitude = 0
+
+                    #  altitude valid!
+                    record['altitude'] = altitude
 
                 # Calculate values
                 record['value_raw'] = value_raw

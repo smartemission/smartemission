@@ -63,7 +63,7 @@ class RefineFilter(Filter):
         day = record_in['day']
         hour = record_in['hour']
 
-        for ts_dict in ts_list:
+        for sensor_vals in ts_list:
             # Go through all the configured sensor outputs we need to calc values for
             for sensor_name in self.sensor_names:
                 record = None
@@ -81,14 +81,14 @@ class RefineFilter(Filter):
                     # get raw input value(s)
                     # i.e. in some cases multiple inputs are required (e.g. audio bands)
                     input_name = sensor_def['input']
-                    input_valid, reason = check_value(input_name, ts_dict)
+                    input_valid, reason = check_value(input_name, sensor_vals)
                     if not input_valid:
                         # log.warn('id=%d-%d-%d-%s gid_raw=%d: invalid input for %s: detail=%s' % (
                         # device_id, day, hour, sensor_name, gid_raw, str(input_name), reason))
                         record = None
                         continue
 
-                    value_raw = get_raw_value(input_name, ts_dict)
+                    value_raw = get_raw_value(input_name, sensor_vals)
                     if value_raw is None:
                         # No use to proceed without raw input value(s)
                         continue
@@ -112,11 +112,19 @@ class RefineFilter(Filter):
                         record['sample_count'] = 0
 
                         # Point location TODO: average, but for now assume static
-                        if 's_longitude' in ts_dict and 's_latitude' in ts_dict:
-                            lon = convert(ts_dict, 's_longitude')
-                            lat = convert(ts_dict, 's_latitude')
-                            if lon is None or lat is None:
+                        if 's_longitude' in sensor_vals and 's_latitude' in sensor_vals:
+                            lon = SENSOR_DEFS['longitude']['converter'](sensor_vals['s_longitude'])
+                            lat = SENSOR_DEFS['latitude']['converter'](sensor_vals['s_latitude'])
+
+                            valid, reason = check_value('latitude', sensor_vals, value=lat)
+                            if not valid:
                                 continue
+
+                            valid, reason = check_value('longitude', sensor_vals, value=lon)
+                            if not valid:
+                                continue
+
+                            # Both lat and lon are valid!
                             record['point'] = 'SRID=4326;POINT(%f %f)' % (lon, lat)
 
                         # No 'point' proceeding without a location
@@ -125,8 +133,14 @@ class RefineFilter(Filter):
 
                         # GPS height. TODO use air pressure
                         record['altitude'] = 0
-                        if 's_altimeter' in ts_dict:
-                            record['altitude'] = ts_dict['s_altimeter']
+                        if 's_altimeter' in sensor_vals:
+                            altitude = SENSOR_DEFS['altitude']['converter'](sensor_vals['s_altimeter'])
+                            valid, reason = check_value('altitude', sensor_vals, value=altitude)
+                            if not valid:
+                                altitude = 0
+
+                            #  altitude valid!
+                            record['altitude'] = altitude
 
                     else:
                         # Record for sensor_name already exists: will add to average later
@@ -153,8 +167,8 @@ class RefineFilter(Filter):
                     # 3) check output (available and valid)
 
                     # 1) check inputs
-                    value = sensor_def['converter'](value_raw, ts_dict, sensor_name)
-                    output_valid, reason = check_value(sensor_name, ts_dict, value=value)
+                    value = sensor_def['converter'](value_raw, sensor_vals, sensor_name)
+                    output_valid, reason = check_value(sensor_name, sensor_vals, value=value)
                     if not output_valid:
                         log.warn('id=%d-%d-%d-%s gid_raw=%d: invalid output for %s: detail=%s' % (
                         device_id, day, hour, sensor_name, gid_raw, sensor_name, reason))
@@ -186,7 +200,7 @@ class RefineFilter(Filter):
 
                         # if output_name == 'v_audiolevel' and 'v_audioavg' in ts_list:
                         #     # average dB value as raw value
-                        #     record['value_raw'] = ts_dict['v_audioavg']
+                        #     record['value_raw'] = sensor_vals['v_audioavg']
 
         # make records into a list() and round all (raw) values
         records_out = records_out.values()
