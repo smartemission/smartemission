@@ -20,7 +20,7 @@
                     <ogc:Filter>
                         <ogc:PropertyIsEqualTo>
                             <ogc:PropertyName>name</ogc:PropertyName>
-                            <ogc:Literal>s_temperatureambient</ogc:Literal>
+                            <ogc:Literal>temperature</ogc:Literal>
                         </ogc:PropertyIsEqualTo>
                     </ogc:Filter>
                     <PointSymbolizer>
@@ -48,7 +48,7 @@
                                     <ogc:Literal>##</ogc:Literal>
                                     <ogc:PropertyName>sample_value</ogc:PropertyName>
                                 </ogc:Function>
-                                <ogc:Literal>&#176;C</ogc:Literal>
+                                <ogc:Literal>&#176;</ogc:Literal>
                             </ogc:Function>
                         </Label>
 
@@ -84,7 +84,7 @@
                     <ogc:Filter>
                         <ogc:PropertyIsEqualTo>
                             <ogc:PropertyName>name</ogc:PropertyName>
-                            <ogc:Literal>s_barometer</ogc:Literal>
+                            <ogc:Literal>pressure</ogc:Literal>
                         </ogc:PropertyIsEqualTo>
                     </ogc:Filter>
                     <PointSymbolizer>
@@ -112,7 +112,7 @@
                                     <ogc:Literal>##</ogc:Literal>
                                     <ogc:PropertyName>sample_value</ogc:PropertyName>
                                 </ogc:Function>
-                                <ogc:Literal>hPa</ogc:Literal>
+                                <ogc:Literal></ogc:Literal>
                             </ogc:Function>
                         </Label>
 
@@ -148,7 +148,7 @@
                     <ogc:Filter>
                         <ogc:PropertyIsEqualTo>
                             <ogc:PropertyName>name</ogc:PropertyName>
-                            <ogc:Literal>s_humidity</ogc:Literal>
+                            <ogc:Literal>humidity</ogc:Literal>
                         </ogc:PropertyIsEqualTo>
                     </ogc:Filter>
                     <PointSymbolizer>
@@ -176,7 +176,7 @@
                                     <ogc:Literal>##</ogc:Literal>
                                     <ogc:PropertyName>sample_value</ogc:PropertyName>
                                 </ogc:Function>
-                                <ogc:Literal>&#37;</ogc:Literal>
+                                <ogc:Literal></ogc:Literal>
                             </ogc:Function>
                         </Label>
 
