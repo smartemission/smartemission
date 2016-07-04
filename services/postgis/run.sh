@@ -9,7 +9,7 @@ NAME="postgis"
 # IMAGE="kartoza/postgis:9.4-2.1"
 IMAGE="geonovum/postgis:9.4-2.1"
 
-VOL_MAP="-v /var/smartem/data/postgresql:/var/lib/postgresql -v ${LOG}/postgresql:/var/log/postgresql"
+VOL_MAP="-v /var/smartem/data/postgresql:/var/lib/postgresql -v ${LOG}/postgresql:/var/log/postgresql -v /var/smartem/backup:/var/smartem/backup"
 # PORT_MAP="-p 5432:5432"
 PORT_MAP=""
 
