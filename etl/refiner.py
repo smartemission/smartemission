@@ -76,8 +76,6 @@ class RefineFilter(Filter):
                     if 'input' not in sensor_def or 'converter' not in sensor_def:
                         continue
 
-                    # if sensor_name == 'o3':
-                    #   print 'yes'
                     # get raw input value(s)
                     # i.e. in some cases multiple inputs are required (e.g. audio bands)
                     input_name = sensor_def['input']
@@ -85,8 +83,7 @@ class RefineFilter(Filter):
                     if not input_valid:
                         # log.warn('id=%d-%d-%d-%s gid_raw=%d: invalid input for %s: detail=%s' % (
                         # device_id, day, hour, sensor_name, gid_raw, str(input_name), reason))
-                        record = None
-                        continue
+                       continue
 
                     value_raw = get_raw_value(input_name, sensor_vals)
                     if value_raw is None:
@@ -172,9 +169,9 @@ class RefineFilter(Filter):
                     if not output_valid:
                         log.warn('id=%d-%d-%d-%s gid_raw=%d: invalid output for %s: detail=%s' % (
                         device_id, day, hour, sensor_name, gid_raw, sensor_name, reason))
-                        record = None
                         continue
 
+                    # Finally calculate calibrated value and recalc  average
                     if value_avg is not None:
                         # Recalc avg
                         record['value'] = self.moving_average(value_avg, value, record['sample_count'])

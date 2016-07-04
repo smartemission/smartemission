@@ -86,7 +86,7 @@ DROP VIEW IF EXISTS smartem_rt.v_last_measurements_O3_raw;
 CREATE VIEW smartem_rt.v_last_measurements_O3_raw AS
   SELECT device_id, device_name, label, unit,
     name, value_raw, value_stale, time AS sample_time, value as sample_value, point, gid, unique_id
-  FROM smartem_rt.last_device_output WHERE value_stale = 0 AND name = 's_o3raw' ORDER BY device_id, gid DESC;
+  FROM smartem_rt.last_device_output WHERE value_stale = 0 AND name = 'o3raw' ORDER BY device_id, gid DESC;
 
 DROP VIEW IF EXISTS smartem_rt.v_last_measurements_temperature;
 CREATE VIEW smartem_rt.v_last_measurements_temperature AS
@@ -107,13 +107,13 @@ CREATE VIEW smartem_rt.v_last_measurements_barometer AS
   FROM smartem_rt.last_device_output WHERE value_stale = 0 AND name = 'pressure' ORDER BY device_id, gid DESC;
 
 DROP VIEW IF EXISTS smartem_rt.v_last_measurements_noise_avg;
-CREATE VIEW smartem_rt.v_last_measurements_audio_max AS
+CREATE VIEW smartem_rt.v_last_measurements_noise_avg AS
   SELECT device_id, device_name, label, unit,
     name, value_raw, value_stale, time AS sample_time, value as sample_value, point, gid, unique_id
   FROM smartem_rt.last_device_output WHERE value_stale = 0 AND name = 'noiseavg' ORDER BY device_id, gid DESC;
 
 DROP VIEW IF EXISTS smartem_rt.v_last_measurements_noise_avg_level;
-CREATE VIEW smartem_rt.v_last_measurements_audio_avg AS
+CREATE VIEW smartem_rt.v_last_measurements_noise_avg_level AS
   SELECT device_id, device_name, label, unit,
     name, value_raw, value_stale, time AS sample_time, value as sample_value, point, gid, unique_id
   FROM smartem_rt.last_device_output WHERE value_stale = 0 AND name = 'noiseavglevel' ORDER BY device_id, gid DESC;
