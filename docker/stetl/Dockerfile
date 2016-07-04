@@ -40,6 +40,9 @@ RUN sudo pip install --upgrade pip
 # Timezone support in Python
 RUN pip install pytz
 
+# Development version of scikit-learn
+RUN pip install git+git://github.com/scikit-learn/scikit-learn.git
+
 # Get latest Stetl from git
 RUN git clone https://github.com/justb4/stetl /opt/stetl
 

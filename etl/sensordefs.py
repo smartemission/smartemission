@@ -457,12 +457,17 @@ SENSOR_DEFS = {
             'max': 1500,
             'converter': ohm_to_kohm
         },
-    #     'co':
-    # {
-    #     'id': 7,
-    #     'label': 'CO',
-    #     'unit': 'ug/m3'
-    # },
+    'co':
+        {
+            'label': 'CO2',
+            'unit': 'ug/m3',
+            'input': ['s_o3resistance', 's_no2resistance', 's_coresistance', 's_temperatureambient',
+                      's_temperatureunit', 's_humidity', 's_barometer', 's_lightsensorbottom'],
+            'converter': ohm_co_to_ugm3,
+            'type': int,
+            'min': 0,
+            'max': 4000
+        },
     'no2raw':
         {
             'label': 'NO2Raw',
@@ -472,13 +477,17 @@ SENSOR_DEFS = {
             'max': 4000,
             'converter': ohm_to_kohm
         },
-    #     'co':
-    # {
-    #     'no2',
-    #     'id': 8,
-    #     'label': 'NO2',
-    #     'unit': 'ug/m3'
-    # },
+    'no2':
+        {
+            'label': 'NO2',
+            'unit': 'ug/m3',
+            'input': ['s_o3resistance', 's_no2resistance', 's_coresistance', 's_temperatureambient',
+                      's_temperatureunit', 's_humidity', 's_barometer', 's_lightsensorbottom'],
+            'converter': ohm_no2_to_ugm3(),
+            'type': int,
+            'min': 0,
+            'max': 400
+        },
     'o3raw':
         {
             'label': 'O3Raw',

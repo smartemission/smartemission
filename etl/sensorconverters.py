@@ -4,6 +4,18 @@ from datetime import datetime, tzinfo, timedelta
 import re
 import math
 from stetl.util import Util
+import pickle
+import numpy as np
+
+pipeline_objects = {'co': 'calibration/pipeline_co.pkl',
+                    'no2': 'calibration/pipeline_no2.pkl',
+                    'o3': 'calibration/pipeline_o3.pkl'}
+running_mean_param = {'co': {'co': 0.005, 'no2': 0.005, 'o3': 0.005},
+                      'no2': {'co': 0.005, 'no2': 0.005, 'o3': 0.005},
+                      'o3': {'co': 0.005, 'no2': 0.005, 'o3': 0.005}}
+running_means = {'co': {'co': None, 'no2': None, 'o3': None},
+                 'no2': {'co': None, 'no2': None, 'o3': None},
+                 'o3': {'co': None, 'no2': None, 'o3': None}}
 
 log = Util.get_log("SensorConverters")
 
@@ -50,33 +62,20 @@ def ppb_o3_to_ugm3(input, json_obj, name):
     return input
 
 
-# http://smartplatform.readthedocs.io/en/latest/data.html#o3-calibration
-# O3 = -89.1177
-# 	+ 0.03420626 * s.coresistance * log(s.o3resistance)
-# 	- 0.008836714 * s.light.sensor.bottom
-# 	- 0.02934928 * s.coresistance * s.temperature.ambient
-# 	- 1.439367 * s.temperature.ambient * log(s.coresistance)
-# 	+ 1.26521 * log(s.coresistance) * sqrt(s.coresistance)
-# 	- 0.000343098 * s.coresistance * s.no2resistance
-# 	+ 0.02761877 * s.no2resistance * log(s.o3resistance)
-# 	- 0.0002260495 * s.barometer * s.coresistance
-# 	+ 0.0699428 * s.humidity
-# 	+ 0.008435412 * s.temperature.unit * sqrt(s.no2resistance)
-#
-def ohm_o3_to_ugm3(input, json_obj, name):
-    # Ik doe als eerst een aantal preprocess stappen:
-    # - gassen in kOhm
-    # - Temperatuur in celsius (zowel ambient als unit)
-    # - Humidity in %, dus ook delen door 1000
-    # - barometer / 100
-    # - Ik doe niets met lightsensor_bottom
+def running_mean(previous_val, new_val, alpha):
+    if previous_val is None:
+        previous_val = new_val
+    val = new_val * alpha + previous_val * (1.0 - alpha)
+    return val
+
+
+def ohm_co_to_ugm3(input, json_obj, name):
+    global running_means
 
     val = None
 
     # Original value in kOhm
-
     s_o3resistance = ohm_to_kohm(json_obj['s_o3resistance'])
-
     s_no2resistance = ohm_no2_to_kohm(json_obj['s_no2resistance'])
     s_coresistance = ohm_to_kohm(json_obj['s_coresistance'])
     s_temperatureambient = convert_temperature(json_obj['s_temperatureambient'])
@@ -84,20 +83,82 @@ def ohm_o3_to_ugm3(input, json_obj, name):
     s_humidity = convert_humidity(json_obj['s_humidity'])
     s_barometer = convert_barometer(json_obj['s_barometer'])
 
-    # Use separate val vars for debugging
-    val1 = -89.1177 + 0.03420626 * s_coresistance * math.log(s_o3resistance)
-    val2 = - 0.008836714 * json_obj['s_lightsensorbottom']
-    val3 = 0.02934928 * s_coresistance * s_temperatureambient
-    val4 = - 1.439367 * s_temperatureambient * math.log(s_coresistance)
-    val5 = 1.26521 * math.log(s_coresistance) * math.sqrt(s_coresistance)
-    val6 = - 0.000343098 * s_coresistance * s_no2resistance
-    val7 = 0.02761877 * s_no2resistance * math.log(s_o3resistance)
-    val8 = - 0.0002260495 * s_barometer * s_coresistance
-    val9 = 0.0699428 * s_humidity
-    val10 = 0.008435412 * s_temperatureunit * math.sqrt(s_no2resistance)
+    # Filter value
+    co_running_means = running_means['co']
+    co_running_means_param = running_mean_param['co']
+    co_running_means['co'] = running_mean(co_running_means['co'], s_coresistance, co_running_means_param['co'])
+    co_running_means['no2'] = running_mean(co_running_means['no2'], s_no2resistance, co_running_means_param['no2'])
+    co_running_means['o3'] = running_mean(co_running_means['o3'], s_o3resistance, co_running_means_param['o3'])
 
-    # Sum all intermediate vals
-    val = val1 + val2 + val3 + val4 + val5 + val6 + val7 + val8 + val9 + val10
+    # Predict RIVM value
+    value_array = np.array([s_barometer, s_coresistance, s_humidity, co_running_means['co'], co_running_means['no2'],
+              co_running_means['o3'], s_temperatureambient, s_temperatureunit])
+    with open(pipeline_objects['co']) as f:
+        co_pipeline = pickle.load(f)
+    val = co_pipeline.predict(value_array)
+
+    return val
+
+
+def ohm_no2_to_ugm3(input, json_obj, name):
+    global running_means
+
+    val = None
+
+    # Original value in kOhm
+    s_o3resistance = ohm_to_kohm(json_obj['s_o3resistance'])
+    s_no2resistance = ohm_no2_to_kohm(json_obj['s_no2resistance'])
+    s_coresistance = ohm_to_kohm(json_obj['s_coresistance'])
+    s_temperatureambient = convert_temperature(json_obj['s_temperatureambient'])
+    s_temperatureunit = convert_temperature(json_obj['s_temperatureunit'])
+    s_humidity = convert_humidity(json_obj['s_humidity'])
+    s_barometer = convert_barometer(json_obj['s_barometer'])
+
+    # Filter value
+    no2_running_means = running_means['no2']
+    no2_running_means_param = running_mean_param['no2']
+    no2_running_means['co'] = running_mean(no2_running_means['co'], s_coresistance, no2_running_means_param['co'])
+    no2_running_means['no2'] = running_mean(no2_running_means['no2'], s_no2resistance, no2_running_means_param['no2'])
+    no2_running_means['o3'] = running_mean(no2_running_means['o3'], s_o3resistance, no2_running_means_param['o3'])
+
+    # Predict RIVM value
+    value_array = np.array([s_barometer, s_coresistance, s_humidity, no2_running_means['co'], no2_running_means['no2'],
+              no2_running_means['o3'], s_temperatureambient, s_temperatureunit])
+    with open(pipeline_objects['no2']) as f:
+        no2_pipeline = pickle.load(f)
+    val = no2_pipeline.predict(value_array)
+
+    return val
+
+
+# http://smartplatform.readthedocs.io/en/latest/data.html#o3-calibration
+def ohm_o3_to_ugm3(input, json_obj, name):
+    global running_means
+
+    val = None
+
+    # Original value in kOhm
+    s_o3resistance = ohm_to_kohm(json_obj['s_o3resistance'])
+    s_no2resistance = ohm_no2_to_kohm(json_obj['s_no2resistance'])
+    s_coresistance = ohm_to_kohm(json_obj['s_coresistance'])
+    s_temperatureambient = convert_temperature(json_obj['s_temperatureambient'])
+    s_temperatureunit = convert_temperature(json_obj['s_temperatureunit'])
+    s_humidity = convert_humidity(json_obj['s_humidity'])
+    s_barometer = convert_barometer(json_obj['s_barometer'])
+
+    # Filter value
+    o3_running_means = running_means['o3']
+    o3_running_means_param = running_mean_param['o3']
+    o3_running_means['co'] = running_mean(o3_running_means['co'], s_coresistance, o3_running_means_param['co'])
+    o3_running_means['no2'] = running_mean(o3_running_means['no2'], s_no2resistance, o3_running_means_param['no2'])
+    o3_running_means['o3'] = running_mean(o3_running_means['o3'], s_o3resistance, o3_running_means_param['o3'])
+
+    # Predict RIVM value
+    value_array = np.array([s_barometer, s_coresistance, s_humidity, o3_running_means['co'], o3_running_means['no2'],
+              o3_running_means['o3'], s_temperatureambient, s_temperatureunit])
+    with open(pipeline_objects['co']) as f:
+        o3_pipeline = pickle.load(f)
+    val = o3_pipeline.predict(value_array)
 
     # log.info('device: %d : O3 : ohm=%d ugm3=%d' % (device, input, val))
     return val
