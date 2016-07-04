@@ -3,7 +3,7 @@ from calendar import timegm
 from datetime import datetime, tzinfo, timedelta
 import re
 import math
-from stetl.util import Util
+# from stetl.util import Util
 import pickle
 import numpy as np
 
@@ -17,7 +17,7 @@ running_means = {'co': {'co': None, 'no2': None, 'o3': None},
                  'no2': {'co': None, 'no2': None, 'o3': None},
                  'o3': {'co': None, 'no2': None, 'o3': None}}
 
-log = Util.get_log("SensorConverters")
+# log = Util.get_log("SensorConverters")
 
 # Conversion functions for raw values from Josene sensors
 
@@ -223,7 +223,7 @@ def convert_coord(input, json_obj=None, name=None):
 def convert_latitude(input, json_obj, name):
     res = convert_coord(input)
     if res is not None and (res < -90.0 or res > 90.0):
-        log.error('Invalid latitude device=%d : %d' % (json_obj['p_unitserialnumber'], res))
+        # log.error('Invalid latitude device=%d : %d' % (json_obj['p_unitserialnumber'], res))
         return None
     return res
 
@@ -231,7 +231,7 @@ def convert_latitude(input, json_obj, name):
 def convert_longitude(input, json_obj, name):
     res = convert_coord(input)
     if res is not None and (res < -180.0 or res > 180.0):
-        log.error('Invalid longitude device=%d : %d' % (json_obj['p_unitserialnumber'], res))
+        # log.error('Invalid longitude device=%d : %d' % (json_obj['p_unitserialnumber'], res))
         return None
     return res
 
