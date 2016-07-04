@@ -91,7 +91,7 @@ def ohm_co_to_ugm3(input, json_obj, name):
     co_running_means['o3'] = running_mean(co_running_means['o3'], s_o3resistance, co_running_means_param['o3'])
 
     # Predict RIVM value
-    value_array = np.array([s_barometer, s_coresistance, s_humidity, co_running_means['co'], co_running_means['no2'],
+    value_array = np.array([s_barometer, co_running_means['co'], s_humidity, co_running_means['no2'],
               co_running_means['o3'], s_temperatureambient, s_temperatureunit])
     with open(pipeline_objects['co']) as f:
         co_pipeline = pickle.load(f)
@@ -122,7 +122,7 @@ def ohm_no2_to_ugm3(input, json_obj, name):
     no2_running_means['o3'] = running_mean(no2_running_means['o3'], s_o3resistance, no2_running_means_param['o3'])
 
     # Predict RIVM value
-    value_array = np.array([s_barometer, s_coresistance, s_humidity, no2_running_means['co'], no2_running_means['no2'],
+    value_array = np.array([s_barometer, no2_running_means['co'], s_humidity, no2_running_means['no2'],
               no2_running_means['o3'], s_temperatureambient, s_temperatureunit])
     with open(pipeline_objects['no2']) as f:
         no2_pipeline = pickle.load(f)
@@ -154,7 +154,7 @@ def ohm_o3_to_ugm3(input, json_obj, name):
     o3_running_means['o3'] = running_mean(o3_running_means['o3'], s_o3resistance, o3_running_means_param['o3'])
 
     # Predict RIVM value
-    value_array = np.array([s_barometer, s_coresistance, s_humidity, o3_running_means['co'], o3_running_means['no2'],
+    value_array = np.array([s_barometer, o3_running_means['co'], s_humidity, o3_running_means['no2'],
               o3_running_means['o3'], s_temperatureambient, s_temperatureunit])
     with open(pipeline_objects['co']) as f:
         o3_pipeline = pickle.load(f)
