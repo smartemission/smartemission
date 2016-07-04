@@ -483,7 +483,7 @@ SENSOR_DEFS = {
             'unit': 'ug/m3',
             'input': ['s_o3resistance', 's_no2resistance', 's_coresistance', 's_temperatureambient',
                       's_temperatureunit', 's_humidity', 's_barometer', 's_lightsensorbottom'],
-            'converter': ohm_no2_to_ugm3(),
+            'converter': ohm_no2_to_ugm3,
             'type': int,
             'min': 0,
             'max': 400
