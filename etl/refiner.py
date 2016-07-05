@@ -6,7 +6,6 @@
 
 # Author: Just van den Broecke - 2015
 
-from stetl.util import Util
 from stetl.filter import Filter
 from stetl.packet import FORMAT
 from stetl.component import Config

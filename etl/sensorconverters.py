@@ -4,12 +4,17 @@ from datetime import datetime, tzinfo, timedelta
 import re
 import math
 # from stetl.util import Util
+from os import sys, path
+
 import pickle
 import numpy as np
 
-pipeline_objects = {'co': 'calibration/pipeline_co.pkl',
-                    'no2': 'calibration/pipeline_no2.pkl',
-                    'o3': 'calibration/pipeline_o3.pkl'}
+# Make absolute location for pickled calibration objects
+file_dir = path.dirname(path.abspath(__file__))
+
+pipeline_objects = {'co': path.join(file_dir, 'calibration/pipeline_co.pkl'),
+                    'no2': path.join(file_dir, 'calibration/pipeline_no2.pkl'),
+                    'o3': path.join(file_dir, 'calibration/pipeline_o3.pkl')}
 running_mean_param = {'co': {'co': 0.005, 'no2': 0.005, 'o3': 0.005},
                       'no2': {'co': 0.005, 'no2': 0.005, 'o3': 0.005},
                       'o3': {'co': 0.005, 'no2': 0.005, 'o3': 0.005}}
@@ -156,8 +161,10 @@ def ohm_o3_to_ugm3(input, json_obj, name):
     # Predict RIVM value
     value_array = np.array([s_barometer, o3_running_means['co'], s_humidity, o3_running_means['no2'],
               o3_running_means['o3'], s_temperatureambient, s_temperatureunit])
-    with open(pipeline_objects['co']) as f:
+    with open(pipeline_objects['co'], 'rb') as f:
+        # s = f.read()
         o3_pipeline = pickle.load(f)
+
     val = o3_pipeline.predict(value_array)
 
     # log.info('device: %d : O3 : ohm=%d ugm3=%d' % (device, input, val))
