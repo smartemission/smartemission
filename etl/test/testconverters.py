@@ -55,7 +55,7 @@ def test_calibration(file_name, sensor_names):
                     print('WARN: %s invalid output: input=%s: reason=%s' % (sensor_name, input_name, reason))
                     continue
 
-                print('%s - raw output value ok output=%f int_output=%d' % (sensor_name, value, int(round(value))))
+                print('%s - raw output value ok output=%f int_output=%d %s' % (sensor_name, value, int(round(value)), sensor_def['unit']))
 
                 print('== END %s time=%s' % (sensor_name, sensor_vals['time']))
 
@@ -64,7 +64,7 @@ def main():
     """
 
     """
-    test_calibration('data/station-26-raw.json', ['o3', 'no2', 'co'])
+    test_calibration('data/station-26-raw.json', ['temperature','humidity','pressure','co2', 'o3', 'no2', 'co'])
 
 
 if __name__ == "__main__":
