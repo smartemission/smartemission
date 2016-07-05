@@ -11,9 +11,9 @@ The entire platform will run as a System service from /etc/init.d/smartem thus s
 "Running" the Platform entails running the Docker images, scheduling regular tasks (cron) for ETL and backup.
 All is controlled using the systemd standard Linux service "smartem".
 
-## Steps
+## Installation
 
-From this dir do:
+From this dir do as `root`:
 
     ./bootstrap.sh - makes empty Ubuntu system ready for Docker and Platform
     ./build.sh  - builds all Docker images
@@ -26,5 +26,24 @@ Then use the standard Linux "service" commands:
     service smartem start
     etc
 
-Also /etc/init.d/smartem start| stop | status will work.
+Also `/etc/init.d/smartem start| stop | status` should work.
 
+Databases (3) need to be initialized once in order to facilitate ETL (NB the `postgis` Docker container needs to be running!)
+
+	cd ../etl/db
+	./db-init-last.sh
+	./db-init-raw.sh
+	./db-init-refined.sh
+	
+	# test ETL using .sh scripts
+	./last.sh
+	./harvester.sh
+	./refiner.sh
+		
+## Administration
+
+All dynamic data (config, databases, logfiles) is kept outside the Docker images. Most under `/var/smartem`.
+
+An admin web-interface (see `services/web/site/adm`) is present at `/adm`.
+Create the file `htpaswd` once under `/opt/geonovum/smartem/git/services/web/config/admin` 
+using the command `htpasswd`. You may need to install the package `apache2-utils` first.
