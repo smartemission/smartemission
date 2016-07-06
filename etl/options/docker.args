@@ -12,6 +12,7 @@ pg_schema=smartem
 pg_schema_rt=smartem_rt
 pg_schema_raw=smartem_raw
 pg_schema_refined=smartem_refined
+pg_max_samples=1000
 
 # Maximum time spent in processing, safest is about half the time between runs
 max_proc_time_secs=600
@@ -20,8 +21,8 @@ max_proc_time_secs=600
 api_interval_secs=1
 
 sos_host=sos52n
-sos_port=80
-sos_user=SOSUSER
-sos_password=SOSPASSWORD
-sos_path=/sos/service
+sos_port=8080
+sos_user=u
+sos_password=p
+sos_path=/sos52n/service
 
