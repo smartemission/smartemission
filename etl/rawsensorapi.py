@@ -240,9 +240,8 @@ class RawSensorLastInput(RawSensorAPIInput):
                 input_name = sensor_def['input']
                 input_valid, reason = check_value(input_name, sensor_vals)
                 if not input_valid:
-                    # log.warn('id=%d-%d-%d-%s gid_raw=%d: invalid input for %s: detail=%s' % (
-                    # device_id, day, hour, sensor_name, gid_raw, str(input_name), reason))
-                    record = None
+                    log.warn('device_id=%d sensor=%s: invalid input for %s: detail=%s' % (
+                    device_id, sensor_name, str(input_name), reason))
                     continue
 
                 value_raw = get_raw_value(input_name, sensor_vals)
