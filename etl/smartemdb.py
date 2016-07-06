@@ -1,19 +1,18 @@
 # -*- coding: utf-8 -*-
 #
-# RawSensorDbInput: Reads RIVM raw AQ/LML file data from measurements table and converts to recordlist
+# Smart Emission DB input classes.
 #
-# Author:Just van den Broecke
+# Author: Just van den Broecke
 
 from stetl.component import Config
-from stetl.packet import FORMAT
 from stetl.util import Util
 from stetl.inputs.dbinput import PostgresDbInput
 
-log = Util.get_log("RawSensorDbInput")
+log = Util.get_log("SmartemDbInput")
 
-class RawSensorDbInput(PostgresDbInput):
+class RawDbInput(PostgresDbInput):
     """
-    Reads raw Smartem json data from timeseries table and converts to recordlist.
+    Reads raw Smartem Harvested json data from timeseries table and converts to recordlist.
     """
 
     @Config(ptype=str, required=True, default=None)
@@ -98,5 +97,55 @@ class RawSensorDbInput(PostgresDbInput):
 
         packet.data = ts_data_rec
         # log.info('data: %s' % str(packet.data))
+
+        return packet
+
+
+class RefinedDbInput(PostgresDbInput):
+    """
+    Reads SmartEmission refined timeseries data from table and converts to recordlist.
+    """
+    def __init__(self, configdict, section):
+        PostgresDbInput.__init__(self, configdict, section)
+        self.progress_query = self.cfg.get('progress_query')
+        self.progress_update = self.cfg.get('progress_update')
+        self.db = None
+
+    def after_chain_invoke(self, packet):
+        """
+        Called right after entire Component Chain invoke.
+        Used to update last id of processed file record.
+        """
+        log.info('Updating progress table with last_id= %d' % self.last_id)
+        self.db.execute(self.progress_update % self.last_id)
+        self.db.commit(close=False)
+        log.info('Update progress table ok')
+        return True
+
+    def read(self, packet):
+
+        # Get last processed id of measurementss table
+        rowcount = self.db.execute(self.progress_query)
+        progress_rec = self.db.cursor.fetchone()
+        self.last_id = progress_rec[3]
+        log.info('progress record: %s' % str(progress_rec))
+
+        # Fetch next batch of measurementss records
+        measurements_recs = self.do_query(self.query % self.last_id)
+
+        log.info('read measurements_recs: %d' % len(measurements_recs))
+        # No more records to process?
+        if len(measurements_recs) == 0:
+            packet.set_end_of_stream()
+            log.info('Nothing to do. All file_records done')
+            return packet
+
+         # Remember last id processed for next query
+        self.last_id = measurements_recs[len(measurements_recs)-1].get('gid')
+
+        packet.data = measurements_recs
+
+        # Always stop after batch, otherwise we would continue forever
+        packet.set_end_of_stream()
 
         return packet

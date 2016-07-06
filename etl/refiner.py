@@ -7,10 +7,10 @@
 # Author: Just van den Broecke - 2015
 
 from stetl.filter import Filter
+from stetl.util import Util
 from stetl.packet import FORMAT
 from stetl.component import Config
 
-import datetime
 import pytz
 from sensordefs import *
 

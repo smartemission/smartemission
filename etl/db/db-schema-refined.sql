@@ -1,4 +1,4 @@
--- Database defs for refined timeseries values of Smart Emission data
+ -- Database defs for refined timeseries values of Smart Emission data
 
 DROP SCHEMA IF EXISTS smartem_refined CASCADE;
 CREATE SCHEMA smartem_refined;
@@ -29,7 +29,7 @@ CREATE TABLE smartem_refined.timeseries (
 DROP INDEX IF EXISTS timeseries_geom_idx;
 CREATE INDEX timeseries_geom_idx ON smartem_refined.timeseries USING gist (point);
 
--- ETL progress tabel, houdt bij voor laatst ingelezen timeseries is per device .
+-- ETL progress tabel, tracks last inserted timeseries (from raw sensor db) per device.
 DROP TABLE IF EXISTS smartem_refined.refiner_progress CASCADE;
 CREATE TABLE smartem_refined.refiner_progress (
   gid serial,
@@ -70,6 +70,22 @@ DROP TRIGGER IF EXISTS refiner_progress_update ON smartem_refined.timeseries;
 --exec
 CREATE TRIGGER refiner_progress_update AFTER INSERT ON smartem_refined.timeseries
     FOR EACH ROW EXECUTE PROCEDURE refiner_progress_update();
+
+-- ETL progress table, tracks Publisher ETL processing ("worker") 
+-- For each worker tracks last processed record id (gid).
+DROP TABLE IF EXISTS smartem_refined.etl_progress CASCADE;
+CREATE TABLE smartem_refined.etl_progress (
+  gid serial,
+  worker character varying (25),
+  source_table  character varying (25),
+  last_gid  integer,
+  last_update timestamp,
+  PRIMARY KEY (gid)
+);
+
+-- Define workers
+INSERT INTO smartem_refined.etl_progress (worker, source_table, last_gid, last_update)
+        VALUES ('publisher', 'timeseries', -1, current_timestamp);
 
 -- VIEWS --
 -- TBD
