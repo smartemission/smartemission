@@ -996,6 +996,28 @@ Heron.options.map.layers = [
     //),
 
     /*
+     * Smart Emission: Current CO
+     */
+    new OpenLayers.Layer.WMS(
+        "Smart Emission - Current CO",
+        Heron.scratch.urls.SMARTEM_OWS,
+        {layers: "smartem:last_measurements_co", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
+            metadata: {
+                wfs: {
+                    protocol: 'fromWMSLayer',
+                    outputFormat: 'GML2',
+                    featurePrefix: 'sensors',
+                    featureNS: 'http://smartem.geonovum.nl',
+                    downloadFormats: Heron.options.wfs.downloadFormats
+                }
+            }
+        }
+    ),
+
+    /*
      * Smart Emission: Current CO Raw
      */
     new OpenLayers.Layer.WMS(
@@ -2172,6 +2194,7 @@ Heron.options.layertree.tree = [
         {
             text: 'Carbon Monoxide (CO)', expanded: true, children: [
             {nodeType: "gx_layer", layer: "RIVM - Current CO", text: "RIVM - ug/m3"},
+            {nodeType: "gx_layer", layer: "Smart Emission - Current CO", text: "Smart Emission - ug/m3"},
             {nodeType: "gx_layer", layer: "Smart Emission - Current CO Raw", text: "Smart Emission RAW - kOhm"}
         ]
         },
@@ -2193,6 +2216,7 @@ Heron.options.layertree.tree = [
         {
             text: 'Nitrogen Dioxide (NO2) - WMS', expanded: true, children: [
             {nodeType: "gx_layer", layer: "RIVM - Current NO2", text: "RIVM - ug/m3"},
+            {nodeType: "gx_layer", layer: "Smart Emission - Current NO2", text: "Smart Emission - ug/m3"},
             {nodeType: "gx_layer", layer: "Smart Emission - Current NO2 Raw", text: "Smart Emission RAW - kOhm"}
         ]
         },
