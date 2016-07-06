@@ -2204,16 +2204,6 @@ Heron.options.layertree.tree = [
         ]
         },
         {
-            text: 'Ammonia (NH3) - WMS', expanded: false, children: [
-            {nodeType: "gx_layer", layer: "RIVM - Current NH3", text: "RIVM - ug/m3"}
-        ]
-        },
-        {
-            text: 'Nitrogen Oxide (NO) - WMS', expanded: false, children: [
-            {nodeType: "gx_layer", layer: "RIVM - Current NO", text: "RIVM - ug/m3"}
-        ]
-        },
-        {
             text: 'Nitrogen Dioxide (NO2) - WMS', expanded: true, children: [
             {nodeType: "gx_layer", layer: "RIVM - Current NO2", text: "RIVM - ug/m3"},
             {nodeType: "gx_layer", layer: "Smart Emission - Current NO2", text: "Smart Emission - ug/m3"},
@@ -2226,19 +2216,20 @@ Heron.options.layertree.tree = [
             {nodeType: "gx_layer", layer: "Smart Emission - Current O3", text: "Smart Emission - ug/m3"},
             {nodeType: "gx_layer", layer: "Smart Emission - Current O3 Raw", text: "Smart Emission RAW - kOhm"}
         ]
-        },
-        {
-            text: 'Particulate Matter (PM10) - WMS', expanded: false, children: [
-            {nodeType: "gx_layer", layer: "RIVM - Current PM10", text: "RIVM - ug/m3"}
-
-        ]
-        },
-        {
-            text: 'Sulfur Dioxide (SO2) - WMS', expanded: false, children: [
-            {nodeType: "gx_layer", layer: "RIVM - Current SO2", text: "RIVM - ug/m3"}
-
-        ]
         }
+        //,
+        //{
+        //    text: 'Particulate Matter (PM10) - WMS', expanded: false, children: [
+        //    {nodeType: "gx_layer", layer: "RIVM - Current PM10", text: "RIVM - ug/m3"}
+        //
+        //]
+        //},
+        //{
+        //    text: 'Sulfur Dioxide (SO2) - WMS', expanded: false, children: [
+        //    {nodeType: "gx_layer", layer: "RIVM - Current SO2", text: "RIVM - ug/m3"}
+        //
+        //]
+        //}
     ]
     },
     {
