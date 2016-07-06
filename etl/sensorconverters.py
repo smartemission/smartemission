@@ -96,8 +96,8 @@ def ohm_co_to_ugm3(input, json_obj, name):
     co_running_means['o3'] = running_mean(co_running_means['o3'], s_o3resistance, co_running_means_param['o3'])
 
     # Predict RIVM value
-    value_array = np.array([s_barometer, co_running_means['co'], s_humidity, co_running_means['no2'],
-              co_running_means['o3'], s_temperatureambient, s_temperatureunit]).reshape(1, -1)
+    value_array = np.array([s_barometer, s_humidity, s_temperatureambient, s_temperatureunit, co_running_means['co'],
+                        co_running_means['no2'], co_running_means['o3']]).reshape(1, -1)
     with open(pipeline_objects['co'], 'rb') as f:
         co_pipeline = pickle.load(f)
     val = co_pipeline.predict(value_array)
@@ -127,8 +127,8 @@ def ohm_no2_to_ugm3(input, json_obj, name):
     no2_running_means['o3'] = running_mean(no2_running_means['o3'], s_o3resistance, no2_running_means_param['o3'])
 
     # Predict RIVM value
-    value_array = np.array([s_barometer, no2_running_means['co'], s_humidity, no2_running_means['no2'],
-              no2_running_means['o3'], s_temperatureambient, s_temperatureunit]).reshape(1, -1)
+    value_array = np.array([s_barometer, s_humidity, s_temperatureambient, s_temperatureunit, no2_running_means['co'],
+                        no2_running_means['no2'], no2_running_means['o3']]).reshape(1, -1)
     with open(pipeline_objects['no2'], 'rb') as f:
         no2_pipeline = pickle.load(f)
     val = no2_pipeline.predict(value_array)
@@ -159,9 +159,9 @@ def ohm_o3_to_ugm3(input, json_obj, name):
     o3_running_means['o3'] = running_mean(o3_running_means['o3'], s_o3resistance, o3_running_means_param['o3'])
 
     # Predict RIVM value
-    value_array = np.array([s_barometer, o3_running_means['co'], s_humidity, o3_running_means['no2'],
-              o3_running_means['o3'], s_temperatureambient, s_temperatureunit]).reshape(1, -1)
-    with open(pipeline_objects['co'], 'rb') as f:
+    value_array = np.array([s_barometer, s_humidity, s_temperatureambient, s_temperatureunit, o3_running_means['co'],
+                            o3_running_means['no2'], o3_running_means['o3']]).reshape(1, -1)
+    with open(pipeline_objects['o3'], 'rb') as f:
         # s = f.read()
         o3_pipeline = pickle.load(f)
 
