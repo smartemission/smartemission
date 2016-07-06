@@ -556,10 +556,10 @@ def check_value(name, val_dict, value=None):
                 return False, '%s not in SENSOR_DEFS' % name
 
             name_def = SENSOR_DEFS[name]
-            if 'min' in name_def and val <= name_def['min']:
-                return False, '%s: val(%s) <= min(%s)' % (name, str(val), str(name_def['min']))
+            if 'min' in name_def and val < name_def['min']:
+                return False, '%s: val(%s) < min(%s)' % (name, str(val), str(name_def['min']))
 
-            if 'max' in name_def and val >= name_def['max']:
-                return False, '%s: val(%s) >= max(%s)' % (name, str(val), str(name_def['max']))
+            if 'max' in name_def and val > name_def['max']:
+                return False, '%s: val(%s) > max(%s)' % (name, str(val), str(name_def['max']))
 
     return True, '%s OK' % name
