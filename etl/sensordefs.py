@@ -459,7 +459,7 @@ SENSOR_DEFS = {
         },
     'co':
         {
-            'label': 'CO2',
+            'label': 'CO',
             'unit': 'ug/m3',
             'input': ['s_o3resistance', 's_no2resistance', 's_coresistance', 's_temperatureambient',
                       's_temperatureunit', 's_humidity', 's_barometer', 's_lightsensorbottom'],
