@@ -97,8 +97,8 @@ def ohm_co_to_ugm3(input, json_obj, name):
 
     # Predict RIVM value
     value_array = np.array([s_barometer, co_running_means['co'], s_humidity, co_running_means['no2'],
-              co_running_means['o3'], s_temperatureambient, s_temperatureunit])
-    with open(pipeline_objects['co']) as f:
+              co_running_means['o3'], s_temperatureambient, s_temperatureunit]).reshape(1, -1)
+    with open(pipeline_objects['co'], 'rb') as f:
         co_pipeline = pickle.load(f)
     val = co_pipeline.predict(value_array)
 
@@ -128,8 +128,8 @@ def ohm_no2_to_ugm3(input, json_obj, name):
 
     # Predict RIVM value
     value_array = np.array([s_barometer, no2_running_means['co'], s_humidity, no2_running_means['no2'],
-              no2_running_means['o3'], s_temperatureambient, s_temperatureunit])
-    with open(pipeline_objects['no2']) as f:
+              no2_running_means['o3'], s_temperatureambient, s_temperatureunit]).reshape(1, -1)
+    with open(pipeline_objects['no2'], 'rb') as f:
         no2_pipeline = pickle.load(f)
     val = no2_pipeline.predict(value_array)
 
@@ -160,7 +160,7 @@ def ohm_o3_to_ugm3(input, json_obj, name):
 
     # Predict RIVM value
     value_array = np.array([s_barometer, o3_running_means['co'], s_humidity, o3_running_means['no2'],
-              o3_running_means['o3'], s_temperatureambient, s_temperatureunit])
+              o3_running_means['o3'], s_temperatureambient, s_temperatureunit]).reshape(1, -1)
     with open(pipeline_objects['co'], 'rb') as f:
         # s = f.read()
         o3_pipeline = pickle.load(f)
