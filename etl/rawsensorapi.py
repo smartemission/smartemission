@@ -292,7 +292,7 @@ class RawSensorLastInput(RawSensorAPIInput):
                 # Calculate values
                 record['value_raw'] = value_raw
 
-                value = sensor_def['converter'](value_raw, sensor_vals, sensor_name)
+                value = sensor_def['converter'](value_raw, sensor_vals, sensor_def)
                 output_valid, reason = check_value(sensor_name, sensor_vals, value=value)
                 if not output_valid:
                     log.warn('id=%d-%s  invalid output for %s: detail=%s' % (

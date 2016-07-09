@@ -308,57 +308,79 @@ SENSOR_DEFS = {
     'v_audio0':
         {
             'label': 'Audio 0-40Hz',
-            'unit': 'dB(A)'
+            'unit': 'dB(A)',
+            'min': -100,
+            'max': 195
         },
     'v_audioplus1':
         {
             'label': 'Audio 40-80Hz',
-            'unit': 'dB(A)'
+            'unit': 'dB(A)',
+            'min': -100,
+            'max': 195
         },
     'v_audioplus2':
         {
             'label': 'Audio 80-160Hz',
-            'unit': 'dB(A)'
+            'unit': 'dB(A)',
+            'min': -100,
+            'max': 195
         },
     'v_audioplus3':
         {
             'label': 'Audio 160-315Hz',
-            'unit': 'dB(A)'
+            'unit': 'dB(A)',
+            'min': -100,
+            'max': 195
         },
     'v_audioplus4':
         {
             'label': 'Audio 315-630Hz',
-            'unit': 'dB(A)'
+            'unit': 'dB(A)',
+            'min': -100,
+            'max': 195
         },
     'v_audioplus5':
         {
             'label': 'Audio 630Hz-1.25kHz',
-            'unit': 'dB(A)'
+            'unit': 'dB(A)',
+            'min': -100,
+            'max': 195
         },
     'v_audioplus6':
         {
             'label': 'Audio 1.25-2.5kHz',
-            'unit': 'dB(A)'
+            'unit': 'dB(A)',
+            'min': -100,
+            'max': 195
         },
     'v_audioplus7':
         {
             'label': 'Audio 2.5-5kHz',
-            'unit': 'dB(A)'
+            'unit': 'dB(A)',
+            'min': -100,
+            'max': 195
         },
     'v_audioplus8':
         {
             'label': 'Audio 5-10kHz',
-            'unit': 'dB(A)'
+            'unit': 'dB(A)',
+            'min': -100,
+            'max': 195
         },
     'v_audioplus9':
         {
             'label': 'Audio 10-20kHz',
-            'unit': 'dB(A)'
+            'unit': 'dB(A)',
+            'min': -100,
+            'max': 195
         },
     'v_audioplus10':
         {
             'label': 'Audio 20-25kHz',
-            'unit': 'dB(A)'
+            'unit': 'dB(A)',
+            'min': -100,
+            'max': 195
         },
     # START user-defined/derived Sensors
     'altitude': {
@@ -369,7 +391,6 @@ SENSOR_DEFS = {
         'type': int,
         'min': -200,
         'max': 3000
-
     },
     'latitude': {
         'label': 'Latitude',
@@ -424,9 +445,11 @@ SENSOR_DEFS = {
             'label': 'Average Noise',
             'unit': 'dB(A)',
             'input': ['v_audio0', 'v_audioplus1', 'v_audioplus2', 'v_audioplus3', 'v_audioplus4', 'v_audioplus5',
-                      'v_audioplus6', 'v_audioplus7', 'v_audioplus8', 'v_audioplus9', 'v_audioplus10'],
-            'converter': convert_audio_avg,
-            'type': int
+                      'v_audioplus6', 'v_audioplus7', 'v_audioplus8', 'v_audioplus9'],
+            'converter': convert_noise_avg,
+            'type': int,
+            'min': -100,
+            'max': 195
         },
     'noiselevelavg':
         {
@@ -556,6 +579,24 @@ def check_value(name, val_dict, value=None):
                 return False, '%s not in SENSOR_DEFS' % name
 
             name_def = SENSOR_DEFS[name]
+
+            # AUdio inputs: need to unpack 3 bands and check for decibel vals
+            if 'audio' in name:
+                bands = [float(val & 255), float((val >> 8) & 255), float((val >> 16) & 255)]
+
+                # determine validity of these 3 bands
+                dbMin = name_def['min']
+                dbMax = name_def['max']
+                for i in range(0, len(bands)):
+                    band_val = bands[i]
+                    # outliers
+                    if band_val < dbMin:
+                        return False, '%s: val(%s) < min(%s)' % (name, str(band_val), str(name_def['min']))
+                    elif band_val > dbMax:
+                        return False, '%s: val(%s) > max(%s)' % (name, str(band_val), str(name_def['max']))
+
+                return True, '%s OK' % name
+
             if 'min' in name_def and val < name_def['min']:
                 return False, '%s: val(%s) < min(%s)' % (name, str(val), str(name_def['min']))
 

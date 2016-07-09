@@ -47,23 +47,23 @@ def ppb_to_ugm3(component, input):
     return ppb_to_ugm3_factor[component] * float(input)
 
 
-def ppb_co_to_ugm3(input, json_obj, name):
+def ppb_co_to_ugm3(input, json_obj, sensor_def):
     return ppb_to_ugm3('co', input)
 
 
-def ppb_co2_to_ugm3(input, json_obj, name):
+def ppb_co2_to_ugm3(input, json_obj, sensor_def):
     return ppb_to_ugm3('co2', input)
 
 
-def ppb_co2_to_ppm(input, json_obj, name):
+def ppb_co2_to_ppm(input, json_obj, sensor_def):
     return input / 1000.0
 
 
-def ppb_no2_to_ugm3(input, json_obj, name):
+def ppb_no2_to_ugm3(input, json_obj, sensor_def):
     return ppb_to_ugm3('no2', input)
 
 
-def ppb_o3_to_ugm3(input, json_obj, name):
+def ppb_o3_to_ugm3(input, json_obj, sensor_def):
     return input
 
 
@@ -74,7 +74,7 @@ def running_mean(previous_val, new_val, alpha):
     return val
 
 
-def ohm_co_to_ugm3(input, json_obj, name):
+def ohm_co_to_ugm3(input, json_obj, sensor_def):
     global running_means
 
     val = None
@@ -105,7 +105,7 @@ def ohm_co_to_ugm3(input, json_obj, name):
     return val
 
 
-def ohm_no2_to_ugm3(input, json_obj, name):
+def ohm_no2_to_ugm3(input, json_obj, sensor_def):
     global running_means
 
     val = None
@@ -137,7 +137,7 @@ def ohm_no2_to_ugm3(input, json_obj, name):
 
 
 # http://smartplatform.readthedocs.io/en/latest/data.html#o3-calibration
-def ohm_o3_to_ugm3(input, json_obj, name):
+def ohm_o3_to_ugm3(input, json_obj, sensor_def):
     global running_means
 
     val = None
@@ -171,18 +171,18 @@ def ohm_o3_to_ugm3(input, json_obj, name):
     return val
 
 
-def ohm_to_kohm(input, json_obj=None, name=None):
+def ohm_to_kohm(input, json_obj=None, sensor_def=None):
     return float(input) / 1000.0
 
 
-def ohm_no2_to_kohm(input, json_obj=None, name=None):
-    val = ohm_to_kohm(input, json_obj, name)
+def ohm_no2_to_kohm(input, json_obj=None, sensor_def=None):
+    val = ohm_to_kohm(input, json_obj, sensor_def)
     if val > 2000:
         return None
     return val
 
 
-def convert_temperature(input, json_obj=None, name=None):
+def convert_temperature(input, json_obj=None, sensor_def=None):
     if input == 0:
         return None
 
@@ -193,14 +193,14 @@ def convert_temperature(input, json_obj=None, name=None):
     return tempC
 
 
-def convert_barometer(input, json_obj=None, name=None):
+def convert_barometer(input, json_obj=None, sensor_def=None):
     result = float(input) / 100.0
     if result > 1100.0:
         return None
     return result
 
 
-def convert_humidity(input, json_obj=None, name=None):
+def convert_humidity(input, json_obj=None, sensor_def=None):
     humPercent = float(input) / 1000.0
     if humPercent > 100:
         return None
@@ -214,7 +214,7 @@ def convert_humidity(input, json_obj=None, name=None):
 # n1: 0 of 8, 0=East/North, 8=West/South
 # n2 en n3: whole degrees (0-180)
 # n4-n8: fraction of degrees (max 999999)
-def convert_coord(input, json_obj=None, name=None):
+def convert_coord(input, json_obj=None, sensor_def=None):
     sign = 1.0
     if input >> 28:
         sign = -1.0
@@ -227,7 +227,7 @@ def convert_coord(input, json_obj=None, name=None):
     return result
 
 
-def convert_latitude(input, json_obj, name):
+def convert_latitude(input, json_obj, sensor_def):
     res = convert_coord(input)
     if res is not None and (res < -90.0 or res > 90.0):
         # log.error('Invalid latitude device=%d : %d' % (json_obj['p_unitserialnumber'], res))
@@ -235,7 +235,7 @@ def convert_latitude(input, json_obj, name):
     return res
 
 
-def convert_longitude(input, json_obj, name):
+def convert_longitude(input, json_obj, sensor_def):
     res = convert_coord(input)
     if res is not None and (res < -180.0 or res > 180.0):
         # log.error('Invalid longitude device=%d : %d' % (json_obj['p_unitserialnumber'], res))
@@ -259,7 +259,7 @@ class UTC(tzinfo):
 utc = UTC()
 
 
-def convert_timestamp(input, json_obj=None, name=None):
+def convert_timestamp(input, json_obj=None, sensor_def=None):
     # input: 2016-05-31T15:55:33.2014241Z
     # iso_str : '2016-05-31T15:55:33GMT'
     iso_str = input.split('.')[0] + 'GMT'
@@ -272,7 +272,7 @@ def convert_timestamp(input, json_obj=None, name=None):
     return datetime.strptime(iso_str, '%Y-%m-%dT%H:%M:%SGMT').replace(tzinfo=utc)
 
 
-def convert_none(value, json_obj=None, name=None):
+def convert_none(value, json_obj=None, sensor_def=None):
     return value
 
 
@@ -303,12 +303,77 @@ def calc_audio_level(db):
 
     return level_num
 
-def convert_noise_level(value, json_obj, name):
+def convert_noise_level(value, json_obj, sensor_def):
     return calc_audio_level(value)
+
+# Converts audio var and populates average
+# Logaritmisch optellen van de waarden per frequentieband voor het verkrijgen van de totaalwaarde:
+#
+# 10^(waarde/10)
+# En dat voor de waarden van alle frequenties en bij elkaar tellen.
+# Daar de log van en x10
+#
+# Normaal tellen wij op van 31,5 Hz tot 8 kHz. In totaal 9 oktaafanden. 31,5  63  125  250  500  1000  2000  4000 en 8000 Hz
+#
+# Of 27   1/3 oktaafbanden: 25, 31.5, 40, 50, 63, 80, enz
+def convert_noise_avg(value, json_obj, sensor_def):
+    # For each audio observation:
+    # decode into 3 bands (0,1,2)
+    # determine average of these  bands
+    # determine overall average of all average bands
+    # Extract values for bands 0-2
+    input_names = sensor_def['input']
+    for input_name in input_names:
+        input_value = json_obj[input_name]
+
+        bands = [float(input_value & 255), float((input_value >> 8) & 255), float((input_value >> 16) & 255)]
+
+        # determine average of these 3 bands
+        band_avg = 0
+        band_cnt = 0
+        dbMin = sensor_def['min']
+        dbMax = sensor_def['max']
+        for i in range(0, len(bands)):
+            band_val = bands[i]
+            # outliers
+            if band_val < dbMin or band_val > dbMax:
+                continue
+            band_cnt += 1
+
+            # convert band value Decibel to Bel and then get "real" value (power 10)
+            band_avg += math.pow(10, band_val / 10)
+            # print '%s : band[%d]=%f band_avg=%f' %(name, i, bands[i], band_avg)
+
+        if band_cnt == 0:
+            return None
+
+        # Take average of "real" values and convert back to Bel via log10 and Decibel via *10
+        band_avg = math.log10(band_avg / float(band_cnt)) * 10.0
+
+        # print '%s : avg=%d' %(name, band_avg)
+
+        if band_avg < dbMin or band_avg > dbMax:
+            return None
+
+        # Initialize  average value to first average calc
+        if 'noiseavg' not in json_obj:
+            json_obj['noiseavg'] = band_avg
+            json_obj['noiseavg_total'] = math.pow(10, band_avg / 10)
+            json_obj['noiseavg_cnt'] = 1
+        else:
+            json_obj['noiseavg_cnt'] += 1
+            json_obj['noiseavg_total'] += math.pow(10, band_avg / 10)
+            json_obj['noiseavg'] = int(
+                round(math.log10(json_obj['noiseavg_total'] / json_obj['noiseavg_cnt']) * 10.0))
+
+    # Determine octave nr from var name
+    # json_obj['v_audiolevel'] = calc_audio_level(json_obj['v_audioavg'])
+    # print 'Unit %s - %s band_db=%f avg_db=%d level=%d' % (json_obj['p_unitserialnumber'], sensor_def, band_avg, json_obj['v_audioavg'], json_obj['v_audiolevel'] )
+    return json_obj['noiseavg']
 
 # Converts audio var and populates virtual max value vars
 # NB not used: now taking average of max values, see convert_audio_avg()
-def convert_audio_max(value, json_obj, name):
+def convert_audio_max(value, json_obj, sensor_def):
     # For each audio observation:
     # decode into 3 bands (0,1,2)
     # determine max of these  bands
@@ -333,69 +398,9 @@ def convert_audio_max(value, json_obj, name):
     if 't_audiomax' not in json_obj or band_max > json_obj['t_audiomax']:
         json_obj['t_audiomax'] = band_max
         # Determine octave nr from var name
-        json_obj['t_audiomax_octave'] = int(re.findall(r'\d+', name)[0])
+        json_obj['t_audiomax_octave'] = int(re.findall(r'\d+', sensor_def['name'])[0])
         json_obj['t_audiomax_octband'] = band_num
         json_obj['t_audiolevel'] = calc_audio_level(band_max)
 
     return band_max
 
-
-# Converts audio var and populates average
-# Logaritmisch optellen van de waarden per frequentieband voor het verkrijgen van de totaalwaarde:
-#
-# 10^(waarde/10)
-# En dat voor de waarden van alle frequenties en bij elkaar tellen.
-# Daar de log van en x10
-#
-# Normaal tellen wij op van 31,5 Hz tot 8 kHz. In totaal 9 oktaafanden. 31,5  63  125  250  500  1000  2000  4000 en 8000 Hz
-#
-# Of 27   1/3 oktaafbanden: 25, 31.5, 40, 50, 63, 80, enz
-def convert_audio_avg(value, json_obj, name):
-    # For each audio observation:
-    # decode into 3 bands (0,1,2)
-    # determine average of these  bands
-    # determine overall average of all average bands
-
-    # Extract values for bands 0-2
-    bands = [float(value & 255), float((value >> 8) & 255), float((value >> 16) & 255)]
-
-    # determine average of these 3 bands
-    band_avg = 0
-    band_cnt = 0
-    for i in range(0, len(bands)):
-        band_val = bands[i]
-        # outliers
-        if band_val < 1 or band_val > 150:
-            continue
-        band_cnt += 1
-
-        # convert band value Decibel to Bel and then get "real" value (power 10)
-        band_avg += math.pow(10, band_val / 10)
-        # print '%s : band[%d]=%f band_avg=%f' %(name, i, bands[i], band_avg)
-
-    if band_cnt == 0:
-        return None
-
-    # Take average of "real" values and convert back to Bel via log10 and Decibel via *10
-    band_avg = math.log10(band_avg / float(band_cnt)) * 10.0
-
-    # print '%s : avg=%d' %(name, band_avg)
-
-    if band_avg < 1 or band_avg > 150:
-        return None
-
-    # Initialize  average value to first average calc
-    if 'v_audioavg' not in json_obj:
-        json_obj['v_audioavg'] = band_avg
-        json_obj['v_audioavg_total'] = math.pow(10, band_avg / 10)
-        json_obj['v_audioavg_cnt'] = 1
-    else:
-        json_obj['v_audioavg_cnt'] += 1
-        json_obj['v_audioavg_total'] += math.pow(10, band_avg / 10)
-        json_obj['v_audioavg'] = int(
-            round(math.log10(json_obj['v_audioavg_total'] / json_obj['v_audioavg_cnt']) * 10.0))
-
-    # Determine octave nr from var name
-    json_obj['v_audiolevel'] = calc_audio_level(json_obj['v_audioavg'])
-    # print 'Unit %s - %s band_db=%f avg_db=%d level=%d' % (json_obj['p_unitserialnumber'], name, band_avg, json_obj['v_audioavg'], json_obj['v_audiolevel'] )
-    return band_avg
