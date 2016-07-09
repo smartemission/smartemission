@@ -1241,9 +1241,9 @@ Heron.options.map.layers = [
      * Smart Emission: Audio: Current Audio/Noise Level
      */
     new OpenLayers.Layer.WMS(
-        "Smart Emission - Current Audio Level Average",
+        "Smart Emission - Current Noise Level Average",
         Heron.scratch.urls.SMARTEM_OWS,
-        {layers: "smartem:last_measurements_au_level", format: "image/png", transparent: true},
+        {layers: "smartem:last_measurements_noise_level_avg", format: "image/png", transparent: true},
         {
             isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
             featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
@@ -1258,6 +1258,28 @@ Heron.options.map.layers = [
             }
         }
     ),
+
+    /*
+      * Smart Emission: Audio: Current Audio/Noise Level
+      */
+     //new OpenLayers.Layer.WMS(
+     //    "Smart Emission - Current Noise Average",
+     //    Heron.scratch.urls.SMARTEM_OWS,
+     //    {layers: "smartem:last_measurements_noise_avg", format: "image/png", transparent: true},
+     //    {
+     //        isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+     //        featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
+     //        metadata: {
+     //            wfs: {
+     //                protocol: 'fromWMSLayer',
+     //                outputFormat: 'GML2',
+     //                featurePrefix: 'sensors',
+     //                featureNS: 'http://smartem.geonovum.nl',
+     //                downloadFormats: Heron.options.wfs.downloadFormats
+     //            }
+     //        }
+     //    }
+     //),
 
     /* END SMARTEM  */
     /* START APS2RASTER */
@@ -2293,9 +2315,16 @@ Heron.options.layertree.tree = [
         text: 'Smart Emission - Audio', expanded: true, children: [
         {
             nodeType: "gx_layer",
-            layer: "Smart Emission - Current Audio Level Average",
-            text: "Current Audio Level Average"
+            layer: "Smart Emission - Current Noise Level Average",
+            text: "Current Noise Level Average"
         }
+        //,
+        //{
+        //    nodeType: "gx_layer",
+        //    layer: "Smart Emission - Current Noise Average",
+        //    text: "Current Noise Average"
+        //}
+
     ]
     }
     //{
