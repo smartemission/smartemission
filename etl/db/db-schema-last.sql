@@ -112,9 +112,9 @@ CREATE VIEW smartem_rt.v_last_measurements_noise_avg AS
     name, value_raw, value_stale, time AS sample_time, value as sample_value, point, gid, unique_id
   FROM smartem_rt.last_device_output WHERE value_stale = 0 AND name = 'noiseavg' ORDER BY device_id, gid DESC;
 
-DROP VIEW IF EXISTS smartem_rt.v_last_measurements_noise_avg_level;
-CREATE VIEW smartem_rt.v_last_measurements_noise_avg_level AS
+DROP VIEW IF EXISTS smartem_rt.v_last_measurements_noise_level_avg;
+CREATE VIEW smartem_rt.v_last_measurements_noise_level_avg AS
   SELECT device_id, device_name, label, unit,
     name, value_raw, value_stale, time AS sample_time, value as sample_value, point, gid, unique_id
-  FROM smartem_rt.last_device_output WHERE value_stale = 0 AND name = 'noiseavglevel' ORDER BY device_id, gid DESC;
+  FROM smartem_rt.last_device_output WHERE value_stale = 0 AND name = 'noiselevelavg' ORDER BY device_id, gid DESC;
 
