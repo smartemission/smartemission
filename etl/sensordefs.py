@@ -551,6 +551,11 @@ def get_raw_value(name, val_dict):
         if name in val_dict:
             val = val_dict[name]
 
+    if 'audio' in name:
+        # We may have audio encoded in 3 bands
+        bands = [float(val & 255), float((val >> 8) & 255), float((val >> 16) & 255)]
+        val = bands[0]
+
     return val, name
 
 

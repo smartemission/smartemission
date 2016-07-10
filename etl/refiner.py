@@ -5,6 +5,7 @@
 
 
 # Author: Just van den Broecke - 2015
+import sys, traceback
 
 from stetl.filter import Filter
 from stetl.util import Util
@@ -45,6 +46,7 @@ class RefineFilter(Filter):
     def moving_average(self, M, x, n, unit):
         if 'dB' in unit:
             # convert Decibel to Bel and then get "real" value (power 10)
+            # print M, x, n
             x = math.pow(10, x / 10)
             M = math.pow(10, M / 10)
             M = self.moving_average(M, x, n, 'int')
@@ -172,7 +174,7 @@ class RefineFilter(Filter):
                     # 3) check output (available and valid)
 
                     # 1) check inputs
-                    value = sensor_def['converter'](value_raw, sensor_vals, sensor_name)
+                    value = sensor_def['converter'](value_raw, sensor_vals, sensor_def)
                     output_valid, reason = check_value(sensor_name, sensor_vals, value=value)
                     if not output_valid:
                         log.warn('id=%d-%d-%d-%s gid_raw=%d: invalid output for %s: detail=%s' % (
@@ -198,6 +200,7 @@ class RefineFilter(Filter):
                 except Exception, e:
                     log.error('Exception refining %s gid_raw=%d dev=%d day-hour=%d-%d, err=%s' % (
                         sensor_name, gid_raw, device_id, day, hour, str(e)))
+                    traceback.print_exc(file=sys.stdout)
                 else:
                     # No error and output value: assign record to result list
                     if record and 'value' in record:
