@@ -8,6 +8,7 @@
 from stetl.outputs.httpoutput import HttpOutput
 from stetl.util import Util
 from stetl.packet import FORMAT
+from stetl.component import Config
 
 log = Util.get_log('sosoutput')
 
@@ -18,10 +19,31 @@ class SOSTOutput(HttpOutput):
     consumes=FORMAT.record
     """
 
+
+    @Config(ptype=str, default='insert-observation', required=False)
+    def sos_request(self):
+        """
+        The SOS request string.
+
+        Required: True
+
+        Default: insert-observation
+        """
+        pass
+
+    @Config(ptype=str, default='application/json;charset=UTF-8', required=True)
+    def content_type(self):
+        """
+        The content type (for template).
+
+        Required: True
+
+        Default: application/json;charset=UTF-8
+        """
+        pass
+
     def __init__(self, configdict, section):
         HttpOutput.__init__(self, configdict, section, consumes=FORMAT.record_array)
-        self.content_type = self.cfg.get('content_type', 'application/json;charset=UTF-8')
-        self.sos_request = self.cfg.get('sos_request', 'insert-observation')
 
         # Template file, to be used as POST body with substituted values
         self.template_file_ext = self.cfg.get('template_file_ext', 'json')
@@ -108,6 +130,8 @@ class SOSTOutput(HttpOutput):
                 format_args['sample_value'] = record['value']
 
                 payload = self.template_str.format(**format_args)
-                # print payload
+                print payload
+                # with open('/etc/hosts') as f:
+                #     print f.read()
 
         return payload
