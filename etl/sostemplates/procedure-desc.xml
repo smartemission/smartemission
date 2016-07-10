@@ -116,20 +116,30 @@
                         </swe:Quantity>
                     </sml:output>
                     <sml:output name="CORaw">
-                        <swe:Quantity definition="CO">
+                        <swe:Quantity definition="CORaw">
                             <swe:uom code="kOhm"/>
                         </swe:Quantity>
                     </sml:output>
                      <sml:output name="NO2Raw">
-                        <swe:Quantity definition="NO2">
+                        <swe:Quantity definition="NO2Raw">
                             <swe:uom code="kOhm"/>
                         </swe:Quantity>
                     </sml:output>
                     <sml:output name="O3Raw">
-                        <swe:Quantity definition="O3">
+                        <swe:Quantity definition="O3Raw">
                             <swe:uom code="kOhm"/>
                         </swe:Quantity>
                     </sml:output>
+                    <sml:output name="NoiseAvg">
+                        <swe:Quantity definition="NoiseAvg">
+                            <swe:uom code="dB(A)"/>
+                        </swe:Quantity>
+                    </sml:output>
+                    <sml:output name="NoiseLevelAvg">
+                         <swe:Quantity definition="NoiseLevelAvg">
+                             <swe:uom code="int"/>
+                         </swe:Quantity>
+                     </sml:output>
                 </sml:OutputList>
             </sml:outputs>
         </sml:System>

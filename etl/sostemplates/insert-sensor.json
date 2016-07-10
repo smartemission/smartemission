@@ -11,8 +11,9 @@
      "O3",
     "O3Raw",
      "CORaw",
-     "NO2Raw"
-
+     "NO2Raw",
+     "NoiseAvg",
+     "NoiseLevelAvg"
   ],
   "observationType": [
     "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement"
