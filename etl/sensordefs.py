@@ -538,7 +538,8 @@ SENSOR_DEFS = {
 def get_raw_value(name, val_dict):
     val = None
     if type(name) is list:
-        return get_raw_value(name[0], val_dict)
+        name = name[0]
+        return get_raw_value(name, val_dict)
         # name is list of names
         # for n in name:
         #     if n in val_dict:
@@ -550,7 +551,7 @@ def get_raw_value(name, val_dict):
         if name in val_dict:
             val = val_dict[name]
 
-    return val
+    return val, name
 
 
 # Check for valid sensor value

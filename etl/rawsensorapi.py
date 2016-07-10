@@ -244,7 +244,7 @@ class RawSensorLastInput(RawSensorAPIInput):
                     device_id, sensor_name, str(input_name), reason))
                     continue
 
-                value_raw = get_raw_value(input_name, sensor_vals)
+                value_raw, input_name_0 = get_raw_value(input_name, sensor_vals)
                 if value_raw is None:
                     # No use to proceed without raw input value(s)
                     continue

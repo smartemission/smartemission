@@ -42,7 +42,15 @@ class RefineFilter(Filter):
     # M = M + (x-M)/n
     # Here M is the (cumulative moving) average, x is the new value in the
     # sequence, n is the count of values. Using floats as not to loose precision.
-    def moving_average(self, M, x, n):
+    def moving_average(self, M, x, n, unit):
+        if 'dB' in unit:
+            # convert Decibel to Bel and then get "real" value (power 10)
+            x = math.pow(10, x / 10)
+            M = math.pow(10, M / 10)
+            M = self.moving_average(M, x, n, 'int')
+            # Take average of "real" values and convert back to Bel via log10 and Decibel via *10
+            return math.log10(M) * 10.0
+
         return float(M) + (float(x) - float(M)) / float(n)
 
     def invoke(self, packet):
@@ -82,9 +90,9 @@ class RefineFilter(Filter):
                     if not input_valid:
                         # log.warn('id=%d-%d-%d-%s gid_raw=%d: invalid input for %s: detail=%s' % (
                         # device_id, day, hour, sensor_name, gid_raw, str(input_name), reason))
-                       continue
+                        continue
 
-                    value_raw = get_raw_value(input_name, sensor_vals)
+                    value_raw, input_name_0 = get_raw_value(input_name, sensor_vals)
                     if value_raw is None:
                         # No use to proceed without raw input value(s)
                         continue
@@ -135,7 +143,7 @@ class RefineFilter(Filter):
                             if not valid:
                                 altitude = 0
 
-                            #  altitude valid!
+                            # altitude valid!
                             record['altitude'] = altitude
 
                     else:
@@ -152,7 +160,8 @@ class RefineFilter(Filter):
                         # M = M + (x-M)/n
                         # Here M is the (cumulative moving) average, x is the new value in the
                         # sequence, n is the count of values.
-                        record['value_raw'] = self.moving_average(value_raw_avg, value_raw, record['sample_count'])
+                        record['value_raw'] = self.moving_average(value_raw_avg, value_raw, record['sample_count'],
+                                                                  SENSOR_DEFS[input_name_0]['unit'])
                     else:
                         # First value for avg
                         record['value_raw'] = value_raw
@@ -167,13 +176,13 @@ class RefineFilter(Filter):
                     output_valid, reason = check_value(sensor_name, sensor_vals, value=value)
                     if not output_valid:
                         log.warn('id=%d-%d-%d-%s gid_raw=%d: invalid output for %s: detail=%s' % (
-                        device_id, day, hour, sensor_name, gid_raw, sensor_name, reason))
+                            device_id, day, hour, sensor_name, gid_raw, sensor_name, reason))
                         continue
 
                     # Finally calculate calibrated value and recalc  average
                     if value_avg is not None:
                         # Recalc avg
-                        record['value'] = self.moving_average(value_avg, value, record['sample_count'])
+                        record['value'] = self.moving_average(value_avg, value, record['sample_count'], sensor_def['unit'])
 
                         # Set min/max
                         if value < record['value_min']:
@@ -188,7 +197,7 @@ class RefineFilter(Filter):
 
                 except Exception, e:
                     log.error('Exception refining %s gid_raw=%d dev=%d day-hour=%d-%d, err=%s' % (
-                    sensor_name, gid_raw, device_id, day, hour, str(e)))
+                        sensor_name, gid_raw, device_id, day, hour, str(e)))
                 else:
                     # No error and output value: assign record to result list
                     if record and 'value' in record:

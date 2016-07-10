@@ -5,6 +5,7 @@
 """
 
 from os import sys, path
+
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
 import json
@@ -41,7 +42,7 @@ def test_calibration(file_name, sensor_names):
                 print('%s - valid input: input=%s' % (sensor_name, input_name))
 
                 # Step 2 get raw value(s)
-                value_raw = get_raw_value(input_name, sensor_vals)
+                value_raw, input_name_0 = get_raw_value(input_name, sensor_vals)
                 if value_raw is None:
                     # No use to proceed without raw input value(s)
                     continue
@@ -49,13 +50,14 @@ def test_calibration(file_name, sensor_names):
                 print('%s - raw input value(s) ok input=%s vals=%s' % (sensor_name, input_name, str(value_raw)))
 
                 # Convert
-                value = sensor_def['converter'](value_raw, sensor_vals, sensor_name)
+                value = sensor_def['converter'](value_raw, sensor_vals, sensor_def)
                 output_valid, reason = check_value(sensor_name, sensor_vals, value=value)
                 if not output_valid:
                     print('WARN: %s invalid output: input=%s: reason=%s' % (sensor_name, input_name, reason))
                     continue
 
-                print('%s - raw output value ok output=%f int_output=%d %s' % (sensor_name, value, int(round(value)), sensor_def['unit']))
+                print('%s - raw output value ok output=%f int_output=%d %s' % (
+                sensor_name, value, int(round(value)), sensor_def['unit']))
 
                 print('== END %s time=%s' % (sensor_name, sensor_vals['time']))
 
@@ -64,7 +66,8 @@ def main():
     """
 
     """
-    test_calibration('data/station-26-raw.json', ['temperature','humidity','pressure','co2', 'o3', 'no2', 'co'])
+    test_calibration('data/station-26-raw.json',
+                     ['temperature', 'humidity', 'pressure', 'noiseavg', 'noiselevelavg', 'co2', 'o3', 'no2', 'co'])
 
 
 if __name__ == "__main__":
