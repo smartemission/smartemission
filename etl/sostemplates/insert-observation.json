@@ -2,18 +2,18 @@
   "request": "InsertObservation",
   "service": "SOS",
   "version": "2.0.0",
-  "offering": "offering/{station_id}",
+  "offering": "offering-{station_id}",
   "observation": {{
     "identifier": {{
       "value": "{unique_id}",
       "codespace": "http://www.opengis.net/def/nil/OGC/0/unknown"
     }},
     "type": "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement",
-    "procedure": "procedure/{station_id}",
+    "procedure": "station-{station_id}",
     "observedProperty": "{component}",
     "featureOfInterest": {{
       "identifier": {{
-        "value": "fid/{station_id}",
+        "value": "fid-{station_id}",
         "codespace": "http://www.opengis.net/def/nil/OGC/0/unknown"
       }},
       "name": [
@@ -39,7 +39,7 @@
     "phenomenonTime": "{sample_time}",
     "resultTime": "{sample_time}",
     "result": {{
-      "uom": "ug/m3",
+      "uom": "{unit}",
       "value": {sample_value}
     }}
   }}

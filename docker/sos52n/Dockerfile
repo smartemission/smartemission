@@ -80,15 +80,15 @@ RUN if [ ! -f /tmp/resources/sos52n.zip ]; then \
 
 # unzips in sos52n/52n-sensorweb-sos-bundle-$SOS_VERSION/bin/target/52n-sos-webapp##4.3.6.war
 # hence mv to a Linux-friendly filename
-RUN unzip /tmp/resources/sos52n.zip -d /tmp/resources/sos52n  \
-    && unzip '/tmp/resources/sos52n/52n-sensorweb-sos-bundle-4.3.6/bin/target/52n-sos-webapp##4.3.6.war' -d $TC_DEPLOY_DIR/sos52n
+RUN unzip /tmp/resources/sos52n.zip -d /tmp/resources/52n-sos-webapp  \
+    && unzip '/tmp/resources/52n-sos-webapp/52n-sensorweb-sos-bundle-4.3.6/bin/target/52n-sos-webapp##4.3.6.war' -d $TC_DEPLOY_DIR/52n-sos-webapp
 
 # Move all relevant settings files to a separate dir and provide symlinks
 # These can then be provided externally via a volume mount from the host to the container
 # Hence these files can be preserved outside the docker image/container, surviving restarts.
 # NB this cuerrently only works for configuration.db, the others need to be copied!
 ENV SOS_CONFIG_DIR  /opt/sosconfig
-ENV SOS_DEPLOY_DIR  $TC_DEPLOY_DIR/sos52n
+ENV SOS_DEPLOY_DIR  $TC_DEPLOY_DIR/52n-sos-webapp
 RUN mkdir -p $SOS_CONFIG_DIR
 RUN cp -f /tmp/resources/config/configuration.db $SOS_CONFIG_DIR \
     && ln -s $SOS_CONFIG_DIR/configuration.db $SOS_DEPLOY_DIR

@@ -8,27 +8,27 @@
                 <sml:IdentifierList>
                     <sml:identifier name="uniqueID">
                         <sml:Term definition="urn:ogc:def:identifier:OGC:1.0:uniqueID">
-                            <sml:value>procedure/{station_id}</sml:value>
+                            <sml:value>station-{station_id}</sml:value>
                         </sml:Term>
                     </sml:identifier>
                     <sml:identifier name="longName">
                         <sml:Term definition="urn:ogc:def:identifier:OGC:1.0:longName">
-                            <sml:value>Smart Emission - Station {station_name}
+                            <sml:value>Smart Emission - Station {station_id}
                             </sml:value>
                         </sml:Term>
                     </sml:identifier>
                     <sml:identifier name="shortName">
                         <sml:Term definition="urn:ogc:def:identifier:OGC:1.0:shortName">
-                            <sml:value>Smartem - {station_name}</sml:value>
+                            <sml:value>Smartem - {station_id}</sml:value>
                         </sml:Term>
                     </sml:identifier>
                 </sml:IdentifierList>
             </sml:identification>
             <sml:capabilities name="offerings">
                 <swe:SimpleDataRecord>
-                    <swe:field name="{station_id} - {station_name}">
+                    <swe:field name="offering-{station_id}">
                         <swe:Text definition="urn:ogc:def:identifier:OGC:offeringID">
-                            <swe:value>offering/{station_id}</swe:value>
+                            <swe:value>offering-{station_id}</swe:value>
                         </swe:Text>
                     </swe:field>
                 </swe:SimpleDataRecord>
@@ -44,9 +44,9 @@
                        </sml:capabilities>    -->
             <sml:capabilities name="featuresOfInterest">
                 <swe:SimpleDataRecord>
-                    <swe:field name="{station_name}">
+                    <swe:field name="fid-{station_id}">
                         <swe:Text definition="featureOfInterestID">
-                            <swe:value>fid/{station_id}</swe:value>
+                            <swe:value>fid-{station_id}</swe:value>
                         </swe:Text>
                     </swe:field>
                 </swe:SimpleDataRecord>
@@ -95,49 +95,64 @@
             </sml:inputs>
             <sml:outputs>
                 <sml:OutputList>
-                    <sml:output name="CO">
-                        <swe:Quantity definition="CO">
+                    <sml:output name="co">
+                        <swe:Quantity definition="co">
                             <swe:uom code="ug/m3"/>
                         </swe:Quantity>
                     </sml:output>
-                    <sml:output name="CO2">
-                        <swe:Quantity definition="CO2">
+                    <sml:output name="co2">
+                        <swe:Quantity definition="co2">
                             <swe:uom code="ppm"/>
                         </swe:Quantity>
                     </sml:output>
-                     <sml:output name="NO2">
-                        <swe:Quantity definition="NO2">
+                     <sml:output name="no2">
+                        <swe:Quantity definition="no2">
                             <swe:uom code="ug/m3"/>
                         </swe:Quantity>
                     </sml:output>
-                    <sml:output name="O3">
-                        <swe:Quantity definition="O3">
+                    <sml:output name="o3">
+                        <swe:Quantity definition="o3">
                             <swe:uom code="ug/m3"/>
                         </swe:Quantity>
                     </sml:output>
-                    <sml:output name="CORaw">
-                        <swe:Quantity definition="CORaw">
+                    <sml:output name="coraw">
+                        <swe:Quantity definition="coraw">
                             <swe:uom code="kOhm"/>
                         </swe:Quantity>
                     </sml:output>
-                     <sml:output name="NO2Raw">
-                        <swe:Quantity definition="NO2Raw">
+                     <sml:output name="no2raw">
+                        <swe:Quantity definition="no2raw">
                             <swe:uom code="kOhm"/>
                         </swe:Quantity>
                     </sml:output>
-                    <sml:output name="O3Raw">
-                        <swe:Quantity definition="O3Raw">
+                    <sml:output name="o3raw">
+                        <swe:Quantity definition="o3raw">
                             <swe:uom code="kOhm"/>
                         </swe:Quantity>
                     </sml:output>
-                    <sml:output name="NoiseAvg">
-                        <swe:Quantity definition="NoiseAvg">
+                    <sml:output name="noiseavg">
+                        <swe:Quantity definition="noiseavg">
                             <swe:uom code="dB(A)"/>
                         </swe:Quantity>
                     </sml:output>
-                    <sml:output name="NoiseLevelAvg">
-                         <swe:Quantity definition="NoiseLevelAvg">
+                    <sml:output name="noiselevelavg">
+                         <swe:Quantity definition="noiselevelavg">
                              <swe:uom code="int"/>
+                         </swe:Quantity>
+                     </sml:output>
+                    <sml:output name="temperature">
+                         <swe:Quantity definition="temperature">
+                             <swe:uom code="Celsius"/>
+                         </swe:Quantity>
+                     </sml:output>
+                    <sml:output name="humidity">
+                         <swe:Quantity definition="humidity">
+                             <swe:uom code="Procent"/>
+                         </swe:Quantity>
+                     </sml:output>
+                    <sml:output name="pressure">
+                         <swe:Quantity definition="pressure">
+                             <swe:uom code="HectoPascal"/>
                          </swe:Quantity>
                      </sml:output>
                 </sml:OutputList>

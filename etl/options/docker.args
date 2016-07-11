@@ -22,7 +22,5 @@ api_interval_secs=1
 
 sos_host=sos52n
 sos_port=8080
-sos_user=u
-sos_password=p
-sos_path=/sos52n/service
+sos_path=/52n-sos-webapp/service
 

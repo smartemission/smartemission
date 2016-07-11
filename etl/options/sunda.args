@@ -21,6 +21,4 @@ api_interval_secs=2
 
 sos_host=local.smartemission.nl
 sos_port=8081
-sos_user=SOSUSER
-sos_password=SOSPASSWORD
-sos_path=/sos52n/service
+sos_path=/52n-sos-webapp/service

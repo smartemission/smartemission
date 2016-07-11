@@ -5,15 +5,18 @@
   "procedureDescriptionFormat": "http://www.opengis.net/sensorML/1.0.1",
   "procedureDescription": "{procedure-desc.xml}",
    "observableProperty": [
-    "CO",
-    "CO2",
-    "NO2",
-     "O3",
-    "O3Raw",
-     "CORaw",
-     "NO2Raw",
-     "NoiseAvg",
-     "NoiseLevelAvg"
+    "co",
+    "co2",
+    "no2",
+     "o3",
+    "o3raw",
+     "coraw",
+     "no2raw",
+     "noiseavg",
+     "noiselevelavg",
+     "temperature",
+     "humidity",
+     "pressure"
   ],
   "observationType": [
     "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement"
