@@ -70,21 +70,38 @@ class SOSTOutput(HttpOutput):
                 self.insert_sensor_templ_str = insert_sensor_str.replace('{procedure-desc.xml}', proc_desc)
 
     def post(self, packet, payload):
+        record = packet.data
+        device_id = record['device_id']
+        component = record['name']
+        gid = record['gid']
+        id = '%s-%s-%s' % (device_id, component, gid)
+        log.info('====START InsertObservation id=%s' % id)
+        log.info('POSTing InsertObservation! try 1 - payload=%s' % payload)
         statuscode, statusmessage, res = HttpOutput.post(self, packet, payload)
-        if statuscode == 200:
-            log.info('YES inserted Observation! res=%s' % res)
+
+        # InsertObservation may fail when Sensor not in SOS
+        # Try to do an InsertSensor and try InsertObservation again
         if statuscode == 400:
-            log.warn('No sensor for station: res=%s' % res)
+            log.info('No sensor for station: res=%s, will insert' % res)
             insert_sensor_payload = self.create_insert_sensor_payload(packet)
+            log.info('POSTing InsertSensor! - payload=%s' % insert_sensor_payload)
             statuscode, statusmessage, res = HttpOutput.post(self, packet, insert_sensor_payload)
             if statuscode != 200:
-                log.warn('Cannot InsertSensor for station: res=%s' % res)
+                log.warn('FAIL InsertSensor for station: rec=%s res=%s' % (str(packet.data), res))
+            else:
+                log.info('YES InsertSensor OK! res=%s' % res)
+                log.info('POSTing InsertObservation! try 2 - payload=%s' % payload)
+                statuscode, statusmessage, res = HttpOutput.post(self, packet, payload)
+                if statuscode == 200:
+                    log.info('YES InsertObservation! try 2 payload=%s res=%s' % (payload, res))
+                else:
+                    log.warn('FAIL InsertObservation payload=%s res=%s' % (payload, res))
+        elif statuscode == 200:
+            log.info('YES inserted Observation! try 1 res=%s' % res)
 
-        statuscode, statusmessage, res = HttpOutput.post(self, packet, payload)
-        if statuscode == 200:
-            log.info('YES inserted Observation!')
-        else:
-            log.warn('Cannot insert observation res=%s' % res)
+        log.info('====END InsertObservation id=%s' % id)
+
+        return statuscode, statusmessage, res
 
     def create_insert_sensor_payload(self, packet):
         # String substitution based on Python String.format()
@@ -106,8 +123,6 @@ class SOSTOutput(HttpOutput):
         format_args = dict()
         format_args['station_id'] = record['device_id']
         format_args['station_name'] = record['device_id']
-        # if record['municipality'] is not None and len(record['municipality']) > 0:
-        #     format_args['name'] += ' - ' + record['municipality']
         format_args['station_altitude'] = record['altitude']
         format_args['station_lon'] = record['lon']
         format_args['station_lat'] = record['lat']
@@ -125,18 +140,12 @@ class SOSTOutput(HttpOutput):
         format_args['station_id'] = record['device_id']
 
         # See issue: somehow the unique_id ends up in the capabilities doc!
-        format_args['unique_id'] = record['gid']
+        format_args['unique_id'] = '%s-%s' % (record['device_id'], record['gid'])
 
-        # Time format: "yyyy-MM-dd'T'HH:mm:ssZ"  e.g. 2013-09-29T18:46:19+0100
+        # Time format: "yyyy-MM-dd'T'HH:mm+0N00"  e.g. 2013-09-29T18:46:19+0100
         t = record['time']
         t_offset = t.tzinfo._offset.seconds / 3600
         format_args['sample_time'] = t.strftime('%Y-%m-%dT%H:%M:%S' + '+0%d00' % t_offset)
-
-        # municipality = record['municipality']
-        # if municipality is None or len(municipality) == 0:
-        #     municipality = 'Unknown municipality for station id %s' % record['station_id']
-
-        format_args['municipality'] = 'Nijmegen'
         format_args['station_lon'] = record['lon']
         format_args['station_lat'] = record['lat']
         format_args['sample_value'] = record['value']

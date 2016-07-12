@@ -18,7 +18,7 @@
       }},
       "name": [
         {{
-          "value": "{municipality}",
+          "value": "SmartEmission-{station_id}",
           "codespace": "http://www.opengis.net/def/nil/OGC/0/unknown"
         }}
       ],

@@ -33,15 +33,6 @@
                     </swe:field>
                 </swe:SimpleDataRecord>
             </sml:capabilities>
-            <!--           <sml:capabilities name="parentProcedures">
-                           <swe:SimpleDataRecord>
-                               <swe:field name="parentProcedure">
-                                   <swe:Text>
-                                       <swe:value>http://sensors.geonovum.nl/rivm-lml/procedure/1</swe:value>
-                                   </swe:Text>
-                               </swe:field>
-                           </swe:SimpleDataRecord>
-                       </sml:capabilities>    -->
             <sml:capabilities name="featuresOfInterest">
                 <swe:SimpleDataRecord>
                     <swe:field name="fid-{station_id}">
@@ -50,19 +41,11 @@
                         </swe:Text>
                     </swe:field>
                 </swe:SimpleDataRecord>
-
-                <!-- OLD invalid: <swe:SimpleDataRecord>
-                    <swe:field name="featureOfInterestID">
-                        <swe:Text>
-                            <swe:value>fid/{station_id}</swe:value>
-                        </swe:Text>
-                    </swe:field>
-                </swe:SimpleDataRecord>  -->
             </sml:capabilities>
             <sml:position name="sensorPosition">
                 <swe:Position referenceFrame="urn:ogc:def:crs:EPSG::4326">
                     <swe:location>
-                        <swe:Vector gml:id="STATION_LOCATION">
+                        <swe:Vector gml:id="STATION_LOCATION-{station_id}">
                             <swe:coordinate name="easting">
                                 <swe:Quantity axisID="x">
                                     <swe:uom code="degree"/>

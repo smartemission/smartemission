@@ -37,6 +37,7 @@ function restart_image() {
   
   # Finally run with all mappings
   sudo docker run --name ${NAME} ${LINK_MAP} ${PORT_MAP} ${VOL_MAP} -d ${IMAGE}
+  sudo docker cp config/jsclient/settings.json sos52n:/usr/local/tomcat/webapps/sos52n/static/client/jsClient
 }
 
 # Some tricky stuff to get full SOS data dir on host when non-existing on host

@@ -1,4 +1,4 @@
-# Host-specific settings - Just's macbook
+# Host-specific settings - Docker environment
 
 raw_device_url=http://whale.citygis.nl/sensors/v1
 
@@ -12,7 +12,7 @@ pg_schema=smartem
 pg_schema_rt=smartem_rt
 pg_schema_raw=smartem_raw
 pg_schema_refined=smartem_refined
-pg_max_samples=1000
+pg_max_samples=5000
 
 # Maximum time spent in processing, safest is about half the time between runs
 max_proc_time_secs=600
@@ -22,5 +22,5 @@ api_interval_secs=1
 
 sos_host=sos52n
 sos_port=8080
-sos_path=/52n-sos-webapp/service
+sos_path=/sos52n/service
 

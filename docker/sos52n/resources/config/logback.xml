@@ -2,7 +2,7 @@
     <!-- /usr/local/tomcat/webapps/sos52n/WEB-INF/classes/logback.xml -->
 	<!-- refer to http://logback.qos.ch/manual/appenders.html -->
 
-	<property name="logFile" value="${catalina.base}/logs/52n-sos-webapp" />
+	<property name="logFile" value="${catalina.base}/logs/sos52n" />
 
 	<!--
 		the following assumptions are made by the Adminstrator:
