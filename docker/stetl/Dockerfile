@@ -44,7 +44,7 @@ RUN pip install pytz
 RUN pip install Cython numpy scipy git+git://github.com/scikit-learn/scikit-learn.git
 
 # Get latest Stetl from git
-RUN git clone https://github.com/justb4/stetl /opt/stetl
+RUN git clone https://github.com/geopython/stetl /opt/stetl
 
 # Use Stetl installer
 RUN cd /opt/stetl; python setup.py install
