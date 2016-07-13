@@ -74,9 +74,9 @@ for publication to the Sensor Things Server from SensorUp.
 
 The ETL design comprises these main processing steps:
 
-* Step 1: *O&M Harvester*: fetch raw O&M data from the CityGIS server via the Raw Sensor API
-* Step 2: *Refine ETL*: validate, calibrate and aggregate the Raw O&M Data, rendering Refined O&M Data with metadata. The datastore is Postgres with PostGIS.
-* Step 3: *Publication*. Publish to various services, some having internal (PostGIS) datastores.
+* Step 1: *Harvester*: fetch raw O&M data from the CityGIS server via the Raw Sensor API
+* Step 2: *Refiner*: validate, calibrate and aggregate the Raw O&M Data, rendering Refined O&M Data with metadata. The datastore is Postgres with PostGIS.
+* Step 3: *Publisher*. Publish to various services, some having internal (PostGIS) datastores.
 
 The services to be published to are:
 
@@ -133,7 +133,7 @@ The Docker Containers as sketched in Figure 4 are deployed.
 
    *Figure 4 - Docker Deployment - Container View*
 
-In first instance Docker Containers will be created for:
+Docker Containers will be created for:
 
 * ``Web``  front-end (Apache2) webserving (viewers/apps)  and proxy to backend web-APIs
 * ``GeoServer``  : container with Tomcat running GeoServer
@@ -141,6 +141,7 @@ In first instance Docker Containers will be created for:
 * ``SensorThings`` : container running SensorUp SensorThings server (or API?)
 * ``Stetl`` : container for the Python-based ETL framework used
 * ``PostGIS`` : container running PostgreSQL with PostGIS extension
+* ``SensorUp STA``: container running Sensor Things API (STA) server from SensorUp
 
 The *Networking and Linking* capabilities of Docker will be applied to link Docker Containers,
 for example to link GeoServer  and the other application servers to PostGIS.
@@ -165,7 +166,7 @@ The list of Docker Containers, each with their related Docker Image:
 * ``postgis`` - PostgreSQL w PostGIS - image: ``geonovum/postgis`` based on ``kartoza/postgis:9.4-2.1``
 * ``stetl`` - All ETL tasks - image: ``geonovum/stetl``
 * ``geoserver`` - GeoServer web app - image: ``geonovum/geoserver`` based on ``kartoza/geoserver``
-* ``sos52`` - 52North SOS web app: (TBD)
+* ``sos52n`` - 52North SOS web app -  - image: ``geonovum/sos52n``
 
 See https://github.com/Geonovum/smartemission/blob/master/docker for the generic images
 and https://github.com/Geonovum/smartemission/blob/master/etl and https://github.com/Geonovum/smartemission/blob/master/services
@@ -180,6 +181,6 @@ a Vagrant environment with Docker can be setup.
 
 NB since FIWARE is not yet available we run on standard VPS systems.
 
-The Test and Production environments will also have separate IP-adresses and domains:
-``data.test.smartemission.nl`` and  ``data.smartemission.nl`` respectively.
+The Test and Production environments have separate IP-adresses and domains:
+`test.smartemission.nl <http://test.smartemission.nl>`_ and  `data.smartemission.nl  <http://data.smartemission.nl>`_ respectively.
 

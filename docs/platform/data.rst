@@ -4,11 +4,42 @@
 Data Management
 ===============
 
-This chapter describes all technical aspects related to data/ETL within the Smart Emission Data Platform
+This chapter describes all technical aspects related to data/ETL within
+the Smart Emission Data Platform
 based on the (ETL-)design described within the :ref:`architecture` chapter.
+As indicated there are three ETL-steps in sequence:
 
-Conversions
-===========
+* Harvester - fetch raw sensor values from "Whale server"
+* Refiner - validate, convert, calibrate and aggregate raw sensor values
+* Publisher - publish refined values to various (OGC) services
+
+Implementation for all ETL can be found here:
+https://github.com/Geonovum/smartemission/blob/master/etl
+
+The `ETL-framework Stetl <http://stetl.org>`_ is used for all ETL-steps using
+ageneric `Stetl Docker Image <https://github.com/Geonovum/smartemission/blob/master/docker/stetl>`_
+is reused in every ETL-step. Each of the three ETL-steps are expanded below.
+
+Harvester
+=========
+
+To be supplied. Implementation:
+
+* https://github.com/Geonovum/smartemission/blob/master/etl/harvester.sh
+* https://github.com/Geonovum/smartemission/blob/master/etl/harvester.cfg
+* https://github.com/Geonovum/smartemission/blob/master/etl/rawsensorapi.py
+* database: https://github.com/Geonovum/smartemission/blob/master/etl/db/db-schema-raw.sql
+
+The "Last" values ETL is an optimization/shorthand to provide all three ETL-steps
+for only the last/current sensor values within a single ETL process. Implementation:
+
+* https://github.com/Geonovum/smartemission/blob/master/etl/last.sh
+* https://github.com/Geonovum/smartemission/blob/master/etl/last.cfg
+* https://github.com/Geonovum/smartemission/blob/master/etl/rawsensorapi.py
+* database: https://github.com/Geonovum/smartemission/blob/master/etl/db/db-schema-last.sql
+
+Refiner
+=======
 
 Most raw sensor values as harvested from the CityGIS-platform need to be converted
 and calibrated to units and values that approximate the "real situation" as much as possible.
@@ -189,9 +220,12 @@ Below are typical values as obtained via the raw sensor API ::
 	p_17: 167772549,
 
 
-Below each of these sensor values are elaborated. All conversions are implemented in this Python script and
-used in various ETL-chains:
-https://github.com/Geonovum/smartemission/blob/master/etl/sensorconverters.py
+Below each of these sensor values are elaborated.
+All conversions are implemented in using two Python scripts, used in the Refiner ETL:
+
+* `sensordefs.py <https://github.com/Geonovum/smartemission/blob/master/etl/sensordefs.py>`_ definitions of sensors
+* `sensorconverters.py <https://github.com/Geonovum/smartemission/blob/master/etl/sensorconverters.py>`_ converter routines
+
 
 Gas Components
 --------------
@@ -331,3 +365,13 @@ Python code: ::
 	        return None
 	    return humPercent
 
+Publisher
+=========
+
+To be supplied. Implementation:
+
+* https://github.com/Geonovum/smartemission/blob/master/etl/publisher.sh
+* https://github.com/Geonovum/smartemission/blob/master/etl/publisher.cfg
+* https://github.com/Geonovum/smartemission/blob/master/etl/smartemdb.py
+* https://github.com/Geonovum/smartemission/blob/master/etl/sosoutput.py
+* database: https://github.com/Geonovum/smartemission/blob/master/etl/db/db-schema-refined.sql (source schema)
