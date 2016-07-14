@@ -17,7 +17,7 @@ Implementation for all ETL can be found here:
 https://github.com/Geonovum/smartemission/blob/master/etl
 
 The `ETL-framework Stetl <http://stetl.org>`_ is used for all ETL-steps using
-ageneric `Stetl Docker Image <https://github.com/Geonovum/smartemission/blob/master/docker/stetl>`_
+a generic `Stetl Docker Image <https://github.com/Geonovum/smartemission/blob/master/docker/stetl>`_
 is reused in every ETL-step. Each of the three ETL-steps are expanded below.
 
 Harvester
