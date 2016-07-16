@@ -42,7 +42,8 @@
         via web services (web APIs) en een aantal apps.
         Deze site en onderliggende diensten zijn ontwikkeld door <a href="http://Geonovum.nl">Geonovum</a>
         en draait binnen het <a href="http://fiware-lab.nl">Fiware Lab NL</a>.
-        De algemene Smart Emission website vind je op <a href="http://smartemission.ruhosting.nl">www.smartemission.nl</a>
+        De algemene Smart Emission website vind je op <a
+                href="http://smartemission.ruhosting.nl">www.smartemission.nl</a>
     </p>
     <p>
         <i>"Het Smart Emission project draait om het in kaart brengen van luchtkwaliteit, geluid,
@@ -54,18 +55,41 @@
     <ul>
         <li><a href="smartapp">SmartApp</a> - voor Mobiel/Tablet</li>
         <li><a href="heron">Heron App</a> - voor Desktop</li>
-        <li><a href="sos52n/static/client/jsClient/index.html">SOS Viewer (52North)</a> - Timeseries, Charts, Download History</li>
+        <li><a href="sos52n/static/client/jsClient/index.html">SOS Viewer (52North)</a> - Timeseries, Charts, Download
+            History
+        </li>
     </ul>
     <h2>APIs</h2>
     <ul>
         <li><a href="sosemu">SOS REST API</a> - JSON/HTML REST API alleen voor laatste waarden</li>
-        <li><a href="sos52n/service">SOS API - 52North</a> - full SOS API voor alle (historische) waarden - <a href="sos52n/documentation">(docs)</a></li>
-        <li><a href="sos52n/api/v1/">SOS REST API - 52North</a> - 52North SOS REST API voor alle (historische) waarden - <a href="sos52n/static/doc/api-doc/index.html">(docs)</a></li>
-
+        <li><a href="sos52n/service">SOS API - 52North</a> - full SOS API voor alle (historische) waarden - <a
+                href="sos52n/documentation">(docs)</a></li>
+        <li><a href="sos52n/api/v1/">SOS REST API - 52North</a> - 52North SOS REST API voor alle (historische) waarden -
+            <a href="sos52n/static/doc/api-doc/index.html">(docs)</a></li>
     </ul>
+    <h2>Download Timeseries</h2>
+    <p>Download of refined (calibrated, aggregated) timeseries (history) data is possible in various ways.</p>
+    <h2>Via SOS</h2>
+       <p>See the <a href="sos52n/static/client/jsClient/index.html">SOS Viewer (52North)</a></p>
+    <h2>Via WFS</h2>
+    <p>
+        Download as CSV and other formats is possible via WFS. The base URL is:
+    </p>    <pre>
+           http://data.smartemission.nl/geoserver/wfs?request=GetFeature&typename=timeseries_<strong>component</strong>&outputformat=csv&CQL_FILTER=device_id=<strong>station id</strong>
+       </pre>
+    <p>
+    where <strong>component</strong> is co2, co, no2, o3, temperature, pressure, humidity, noise_level_avg and
+    <strong>station id</strong> a station number like 12.
+    </p>
+     <p>
+         Example: <a href="geoserver/wfs?request=GetFeature&typename=timeseries_no2&outputformat=csv&CQL_FILTER=device_id=20">all NO2 hourly averages station 20 (CSV)</a>
+     </p>
+
     <h2>Documentatie</h2>
     <ul>
-        <li><a href="http://smartplatform.readthedocs.org/en/latest/">Smart Emission Data Platform</a> - Technische documentatie Data Platform</li>
+        <li><a href="http://smartplatform.readthedocs.org/en/latest/">Smart Emission Data Platform</a> - Technische
+            documentatie Data Platform
+        </li>
     </ul>
     <h2>Links</h2>
     <ul>
@@ -75,7 +99,7 @@
     </ul>
     <h2>Partners</h2>
     <p>
-        <img src="se-partners.jpg" />
+        <img src="se-partners.jpg"/>
     </p>
 </div>
 <!-- Bootstrap core JavaScript

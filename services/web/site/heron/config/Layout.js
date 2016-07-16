@@ -317,7 +317,7 @@ Heron.layout = {
                     items: [
                         {
                             xtype: 'hr_simpletimesliderpanel',
-                            title: 'Slider for Time Series Layers',
+                            title: 'Slider for Timeseries (History) Layers',
                             border: false,
                             startDateTime: '2016-04-24T10:00:00Z',
                             endDateTime: Heron.date,  // default is current time
