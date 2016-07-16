@@ -21,11 +21,11 @@
     "referenceValues": [],
     "firstValue": {
       "timestamp": {{ last_value['timestamp'] }},
-      "value": {{ last_value['sample_value'] }}
+      "value": {{ last_value['value'] }}
     },
     "lastValue": {
       "timestamp": {{ last_value['timestamp'] }},
-      "value": {{ last_value['sample_value'] }}
+      "value": {{ last_value['value'] }}
     },
     "parameters": {
       "service": {
