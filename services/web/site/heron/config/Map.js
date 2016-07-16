@@ -929,28 +929,7 @@ Heron.options.map.layers = [
         }
     ),
 
-    /*
-     * Smart Emission: Measurements CO
-     */
-    //new OpenLayers.Layer.WMS(
-    //    "Smart Emission - History CO",
-    //    Heron.scratch.urls.SMARTEM_OWS,
-    //    {layers: "measurements_co", format: "image/png", transparent: true},
-    //    {
-    //        isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
-    //        featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
-    //        metadata: {
-    //            wfs: {
-    //                protocol: 'fromWMSLayer',
-    //                outputFormat: 'GML2',
-    //                featurePrefix: 'sensors',
-    //                featureNS: 'http://smartem.geonovum.nl',
-    //                downloadFormats: Heron.options.wfs.downloadFormats
-    //            }
-    //        }
-    //    }
-    //),
-
+    /* START SMARTEM - GASSES */
     /*
      * Smart Emission: Current CO2
      */
@@ -974,26 +953,26 @@ Heron.options.map.layers = [
     ),
 
     /*
-     * Smart Emission: Current CO
+     * Smart Emission: Timeseries CO2
      */
-    //new OpenLayers.Layer.WMS(
-    //    "Smart Emission - Current CO",
-    //    Heron.scratch.urls.SMARTEM_OWS,
-    //    {layers: "smartem:last_measurements_co", format: "image/png", transparent: true},
-    //    {
-    //        isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
-    //        featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
-    //        metadata: {
-    //            wfs: {
-    //                protocol: 'fromWMSLayer',
-    //                outputFormat: 'GML2',
-    //                featurePrefix: 'sensors',
-    //                featureNS: 'http://smartem.geonovum.nl',
-    //                downloadFormats: Heron.options.wfs.downloadFormats
-    //            }
-    //        }
-    //    }
-    //),
+    new OpenLayers.Layer.WMS(
+        "Smart Emission - Timeseries CO2",
+        Heron.scratch.urls.SMARTEM_OWS,
+        {layers: "smartem:timeseries_co2", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
+            metadata: {
+                wfs: {
+                    protocol: 'fromWMSLayer',
+                    outputFormat: 'GML2',
+                    featurePrefix: 'sensors',
+                    featureNS: 'http://smartem.geonovum.nl',
+                    downloadFormats: Heron.options.wfs.downloadFormats
+                }
+            }
+        }
+    ),
 
     /*
      * Smart Emission: Current CO
@@ -1002,6 +981,28 @@ Heron.options.map.layers = [
         "Smart Emission - Current CO",
         Heron.scratch.urls.SMARTEM_OWS,
         {layers: "smartem:last_measurements_co", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
+            metadata: {
+                wfs: {
+                    protocol: 'fromWMSLayer',
+                    outputFormat: 'GML2',
+                    featurePrefix: 'sensors',
+                    featureNS: 'http://smartem.geonovum.nl',
+                    downloadFormats: Heron.options.wfs.downloadFormats
+                }
+            }
+        }
+    ),
+
+    /*
+     * Smart Emission: Timeseries CO
+     */
+    new OpenLayers.Layer.WMS(
+        "Smart Emission - Timeseries CO",
+        Heron.scratch.urls.SMARTEM_OWS,
+        {layers: "smartem:timeseries_co", format: "image/png", transparent: true},
         {
             isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
             featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
@@ -1040,26 +1041,26 @@ Heron.options.map.layers = [
     ),
 
     /*
-     * Smart Emission: Measurements NO2
+     * Smart Emission: Timeseries CO Raw
      */
-    //new OpenLayers.Layer.WMS(
-    //    "Smart Emission - History NO2",
-    //    Heron.scratch.urls.SMARTEM_OWS,
-    //    {layers: "smartem:measurements_no2", format: "image/png", transparent: true},
-    //    {
-    //        isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
-    //        featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
-    //        metadata: {
-    //            wfs: {
-    //                protocol: 'fromWMSLayer',
-    //                outputFormat: 'GML2',
-    //                featurePrefix: 'sensors',
-    //                featureNS: 'http://smartem.geonovum.nl',
-    //                downloadFormats: Heron.options.wfs.downloadFormats
-    //            }
-    //        }
-    //    }
-    //),
+    new OpenLayers.Layer.WMS(
+        "Smart Emission - Timeseries CO Raw",
+        Heron.scratch.urls.SMARTEM_OWS,
+        {layers: "smartem:timeseries_co_raw", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
+            metadata: {
+                wfs: {
+                    protocol: 'fromWMSLayer',
+                    outputFormat: 'GML2',
+                    featurePrefix: 'sensors',
+                    featureNS: 'http://smartem.geonovum.nl',
+                    downloadFormats: Heron.options.wfs.downloadFormats
+                }
+            }
+        }
+    ),
 
     /*
      * Smart Emission: Current NO2
@@ -1068,6 +1069,28 @@ Heron.options.map.layers = [
         "Smart Emission - Current NO2",
         Heron.scratch.urls.SMARTEM_OWS,
         {layers: "smartem:last_measurements_no2", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
+            metadata: {
+                wfs: {
+                    protocol: 'fromWMSLayer',
+                    outputFormat: 'GML2',
+                    featurePrefix: 'sensors',
+                    featureNS: 'http://smartem.geonovum.nl',
+                    downloadFormats: Heron.options.wfs.downloadFormats
+                }
+            }
+        }
+    ),
+
+    /*
+     * Smart Emission: Timeseries NO2
+     */
+    new OpenLayers.Layer.WMS(
+        "Smart Emission - Timeseries NO2",
+        Heron.scratch.urls.SMARTEM_OWS,
+        {layers: "smartem:timeseries_no2", format: "image/png", transparent: true},
         {
             isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
             featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
@@ -1106,26 +1129,26 @@ Heron.options.map.layers = [
     ),
 
     /*
-     * Smart Emission: Measurements O3
+     * Smart Emission: Timeseries NO2 Raw
      */
-    //new OpenLayers.Layer.WMS(
-    //    "Smart Emission - History O3",
-    //    Heron.scratch.urls.SMARTEM_OWS,
-    //    {layers: "smartem:measurements_o3", format: "image/png", transparent: true},
-    //    {
-    //        isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
-    //        featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
-    //        metadata: {
-    //            wfs: {
-    //                protocol: 'fromWMSLayer',
-    //                outputFormat: 'GML2',
-    //                featurePrefix: 'sensors',
-    //                featureNS: 'http://smartem.geonovum.nl',
-    //                downloadFormats: Heron.options.wfs.downloadFormats
-    //            }
-    //        }
-    //    }
-    //),
+    new OpenLayers.Layer.WMS(
+        "Smart Emission - Timeseries NO2 Raw",
+        Heron.scratch.urls.SMARTEM_OWS,
+        {layers: "smartem:timeseries_no2_raw", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
+            metadata: {
+                wfs: {
+                    protocol: 'fromWMSLayer',
+                    outputFormat: 'GML2',
+                    featurePrefix: 'sensors',
+                    featureNS: 'http://smartem.geonovum.nl',
+                    downloadFormats: Heron.options.wfs.downloadFormats
+                }
+            }
+        }
+    ),
 
     /*
      * Smart Emission: Current O3
@@ -1134,6 +1157,28 @@ Heron.options.map.layers = [
         "Smart Emission - Current O3",
         Heron.scratch.urls.SMARTEM_OWS,
         {layers: "smartem:last_measurements_o3", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
+            metadata: {
+                wfs: {
+                    protocol: 'fromWMSLayer',
+                    outputFormat: 'GML2',
+                    featurePrefix: 'sensors',
+                    featureNS: 'http://smartem.geonovum.nl',
+                    downloadFormats: Heron.options.wfs.downloadFormats
+                }
+            }
+        }
+    ),
+
+    /*
+     * Smart Emission: Timeseries O3
+     */
+    new OpenLayers.Layer.WMS(
+        "Smart Emission - Timeseries O3",
+        Heron.scratch.urls.SMARTEM_OWS,
+        {layers: "smartem:timeseries_o3", format: "image/png", transparent: true},
         {
             isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
             featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
@@ -1170,6 +1215,30 @@ Heron.options.map.layers = [
             }
         }
     ),
+
+    /*
+     * Smart Emission: Timeseries O3 Raw
+     */
+    new OpenLayers.Layer.WMS(
+        "Smart Emission - Timeseries O3 Raw",
+        Heron.scratch.urls.SMARTEM_OWS,
+        {layers: "smartem:timeseries_o3_raw", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
+            metadata: {
+                wfs: {
+                    protocol: 'fromWMSLayer',
+                    outputFormat: 'GML2',
+                    featurePrefix: 'sensors',
+                    featureNS: 'http://smartem.geonovum.nl',
+                    downloadFormats: Heron.options.wfs.downloadFormats
+                }
+            }
+        }
+    ),
+
+    /* END SMARTEM - GASSES */
 
     /*
      * Smart Emission: Meteo: Current Temperature
@@ -1239,12 +1308,56 @@ Heron.options.map.layers = [
     ),
 
     /*
+     * Smart Emission: Meteo: Timeseries Barometer
+     */
+    new OpenLayers.Layer.WMS(
+        "Smart Emission - Timeseries Barometer",
+        Heron.scratch.urls.SMARTEM_OWS,
+        {layers: "smartem:timeseries_barometer", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
+            metadata: {
+                wfs: {
+                    protocol: 'fromWMSLayer',
+                    outputFormat: 'GML2',
+                    featurePrefix: 'sensors',
+                    featureNS: 'http://smartem.geonovum.nl',
+                    downloadFormats: Heron.options.wfs.downloadFormats
+                }
+            }
+        }
+    ),
+
+    /*
      * Smart Emission: Meteo: Current Humidity
      */
     new OpenLayers.Layer.WMS(
         "Smart Emission - Current Humidity",
         Heron.scratch.urls.SMARTEM_OWS,
         {layers: "smartem:last_measurements_humidity", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
+            metadata: {
+                wfs: {
+                    protocol: 'fromWMSLayer',
+                    outputFormat: 'GML2',
+                    featurePrefix: 'sensors',
+                    featureNS: 'http://smartem.geonovum.nl',
+                    downloadFormats: Heron.options.wfs.downloadFormats
+                }
+            }
+        }
+    ),
+
+    /*
+     * Smart Emission: Meteo: Timeseries Humidity
+     */
+    new OpenLayers.Layer.WMS(
+        "Smart Emission - Timeseries Humidity",
+        Heron.scratch.urls.SMARTEM_OWS,
+        {layers: "smartem:timeseries_humidity", format: "image/png", transparent: true},
         {
             isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
             featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
@@ -1283,26 +1396,48 @@ Heron.options.map.layers = [
     ),
 
     /*
-      * Smart Emission: Audio: Current Audio/Noise Level
-      */
-     //new OpenLayers.Layer.WMS(
-     //    "Smart Emission - Current Noise Average",
-     //    Heron.scratch.urls.SMARTEM_OWS,
-     //    {layers: "smartem:last_measurements_noise_avg", format: "image/png", transparent: true},
-     //    {
-     //        isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
-     //        featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
-     //        metadata: {
-     //            wfs: {
-     //                protocol: 'fromWMSLayer',
-     //                outputFormat: 'GML2',
-     //                featurePrefix: 'sensors',
-     //                featureNS: 'http://smartem.geonovum.nl',
-     //                downloadFormats: Heron.options.wfs.downloadFormats
-     //            }
-     //        }
-     //    }
-     //),
+     * Smart Emission: Audio: Timeseries Audio/Noise Level
+     */
+    new OpenLayers.Layer.WMS(
+        "Smart Emission - Timeseries Noise Level Average",
+        Heron.scratch.urls.SMARTEM_OWS,
+        {layers: "smartem:timeseries_noise_level_avg", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
+            metadata: {
+                wfs: {
+                    protocol: 'fromWMSLayer',
+                    outputFormat: 'GML2',
+                    featurePrefix: 'sensors',
+                    featureNS: 'http://smartem.geonovum.nl',
+                    downloadFormats: Heron.options.wfs.downloadFormats
+                }
+            }
+        }
+    ),
+
+    /*
+     * Smart Emission: Audio: Current Audio/Noise Level
+     */
+    //new OpenLayers.Layer.WMS(
+    //    "Smart Emission - Current Noise Average",
+    //    Heron.scratch.urls.SMARTEM_OWS,
+    //    {layers: "smartem:last_measurements_noise_avg", format: "image/png", transparent: true},
+    //    {
+    //        isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+    //        featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
+    //        metadata: {
+    //            wfs: {
+    //                protocol: 'fromWMSLayer',
+    //                outputFormat: 'GML2',
+    //                featurePrefix: 'sensors',
+    //                featureNS: 'http://smartem.geonovum.nl',
+    //                downloadFormats: Heron.options.wfs.downloadFormats
+    //            }
+    //        }
+    //    }
+    //),
 
     /* END SMARTEM  */
     /* START APS2RASTER */
@@ -2228,62 +2363,93 @@ Heron.options.layertree.tree = [
     {
         text: 'Stations', expanded: true, children: [
         {nodeType: "gx_layer", layer: "RIVM - All Stations", text: "RIVM Stations (WMS)"},
-        //{nodeType: "gx_layer", layer: "RIVM - Active Stations", text: "RIVM AQ LML Stations"},
-        //{nodeType: "gx_layer", layer: "RIVM - Active Stations (WFS)", text: "RIVM AQ Stations (WFS)"},
-        //{nodeType: "gx_layer", layer: "Zones and Agglomerations", text: "RIVM Zones and Agglomerations (WMS)"},
         {nodeType: "gx_layer", layer: "Smart Emission - Stations", text: "Smart Emission Stations (WMS)"}
     ]
     },
     {
-        text: 'Chemische Componenten (Laatste)', expanded: true, children: [
+        text: 'Smart Emission - Gasses', expanded: true, children: [
         {
             text: 'Carbon Monoxide (CO)', expanded: true, children: [
-            {nodeType: "gx_layer", layer: "RIVM - Current CO", text: "RIVM - ug/m3"},
-            {nodeType: "gx_layer", layer: "Smart Emission - Current CO", text: "Smart Emission - ug/m3"},
-            {nodeType: "gx_layer", layer: "Smart Emission - Current CO Raw", text: "Smart Emission RAW - kOhm"}
+            {nodeType: "gx_layer", layer: "Smart Emission - Current CO", text: "CO - Current - ug/m3"},
+            {nodeType: "gx_layer", layer: "Smart Emission - Timeseries CO", text: "CO - History - ug/m3"},
+            {nodeType: "gx_layer", layer: "Smart Emission - Current CO Raw", text: "CO Raw - Current - kOhm"},
+            {nodeType: "gx_layer", layer: "Smart Emission - Timeseries CO Raw", text: "CO Raw - History - kOhm"}
         ]
         },
         {
             text: 'Carbon Dioxide (CO2)', expanded: true, children: [
-            {nodeType: "gx_layer", layer: "Smart Emission - Current CO2", text: "Smart Emission - ppm"}
+            {nodeType: "gx_layer", layer: "Smart Emission - Current CO2", text: "CO2 - Current - ppm"},
+            {nodeType: "gx_layer", layer: "Smart Emission - Current CO2", text: "CO2 - Current - ppm"}
         ]
         },
         {
             text: 'Nitrogen Dioxide (NO2) - WMS', expanded: true, children: [
-            {nodeType: "gx_layer", layer: "RIVM - Current NO2", text: "RIVM - ug/m3"},
-            {nodeType: "gx_layer", layer: "Smart Emission - Current NO2", text: "Smart Emission - ug/m3"},
-            {nodeType: "gx_layer", layer: "Smart Emission - Current NO2 Raw", text: "Smart Emission RAW - kOhm"}
+            {nodeType: "gx_layer", layer: "Smart Emission - Current NO2", text: "NO2 - Current - ug/m3"},
+            {nodeType: "gx_layer", layer: "Smart Emission - Timeseries NO2", text: "NO2 - History - ug/m3"},
+            {nodeType: "gx_layer", layer: "Smart Emission - Current NO2 Raw", text: "NO2 Raw - Current - kOhm"},
+            {nodeType: "gx_layer", layer: "Smart Emission - Timeseries NO2 Raw", text: "NO2 Raw - History - kOhm"}
         ]
         },
         {
             text: 'Ozone (O3) - WMS', expanded: true, children: [
-            {nodeType: "gx_layer", layer: "RIVM - Current O3", text: "RIVM - ug/m3"},
-            {nodeType: "gx_layer", layer: "Smart Emission - Current O3", text: "Smart Emission - ug/m3"},
-            {nodeType: "gx_layer", layer: "Smart Emission - Current O3 Raw", text: "Smart Emission RAW - kOhm"}
+            {nodeType: "gx_layer", layer: "Smart Emission - Current O3", text: "O3 - Current - ug/m3"},
+            {nodeType: "gx_layer", layer: "Smart Emission - Timeseries O3", text: "O3 - History - ug/m3"},
+            {nodeType: "gx_layer", layer: "Smart Emission - Current O3 Raw", text: "O3 Raw - Current - kOhm"},
+            {nodeType: "gx_layer", layer: "Smart Emission - Timeseries O3 Raw", text: "O3 Raw - History - kOhm"}
         ]
         }
-        //,
-        //{
-        //    text: 'Particulate Matter (PM10) - WMS', expanded: false, children: [
-        //    {nodeType: "gx_layer", layer: "RIVM - Current PM10", text: "RIVM - ug/m3"}
-        //
-        //]
-        //},
-        //{
-        //    text: 'Sulfur Dioxide (SO2) - WMS', expanded: false, children: [
-        //    {nodeType: "gx_layer", layer: "RIVM - Current SO2", text: "RIVM - ug/m3"}
-        //
-        //]
-        //}
     ]
     },
     {
-        text: 'Chemische Componenten (Historie)', expanded: false, children: [
+        text: 'Smart Emission - Noise', expanded: true, children: [
+        {
+            nodeType: "gx_layer",
+            layer: "Smart Emission - Current Noise Level Average",
+            text: "Noise Level Average - Current"
+        },
+        {
+            nodeType: "gx_layer",
+            layer: "Smart Emission - Timeseries Noise Level Average",
+            text: "Noise Level Average - History"
+        }
+        //,
+        //{
+        //    nodeType: "gx_layer",
+        //    layer: "Smart Emission - Current Noise Average",
+        //    text: "Current Noise Average"
+        //}
+
+    ]
+    },
+    {
+        text: 'Smart Emission - Meteo', expanded: true, children: [
+        {nodeType: "gx_layer", layer: "Smart Emission - Current Temperature", text: "Temperature - Current"},
+        {nodeType: "gx_layer", layer: "Smart Emission - Timeseries Temperature", text: "Temperature - History"},
+        {nodeType: "gx_layer", layer: "Smart Emission - Current Barometer", text: "Air Pressure - Current"},
+        {nodeType: "gx_layer", layer: "Smart Emission - Timeseries Barometer", text: "Air Pressure - History"},
+        {nodeType: "gx_layer", layer: "Smart Emission - Current Humidity", text: "Humidity - Current"},
+        {nodeType: "gx_layer", layer: "Smart Emission - Timeseries Humidity", text: "Humidity - History"}
+    ]
+    },
+
+    //{
+    //    text: 'Geonovum Weather', expanded: false, children: [
+    //    {nodeType: "gx_layer", layer: "Weather Stations", text: "Weather Stations (WMS)"},
+    //    {nodeType: "gx_layer", layer: "Weather Observations", text: "Weather Observations (WMS Time)"},
+    //    {nodeType: "gx_layer", layer: "Last Weather Observations", text: "Last Weather Observations (WMS)"}
+    //]
+    //},
+    //{
+    //    text: 'Fiware', expanded: false, children: [
+    //    {nodeType: "gx_layer", layer: "Fiware Entities", text: "Fiware Entities (Geonovum)"}
+    //]
+    //},
+    {
+        text: 'RIVM', expanded: false, children: [
         {
             text: 'Carbon monoxide (CO)', expanded: false, children: [
+            {nodeType: "gx_layer", layer: "RIVM - Current CO", text: "RIVM - ug/m3"},
             {nodeType: "gx_layer", layer: "RIVM - History CO"}
-            //,
-            //{nodeType: "gx_layer", layer: "Smart Emission - History CO"}
         ]
         },
         {
@@ -2298,6 +2464,7 @@ Heron.options.layertree.tree = [
         },
         {
             text: 'Nitrogen Dioxide (NO2) - WMS', expanded: true, children: [
+            {nodeType: "gx_layer", layer: "RIVM - Current NO2", text: "RIVM - ug/m3"},
             {nodeType: "gx_layer", layer: "RIVM - History NO2"},
             //{nodeType: "gx_layer", layer: "Smart Emission - History NO2"},
             {nodeType: "gx_layer", layer: "TEST - RIO APS NO2"}
@@ -2305,64 +2472,26 @@ Heron.options.layertree.tree = [
         },
         {
             text: 'Ozone (O3) - WMS', expanded: true, children: [
-            {nodeType: "gx_layer", layer: "RIVM - History O3"},
-            //{nodeType: "gx_layer", layer: "Smart Emission - History O3"},
-            {nodeType: "gx_layer", layer: "TEST - RIO APS O3"}
+            {nodeType: "gx_layer", layer: "RIVM - Current O3", text: "Current O3 - ug/m3"},
+            {nodeType: "gx_layer", layer: "RIVM - History O3", text: "History O3 - ug/m3"}
+            //{nodeType: "gx_layer", layer: "TEST - RIO APS O3"}
         ]
         },
         {
             text: 'Particulate Matter (PM10) - WMS', expanded: true, children: [
-            {nodeType: "gx_layer", layer: "RIVM - History PM10"},
-            {nodeType: "gx_layer", layer: "TEST - RIO APS PM10"}
-
+            {nodeType: "gx_layer", layer: "RIVM - Current PM10", text: "RIVM - ug/m3"},
+            {nodeType: "gx_layer", layer: "RIVM - History PM10"}
+            //{nodeType: "gx_layer", layer: "TEST - RIO APS PM10"}
         ]
         },
         {
             text: 'Sulfur Dioxide (SO2) - WMS', expanded: false, children: [
+            {nodeType: "gx_layer", layer: "RIVM - Current SO2"},
             {nodeType: "gx_layer", layer: "RIVM - History SO2"}
-
         ]
         }
     ]
-    },
-
-
-    {
-        text: 'Smart Emission - Meteo', expanded: true, children: [
-        {nodeType: "gx_layer", layer: "Smart Emission - Timeseries Temperature", text: "Temperature - History"},
-        {nodeType: "gx_layer", layer: "Smart Emission - Current Temperature", text: "Current Temperature"},
-        {nodeType: "gx_layer", layer: "Smart Emission - Current Barometer", text: "Current Air Pressure"},
-        {nodeType: "gx_layer", layer: "Smart Emission - Current Humidity", text: "Current Humidity"}
-    ]
-    },
-    {
-        text: 'Smart Emission - Noise', expanded: true, children: [
-        {
-            nodeType: "gx_layer",
-            layer: "Smart Emission - Current Noise Level Average",
-            text: "Current Noise Level Average"
-        }
-        //,
-        //{
-        //    nodeType: "gx_layer",
-        //    layer: "Smart Emission - Current Noise Average",
-        //    text: "Current Noise Average"
-        //}
-
-    ]
     }
-    //{
-    //    text: 'Geonovum Weather', expanded: false, children: [
-    //    {nodeType: "gx_layer", layer: "Weather Stations", text: "Weather Stations (WMS)"},
-    //    {nodeType: "gx_layer", layer: "Weather Observations", text: "Weather Observations (WMS Time)"},
-    //    {nodeType: "gx_layer", layer: "Last Weather Observations", text: "Last Weather Observations (WMS)"}
-    //]
-    //},
-    //{
-    //    text: 'Fiware', expanded: false, children: [
-    //    {nodeType: "gx_layer", layer: "Fiware Entities", text: "Fiware Entities (Geonovum)"}
-    //]
-    //},
     , {
         text: 'KNMI - Meteorology', expanded: false, children: [
             {nodeType: "gx_layer", layer: "KNMI - Current Temperatures"},
@@ -2373,91 +2502,6 @@ Heron.options.layertree.tree = [
             {nodeType: "gx_layer", layer: "KNMI - Rain Radar (Color)"}
         ]
     }
-    //{
-    //    text: 'Kadaster', expanded: false, children: [
-    //
-    //    {
-    //        text: 'Kadastrale Kaart (zoom >8)', expanded: false, children: [
-    //        {nodeType: "gx_layer", layer: "Kadastrale Vlakken", text: "Percelen (WMS)"},
-    //        {nodeType: "gx_layer", layer: "Kadastrale Vlakken (tiled)", text: "Percelen (tiled)"},
-    //        {nodeType: "gx_layer", layer: "Kadastrale Gebouwen (tiled)", text: "Gebouwen (tiled)"},
-    //        {nodeType: "gx_layer", layer: "Kadastrale Kaart Alles (tiled)", text: "Percelen en Gebouwen (tiled)"}
-    //    ]
-    //    }
-    //]
-    //},
-    //{
-    //    text: 'PDOK', expanded: false, children: [
-    //    {
-    //        text: 'BAG', expanded: false, children: [
-    //        {nodeType: "gx_layer", layer: "BAG - Adressen", text: "BAG Adressen"},
-    //        {nodeType: "gx_layer", layer: "BAG - Woonplaatsen", text: "BAG Woonplaatsen"},
-    //        {nodeType: "gx_layer", layer: "BAG - Ligplaatsen", text: "BAG Ligplaatsen"},
-    //        {nodeType: "gx_layer", layer: "BAG - Standplaatsen", text: "BAG Standplaatsen"},
-    //        {nodeType: "gx_layer", layer: "BAG - Verblijfsobjecten", text: "BAG Verblijfsobjecten"},
-    //        {nodeType: "gx_layer", layer: "BAG - Panden", text: "BAG Panden"},
-    //        {nodeType: "gx_layer", layer: "BAG - Panden (WFS)", text: "BAG Panden (WFS)"}
-    //    ]
-    //    },
-    //    {
-    //        text: 'Bestuurlijke Grenzen', expanded: false, children: [
-    //        /*							{nodeType: "gx_layer", layer: "Bestuurlijke Grenzen - Buurten", text: "Buurten" },
-    //         {nodeType: "gx_layer", layer: "Bestuurlijke Grenzen - Wijken", text: "Wijken" },  */
-    //        {nodeType: "gx_layer", layer: "Bestuurlijke Grenzen - Gemeenten", text: "Gemeenten (WMS)"},
-    //        {nodeType: "gx_layer", layer: "Bestuurlijke Grenzen - Gemeenten (WFS)", text: "Gemeenten (WFS)"},
-    //        {nodeType: "gx_layer", layer: "Bestuurlijke Grenzen - Provincies", text: "Provincies"},
-    //        {nodeType: "gx_layer", layer: "Bestuurlijke Grenzen - Provincies (WFS)", text: "Provincies (WFS)"},
-    //        {nodeType: "gx_layer", layer: "Bestuurlijke Grenzen - Land", text: "Land"},
-    //        {nodeType: "gx_layer", layer: "Bestuurlijke Grenzen - Land (WFS)", text: "Land (WFS)"}
-    //    ]
-    //    },
-    //    {
-    //        text: 'Digitaal Topografisch Bestand (DTB)', expanded: false, children: [
-    //        {nodeType: "gx_layer", layer: "DTB Vlakken"},
-    //        {nodeType: "gx_layer", layer: "DTB Lijnen"},
-    //        {nodeType: "gx_layer", layer: "DTB Punten"}
-    //    ]
-    //    },
-    //    {
-    //        text: 'Actueel Hoogtebestand (AHN)', expanded: false, children: [
-    //        {nodeType: "gx_layer", layer: "AHN2 0.5m Ruw"},
-    //        {nodeType: "gx_layer", layer: "AHN2 0.5m Geinterpoleerd"},
-    //        {nodeType: "gx_layer", layer: "AHN2 0.5m Niet Geinterpoleerd"},
-    //        {nodeType: "gx_layer", layer: "AHN2 5m"},
-    //        {nodeType: "gx_layer", layer: "AHN2 Bladindex"},
-    //        {nodeType: "gx_layer", layer: "AHN 25m", text: 'AHN1 25m (Oud)'}
-    //    ]
-    //    },
-    //    {
-    //        text: 'Rijksdriehoeksmeting (RDInfo)', expanded: false, children: [
-    //        {nodeType: "gx_layer", layer: "RD Info - Punten"},
-    //        {nodeType: "gx_layer", layer: "RD Info - Stations"}
-    //    ]
-    //
-    //    },
-    //    {
-    //        text: 'Natuur & Mileu', expanded: false, children: [
-    //        {nodeType: "gx_layer", layer: "Natura 2000"},
-    //        {nodeType: "gx_layer", layer: "Nationale Parken"},
-    //        {nodeType: "gx_layer", layer: "NOK 2010 - EHS"},
-    //        {nodeType: "gx_layer", layer: "NOK 2010 - RODS"},
-    //        {nodeType: "gx_layer", layer: "NOK 2010 - BBLBuitenbegrenzing", text: "NOK 2010 - BBLBuitenbegr."}
-    //    ]
-    //    }
-    //]
-    //},
-    //{
-    //    text: 'RO Online', expanded: false, children: [
-    //    {nodeType: "gx_layer", layer: "RO Online Bestemmingsplannen", text: "Bestemmingsplannen (BP)"},
-    //    {nodeType: "gx_layer", layer: "RO Online Gem. Structuurvisie", text: "Gem. Structuurvisie (GSV),"},
-    //    {nodeType: "gx_layer", layer: "RO Online Prov. Structuurvisie", text: "Prov. Structuurvisie (PSV)"}
-    //]
-    //},
-    //{
-    //    text: 'Scratch folder', expanded: false, children: [
-    //    {nodeType: "gx_layer", layer: "Tekenlaag", text: "Drawing Layer"},
-    //    {nodeType: "gx_layer", layer: "Kladlaag", text: "Upload Loayer"}
-    //]
-    //}
+
 
 ];

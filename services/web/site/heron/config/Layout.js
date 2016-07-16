@@ -319,7 +319,7 @@ Heron.layout = {
                             xtype: 'hr_simpletimesliderpanel',
                             title: 'Slider for Time Series Layers',
                             border: false,
-                            startDateTime: '2014-06-09T17:00:00Z',
+                            startDateTime: '2016-04-24T10:00:00Z',
                             endDateTime: Heron.date,  // default is current time
                             stepTime: 'PT1H',
                             dateTime: Heron.cdate,

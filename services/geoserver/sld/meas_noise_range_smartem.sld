@@ -41,7 +41,7 @@
                     <Title>20-35 dB(A)- Stil</Title>
                     <ogc:Filter>
                         <ogc:PropertyIsEqualTo>
-                            <ogc:PropertyName>sample_value</ogc:PropertyName>
+                            <ogc:PropertyName>value</ogc:PropertyName>
                             <ogc:Literal>1</ogc:Literal>
                         </ogc:PropertyIsEqualTo>
                     </ogc:Filter>
@@ -67,7 +67,7 @@
                     <Title>35-50 dB(A)- Rustige woonwijk</Title>
                     <ogc:Filter>
                         <ogc:PropertyIsEqualTo>
-                            <ogc:PropertyName>sample_value</ogc:PropertyName>
+                            <ogc:PropertyName>value</ogc:PropertyName>
                             <ogc:Literal>2</ogc:Literal>
                         </ogc:PropertyIsEqualTo>
                      </ogc:Filter>
@@ -92,7 +92,7 @@
                     <Title>50-65 dB(A) - Drukke woonwijk</Title>
                     <ogc:Filter>
                         <ogc:PropertyIsEqualTo>
-                             <ogc:PropertyName>sample_value</ogc:PropertyName>
+                             <ogc:PropertyName>value</ogc:PropertyName>
                              <ogc:Literal>3</ogc:Literal>
                          </ogc:PropertyIsEqualTo>
                     </ogc:Filter>
@@ -117,7 +117,7 @@
                     <Title>65-80 dB(A)- Bij spoor</Title>
                     <ogc:Filter>
                         <ogc:PropertyIsEqualTo>
-                            <ogc:PropertyName>sample_value</ogc:PropertyName>
+                            <ogc:PropertyName>value</ogc:PropertyName>
                             <ogc:Literal>4</ogc:Literal>
                         </ogc:PropertyIsEqualTo>
                      </ogc:Filter>
@@ -142,7 +142,7 @@
                     <Title>80-90 dB(A) - Rockband</Title>
                      <ogc:Filter>
                         <ogc:PropertyIsEqualTo>
-                             <ogc:PropertyName>sample_value</ogc:PropertyName>
+                             <ogc:PropertyName>value</ogc:PropertyName>
                              <ogc:Literal>5</ogc:Literal>
                          </ogc:PropertyIsEqualTo>
                     </ogc:Filter>

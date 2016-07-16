@@ -39,7 +39,7 @@
 
                             <ogc:Function name="numberFormat">
                                 <ogc:Literal>##</ogc:Literal>
-                                <ogc:PropertyName>sample_value</ogc:PropertyName>
+                                <ogc:PropertyName>value</ogc:PropertyName>
                             </ogc:Function>
                         </Label>
 

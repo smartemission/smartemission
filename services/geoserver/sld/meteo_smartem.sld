@@ -46,7 +46,7 @@
                             <ogc:Function name="strConcat">
                                 <ogc:Function name="numberFormat">
                                     <ogc:Literal>##</ogc:Literal>
-                                    <ogc:PropertyName>sample_value</ogc:PropertyName>
+                                    <ogc:PropertyName>value</ogc:PropertyName>
                                 </ogc:Function>
                                 <ogc:Literal>&#176;</ogc:Literal>
                             </ogc:Function>
@@ -110,7 +110,7 @@
                             <ogc:Function name="strConcat">
                                 <ogc:Function name="numberFormat">
                                     <ogc:Literal>##</ogc:Literal>
-                                    <ogc:PropertyName>sample_value</ogc:PropertyName>
+                                    <ogc:PropertyName>value</ogc:PropertyName>
                                 </ogc:Function>
                                 <ogc:Literal></ogc:Literal>
                             </ogc:Function>
@@ -174,7 +174,7 @@
                             <ogc:Function name="strConcat">
                                 <ogc:Function name="numberFormat">
                                     <ogc:Literal>##</ogc:Literal>
-                                    <ogc:PropertyName>sample_value</ogc:PropertyName>
+                                    <ogc:PropertyName>value</ogc:PropertyName>
                                 </ogc:Function>
                                 <ogc:Literal></ogc:Literal>
                             </ogc:Function>

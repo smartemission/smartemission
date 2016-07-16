@@ -72,7 +72,7 @@
                     <Title>  0 - 30 ug/m3</Title>
                     <ogc:Filter>
                         <ogc:PropertyIsLessThan>
-                            <ogc:PropertyName>sample_value</ogc:PropertyName>
+                            <ogc:PropertyName>value</ogc:PropertyName>
                             <ogc:Literal>30.5</ogc:Literal>
                         </ogc:PropertyIsLessThan>
                     </ogc:Filter>
@@ -99,11 +99,11 @@
                     <ogc:Filter>
                         <ogc:And>
                             <ogc:PropertyIsGreaterThan>
-                                <ogc:PropertyName>sample_value</ogc:PropertyName>
+                                <ogc:PropertyName>value</ogc:PropertyName>
                                 <ogc:Literal>30.5</ogc:Literal>
                             </ogc:PropertyIsGreaterThan>
                             <ogc:PropertyIsLessThan>
-                                <ogc:PropertyName>sample_value</ogc:PropertyName>
+                                <ogc:PropertyName>value</ogc:PropertyName>
                                 <ogc:Literal>50.5</ogc:Literal>
                             </ogc:PropertyIsLessThan>
                         </ogc:And>
@@ -130,11 +130,11 @@
                     <ogc:Filter>
                         <ogc:And>
                             <ogc:PropertyIsGreaterThan>
-                                <ogc:PropertyName>sample_value</ogc:PropertyName>
+                                <ogc:PropertyName>value</ogc:PropertyName>
                                 <ogc:Literal>50.5</ogc:Literal>
                             </ogc:PropertyIsGreaterThan>
                             <ogc:PropertyIsLessThan>
-                                <ogc:PropertyName>sample_value</ogc:PropertyName>
+                                <ogc:PropertyName>value</ogc:PropertyName>
                                 <ogc:Literal>70.5</ogc:Literal>
                             </ogc:PropertyIsLessThan>
                         </ogc:And>
@@ -161,11 +161,11 @@
                     <ogc:Filter>
                         <ogc:And>
                             <ogc:PropertyIsGreaterThan>
-                                <ogc:PropertyName>sample_value</ogc:PropertyName>
+                                <ogc:PropertyName>value</ogc:PropertyName>
                                 <ogc:Literal>70.5</ogc:Literal>
                             </ogc:PropertyIsGreaterThan>
                             <ogc:PropertyIsLessThan>
-                                <ogc:PropertyName>sample_value</ogc:PropertyName>
+                                <ogc:PropertyName>value</ogc:PropertyName>
                                 <ogc:Literal>90.5</ogc:Literal>
                             </ogc:PropertyIsLessThan>
                         </ogc:And>
@@ -192,11 +192,11 @@
                     <ogc:Filter>
                         <ogc:And>
                             <ogc:PropertyIsGreaterThan>
-                                <ogc:PropertyName>sample_value</ogc:PropertyName>
+                                <ogc:PropertyName>value</ogc:PropertyName>
                                 <ogc:Literal>90.5</ogc:Literal>
                             </ogc:PropertyIsGreaterThan>
                             <ogc:PropertyIsLessThan>
-                                <ogc:PropertyName>sample_value</ogc:PropertyName>
+                                <ogc:PropertyName>value</ogc:PropertyName>
                                 <ogc:Literal>110.5</ogc:Literal>
                             </ogc:PropertyIsLessThan>
                         </ogc:And>
@@ -223,11 +223,11 @@
                     <ogc:Filter>
                         <ogc:And>
                             <ogc:PropertyIsGreaterThan>
-                                <ogc:PropertyName>sample_value</ogc:PropertyName>
+                                <ogc:PropertyName>value</ogc:PropertyName>
                                 <ogc:Literal>110.5</ogc:Literal>
                             </ogc:PropertyIsGreaterThan>
                             <ogc:PropertyIsLessThan>
-                                <ogc:PropertyName>sample_value</ogc:PropertyName>
+                                <ogc:PropertyName>value</ogc:PropertyName>
                                 <ogc:Literal>145.5</ogc:Literal>
                             </ogc:PropertyIsLessThan>
                         </ogc:And>
@@ -254,11 +254,11 @@
                     <ogc:Filter>
                         <ogc:And>
                             <ogc:PropertyIsGreaterThan>
-                                <ogc:PropertyName>sample_value</ogc:PropertyName>
+                                <ogc:PropertyName>value</ogc:PropertyName>
                                 <ogc:Literal>145.5</ogc:Literal>
                             </ogc:PropertyIsGreaterThan>
                             <ogc:PropertyIsLessThan>
-                                <ogc:PropertyName>sample_value</ogc:PropertyName>
+                                <ogc:PropertyName>value</ogc:PropertyName>
                                 <ogc:Literal>180.5</ogc:Literal>
                             </ogc:PropertyIsLessThan>
                         </ogc:And>
@@ -285,11 +285,11 @@
                     <ogc:Filter>
                         <ogc:And>
                             <ogc:PropertyIsGreaterThan>
-                                <ogc:PropertyName>sample_value</ogc:PropertyName>
+                                <ogc:PropertyName>value</ogc:PropertyName>
                                 <ogc:Literal>180.5</ogc:Literal>
                             </ogc:PropertyIsGreaterThan>
                             <ogc:PropertyIsLessThan>
-                                <ogc:PropertyName>sample_value</ogc:PropertyName>
+                                <ogc:PropertyName>value</ogc:PropertyName>
                                 <ogc:Literal>240.5</ogc:Literal>
                             </ogc:PropertyIsLessThan>
                         </ogc:And>
@@ -316,11 +316,11 @@
                     <ogc:Filter>
                         <ogc:And>
                             <ogc:PropertyIsGreaterThan>
-                                <ogc:PropertyName>sample_value</ogc:PropertyName>
+                                <ogc:PropertyName>value</ogc:PropertyName>
                                 <ogc:Literal>240.5</ogc:Literal>
                             </ogc:PropertyIsGreaterThan>
                             <ogc:PropertyIsLessThan>
-                                <ogc:PropertyName>sample_value</ogc:PropertyName>
+                                <ogc:PropertyName>value</ogc:PropertyName>
                                 <ogc:Literal>360.5</ogc:Literal>
                             </ogc:PropertyIsLessThan>
                         </ogc:And>
@@ -346,7 +346,7 @@
                     <Title>  &gt; 360 ug/m3</Title>
                     <ogc:Filter>
                         <ogc:PropertyIsGreaterThan>
-                            <ogc:PropertyName>sample_value</ogc:PropertyName>
+                            <ogc:PropertyName>value</ogc:PropertyName>
                             <ogc:Literal>360.5</ogc:Literal>
                         </ogc:PropertyIsGreaterThan>
                     </ogc:Filter>
@@ -374,7 +374,7 @@
                         <Label>
                             <ogc:Function name="numberFormat">
                                 <ogc:Literal>##</ogc:Literal>
-                                <ogc:PropertyName>sample_value</ogc:PropertyName>
+                                <ogc:PropertyName>value</ogc:PropertyName>
                             </ogc:Function>
                         </Label>
 
