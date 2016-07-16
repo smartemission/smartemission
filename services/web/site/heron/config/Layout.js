@@ -332,11 +332,8 @@ Heron.layout = {
                                 "RIVM - History PM10",
                                 "RIVM - History O3",
                                 "RIVM - History SO2",
-                                //"Smart Emission - History CO",
-                                //"Smart Emission - History NO2",
-                                //"Smart Emission - History O3",
-                                "Weather Observations"
-                            ]
+                                "Weather Observations",
+                                "Smart Emission - Timeseries Temperature"                            ]
                         }
                     ]
                 },

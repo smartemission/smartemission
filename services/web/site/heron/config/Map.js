@@ -1193,6 +1193,29 @@ Heron.options.map.layers = [
         }
     ),
 
+
+    /*
+     * Smart Emission: Meteo: Timeseries Temperature
+     */
+    new OpenLayers.Layer.WMS(
+        "Smart Emission - Timeseries Temperature",
+        Heron.scratch.urls.SMARTEM_OWS,
+        {layers: "smartem:timeseries_temperature", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
+            metadata: {
+                wfs: {
+                    protocol: 'fromWMSLayer',
+                    outputFormat: 'GML2',
+                    featurePrefix: 'sensors',
+                    featureNS: 'http://smartem.geonovum.nl',
+                    downloadFormats: Heron.options.wfs.downloadFormats
+                }
+            }
+        }
+    ),
+
     /*
      * Smart Emission: Meteo: Current Barometer
      */
@@ -2306,13 +2329,14 @@ Heron.options.layertree.tree = [
 
     {
         text: 'Smart Emission - Meteo', expanded: true, children: [
+        {nodeType: "gx_layer", layer: "Smart Emission - Timeseries Temperature", text: "Temperature - History"},
         {nodeType: "gx_layer", layer: "Smart Emission - Current Temperature", text: "Current Temperature"},
         {nodeType: "gx_layer", layer: "Smart Emission - Current Barometer", text: "Current Air Pressure"},
         {nodeType: "gx_layer", layer: "Smart Emission - Current Humidity", text: "Current Humidity"}
     ]
     },
     {
-        text: 'Smart Emission - Audio', expanded: true, children: [
+        text: 'Smart Emission - Noise', expanded: true, children: [
         {
             nodeType: "gx_layer",
             layer: "Smart Emission - Current Noise Level Average",
