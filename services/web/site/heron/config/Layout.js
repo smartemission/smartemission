@@ -333,7 +333,18 @@ Heron.layout = {
                                 "RIVM - History O3",
                                 "RIVM - History SO2",
                                 "Weather Observations",
-                                "Smart Emission - Timeseries Temperature"                            ]
+                                "Smart Emission - Timeseries Temperature",
+                                "Smart Emission - Timeseries Barometer",
+                                "Smart Emission - Timeseries Humidity",
+                                "Smart Emission - Timeseries Noise Level Average",
+                                "Smart Emission - Timeseries CO2",
+                                "Smart Emission - Timeseries CO",
+                                "Smart Emission - Timeseries CO Raw",
+                                "Smart Emission - Timeseries NO2",
+                                "Smart Emission - Timeseries NO2 Raw",
+                                "Smart Emission - Timeseries O3",
+                                "Smart Emission - Timeseries O3 Raw"
+                            ]
                         }
                     ]
                 },

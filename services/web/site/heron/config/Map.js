@@ -2379,7 +2379,7 @@ Heron.options.layertree.tree = [
         {
             text: 'Carbon Dioxide (CO2)', expanded: true, children: [
             {nodeType: "gx_layer", layer: "Smart Emission - Current CO2", text: "CO2 - Current - ppm"},
-            {nodeType: "gx_layer", layer: "Smart Emission - Current CO2", text: "CO2 - Current - ppm"}
+            {nodeType: "gx_layer", layer: "Smart Emission - Timeseries CO2", text: "CO2 - History - ppm"}
         ]
         },
         {
