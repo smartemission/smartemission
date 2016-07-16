@@ -364,7 +364,8 @@ class RawSensorTimeseriesInput(RawSensorAPIInput):
     - if device is not in progress-table insert and set day,hour to 0
     - if in progress-table fetch entry (day, hour)
     - get timeseries (hours) available for that day
-    - fetch and store each, starting with the last hour perviously stored (as it may not be completely filled)
+    - fetch and store each, starting with the last hour perviously stored
+    - ignore timeseries for current day/hour, as the hour will not be yet filled (and Refiner may else already process)
     - stored entry: device_id, day, hour, last_flag, json blob
     - finish: when all done or when max_proc_time_secs passed 
     """
@@ -522,10 +523,18 @@ class RawSensorTimeseriesInput(RawSensorAPIInput):
 
         # Still hours?
         if self.hour > 0:
-            # The base method read() will fetch self.url until it is set to None
-            # <base_url>/devices/14/timeseries/20160603/18
-            self.url = self.base_url + '/devices/%d/timeseries/%d/%d' % (self.device_id, self.day, self.hour)
-            log.info('self.url = ' + self.url)
+            # Get the current day and hour in UTC
+            current_time = time.gmtime()
+            current_day = int(time.strftime('%Y%m%d', current_time))
+            current_hour = int(time.strftime('%H',current_time))
+
+            if self.day == current_day and (self.hour - 1) == current_hour:
+                log.info('Processing skipped for current raw API device-day-hour: %d-%d-%d' % (self.device_id, self.day, self.hour))
+            else:
+                # The base method read() will fetch self.url until it is set to None
+                # <base_url>/devices/14/timeseries/20160603/18
+                self.url = self.base_url + '/devices/%d/timeseries/%d/%d' % (self.device_id, self.day, self.hour)
+                log.info('self.url = ' + self.url)
 
         if self.device_id < 0:
             log.info('Processing all devices done')

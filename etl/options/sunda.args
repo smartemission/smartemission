@@ -17,7 +17,7 @@ pg_max_samples=50
 # Maximum time spent in processing
 max_proc_time_secs=15
 # time between calling the REST API again
-api_interval_secs=2
+api_interval_secs=1
 
 sos_host=local.smartemission.nl
 sos_port=8081
