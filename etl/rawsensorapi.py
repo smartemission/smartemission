@@ -521,20 +521,22 @@ class RawSensorTimeseriesInput(RawSensorAPIInput):
 
         self.next_hour()
 
+        # Get the current day and hour in UTC
+        current_time = time.gmtime()
+        current_day = int(time.strftime('%Y%m%d', current_time))
+        current_hour = int(time.strftime('%H',current_time))
+
+        # Skip harvesting the current hour as it will not yet be complete, so try the next device, hour
+        if self.day == current_day and (self.hour - 1) == current_hour:
+            log.info('Processing skipped for current raw API device-day-hour: %d-%d-%d' % (self.device_id, self.day, self.hour))
+            self.next_hour()
+
         # Still hours?
         if self.hour > 0:
-            # Get the current day and hour in UTC
-            current_time = time.gmtime()
-            current_day = int(time.strftime('%Y%m%d', current_time))
-            current_hour = int(time.strftime('%H',current_time))
-
-            if self.day == current_day and (self.hour - 1) == current_hour:
-                log.info('Processing skipped for current raw API device-day-hour: %d-%d-%d' % (self.device_id, self.day, self.hour))
-            else:
-                # The base method read() will fetch self.url until it is set to None
-                # <base_url>/devices/14/timeseries/20160603/18
-                self.url = self.base_url + '/devices/%d/timeseries/%d/%d' % (self.device_id, self.day, self.hour)
-                log.info('self.url = ' + self.url)
+            # The base method read() will fetch self.url until it is set to None
+            # <base_url>/devices/14/timeseries/20160603/18
+            self.url = self.base_url + '/devices/%d/timeseries/%d/%d' % (self.device_id, self.day, self.hour)
+            log.info('self.url = ' + self.url)
 
         if self.device_id < 0:
             log.info('Processing all devices done')
