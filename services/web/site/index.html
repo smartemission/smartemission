@@ -70,22 +70,26 @@
     <h2>Download Timeseries</h2>
     <p>Download of refined (calibrated, aggregated) timeseries (history) data is possible in various ways.</p>
     <h2>Via SOS</h2>
-       <p>See the <a href="sos52n/static/client/jsClient/index.html">SOS Viewer (52North)</a></p>
-    <h2>Via WFS</h2>
+    <p>See the <a href="sos52n/static/client/jsClient/index.html">SOS Viewer (52North)</a></p>
+    <h3>Via WFS</h3>
     <p>
         Download as CSV and other formats is possible via WFS. The base URL is:
-    </p>    <pre>
-           http://data.smartemission.nl/geoserver/wfs?request=GetFeature&typename=timeseries_<strong>component</strong>&outputformat=csv&CQL_FILTER=device_id=<strong>station id</strong>
-       </pre>
-    <p>
-    where <strong>component</strong> is co2, co, no2, o3, temperature, pressure, humidity, noise_level_avg and
-    <strong>station id</strong> a station number like 12.
     </p>
-     <p>
-         Example: <a href="geoserver/wfs?request=GetFeature&typename=timeseries_no2&outputformat=csv&CQL_FILTER=device_id=20">all NO2 hourly averages station 20 (CSV)</a>
-     </p>
+    <p>
+        http://data.smartemission.nl/geoserver/wfs?request=GetFeature&typename=timeseries_<strong>component</strong>&outputformat=csv&CQL_FILTER=device_id=<strong>station
+        id</strong>
+    </p>
+    <p>
+        where <strong>component</strong> is co2, co, no2, o3, temperature, pressure, humidity, noise_level_avg and
+        <strong>station id</strong> a station number like 12.
+    </p>
+    <p>
+        Example: <a
+            href="geoserver/wfs?request=GetFeature&typename=timeseries_no2&outputformat=csv&CQL_FILTER=device_id=20">all
+        NO2 hourly averages station 20 (CSV)</a>
+    </p>
 
-    <h2>Documentatie</h2>
+    <h3>Documentatie</h3>
     <ul>
         <li><a href="http://smartplatform.readthedocs.org/en/latest/">Smart Emission Data Platform</a> - Technische
             documentatie Data Platform
