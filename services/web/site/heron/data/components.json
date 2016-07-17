@@ -1,0 +1,49 @@
+{
+  "components": [
+    {
+      "name": "co2"
+    },
+    {
+      "name": "co"
+    },
+    {
+      "name": "co_raw"
+    },
+    {
+      "name": "no2"
+    },
+    {
+      "name": "no2_raw"
+    },
+    {
+      "name": "o3"
+    },
+    {
+      "name": "o3_raw"
+    },
+    {
+      "name": "temperature"
+    },
+    {
+      "name": "pressure"
+    },
+    {
+      "name": "humidity"
+    },
+    {
+      "name": "noise_level_avg"
+    }
+  ]
+}
+
+
+
+
+
+
+
+
+
+
+
+

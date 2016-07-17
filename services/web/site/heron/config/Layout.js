@@ -190,9 +190,9 @@ Heron.layout = {
                         //    title: 'Geonovum SOSPilot WMS',
                         //    owsPreviewStrategies: ['getlegendgraphic']  // or 'no preview available' if empty array
                         //},
-                        pdok_bagviewer_wms: {
+                        pdok_bag_wms: {
                             ptype: "gxp_wmssource",
-                            url: Heron.options.urls.PDOK + '/bagviewer/wms',
+                            url: Heron.options.urls.PDOK + '/bag/wms',
                             version: "1.1.0",
                             title: 'PDOK BAG WMS',
                             owsPreviewStrategies: ['getlegendgraphic']  // or 'no preview available' if empty array
@@ -204,9 +204,9 @@ Heron.layout = {
                             title: 'PDOK Bestuurlijke Grenzen WMS',
                             owsPreviewStrategies: ['getlegendgraphic']  // or 'no preview available' if empty array
                         },
-                        pdok_bagviewer_wfs: {
+                        pdok_bag_wfs: {
                             ptype: "gxp_wfssource",
-                            url: Heron.options.urls.PDOK + '/bagviewer/wfs',
+                            url: Heron.options.urls.PDOK + '/bag/wfs',
                             version: "1.1.0",
                             title: 'PDOK BAG WFS',
                             owsPreviewStrategies: ['randomcolor']  // or 'no preview available' if empty array
@@ -290,7 +290,7 @@ Heron.layout = {
                 {
                     xtype: 'hr_mappanel',
                     id: 'hr-map',
-                    title: '<a href="http://smartemission.nl">Smart Emission</a> - HeronViewer - Gemaakt met <a href="http://heron-mc.org">Heron</a> - <b>SE-metingen nog niet gecalibreerd!</b>',
+                    title: '<a href="http://smartemission.nl">Smart Emission</a> - HeronViewer - Gemaakt met <a href="http://heron-mc.org">Heron</a> - <b>SE-metingen gecalibreerd!</b>',
                     region: 'center',
                     collapsible: false,
                     border: false,

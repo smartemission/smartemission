@@ -104,7 +104,213 @@ Heron.options.searchPanelConfig = {
     xtype: 'hr_multisearchcenterpanel',
     height: 600,
     hropts: [
+        {
+            searchPanel: {
+                xtype: 'hr_formsearchpanel',
+                name: 'Download Historie/Tijdreeksen',
+                header: false,
+                protocol: new OpenLayers.Protocol.WFS({
+                    version: "1.1.0",
+                    url: 'http://test.smartemission.nl/geoserver/wfs',
+                    srsName: "EPSG:4326",
+                    featureType: "timeseries",
+                    featureNS: "http://smartem.geonovum.nl",
+                    outputFormat: 'GML2',
+                    maxFeatures: 40000
+                }),
 
+                listeners: {
+                    'beforeaction': function (form) {
+                        // Verkrijg stastion/device_id en naam component
+                        var station = form.items.items[0].getValue();
+                        var component = form.items.items[1].getValue();
+                        form.items.items[2].setValue(station);
+                        form.items.items[3].setValue(component);
+                     },
+                    scope: this
+                },
+                downloadFormats: Heron.options.downloadFormats,
+                items: [
+                    {
+                        xtype: 'combo',
+                        fieldLabel: 'Station',
+                        // hiddenName: 'station',
+                        submitValue: false,
+                        enableKeyEvents: true,
+                        editable: false,
+                        autoSelect: true,
+                        forceSelection: true,
+                        typeAhead: false,
+                        caseSensitive: false,
+                        lazyInit: true,
+                        emptyText: 'Selecteer Station',
+                        loadingText: 'Stations ophalen..',
+                        minChars: 1,
+                        width: 200,
+                        mode: 'local',
+                        store: new Ext.data.JsonStore({
+                            autoLoad: true,
+                            proxy: new Ext.data.HttpProxy({
+                                url: 'http://test.smartemission.nl/geoserver/wfs?request=GetFeature&typename=timeseries_stations&outputformat=JSON',
+                                method: 'GET'
+                            }),
+                            idProperty: 'device_id',
+                            root: 'features',
+                            successProperty: null,
+                            totalProperty: null,
+                            fields: [
+                                {name: 'device_id', mapping: 'properties.device_id'}
+                            ]
+                        }),
+                        valueField: 'device_id',
+                        displayField: 'device_id',
+                        triggerAction: 'all',
+                        selectOnFocus: true,
+                        listeners: {
+                            'select': function (cb, rec) {
+                                // Sets the value into the filter of "component" combo
+                                // TODO: need more elegant way of doing this, like "observer"
+                                var componentCB = Ext.getCmp('component_cb');
+                            //    componentCB.clearValue();
+                            //    componentCB.store.proxy.protocol.filter.value = cb.value;
+                            //    componentCB.store.load();
+                            },
+                            'beforequery': function (queryPlan) {
+                                var combo = queryPlan.combo;
+                                combo.store.clearFilter(true);
+                                var searchValue = queryPlan.query;
+                                if (combo.lastQuery != searchValue) {
+                                    combo.store.filter('device_id', searchValue, true, false);
+                                    combo.lastQuery = searchValue;
+                                    combo.onLoad();
+                                    console.log('searchValue=' + searchValue);
+                                }
+                                return false;
+                            },
+                            scope: this
+                        }
+                    },
+
+                    {
+                        xtype: 'combo',
+                        id: 'component_cb',
+                        fieldLabel: 'Component',
+                        width: 200,
+                        // hiddenName: 'component',
+                        submitValue: false,
+                        loadingText: 'Componenten ophalen..',
+                        store: new Ext.data.JsonStore({
+                            autoLoad: true,
+                            proxy: new Ext.data.HttpProxy({
+                                url: 'data/components.json',
+                                method: 'GET'
+                            }),
+                            idProperty: 'device_id',
+                            root: 'components',
+                            successProperty: null,
+                            totalProperty: null,
+                            fields: [
+                                {name: 'name', mapping: 'name'}
+                            ]
+                         }),
+                        // valueField: 'component',
+                        displayField: 'name',
+                        triggerAction: 'all',
+                        emptyText: 'Selecteer Component',
+                        selectOnFocus: true,
+                        editable: false
+                    },
+                    {
+                        xtype: "numberfield",
+                        name: "device_id__eq",
+                        hidden: true,
+                        value: -1
+                    },
+                    {
+                        xtype: "textfield",
+                        name: "name__eq",
+                        hidden: true,
+                        value: ''
+                    },
+                    {
+                        xtype: "label",
+                        id: "helplabel",
+                        html: 'Downloaden tijdreeksen (historie)<br/>Voer station nummer en dan component in. ' +
+                        '<br>Doe dan "Zoek"", kan even duren...Dan rechtsboven in resultaat tabel Download en formaat, bijv CSV, kiesen',
+                        style: {
+                            fontSize: '10px',
+                            color: '#AAAAAA'
+                        }
+                    }
+                ],
+                hropts: {
+                    onSearchCompleteZoom: 11,
+                    autoWildCardAttach: true,
+                    caseInsensitiveMatch: false,
+                    logicalOperator: OpenLayers.Filter.Logical.AND
+                }
+            },
+            resultPanel: {
+                xtype: 'hr_featurepanel',
+                id: 'hr-featuregridpanel',
+                header: false,
+                autoConfig: true,
+                //columns: [
+                //    {
+                //        header: "Station",
+                //        width: 64,
+                //        dataIndex: "device_id"
+                //    },
+                //    {
+                //        header: "Dag",
+                //        width: 64,
+                //        dataIndex: "day"
+                //    },
+                //    {
+                //         header: "Uur",
+                //         width: 64,
+                //         dataIndex: "hour"
+                //     },
+                //    {
+                //        header: "Waarde",
+                //        width: 64,
+                //        dataIndex: "value"
+                //    },
+                //    {
+                //        header: "Eenheid",
+                //        width: 64,
+                //        dataIndex: "unit"
+                //    },
+                //    {
+                //        header: "Waarde ruw",
+                //        width: 64,
+                //        dataIndex: "value_raw"
+                //    },
+                //    {
+                //        header: "Min",
+                //        width: 64,
+                //        dataIndex: "value_min"
+                //    },
+                //    {
+                //        header: "Max",
+                //        width: 64,
+                //        dataIndex: "value_max"
+                //    },
+                //    {
+                //        header: "Samples",
+                //        width: 64,
+                //        dataIndex: "sample_count"
+                //    }
+                //
+                //],
+                exportFormats: Heron.options.exportFormats,
+                hropts: {
+                    zoomOnRowDoubleClick: true,
+                    zoomOnFeatureSelect: false,
+                    zoomLevelPointSelect: 8
+                }
+            }
+        },
         {
             searchPanel: {
                 xtype: 'hr_searchbydrawpanel',
@@ -128,22 +334,54 @@ Heron.options.searchPanelConfig = {
                     zoomToDataExtent: false
                 }
             }
-        },
+        }
+
+        //{
+        //    searchPanel: {
+        //        xtype: 'hr_gxpquerypanel',
+        //        name: 'Make your own queries',
+        //        description: 'Zoek objecten binnen kaart-extent en/of eigen zoek-criteria',
+        //        header: false,
+        //        border: false,
+        //        caseInsensitiveMatch: true,
+        //        autoWildCardAttach: true,
+        //        downloadFormats: Heron.options.downloadFormats
+        //    },
+        //    resultPanel: {
+        //        xtype: 'hr_featuregridpanel',
+        //        id: 'hr-featuregridpanel',
+        //        displayPanels: ['Table','Detail'],
+        //        header: false,
+        //        border: false,
+        //        autoConfig: true,
+        //        autoConfigMaxSniff: 150,
+        //        exportFormats: Heron.options.exportFormats,
+        //        hropts: {
+        //            zoomOnRowDoubleClick: true,
+        //            zoomOnFeatureSelect: false,
+        //            zoomLevelPointSelect: 8,
+        //            zoomToDataExtent: true
+        //        }
+        //    }
+        //}
 //        {
 //            searchPanel: {
-//                xtype: 'hr_gxpquerypanel',
-//                name: 'Make your own queries',
-//                description: 'Zoek objecten binnen kaart-extent en/of eigen zoek-criteria',
+//                xtype: 'hr_searchbyfeaturepanel',
+//                name: 'Search via object-selection',
+//                description: 'Selecteer objecten uit een laag en gebruik hun geometrieën om in een andere laag te zoeken',
 //                header: false,
 //                border: false,
-//                caseInsensitiveMatch: true,
-//                autoWildCardAttach: true,
+//                bodyStyle: 'padding: 6px',
+//                style: {
+//                    fontFamily: 'Verdana, Arial, Helvetica, sans-serif',
+//                    fontSize: '12px'
+//                },
 //                downloadFormats: Heron.options.downloadFormats
 //            },
 //            resultPanel: {
 //                xtype: 'hr_featuregridpanel',
 //                id: 'hr-featuregridpanel',
-//                displayPanels: ['Table','Detail'],
+//                displayPanels: ['Table', 'Detail'],
 //                header: false,
 //                border: false,
 //                autoConfig: true,
@@ -153,41 +391,10 @@ Heron.options.searchPanelConfig = {
 //                    zoomOnRowDoubleClick: true,
 //                    zoomOnFeatureSelect: false,
 //                    zoomLevelPointSelect: 8,
-//                    zoomToDataExtent: true
+//                    zoomToDataExtent: false
 //                }
 //            }
-//        },
-        {
-            searchPanel: {
-                xtype: 'hr_searchbyfeaturepanel',
-                name: 'Search via object-selection',
-                description: 'Selecteer objecten uit een laag en gebruik hun geometrieën om in een andere laag te zoeken',
-                header: false,
-                border: false,
-                bodyStyle: 'padding: 6px',
-                style: {
-                    fontFamily: 'Verdana, Arial, Helvetica, sans-serif',
-                    fontSize: '12px'
-                },
-                downloadFormats: Heron.options.downloadFormats
-            },
-            resultPanel: {
-                xtype: 'hr_featuregridpanel',
-                id: 'hr-featuregridpanel',
-                displayPanels: ['Table', 'Detail'],
-                header: false,
-                border: false,
-                autoConfig: true,
-                autoConfigMaxSniff: 150,
-                exportFormats: Heron.options.exportFormats,
-                hropts: {
-                    zoomOnRowDoubleClick: true,
-                    zoomOnFeatureSelect: false,
-                    zoomLevelPointSelect: 8,
-                    zoomToDataExtent: false
-                }
-            }
-        }
+//        }
 
     ]
 };
@@ -637,7 +844,7 @@ Heron.options.map.toolbar = [
                 title: null, //__('Multiple Searches'),
                 x: 100,
                 y: undefined,
-                width: 360,
+                width: 500,
                 height: 440,
                 items: [
                     Heron.options.searchPanelConfig
