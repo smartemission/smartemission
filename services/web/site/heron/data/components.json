@@ -7,19 +7,19 @@
       "name": "co"
     },
     {
-      "name": "co_raw"
+      "name": "coraw"
     },
     {
       "name": "no2"
     },
     {
-      "name": "no2_raw"
+      "name": "no2raw"
     },
     {
       "name": "o3"
     },
     {
-      "name": "o3_raw"
+      "name": "o3raw"
     },
     {
       "name": "temperature"
@@ -31,7 +31,7 @@
       "name": "humidity"
     },
     {
-      "name": "noise_level_avg"
+      "name": "noiselevelavg"
     }
   ]
 }

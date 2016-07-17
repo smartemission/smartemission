@@ -73,8 +73,11 @@
     <p>See the <a href="sos52n/static/client/jsClient/index.html">SOS Viewer (52North)</a></p>
     <h3>Via WFS</h3>
     <p>
-        Download as CSV and other formats is possible via WFS. The base URL is:
+        Download as CSV and other formats is possible via WFS either direct or via the Heron App (see above).
+        Within the Heron App, choose the Binoculairs (Verrekijker) icon on top, choose stationand component and
+        press "Zoeken". This may take some time...be patient. On the result table-grid choose Download and choose format.
     </p>
+    <p>For raw/direct download via your browser or a download tool like curl, use this base URL:</p>
     <p>
         http://data.smartemission.nl/geoserver/wfs?request=GetFeature&typename=timeseries_<strong>component</strong>&outputformat=csv&CQL_FILTER=device_id=<strong>station
         id</strong>
