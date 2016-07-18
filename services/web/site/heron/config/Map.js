@@ -112,6 +112,8 @@ Heron.options.map.settings = {
 Ext.namespace("Heron.scratch");
 Heron.scratch.urls = {
     SOSPILOT_OWS: 'http://sensors.geonovum.nl/gs/ows?',
+    SMARTEM_WFS_TEST: 'http://test.smartemission.nl/geoserver/wfs?',
+    SMARTEM_WFS: '/geoserver/wfs?',
     SMARTEM_OWS: '/geoserver/ows?',
     PDOK: 'http://geodata.nationaalgeoregister.nl',
     KADEMO_WFS: 'http://kademo.nl/gs2/wfs?',

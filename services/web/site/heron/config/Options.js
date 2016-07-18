@@ -111,17 +111,18 @@ Heron.options.searchPanelConfig = {
                 header: false,
                 protocol: new OpenLayers.Protocol.WFS({
                     version: "1.1.0",
-                    url: 'http://test.smartemission.nl/geoserver/wfs',
+                    url: Heron.scratch.urls.SMARTEM_WFS,
                     srsName: "EPSG:4326",
                     featureType: "timeseries",
                     featureNS: "http://smartem.geonovum.nl",
                     outputFormat: 'GML2',
-                    maxFeatures: 40000
+                    maxFeatures: 20000
                 }),
 
                 listeners: {
                     'beforeaction': function (form) {
-                        // Verkrijg stastion/device_id en naam component
+                        // Verkrijg station/device_id en naam component
+                        // tbv WFS Filter
                         var station = form.items.items[0].getValue();
                         var component = form.items.items[1].getValue();
                         form.items.items[2].setValue(station);
@@ -134,24 +135,19 @@ Heron.options.searchPanelConfig = {
                     {
                         xtype: 'combo',
                         fieldLabel: 'Station',
-                        // hiddenName: 'station',
+                        width: 200,
                         submitValue: false,
-                        enableKeyEvents: true,
-                        editable: false,
-                        autoSelect: true,
-                        forceSelection: true,
-                        typeAhead: false,
-                        caseSensitive: false,
-                        lazyInit: true,
                         emptyText: 'Selecteer Station',
                         loadingText: 'Stations ophalen..',
-                        minChars: 1,
-                        width: 200,
-                        mode: 'local',
+                        valueField: 'device_id',
+                        displayField: 'device_id',
+                        triggerAction: 'all',
+                        selectOnFocus: true,
                         store: new Ext.data.JsonStore({
                             autoLoad: true,
                             proxy: new Ext.data.HttpProxy({
-                                url: 'http://test.smartemission.nl/geoserver/wfs?request=GetFeature&typename=timeseries_stations&outputformat=JSON',
+                                url: Heron.scratch.urls.SMARTEM_WFS +
+                                'request=GetFeature&typename=timeseries_stations&outputformat=JSON',
                                 method: 'GET'
                             }),
                             idProperty: 'device_id',
@@ -161,34 +157,7 @@ Heron.options.searchPanelConfig = {
                             fields: [
                                 {name: 'device_id', mapping: 'properties.device_id'}
                             ]
-                        }),
-                        valueField: 'device_id',
-                        displayField: 'device_id',
-                        triggerAction: 'all',
-                        selectOnFocus: true,
-                        listeners: {
-                            'select': function (cb, rec) {
-                                // Sets the value into the filter of "component" combo
-                                // TODO: need more elegant way of doing this, like "observer"
-                                var componentCB = Ext.getCmp('component_cb');
-                            //    componentCB.clearValue();
-                            //    componentCB.store.proxy.protocol.filter.value = cb.value;
-                            //    componentCB.store.load();
-                            },
-                            'beforequery': function (queryPlan) {
-                                var combo = queryPlan.combo;
-                                combo.store.clearFilter(true);
-                                var searchValue = queryPlan.query;
-                                if (combo.lastQuery != searchValue) {
-                                    combo.store.filter('device_id', searchValue, true, false);
-                                    combo.lastQuery = searchValue;
-                                    combo.onLoad();
-                                    console.log('searchValue=' + searchValue);
-                                }
-                                return false;
-                            },
-                            scope: this
-                        }
+                        })
                     },
 
                     {
@@ -196,9 +165,13 @@ Heron.options.searchPanelConfig = {
                         id: 'component_cb',
                         fieldLabel: 'Component',
                         width: 200,
-                        // hiddenName: 'component',
                         submitValue: false,
+                        emptyText: 'Selecteer Component',
                         loadingText: 'Componenten ophalen..',
+                        valueField: 'name',
+                        displayField: 'desc',
+                        triggerAction: 'all',
+                        selectOnFocus: true,
                         store: new Ext.data.JsonStore({
                             autoLoad: true,
                             proxy: new Ext.data.HttpProxy({
@@ -210,15 +183,10 @@ Heron.options.searchPanelConfig = {
                             successProperty: null,
                             totalProperty: null,
                             fields: [
-                                {name: 'name', mapping: 'name'}
+                                {name: 'name', mapping: 'name'},
+                                {name: 'desc', mapping: 'desc'}
                             ]
-                         }),
-                        // valueField: 'component',
-                        displayField: 'name',
-                        triggerAction: 'all',
-                        emptyText: 'Selecteer Component',
-                        selectOnFocus: true,
-                        editable: false
+                         })
                     },
                     {
                         xtype: "numberfield",
@@ -235,8 +203,8 @@ Heron.options.searchPanelConfig = {
                     {
                         xtype: "label",
                         id: "helplabel",
-                        html: 'Downloaden tijdreeksen (historie)<br/>Voer station nummer en dan component in. ' +
-                        '<br>Doe dan "Zoek"", kan even duren...Dan rechtsboven in resultaat tabel Download en formaat, bijv CSV, kiesen',
+                        html: 'Downloaden tijdreeksen (historie)<br/>Kies station nummer en dan component.' +
+                        '<br>Klik op "Zoeken" knop. Zoeken kan even duren...geduld...Dan rechtsboven in resultaat tabel Download en formaat, bijv CSV, kiezen',
                         style: {
                             fontSize: '10px',
                             color: '#AAAAAA'

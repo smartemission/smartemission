@@ -1,37 +1,37 @@
 {
   "components": [
     {
-      "name": "co2"
+      "name": "co2", "desc": "Kooldioxide (CO2 ppm)"
     },
     {
-      "name": "co"
+      "name": "co", "desc": "Koolmonoxide (CO mg/m3)"
     },
     {
-      "name": "coraw"
+      "name": "coraw", "desc": "Koolmonoxide Ruw (CO kOhm)"
     },
     {
-      "name": "no2"
+      "name": "no2", "desc": "Stikstofdioxide (NO2 mg/m3)"
     },
     {
-      "name": "no2raw"
+      "name": "no2raw", "desc": "Stikstofdioxide Ruw (NO2 kOhm)"
     },
     {
-      "name": "o3"
+      "name": "o3", "desc": "Ozon (O3 mg/m3)"
     },
     {
-      "name": "o3raw"
+      "name": "o3raw", "desc": "Ozon Ruw (O3 kOhm)"
     },
     {
-      "name": "temperature"
+      "name": "temperature", "desc": "Temperatuur (C)"
     },
     {
-      "name": "pressure"
+      "name": "pressure", "desc": "Luchtdruk (hectopascal)"
     },
     {
-      "name": "humidity"
+      "name": "humidity", "desc": "Luchtvochtigheid (%)"
     },
     {
-      "name": "noiselevelavg"
+      "name": "noiselevelavg", "desc": "Geluid (1-5 en dBA)"
     }
   ]
 }
