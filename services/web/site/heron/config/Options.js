@@ -212,7 +212,7 @@ Heron.options.searchPanelConfig = {
                     }
                 ],
                 hropts: {
-                    onSearchCompleteZoom: 11,
+                    onSearchCompleteZoom: 8,
                     autoWildCardAttach: true,
                     caseInsensitiveMatch: false,
                     logicalOperator: OpenLayers.Filter.Logical.AND

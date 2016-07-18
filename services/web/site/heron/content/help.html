@@ -8,12 +8,58 @@
         <p>Some links</p>
         <ul>
             <li>
-                <a target="_new" href="http://smartemission.nl">Main Smarte Emission website</a>
+                <a target="_new" href="http://smartemission.nl">Main Smart Emission website</a>
             </li>
-            <li>
+            <li><a href="http://smartplatform.readthedocs.org/en/latest/">Smart Emission Data Platform</a> - Technische
+                documentatie SE Data Platform
+            </li>            <li>
                 <a target="_new" href="http://heron-mc.org">Heron website</a>
             </li>
         </ul>
+
+        <h2>Download Timeseries</h2>
+        <p>Download of refined (validated, calibrated, aggregated) and raw timeseries (history) data is possible in various
+            ways.
+            Apart from the SOS/WMS/WFS APIs above data can be downloaded via the Viewers.</p>
+        <h3>52North Viewer (SOS)</h3>
+        <p>
+            See the <a href="/sos52n/static/client/jsClient/index.html" target="_new">SOS Viewer (52North)</a>. When viewing
+            the Chart, click in "I" (Info) button on the right under each component.
+
+        </p>
+        <h3>Heron Viewer (WFS)</h3>
+        <p>
+            Download as CSV and other formats is possible via WFS using this Heron Viewer:
+        </p>
+        <ul>
+            <li>Choose the <i>Binoculairs</i> <img
+                    src="http://lib.heron-mc.org/heron/latest/resources/images/silk/find.png"> icon within the top-toolbar
+            </li>
+            <li> A search form window pops up</li>
+            <li>Choose Station and Component</li>
+            <li>press the "Zoeken" button. Searching may take some time...be patient</li>
+            <li>A result table-grid appears. Choose "Download" and choose download format, e.g. CSV</li>
+        </ul>
+        <p>
+        Advanced: it is even possible to download RIVM historic data (from 2014 on): enable the Layer RIVM Stations. Choose
+        the Search form "Door geometriën te tekenen"
+        </p>
+        <p>Tip: For raw/direct download via your browser or a download tool like curl, a quick WFS download be done this
+            base URL:</p>
+        <p>
+            <code>http://data.smartemission.nl/geoserver/wfs?request=GetFeature&typename=timeseries_<strong>component</strong>&outputformat=csv&CQL_FILTER=device_id=<strong>station
+            id</strong></code>
+        </p>
+        <p>
+            where <strong>component</strong> is one of 'co2', 'co', 'coraw', 'no2', 'no2raw', 'o3', 'o3raw', 'temperature', 'pressure', 'humidity',
+            'noiselevelavg' and
+            <strong>station id</strong> a station number like 12.
+        </p>
+        <p>
+            Example: <a
+                href="/geoserver/wfs?request=GetFeature&typename=timeseries_no2&cql_filter=device_id=20&outputformat=csv">all
+            NO2 hourly averages station 20 (CSV)</a>
+        </p>
 
         <h2>Kaartlagen Functies</h2>
         <hr>
@@ -63,7 +109,7 @@
             Uitzondering zijn getegelde
             lagen (TMS/WMTS). </p>
 
-        <h3><img src="content/images/find.png" style="vertical-align:middle"/> Zoek Formulieren (WFS)</h3>
+        <h3><img src="content/images/find.png" style="vertical-align:middle"/> Zoek Formulieren (WFS), zie boven.</h3>
 
 
         <p>Geeft popup met keuze uit meerdere zoekformulieren. Allen werken via WFS.</p>
