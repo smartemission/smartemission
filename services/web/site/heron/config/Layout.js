@@ -313,7 +313,7 @@ Heron.layout = {
                     flex: 1, //gives precedence, and "flexes" to fill space
                     height: 140,
                     region: 'north',
-                    border: false,
+                    border: true,
                     layout: 'fit',
                     items: [
                         {
@@ -355,7 +355,7 @@ Heron.layout = {
                     region: 'center',
                     flex: 3, //gives precedence, and "flexes" to fill space
                     height: 16,
-                    border: false,
+                    border: true,
                     html: 'Downloaden tijdreeksen (historie): kies verrekijker knop <img src="http://lib.heron-mc.org/heron/latest/resources/images/silk/find.png"> bovenaan',
                     style: {
                         fontSize: '11px',
@@ -368,7 +368,7 @@ Heron.layout = {
                     flex: 2, //gives precedence, and "flexes" to fill space
                     height: 600,
                     region: 'south',
-                    border: false,
+                    border: true,
                     defaults: {
                         useScaleParameter: true,
                         baseParams: {
