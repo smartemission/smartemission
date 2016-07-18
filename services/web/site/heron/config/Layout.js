@@ -19,7 +19,7 @@ Heron.options.urls = Heron.scratch.urls;
 
 // Create end interval date from current date for timeseries slider config.
 Heron.date = new Date();
-Heron.date.setHours(Heron.date.getHours() - 1);
+Heron.date.setHours(Heron.date.getHours());
 Heron.date.setMinutes(0);
 Heron.date.setSeconds(0);
 Heron.date.setMilliseconds(0);
@@ -27,7 +27,7 @@ Heron.date.setMilliseconds(0);
 Heron.date = Heron.date.toISOString();
 
 Heron.cdate = new Date();
-Heron.cdate.setHours(Heron.cdate.getHours() - 3);
+Heron.cdate.setHours(Heron.cdate.getHours() - 1);
 Heron.cdate.setMinutes(0);
 Heron.cdate.setSeconds(0);
 Heron.cdate.setMilliseconds(0);
@@ -318,7 +318,7 @@ Heron.layout = {
                     items: [
                         {
                             xtype: 'hr_simpletimesliderpanel',
-                            title: 'Slider for Timeseries (History) Layers',
+                            title: 'Slider for Timeseries (History in UTC) Layers',
                             border: false,
                             startDateTime: '2016-04-24T10:00:00Z',
                             endDateTime: Heron.date,  // default is current time
