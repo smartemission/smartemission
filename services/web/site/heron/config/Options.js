@@ -373,7 +373,7 @@ Heron.options.searchPanelConfig = {
 var sthURL = 'http://sensors.geonovum.nl:8666';
 var entityType = 'thing';
 Heron.options.map.toolbar = [
-    {type: "scale"},
+    //{type: "scale"},
     /* Leave out: see http://code.google.com/p/geoext-viewer/issues/detail?id=116 */
     {
         type: "featureinfo", options: {
@@ -455,7 +455,6 @@ Heron.options.map.toolbar = [
     },
     {type: "-"},
     {type: "pan"},
-//    {type: "pan", options: {iconCls: "icon-hand"}},
     {type: "zoomin"},
     {type: "zoomout"},
     {type: "zoomvisible"},
@@ -463,12 +462,47 @@ Heron.options.map.toolbar = [
     {type: "zoomprevious"},
     {type: "zoomnext"},
     {type: "-"},
+
+    {
+        type: "searchcenter",
+        // Options for SearchPanel window
+        options: {
+            tooltip: 'Zoek en download tijdreeksen (historie)',
+            show: false,
+
+            searchWindow: {
+                title: null, //__('Multiple Searches'),
+                x: 100,
+                y: undefined,
+                width: 500,
+                height: 440,
+                items: [
+                    Heron.options.searchPanelConfig
+                ]
+            }
+        }
+    },
+    {
+        type: "namesearch",
+        // Optional options, see OpenLSSearchCombo.js
+        options: {
+            xtype: 'hr_openlssearchcombo',
+            id: "pdoksearchcombo",
+            width: 240,
+            listWidth: 400,
+            minChars: 4,
+            queryDelay: 200,
+            zoom: 11,
+            emptyText: 'Zoek adres met PDOK GeoCoder',
+            tooltip: 'Zoek adres met PDOK GeoCoder',
+            url: 'http://geodata.nationaalgeoregister.nl/geocoder/Geocoder?max=10'
+        }
+    },
+    {type: "printdialog", options: {url: 'http://kademo.nl/print/pdf28992.kadviewer'}},
+    {type: "-"},
 /** Use "geodesic: true" for non-linear/Mercator projections like Google, Bing etc */
     {type: "measurelength", options: {geodesic: false}},
     {type: "measurearea", options: {geodesic: false}},
-    {type: "-"},
-    {type: "printdialog", options: {url: 'http://kademo.nl/print/pdf28992.kadviewer'}},
-    {type: "-"},
     {
         type: "oleditor", options: {
         pressed: false,
@@ -626,215 +660,6 @@ Heron.options.map.toolbar = [
             }
         }
     }
-    },
-    {
-        type: "upload", options: {
-        upload: {
-            layerName: 'Kladlaag',
-            url: Heron.globals.serviceUrl,
-            formats: [
-                {
-                    name: 'Well-Known-Text (WKT)',
-                    fileExt: '.wkt',
-                    mimeType: 'text/plain',
-                    formatter: 'OpenLayers.Format.WKT'
-                },
-                {
-                    name: 'Geographic Markup Language - v2 (GML2)',
-                    fileExt: '.gml',
-                    mimeType: 'text/xml',
-                    formatter: 'OpenLayers.Format.GML'
-                },
-                {
-                    name: 'Geographic Markup Language - v3 (GML3)',
-                    fileExt: '.gml',
-                    mimeType: 'text/xml',
-                    formatter: 'OpenLayers.Format.GML.v3'
-                },
-                {name: 'GeoJSON', fileExt: '.json', mimeType: 'text/plain', formatter: 'OpenLayers.Format.GeoJSON'},
-                {
-                    name: 'GPS Exchange Format (GPX)',
-                    fileExt: '.gpx',
-                    mimeType: 'text/xml',
-                    formatter: 'OpenLayers.Format.GPX',
-                    fileProjection: new OpenLayers.Projection('EPSG:4326')
-                },
-                {
-                    name: 'Keyhole Markup Language (KML)',
-                    fileExt: '.kml',
-                    mimeType: 'text/xml',
-                    formatter: 'OpenLayers.Format.KML',
-                    fileProjection: new OpenLayers.Projection('EPSG:4326')
-                },
-                {
-                    name: 'CSV (alleen RD-punten, moet X,Y kolom hebben)',
-                    fileExt: '.csv',
-                    mimeType: 'text/plain',
-                    formatter: 'OpenLayers.Format.GeoJSON',
-                    fileProjection: new OpenLayers.Projection('EPSG:28992')
-                },
-                {
-                    name: 'CSV (idem, punten in WGS84)',
-                    fileExt: '.csv',
-                    mimeType: 'text/plain',
-                    formatter: 'OpenLayers.Format.GeoJSON',
-                    fileProjection: new OpenLayers.Projection('EPSG:4326')
-                },
-                {
-                    name: 'ESRI Shapefile (1 laag, gezipped in RD)',
-                    fileExt: '.zip',
-                    mimeType: 'text/plain',
-                    formatter: 'OpenLayers.Format.GeoJSON'
-                },
-//                {name: 'ESRI Shapefile (1 laag, gezipped in ETRS89)', fileExt: '.zip', mimeType: 'text/plain', formatter: 'OpenLayers.Format.GeoJSON', fileProjection: new OpenLayers.Projection('EPSG:4258')},
-                {
-                    name: 'ESRI Shapefile (1 laag, gezipped in WGS84)',
-                    fileExt: '.zip',
-                    mimeType: 'text/plain',
-                    formatter: 'OpenLayers.Format.GeoJSON',
-                    fileProjection: new OpenLayers.Projection('EPSG:4326')
-                },
-                {
-                    name: 'OGC GeoPackage (1 laag, in RD)',
-                    fileExt: '.gpkg',
-                    mimeType: 'text/plain',
-                    formatter: 'OpenLayers.Format.GeoJSON'
-                },
-//                {name: 'ESRI Shapefile (1 laag, gezipped in ETRS89)', fileExt: '.zip', mimeType: 'text/plain', formatter: 'OpenLayers.Format.GeoJSON', fileProjection: new OpenLayers.Projection('EPSG:4258')},
-                {
-                    name: 'OGC GeoPackage (1 laag, in WGS84)',
-                    fileExt: '.gpkg',
-                    mimeType: 'text/plain',
-                    formatter: 'OpenLayers.Format.GeoJSON',
-                    fileProjection: new OpenLayers.Projection('EPSG:4326')
-                }
-            ],
-            // For custom projections use Proj4.js
-            fileProjection: new OpenLayers.Projection('EPSG:28992')
-        }
-    }
-    },
-    {type: "-"},
-//    {type: "coordinatesearch", options: {onSearchCompleteZoom: 8, localIconFile: 'redpin.png', projection: 'EPSG:28992', fieldLabelX: 'X', fieldLabelY: 'Y'}},
-    {
-        type: "coordinatesearch", options: {
-
-        // === Full demo configuration ===
-
-        // see ToolbarBuilder.js
-        formWidth: 320,
-        formPageX: 15,
-        formPageY: 100
-        // see CoordSearchPanel.js
-        // , title: 'My title'
-        ,
-        titleDescription: 'Kies eventueel een projectie systeem.<br>Voer dan X/Y-coordinaten (RD) of Lon/Lat-waarden in.<br>&nbsp;<br>',
-        titleDescriptionStyle: 'font-size:11px; color:dimgrey;',
-        bodyBaseCls: 'x-form-back',
-        bodyItemCls: 'hr-html-panel-font-size-11',
-        bodyCls: 'hr-html-panel-font-size-11',
-        fieldMaxWidth: 200,
-        fieldLabelWidth: 80,
-        fieldStyle: 'color: red;',
-        fieldLabelStyle: 'color: darkblue',
-        layerName: 'Locatie NL - RD',
-        onProjectionIndex: 1,
-        onZoomLevel: -1,
-        showProjection: true,
-        showZoom: true,
-        showAddMarkers: true,
-        checkAddMarkers: true,
-        showHideMarkers: true,
-        checkHideMarkers: false,
-        removeMarkersOnClose: true,
-        showRemoveMarkersBtn: true,
-        buttonAlign: 'center'		// left, center, right
-        /*
-         http://spatialreference.org/ref/epsg/4326/
-         EPSG:4326
-         WGS 84
-         WGS84 Bounds: -180.0000, -90.0000, 180.0000, 90.0000
-         Projected Bounds: -180.0000, -90.0000, 180.0000, 90.0000
-
-         http://spatialreference.org/ref/epsg/28992/
-         EPSG:28992
-         Amersfoort / RD New
-         WGS84 Bounds: 3.3700, 50.7500, 7.2100, 53.4700
-         Projected Bounds: 12628.0541, 308179.0423, 283594.4779, 611063.1429
-         */,
-        hropts: [
-            {
-                projEpsg: 'EPSG:4326',
-                projDesc: 'EPSG:4326 - WGS 84',
-                fieldLabelX: 'Lon [Graden]',
-                fieldLabelY: 'Lat [Graden]',
-                fieldEmptyTextX: 'Voer lengtegraad (x.yz) in...',
-                fieldEmptyTextY: 'Voer breedtegraad (x.yz) in...',
-                fieldMinX: 3.3700,
-                fieldMinY: 50.7500,
-                fieldMaxX: 7.2100,
-                fieldMaxY: 53.4700,
-                iconWidth: 32,
-                iconHeight: 32,
-                localIconFile: 'bluepin.png',
-                iconUrl: null
-            },
-            {
-                projEpsg: 'EPSG:28992',
-                projDesc: 'EPSG:28992 - Amersfoort / RD New',
-                fieldLabelX: 'X [m]',
-                fieldLabelY: 'Y [m]',
-                fieldEmptyTextX: 'Voer X-coordinaat in...',
-                fieldEmptyTextY: 'Voer Y-coordinaat in...',
-                fieldMinX: -285401.920,
-                fieldMinY: 22598.080,
-                fieldMaxX: 595401.920,
-                fieldMaxY: 903401.920,
-                iconWidth: 32,
-                iconHeight: 32,
-                localIconFile: 'redpin.png',
-                iconUrl: null
-            }
-
-        ]
-
-        // ====================================
-
-    }
-    },
-    {
-        type: "searchcenter",
-        // Options for SearchPanel window
-        options: {
-            show: false,
-
-            searchWindow: {
-                title: null, //__('Multiple Searches'),
-                x: 100,
-                y: undefined,
-                width: 500,
-                height: 440,
-                items: [
-                    Heron.options.searchPanelConfig
-                ]
-            }
-        }
-    },
-    {
-        type: "namesearch",
-        // Optional options, see OpenLSSearchCombo.js
-        options: {
-            xtype: 'hr_openlssearchcombo',
-            id: "pdoksearchcombo",
-            width: 240,
-            listWidth: 400,
-            minChars: 4,
-            queryDelay: 200,
-            zoom: 11,
-            emptyText: 'Zoek adres met PDOK GeoCoder',
-            tooltip: 'Zoek adres met PDOK GeoCoder',
-            url: 'http://geodata.nationaalgeoregister.nl/geocoder/Geocoder?max=10'
-        }
     },
     {type: "addbookmark"},
 //    {type: "mapopen"},
