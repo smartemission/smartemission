@@ -6,15 +6,15 @@ import math
 # from stetl.util import Util
 from os import sys, path
 
-import pickle
+import picklegit
 import numpy as np
 
 # Make absolute location for pickled calibration objects
 file_dir = path.dirname(path.abspath(__file__))
 
-pipeline_objects = {'co': path.join(file_dir, 'calibration/pipeline_co.pkl'),
-                    'no2': path.join(file_dir, 'calibration/pipeline_no2.pkl'),
-                    'o3': path.join(file_dir, 'calibration/pipeline_o3.pkl')}
+pipeline_objects = {'co': path.join(file_dir, 'calibration/model/pipeline_co.pkl'),
+                    'no2': path.join(file_dir, 'calibration/model/pipeline_no2.pkl'),
+                    'o3': path.join(file_dir, 'calibration/model/pipeline_o3.pkl')}
 running_mean_param = {'co': {'co': 0.005, 'no2': 0.005, 'o3': 0.005},
                       'no2': {'co': 0.005, 'no2': 0.005, 'o3': 0.005},
                       'o3': {'co': 0.005, 'no2': 0.005, 'o3': 0.005}}
