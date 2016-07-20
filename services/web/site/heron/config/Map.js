@@ -252,7 +252,7 @@ Heron.options.map.layers = [
             type: 'jpeg',
             serverResolutions: Heron.options.serverResolutions.zoom_0_13,
             isBaseLayer: false,
-            visibility: true
+            visibility: false
         }
     ),
 
