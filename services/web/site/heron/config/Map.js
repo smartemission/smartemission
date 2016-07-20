@@ -217,23 +217,6 @@ Heron.options.map.layers = [
      * ==================================
      */
 
-    new OpenLayers.Layer.TMS("OpenBasisKaart OSM",
-        Heron.scratch.urls.OPENBASISKAART_TMS,
-        {
-            layername: 'osm@rd',
-            type: "png",
-            isBaseLayer: true,
-            transparent: true,
-            bgcolor: "0xffffff",
-            visibility: true,
-            singleTile: false,
-            serverResolutions: Heron.options.serverResolutions.zoom_0_13,
-            alpha: true,
-            opacity: 1.0,
-            attribution: "(C) <a href='http://openbasiskaart.nl'>OpenBasisKaart</a><br/>Data <a href='http://www.openstreetmap.org/copyright'>ODbL</a> <a href='http://openstreetmap.org/'>OpenStreetMap</a> ",
-            transitionEffect: 'resize'
-        }),
-
     /*
      * Arial images PDOK.
      */
@@ -245,9 +228,26 @@ Heron.options.map.layers = [
             type: 'jpeg',
             serverResolutions: Heron.options.serverResolutions.zoom_0_13,
             isBaseLayer: true,
-            visibility: false
+            visibility: true
         }
     ),
+
+    new OpenLayers.Layer.TMS("OpenBasisKaart OSM",
+        Heron.scratch.urls.OPENBASISKAART_TMS,
+        {
+            layername: 'osm@rd',
+            type: "png",
+            isBaseLayer: true,
+            transparent: true,
+            bgcolor: "0xffffff",
+            visibility: false,
+            singleTile: false,
+            serverResolutions: Heron.options.serverResolutions.zoom_0_13,
+            alpha: true,
+            opacity: 1.0,
+            attribution: "(C) <a href='http://openbasiskaart.nl'>OpenBasisKaart</a><br/>Data <a href='http://www.openstreetmap.org/copyright'>ODbL</a> <a href='http://openstreetmap.org/'>OpenStreetMap</a> ",
+            transitionEffect: 'resize'
+        }),
 
     new OpenLayers.Layer.TMS("Map5 Relief Struct TMS",
         Heron.scratch.urls.MAP5_TMS,
