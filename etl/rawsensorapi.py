@@ -528,7 +528,7 @@ class RawSensorTimeseriesInput(RawSensorAPIInput):
 
         # Skip harvesting the current hour as it will not yet be complete, so try the next device, hour
         if self.day == current_day and (self.hour - 1) == current_hour:
-            log.info('Skipped device-day-hour: %d-%d-%d (still sampling current hour %d)' % (self.device_id, self.day, self.hour, current_hour))
+            log.info('Skipped device-day-hour: %d-%d-%d (it is still sampling current hour %d)' % (self.device_id, self.day, self.hour, current_hour))
             self.next_hour()
 
         # Still hours?
