@@ -217,6 +217,30 @@ Heron.options.map.layers = [
      * ==================================
      */
 
+    new OpenLayers.Layer.TMS("OpenSimpleTopo TMS",
+        Heron.scratch.urls.MAP5_TMS,
+        {
+            layername: 'opensimpletopo/EPSG28992',
+            type: "jpeg",
+            isBaseLayer: true,
+            transparent: false,
+            bgcolor: "0xffffff",
+            visibility: true,
+            singleTile: false,
+            serverResolutions: Heron.options.serverResolutions.zoom_0_16,
+            alpha: true,
+            opacity: 1.0,
+            attribution: "CC by CA <a href='http://map5.nl'>OpenTopo via map5.nl</a> <br/>Data <a href='http://www.openstreetmap.org/copyright'>ODbL</a> <a href='http://openstreetmap.org/'>OpenStreetMap</a> ",
+            transitionEffect: 'resize',
+            metadata: {
+                legend: {
+                    // Use a fixed URL as legend
+                    legendURL: 'images/legend/legenda-opensimpletopo-760.png',
+                    hideInLegend: false
+                }
+            }
+        }),
+
     /*
      * Arial images PDOK.
      */
@@ -227,7 +251,7 @@ Heron.options.map.layers = [
             layername: 'luchtfoto_EPSG28992',
             type: 'jpeg',
             serverResolutions: Heron.options.serverResolutions.zoom_0_13,
-            isBaseLayer: true,
+            isBaseLayer: false,
             visibility: true
         }
     ),
@@ -262,7 +286,7 @@ Heron.options.map.layers = [
             serverResolutions: Heron.options.serverResolutions.zoom_0_16,
             alpha: true,
             opacity: 1.0,
-            attribution: "CC by CA <a href='http://opentopo.nl'>OpenTopo</a> <br/>Data <a href='http://www.openstreetmap.org/copyright'>ODbL</a> <a href='http://openstreetmap.org/'>OpenStreetMap</a> ",
+            attribution: "CC by CA <a href='http://map5.nl'>OpenTopo via map5.nl</a> <br/>Data <a href='http://www.openstreetmap.org/copyright'>ODbL</a> <a href='http://openstreetmap.org/'>OpenStreetMap</a> ",
             transitionEffect: 'resize'
         }),
 
@@ -296,7 +320,7 @@ Heron.options.map.layers = [
             serverResolutions: Heron.options.serverResolutions.zoom_0_16,
             alpha: true,
             opacity: 1.0,
-            attribution: "CC by CA <a href='http://opentopo.nl'>OpenTopo</a> <br/>Data <a href='http://www.openstreetmap.org/copyright'>ODbL</a> <a href='http://openstreetmap.org/'>OpenStreetMap</a> ",
+            attribution: "CC by CA <a href='http://map5.nl'>OpenTopo via map5.nl</a> <br/>Data <a href='http://www.openstreetmap.org/copyright'>ODbL</a> <a href='http://openstreetmap.org/'>OpenStreetMap</a> ",
             transitionEffect: 'resize',
             metadata: {
                 legend: {
@@ -306,31 +330,6 @@ Heron.options.map.layers = [
                 }
             }
         }),
-
-    new OpenLayers.Layer.TMS("OpenSimpleTopo TMS",
-        Heron.scratch.urls.MAP5_TMS,
-        {
-            layername: 'opensimpletopo/EPSG28992',
-            type: "jpeg",
-            isBaseLayer: true,
-            transparent: false,
-            bgcolor: "0xffffff",
-            visibility: false,
-            singleTile: false,
-            serverResolutions: Heron.options.serverResolutions.zoom_0_16,
-            alpha: true,
-            opacity: 1.0,
-            attribution: "CC by CA <a href='http://opentopo.nl'>OpenTopo</a> <br/>Data <a href='http://www.openstreetmap.org/copyright'>ODbL</a> <a href='http://openstreetmap.org/'>OpenStreetMap</a> ",
-            transitionEffect: 'resize',
-            metadata: {
-                legend: {
-                    // Use a fixed URL as legend
-                    legendURL: 'images/legend/legenda-opensimpletopo-760.png',
-                    hideInLegend: false
-                }
-            }
-        }),
-
 
     new OpenLayers.Layer.TMS("Map5 OpenLufo TMS",
         Heron.scratch.urls.MAP5_TMS,
@@ -345,7 +344,7 @@ Heron.options.map.layers = [
             serverResolutions: Heron.options.serverResolutions.zoom_0_16,
             alpha: true,
             opacity: 1.0,
-            attribution: "CC by CA <a href='http://opentopo.nl'>OpenTopo</a> <br/>Data <a href='http://www.openstreetmap.org/copyright'>ODbL</a> <a href='http://openstreetmap.org/'>OpenStreetMap</a> ",
+            attribution: "CC by CA <a href='http://map5.nl'>OpenTopo via map5.nl</a> <br/>Data <a href='http://www.openstreetmap.org/copyright'>ODbL</a> <a href='http://openstreetmap.org/'>OpenStreetMap</a> ",
             transitionEffect: 'resize'
         }),
 
