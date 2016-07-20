@@ -84,7 +84,7 @@
     </p>
     <h3>Heron Viewer (WFS)</h3>
     <p>
-        Download as CSV and other formats is possible via WFS using the <a href="heron">Heron Viewer</a>:
+        Download as CSV and other formats via WFS using the <a href="heron">Heron Viewer</a>:
     </p>
     <ul>
         <li>Choose the <i>Binoculairs</i> <img
@@ -93,13 +93,14 @@
         <li> A search form window pops up</li>
         <li>Choose Station and Component</li>
         <li>press the "Zoeken" button. Searching may take some time...be patient</li>
-        <li>A result table-grid appears. Choose "Download" and choose download format, e.g. CSV</li>
+        <li>A result table-grid appears. Choose "Download" and choose download format, e.g. CSV, Excel, GML etc</li>
     </ul>
     <p>
     Advanced: it is even possible to download RIVM historic data (from 2014 on): enable the Layer RIVM Stations. Choose
     the Search form "Door geometriën te tekenen"
     </p>
-    <p>Tip: For raw/direct download via your browser or a download tool like curl, a quick WFS download be done this
+    <h3>Direct (WFS)</h3>
+    <p>For raw/direct download via your browser or a download tool like curl, a quick WFS download be done this
         base URL:</p>
     <p>
         <code>http://data.smartemission.nl/geoserver/wfs?request=GetFeature&typename=timeseries_<strong>component</strong>&outputformat=csv&CQL_FILTER=device_id=<strong>station
