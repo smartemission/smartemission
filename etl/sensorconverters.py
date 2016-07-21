@@ -103,9 +103,9 @@ def ohm_co_to_ugm3(input, json_obj, sensor_def):
                         co_running_means['no2'], co_running_means['o3']]).reshape(1, -1)
     with open(pipeline_objects['co'], 'rb') as f:
         co_pipeline = pickle.load(f)
-    val = co_pipeline.predict(value_array)
+    val = co_pipeline.predict(value_array)[0]
 
-    return val[0]
+    return val
 
 
 def ohm_no2_to_ugm3(input, json_obj, sensor_def):
@@ -134,9 +134,9 @@ def ohm_no2_to_ugm3(input, json_obj, sensor_def):
                         no2_running_means['no2'], no2_running_means['o3']]).reshape(1, -1)
     with open(pipeline_objects['no2'], 'rb') as f:
         no2_pipeline = pickle.load(f)
-    val = no2_pipeline.predict(value_array)
+    val = no2_pipeline.predict(value_array)[0]
 
-    return val[0]
+    return val
 
 
 # http://smartplatform.readthedocs.io/en/latest/data.html#o3-calibration
@@ -168,10 +168,10 @@ def ohm_o3_to_ugm3(input, json_obj, sensor_def):
         # s = f.read()
         o3_pipeline = pickle.load(f)
 
-    val = o3_pipeline.predict(value_array)
+    val = o3_pipeline.predict(value_array)[0]
 
     # log.info('device: %d : O3 : ohm=%d ugm3=%d' % (device, input, val))
-    return val[0]
+    return val
 
 
 def ohm_to_kohm(input, json_obj=None, sensor_def=None):
