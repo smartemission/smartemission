@@ -6,7 +6,7 @@ import math
 # from stetl.util import Util
 from os import sys, path
 
-import picklegit
+import pickle
 import numpy as np
 
 # Make absolute location for pickled calibration objects
