@@ -320,7 +320,7 @@ Heron.layout = {
                             xtype: 'hr_simpletimesliderpanel',
                             title: 'Slider for Timeseries (History in UTC) Layers',
                             border: false,
-                            startDateTime: '2016-04-24T10:00:00Z',
+                            startDateTime: '2016-04-01T20:00:00Z',
                             endDateTime: Heron.date,  // default is current time
                             stepTime: 'PT1H',
                             dateTime: Heron.cdate,
