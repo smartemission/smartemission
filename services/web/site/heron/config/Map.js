@@ -325,7 +325,7 @@ Heron.options.map.layers = [
             metadata: {
                 legend: {
                     // Use a fixed URL as legend
-                    legendURL: 'images/legend/legenda-opentopo-1012.png',
+                    legendURL: 'images/legend/legenda-opentopo-760.png',
                     hideInLegend: false
                 }
             }
