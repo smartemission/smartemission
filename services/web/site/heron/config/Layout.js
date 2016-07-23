@@ -353,7 +353,7 @@ Heron.layout = {
                     xtype: "hr_htmlpanel",
                     title: 'Tips',
                     region: 'center',
-                    flex: 3, //gives precedence, and "flexes" to fill space
+                    flex: 2, //gives precedence, and "flexes" to fill space
                     height: 16,
                     border: true,
                     html: 'Downloaden tijdreeksen (historie): kies verrekijker knop <img src="http://lib.heron-mc.org/heron/latest/resources/images/silk/find.png"> bovenaan',
@@ -365,8 +365,8 @@ Heron.layout = {
                 {
                     xtype: 'hr_layerlegendpanel',
                     id: 'hr-layerlegend-panel',
-                    flex: 2, //gives precedence, and "flexes" to fill space
-                    height: 600,
+                    flex: 3, //gives precedence, and "flexes" to fill space
+                    height: 300,
                     region: 'south',
                     border: true,
                     defaults: {
