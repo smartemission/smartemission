@@ -231,14 +231,14 @@ Heron.options.map.layers = [
             alpha: true,
             opacity: 1.0,
             attribution: "CC by CA <a href='http://map5.nl'>OpenTopo via map5.nl</a> <br/>Data <a href='http://www.openstreetmap.org/copyright'>ODbL</a> <a href='http://openstreetmap.org/'>OpenStreetMap</a> ",
-            transitionEffect: 'resize',
-            metadata: {
-                legend: {
-                    // Use a fixed URL as legend
-                    legendURL: 'images/legend/legenda-opensimpletopo-760.png',
-                    hideInLegend: false
-                }
-            }
+            transitionEffect: 'resize'
+            //metadata: {
+            //    legend: {
+            //        // Use a fixed URL as legend
+            //        legendURL: 'images/legend/legenda-opensimpletopo-760.png',
+            //        hideInLegend: false
+            //    }
+            //}
         }),
 
     /*
@@ -321,14 +321,14 @@ Heron.options.map.layers = [
             alpha: true,
             opacity: 1.0,
             attribution: "CC by CA <a href='http://map5.nl'>OpenTopo via map5.nl</a> <br/>Data <a href='http://www.openstreetmap.org/copyright'>ODbL</a> <a href='http://openstreetmap.org/'>OpenStreetMap</a> ",
-            transitionEffect: 'resize',
-            metadata: {
-                legend: {
-                    // Use a fixed URL as legend
-                    legendURL: 'images/legend/legenda-opentopo-760.png',
-                    hideInLegend: false
-                }
-            }
+            transitionEffect: 'resize'
+            //metadata: {
+            //    legend: {
+            //        // Use a fixed URL as legend
+            //        legendURL: 'images/legend/legenda-opentopo-760.png',
+            //        hideInLegend: true
+            //    }
+            //}
         }),
 
     new OpenLayers.Layer.TMS("Map5 OpenLufo TMS",
