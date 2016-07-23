@@ -11,19 +11,6 @@ $(document).ready(function () {
     var source = $("#entry-template").html();
     var template = Handlebars.compile(source);
 
-
-    // Create icon based on feature props and selected state
-    function getMarkerIcon(feature, selected) {
-        // Default
-        var iconUrl = feature.properties['value_stale'] == '0' ? 'locatie-icon.png' : 'locatie-icon-stale.png';
-
-        return new L.icon({
-                    iconUrl: selected ? 'locatie-icon-click.png' : iconUrl,
-                    iconSize: [24, 41],
-                    iconAnchor: [10, 40]
-                });
-    }
-
     // URL of the Smart Emission SOS REST API
     //var apiUrl = 'http://api.smartemission.nl/sosemu/api/v1';
     var apiUrl = '/sosemu/api/v1';
@@ -41,6 +28,106 @@ $(document).ready(function () {
     var meteoIds = 'temperature,pressure,humidity';
     var audioIds = 'noiseavg,noiselevelavg';
 
+    // Create icon based on feature props and selected state
+    function getMarkerIcon(feature, selected) {
+        // Default
+        var iconUrl = feature.properties['value_stale'] == '0' ? 'locatie-icon.png' : 'locatie-icon-stale.png';
+
+        return new L.icon({
+            iconUrl: selected ? 'locatie-icon-click.png' : iconUrl,
+            iconSize: [24, 41],
+            iconAnchor: [10, 40]
+        });
+    }
+
+    // Show the station side bar popup
+    function show_station_popup(feature) {
+        var stationId = feature.properties.id;
+        var timeseriesUrl = apiUrl + '/timeseries?format=json&station=' + stationId + '&callback=?';
+
+        $.getJSON(timeseriesUrl, function (data) {
+            // See to which category an observation belongs by matching the label
+            var gasses = [];
+            var meteo = [];
+            var audio = [];
+
+            for (var idx in data) {
+                var component = data[idx];
+                var componentId = component.id;
+
+                // Is it a gas?
+                if (gasIds.indexOf(componentId) >= 0) {
+                    gasses.push(component);
+
+                    // Is it a meteo?
+                } else if (meteoIds.indexOf(componentId) >= 0) {
+                    meteo.push(component);
+
+                    // Is it audio?
+                } else if (audioIds.indexOf(componentId) >= 0) {
+                    // Is it a audio?
+                    audio.push(component);
+
+                    if (componentId == 'noiselevelavg') {
+                        component['offset'] = parseInt(component.lastValue.value) * 20 - 10;
+                    }
+                }
+            }
+
+            // Create station data struct: splitting up component categories
+            var stationData = {
+                station: feature,
+                data: {
+                    gasses: gasses,
+                    meteo: meteo,
+                    audio: audio
+                }
+            };
+
+            // console.log(stationData);
+
+            var html = template(stationData);
+
+            // Hier met JQuery
+            var sidebarElm = $("#sidebar");
+
+            // sidebarElm clear first
+            sidebarElm.empty();
+            sidebarElm.append(html);
+            sidebar.toggle();
+
+            // Zoom to station and change icon to yellow
+
+            // Get the Marker
+            var markerClicked = markers[stationId];
+            if (markerClicked) {
+                var icon = getMarkerIcon(feature, true);
+                markerClicked.setIcon(icon);
+
+                // Reset previous clicked marker if exists
+                if (oldMarkerId) {
+                    var oldMarkerClicked = markers[oldMarkerId];
+                    icon = getMarkerIcon(oldMarkerClicked.feature, false);
+                    oldMarkerClicked.setIcon(icon);
+                }
+
+                // Save the clicked marker feature id, to reset
+                oldMarkerId = stationId;
+            }
+
+            // Coordinaten geometrie (lon,lat) en LatLon object (lat, lon) moeten omgedraaid
+            var zoomTo = feature.geometry.coordinates;
+            map.setView(new L.latLng([zoomTo[1], zoomTo[0]]), 17);
+        });
+    }
+
+    // get query params, see: http://blog.thematicmapping.org/2012/10/how-to-control-your-leaflet-map-with.html
+    // and http://papermashup.com/read-url-get-variables-withjavascript/
+    var query_params = {};
+    window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
+        query_params[key] = value;
+    });
+
     // First get stations JSON object via REST
     $.getJSON(stationsUrl, function (data) {
         // Callback when getting stations
@@ -56,84 +143,14 @@ $(document).ready(function () {
             // When station-marker clicked get Timeseries with last value for that Station
             .on('click', function (e) {
                 var feature = e.layer.feature;
-                var stationId = feature.properties.id;
-                var timeseriesUrl = apiUrl + '/timeseries?format=json&station=' + stationId + '&callback=?';
-
-                $.getJSON(timeseriesUrl, function (data) {
-                    // See to which category an observation belongs by matching the label
-                    var gasses = [];
-                    var meteo = [];
-                    var audio = [];
-
-                    for (var idx in data) {
-                        var component = data[idx];
-                        var componentId = component.id;
-
-                        // Is it a gas?
-                        if (gasIds.indexOf(componentId) >= 0) {
-                            gasses.push(component);
-
-                            // Is it a meteo?
-                        } else if (meteoIds.indexOf(componentId) >= 0) {
-                            meteo.push(component);
-
-                            // Is it audio?
-                        } else if (audioIds.indexOf(componentId) >= 0) {
-                            // Is it a audio?
-                            audio.push(component);
-
-                            if (componentId == 'noiselevelavg') {
-                                component['offset'] = parseInt(component.lastValue.value) * 20 - 10;
-                            }
-                        }
-                    }
-
-                    // Create station data struct: splitting up component categories
-                    var stationData = {
-                        station: feature,
-                        data: {
-                            gasses: gasses,
-                            meteo: meteo,
-                            audio: audio
-                        }
-                    };
-
-                    // console.log(stationData);
-
-                    var html = template(stationData);
-
-                    // Hier met JQuery
-                    var sidebarElm = $("#sidebar");
-
-                    // sidebarElm clear first
-                    sidebarElm.empty();
-                    sidebarElm.append(html);
-                    sidebar.toggle();
-
-                    // Zoom to station and change icon to yellow
-
-                    // Get the Marker
-                    var markerClicked = markers[stationId];
-                    if (markerClicked) {
-                        var icon = getMarkerIcon(feature, true);
-                        markerClicked.setIcon(icon);
-
-                        // Reset previous clicked marker if exists
-                        if (oldMarkerId) {
-                            var oldMarkerClicked = markers[oldMarkerId];
-                            icon = getMarkerIcon(oldMarkerClicked.feature, false);
-                            oldMarkerClicked.setIcon(icon);
-                        }
-
-                        // Save the clicked marker feature id, to reset
-                        oldMarkerId = stationId;
-                    }
-
-                    // Coordinaten geometrie (lon,lat) en LatLon object (lat, lon) moeten omgedraaid
-                    var zoomTo = feature.geometry.coordinates;
-                    map.setView(new L.latLng([zoomTo[1], zoomTo[0]]), 17);
-                });
+                show_station_popup(feature);
             });
+
+        // Check query parameter to directly show station values
+        if (query_params.station && markers[query_params.station]) {
+            var feature = markers[query_params.station].feature;
+            show_station_popup(feature);
+        }
     });
 
     var sidebar = L.control.sidebar('sidebar', {
