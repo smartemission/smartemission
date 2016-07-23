@@ -29,6 +29,13 @@ class RawDbInput(PostgresDbInput):
         """
         pass
 
+    @Config(ptype=int, required=True, default=10)
+    def max_input_records(self):
+        """
+        Maximum number of input (raw) records to be processed.
+        """
+        pass
+
     @Config(ptype=str, required=True, default=None)
     def data_query(self):
         """
@@ -66,7 +73,8 @@ class RawDbInput(PostgresDbInput):
             self.last_gid, = last_gid_tuples[0]
 
         # One time: get all gid's to be processed
-        ts_gid_tuples = self.raw_query(self.gids_query % self.last_gid)
+        raw_query = self.gids_query % (self.last_gid, self.last_gid + self.max_input_records)
+        ts_gid_tuples = self.raw_query(raw_query)
         ts_gid_recs = self.tuples_to_records(ts_gid_tuples, ['gid'])
 
         log.info('read timeseries_recs: %d' % len(ts_gid_recs))
@@ -102,6 +110,13 @@ class RawDbInput(PostgresDbInput):
 
 
 class RefinedDbInput(PostgresDbInput):
+    @Config(ptype=int, required=True, default=10)
+    def max_input_records(self):
+        """
+        Maximum number of input (refined) records to be processed.
+        """
+        pass
+
     """
     Reads SmartEmission refined timeseries data from table and converts to recordlist.
     """
@@ -130,8 +145,8 @@ class RefinedDbInput(PostgresDbInput):
         self.last_id = progress_rec[3]
         log.info('progress record: %s' % str(progress_rec))
 
-        # Fetch next batch of measurementss records
-        measurements_recs = self.do_query(self.query % self.last_id)
+        # Fetch next batch of refined input records
+        measurements_recs = self.do_query(self.query % (self.last_id, self.last_id + self.max_input_records))
 
         log.info('read measurements_recs: %d' % len(measurements_recs))
         # No more records to process?

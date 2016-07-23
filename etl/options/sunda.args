@@ -12,7 +12,8 @@ pg_schema=smartem
 pg_schema_rt=smartem_rt
 pg_schema_raw=smartem_raw
 pg_schema_refined=smartem_refined
-pg_max_samples=50
+refiner_max_input_records=200
+publisher_max_input_records=50
 
 # Maximum time spent in processing
 max_proc_time_secs=15
