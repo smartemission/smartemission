@@ -100,6 +100,9 @@ RUN if ls /tmp/resources/config/datasource.properties > /dev/null 2>&1; then \
     fi; \
     if ls /tmp/resources/config/logback.xml > /dev/null 2>&1; then \
       cp -f /tmp/resources/config/logback.xml $SOS_DEPLOY_DIR/WEB-INF/classes; \
+    fi; \
+    if ls /tmp/resources/config/timeseries-api_v1_beans.xml > /dev/null 2>&1; then \
+      cp -f /tmp/resources/config/timeseries-api_v1_beans.xml $SOS_DEPLOY_DIR/WEB-INF/spring; \
     fi;
 
 # Overlay files and directories in resources/overlays if they exist
