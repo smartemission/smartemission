@@ -5,6 +5,7 @@ as these are not possible to map via symlinks from host:
 
 - datasource.properties
 - logback.xml
+- timeseries-api_v1_beans.xml  (just for Service Identification)
 
 The third config file that the SOS needs is WEB-INF/configuration.db.
 A default version is provided here. However, to be able to maintain

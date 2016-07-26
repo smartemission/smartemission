@@ -82,10 +82,10 @@ RUN if [ ! -f /tmp/resources/sos52n.zip ]; then \
       wget -c $SOS_DL_URL -O /tmp/resources/sos52n.zip; \
     fi;
 
-# unzips in sos52n/52n-sensorweb-sos-bundle-$SOS_VERSION/bin/target/52n-sos-webapp##4.3.6.war
+# unzips in sos52n/52n-sensorweb-sos-bundle-$SOS_VERSION/bin/target/52n-sos-webapp##4.3.7.war
 # hence mv to a Linux-friendly filename
 RUN unzip /tmp/resources/sos52n.zip -d /tmp/resources/sos52n  \
-    && unzip '/tmp/resources/sos52n/52n-sensorweb-sos-bundle-4.3.6/bin/target/52n-sos-webapp##4.3.6.war' -d $SOS_DEPLOY_DIR
+    && unzip '/tmp/resources/sos52n/52n-sensorweb-sos-bundle-4.3.7/bin/target/52n-sos-webapp##4.3.7.war' -d $SOS_DEPLOY_DIR
 
 # Move all relevant settings files to a separate dir and provide symlinks
 # These can then be provided externally via a volume mount from the host to the container
