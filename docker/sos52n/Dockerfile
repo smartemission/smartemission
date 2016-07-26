@@ -28,7 +28,8 @@ RUN echo "$IMAGE_TIMEZONE" > /etc/timezone && \
 #-------------Application Specific Stuff ----------------------------------------------------
 #  .zip file: http://52north.org/downloads/send/3-sos/484-52n-sensorweb-sos-bundle-4-3-7
 ENV SOS_VERSION 4.3.7
-ENV SOS_DL_URL http://52north.org/downloads/send/3-sos/484-52n-sensorweb-sos-bundle-4-3-7
+# ENV SOS_DL_URL http://52north.org/downloads/send/3-sos/484-52n-sensorweb-sos-bundle-4-3-7
+ENV SOS_DL_URL http://52north.org/downloads/send/3-sos/491-52n-sensorweb-sos-bundle-4-3-7
 ENV TC_DEPLOY_DIR $CATALINA_HOME/webapps
 ENV SOS_CONFIG_DIR  /opt/sosconfig
 ENV SOS_DEPLOY_DIR  $TC_DEPLOY_DIR/sos52n
