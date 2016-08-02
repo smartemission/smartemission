@@ -127,7 +127,7 @@ Heron.options.searchPanelConfig = {
                         var component = form.items.items[1].getValue();
                         form.items.items[2].setValue(station);
                         form.items.items[3].setValue(component);
-                     },
+                    },
                     scope: this
                 },
                 downloadFormats: Heron.options.downloadFormats,
@@ -186,7 +186,7 @@ Heron.options.searchPanelConfig = {
                                 {name: 'name', mapping: 'name'},
                                 {name: 'desc', mapping: 'desc'}
                             ]
-                         })
+                        })
                     },
                     {
                         xtype: "numberfield",
@@ -199,6 +199,22 @@ Heron.options.searchPanelConfig = {
                         name: "name__eq",
                         hidden: true,
                         value: ''
+                    },
+                    {
+                        xtype: 'datefield'
+                        , name: "time__ge"
+                        , width: 200
+                        , format: 'Y-m-d\\TH:i:s'   // the format of date with time.
+                        , value: new Date()
+                        , fieldLabel: "  Vanaf datum"
+                    },
+                    {
+                        xtype: 'datefield'
+                        , name: "time__le"
+                        , width: 200
+                        , format: 'Y-m-d\\TH:i:s'   // the format of date with time.
+                        , value: new Date()
+                        , fieldLabel: "  Tot datum"
                     },
                     {
                         xtype: "label",
