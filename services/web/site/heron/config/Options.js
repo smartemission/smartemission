@@ -126,7 +126,9 @@ Heron.options.searchPanelConfig = {
                         var station = form.items.items[0].getValue();
                         var component = form.items.items[1].getValue();
                         form.items.items[2].setValue(station);
-                        form.items.items[3].setValue(component);
+                        var compItem = form.items.items[3];
+                        compItem.setValue(component);
+                        compItem.setDisabled(component == '*');
                     },
                     scope: this
                 },
