@@ -205,8 +205,8 @@ Heron.options.searchPanelConfig = {
                         , name: "time__ge"
                         , width: 200
                         , format: 'Y-m-d\\TH:i:s'   // the format of date with time.
-                        , value: new Date()
-                        , fieldLabel: "  Vanaf datum"
+                        , value: undefined
+                        , fieldLabel: "  Start datum"
                     },
                     {
                         xtype: 'datefield'
@@ -214,7 +214,7 @@ Heron.options.searchPanelConfig = {
                         , width: 200
                         , format: 'Y-m-d\\TH:i:s'   // the format of date with time.
                         , value: new Date()
-                        , fieldLabel: "  Tot datum"
+                        , fieldLabel: "  Eind datum"
                     },
                     {
                         xtype: "label",
