@@ -204,22 +204,23 @@ Heron.options.searchPanelConfig = {
                         xtype: 'datefield'
                         , name: "time__ge"
                         , width: 200
-                        , format: 'Y-m-d\\TH:i:s'   // the format of date with time.
-                        , value: undefined
+                        // , format: 'Y-m-d\\TH:i:s'
+                        , format: 'd M Y'   // the format of date with time.
+                        , value: new Date((new Date()).valueOf() - 1000*60*60*24)
                         , fieldLabel: "  Start datum"
                     },
                     {
                         xtype: 'datefield'
                         , name: "time__le"
                         , width: 200
-                        , format: 'Y-m-d\\TH:i:s'   // the format of date with time.
+                        , format: 'd M Y'   // the format of date with time.
                         , value: new Date()
                         , fieldLabel: "  Eind datum"
                     },
                     {
                         xtype: "label",
                         id: "helplabel",
-                        html: 'Downloaden tijdreeksen (historie)<br/>Kies station nummer en dan component.' +
+                        html: 'Downloaden tijdreeksen (historie)<br/>Kies station nummer, dan component, dan evt tijdspanne.' +
                         '<br>Klik op "Zoeken" knop. Zoeken kan even duren...geduld...Dan rechtsboven in resultaat tabel Download en formaat, bijv CSV, kiezen',
                         style: {
                             fontSize: '10px',
