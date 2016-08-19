@@ -18,6 +18,7 @@ Contents:
    dissemination.rst
    contact.rst
    links.rst
+   notes.rst
 
 Indices and tables
 ==================
