@@ -1,7 +1,7 @@
 
 zooify <- function(df, col_time = "datetime") {
-  idx <- df[, which(col_time %in% names(df))]
-  df <- df[, -which(col_time %in% names(df))]
+  idx <- df[, col_time, with = FALSE][[1]]
+  df <- df[, -which(col_time %in% names(df)), with = FALSE]
   df <- zoo(data.matrix(df), idx)
   return(df)
 }
@@ -19,7 +19,7 @@ remove_na_col <- function(df, max.part = 1.0, verbose = FALSE) {
     print("Deleting columns because of to many NA's")
     print(names(many_na[many_na >= max.part]))
   }
-  df <- df[, many_na < max.part]
+  df <- df[, many_na < max.part, with = FALSE]
   return(df)
 }
 

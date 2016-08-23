@@ -6,6 +6,8 @@ library(compositions)
 library(zoo)
 library(grid)
 library(gridExtra)
+library(data.table)
+library(lubridate)
 
 source("io.R")
 source("preproc.R")
@@ -17,19 +19,19 @@ folder <- "~/Data/GemeenteNijmegen/SmartEmission"
 nrow <- -1
 
 ## Load RIVM data -------------------------------------
-rivm <- read_rivm(folder, "741_742_minuten_2016.csv", nrow)
-rivm_14 <- rivm[, c(1, 2, 3:18)]
-rivm_12 <- rivm[, c(1, 2, 19:34)]
+rivm <- read_rivm(folder, "741_742_minuten_feb_jul2016.csv", nrow)
+rivm_14 <- rivm[, c(1, 2, 3:18), with = FALSE]
+rivm_12 <- rivm[, c(1, 2, 19:34), with = FALSE]
 rivm_14 <- rivm_remove_bad_status(rivm_14)
-rivm_12 <- rivm_remove_bad_status(rivm_12) 
+rivm_12 <- rivm_remove_bad_status(rivm_12)
 
 ## Read jose data -------------------------------------
-jose_12 <- read_jose(folder, "12.txt", nrow)
-jose_14 <- read_jose(folder, "14.txt", nrow)
+jose_12 <- read_jose(folder, "jose12.csv", nrow)
+jose_14 <- read_jose(folder, "jose14.csv", nrow)
 jose_12 <- preproc_jose(jose_12)
 jose_14 <- preproc_jose(jose_14)
-jose_12 <- preproc_jose_types(jose_12)
-jose_14 <- preproc_jose_types(jose_14)
+# jose_12 <- preproc_jose_types(jose_12)
+# jose_14 <- preproc_jose_types(jose_14)
 jose_12 <- preproc_jose_bad_values(jose_12, min.date = "2016-02-10")
 jose_14 <- preproc_jose_bad_values(jose_14)
 
@@ -42,6 +44,8 @@ save(rivm_14,
 load(file.path(folder, "rivm_jose_12_14.rda"))
 
 ## Interpolate data -----------------------------------------------------------
+jose_12 <- jose_12[!duplicated(datetime),]
+jose_14 <- jose_14[!duplicated(datetime),]
 jose_12 <- remove_na_col(jose_12)
 jose_14 <- remove_na_col(jose_14)
 rivm_12 <- remove_na_col(rivm_12)
@@ -64,13 +68,15 @@ save(z_both_12, z_both_14, file = file.path(folder, f_name))
 load(file.path(folder, f_name))
 
 ## Features --------------------------------------------------------------------
-df_12 <- preproc_jose_types(data.frame(z_both_12))
-df_14 <- preproc_jose_types(data.frame(z_both_14))
+# df_12 <- preproc_jose_types(data.table(z_both_12))
+# df_14 <- preproc_jose_types(data.table(z_both_14))
+df_12 <- data.table(z_both_12)
+df_14 <- data.table(z_both_14)
 df_14$secs <- df_14$secs + 10000000000
 air <- rbind.fill(df_12, df_14)
 
-air_jose <- air[, 1:62]
-air_rivm <- air[, 63:82]
+air_jose <- air[, 1:26]
+air_rivm <- air[, 27:47]
 
 save(air, air_jose, air_rivm, file = file.path(folder, "rivm_jose_df_feat.rda"))
 
@@ -79,7 +85,7 @@ load(file.path(folder, "rivm_jose_df_feat.rda"))
 
 csv.air <- air_jose[, grep("baro|cores|humidity|no2res|o3res|temp|secs", colnames(air_jose))]
 
-csv.air <- data.frame(na.approx(csv.air, maxgap = 100, na.rm = TRUE))
+csv.air <- data.table(na.approx(csv.air, maxgap = 100, na.rm = TRUE))
 na.idx <- rowSums(is.na(csv.air)) == 0
 csv.air <- cbind(csv.air[na.idx,], air_rivm[na.idx, c("O3_Waarden", "NO2_Waarden", "CO_Waarden")])
 # csv.air <- csv.air[sample(1:nrow(csv.air), nrow(csv.air)/5),]
