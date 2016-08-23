@@ -28,7 +28,8 @@ RUN echo "$IMAGE_TIMEZONE" > /etc/timezone && \
 #-------------Application Specific Stuff ----------------------------------------------------
 #  .zip file: http://52north.org/downloads/send/3-sos/484-52n-sensorweb-sos-bundle-4-3-7
 ENV SOS_VERSION 4.3.7
-ENV SOS_DL_URL http://52north.org/downloads/send/3-sos/484-52n-sensorweb-sos-bundle-4-3-7
+# ENV SOS_DL_URL http://52north.org/downloads/send/3-sos/484-52n-sensorweb-sos-bundle-4-3-7
+ENV SOS_DL_URL http://52north.org/downloads/send/3-sos/491-52n-sensorweb-sos-bundle-4-3-7
 ENV TC_DEPLOY_DIR $CATALINA_HOME/webapps
 ENV SOS_CONFIG_DIR  /opt/sosconfig
 ENV SOS_DEPLOY_DIR  $TC_DEPLOY_DIR/sos52n
@@ -82,10 +83,10 @@ RUN if [ ! -f /tmp/resources/sos52n.zip ]; then \
       wget -c $SOS_DL_URL -O /tmp/resources/sos52n.zip; \
     fi;
 
-# unzips in sos52n/52n-sensorweb-sos-bundle-$SOS_VERSION/bin/target/52n-sos-webapp##4.3.6.war
+# unzips in sos52n/52n-sensorweb-sos-bundle-$SOS_VERSION/bin/target/52n-sos-webapp##4.3.7.war
 # hence mv to a Linux-friendly filename
 RUN unzip /tmp/resources/sos52n.zip -d /tmp/resources/sos52n  \
-    && unzip '/tmp/resources/sos52n/52n-sensorweb-sos-bundle-4.3.6/bin/target/52n-sos-webapp##4.3.6.war' -d $SOS_DEPLOY_DIR
+    && unzip '/tmp/resources/sos52n/52n-sensorweb-sos-bundle-4.3.7/bin/target/52n-sos-webapp##4.3.7.war' -d $SOS_DEPLOY_DIR
 
 # Move all relevant settings files to a separate dir and provide symlinks
 # These can then be provided externally via a volume mount from the host to the container
@@ -100,6 +101,9 @@ RUN if ls /tmp/resources/config/datasource.properties > /dev/null 2>&1; then \
     fi; \
     if ls /tmp/resources/config/logback.xml > /dev/null 2>&1; then \
       cp -f /tmp/resources/config/logback.xml $SOS_DEPLOY_DIR/WEB-INF/classes; \
+    fi; \
+    if ls /tmp/resources/config/timeseries-api_v1_beans.xml > /dev/null 2>&1; then \
+      cp -f /tmp/resources/config/timeseries-api_v1_beans.xml $SOS_DEPLOY_DIR/WEB-INF/spring; \
     fi;
 
 # Overlay files and directories in resources/overlays if they exist

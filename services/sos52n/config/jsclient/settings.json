@@ -2,7 +2,8 @@
     "selectedLineWidth": 4,
     "commonLineWidth": 1,
     "restApiUrls": {
-	    "/sos52n/api/v1/": "SmartEmission"
+	    "/sos52n/api/v1/": "SmartEmission",
+        "http://inspire.rivm.nl/sos/eaq/api/v1/": "RIVM"
     },
     "defaultProvider": {
         "serviceID": "1",

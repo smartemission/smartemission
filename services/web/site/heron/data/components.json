@@ -1,6 +1,9 @@
 {
   "components": [
     {
+      "name": "*", "desc": "Alle Componenten"
+    },
+    {
       "name": "co2", "desc": "Kooldioxide (CO2 ppm)"
     },
     {

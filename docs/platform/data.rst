@@ -226,37 +226,181 @@ All conversions are implemented in using two Python scripts, used in the Refiner
 * `sensordefs.py <https://github.com/Geonovum/smartemission/blob/master/etl/sensordefs.py>`_ definitions of sensors
 * `sensorconverters.py <https://github.com/Geonovum/smartemission/blob/master/etl/sensorconverters.py>`_ converter routines
 
+By using a generic config file `sensordefs.py <https://github.com/Geonovum/smartemission/blob/master/etl/sensordefs.py>`_
+all validation and calibration is specified generically. Below some sample entries. ::
+
+	SENSOR_DEFS = {
+	.
+	.
+	    # START Gasses Jose
+	    's_o3resistance':
+	        {
+	            'label': 'O3Raw',
+	            'unit': 'Ohm',
+	            'min': 3000,
+	            'max': 6000000
+	        },
+	    's_no2resistance':
+	        {
+	            'label': 'NO2RawOhm',
+	            'unit': 'Ohm',
+	            'min': 800,
+	            'max': 20000000
+	        },
+	.
+	.
+	    # START Meteo Jose
+	    's_temperatureambient':
+	        {
+	            'label': 'Temperatuur',
+	            'unit': 'milliKelvin',
+	            'min': 233150,
+	            'max': 398150
+	        },
+	    's_barometer':
+	        {
+	            'label': 'Luchtdruk',
+	            'unit': 'HectoPascal',
+	            'min': 20000,
+	            'max': 110000
+
+	        },
+	    's_humidity':
+	        {
+	            'label': 'Relative Humidity',
+	            'unit': 'm%RH',
+	            'min': 20000,
+	            'max': 100000
+	        },
+	.
+	.
+	    'temperature':
+	        {
+	            'label': 'Temperatuur',
+	            'unit': 'Celsius',
+	            'input': 's_temperatureambient',
+	            'converter': convert_temperature,
+	            'type': int,
+	            'min': -25,
+	            'max': 60
+	        },
+	    'pressure':
+	        {
+	            'label': 'Luchtdruk',
+	            'unit': 'HectoPascal',
+	            'input': 's_barometer',
+	            'converter': convert_barometer,
+	            'type': int,
+	            'min': 200,
+	            'max': 1100
+	        },
+	    'humidity':
+	        {
+	            'label': 'Luchtvochtigheid',
+	            'unit': 'Procent',
+	            'input': 's_humidity',
+	            'converter': convert_humidity,
+	            'type': int,
+	            'min': 20,
+	            'max': 100
+	        },
+	    'noiseavg':
+	        {
+	            'label': 'Average Noise',
+	            'unit': 'dB(A)',
+	            'input': ['v_audio0', 'v_audioplus1', 'v_audioplus2', 'v_audioplus3', 'v_audioplus4', 'v_audioplus5',
+	                      'v_audioplus6', 'v_audioplus7', 'v_audioplus8', 'v_audioplus9'],
+	            'converter': convert_noise_avg,
+	            'type': int,
+	            'min': -100,
+	            'max': 195
+	        },
+	    'noiselevelavg':
+	        {
+	            'label': 'Average Noise Level 1-5',
+	            'unit': 'int',
+	            'input': 'noiseavg',
+	            'converter': convert_noise_level,
+	            'type': int,
+	            'min': 1,
+	            'max': 5
+	        },
+	.
+	.
+	    'no2raw':
+	        {
+	            'label': 'NO2Raw',
+	            'unit': 'kOhm',
+	            'input': ['s_no2resistance'],
+	            'min': 8,
+	            'max': 4000,
+	            'converter': ohm_to_kohm
+	        },
+	    'no2':
+	        {
+	            'label': 'NO2',
+	            'unit': 'ug/m3',
+	            'input': ['s_o3resistance', 's_no2resistance', 's_coresistance', 's_temperatureambient',
+	                      's_temperatureunit', 's_humidity', 's_barometer', 's_lightsensorbottom'],
+	            'converter': ohm_no2_to_ugm3,
+	            'type': int,
+	            'min': 0,
+	            'max': 400
+	        },
+	    'o3raw':
+	        {
+	            'label': 'O3Raw',
+	            'unit': 'kOhm',
+	            'input': ['s_o3resistance'],
+	            'min': 0,
+	            'max': 20000,
+	            'converter': ohm_to_kohm
+	        },
+	    'o3':
+	        {
+	            'label': 'O3',
+	            'unit': 'ug/m3',
+	            'input': ['s_o3resistance', 's_no2resistance', 's_coresistance', 's_temperatureambient',
+	                      's_temperatureunit', 's_humidity', 's_barometer', 's_lightsensorbottom'],
+	            'converter': ohm_o3_to_ugm3,
+	            'type': int,
+	            'min': 0,
+	            'max': 400
+	        },
+	.
+	.
+	}
+
+Each entry has:
+
+* `label`: name for display
+* `unit`: well the unit
+* `input`: optionally one or more input Entries required for conversion (`sensorconverters.py <https://github.com/Geonovum/smartemission/blob/master/etl/sensorconverters.py>`_). May cascade.
+* `converter`: pointer to Python conversion function
+* `type`: value type
+* `min/max`: valid range (for validation)
+
+Entries starting with ``s_`` denote Jose raw sensor indicators. Others like ``no2`` are
+"virtual" (SE) indicators, i.e. derived eventually from ``s_`` indicators.
+
+In the `Refiner ETL-config <https://github.com/Geonovum/smartemission/blob/master/etl/refiner.cfg>`_ the
+desired indicators are specified, for example:
+``temperature,humidity,pressure,noiseavg,noiselevelavg,co2,o3,co,no2,o3raw,coraw,no2raw``.
+In this fashion the Refiner remains generic: driven by required indicators and their Entries.
 
 Gas Components
 --------------
 
-Within the SE project a seperate activity is performed for gas-calibration based on Big Data Analysis
+Within the SE project a separate activity is performed for gas-calibration based on Big Data Analysis
 statistical methods. Values coming from SE sensors were compared to actual RIVM values. By matching predicted
-values with RIVM-values, a formula for each gas-component is established and refined.
+values with RIVM-values, a formula for each gas-component is established and refined. The initial approach
+was to use linear analysis methods. However, further along in the project the use
+of `Artificial Neural Networks (ANN) <https://en.wikipedia.org/wiki/Artificial_neural_network>`_
+appeared to be the most promising.
 
-This is all implemented and described in this GitHub repo:
-https://github.com/pietermarsman/smartemission_calibration .
+To be supplied further.
 
-By using the R-language, reports in PDF are generated.
-
-O3 Calibration
-~~~~~~~~~~~~~~
-
-O3 seems to be the most linear. See the resulting `O3 PDF report <_static/calibration/O3.pdf>`_.
-
-From the linear model comes the following formula for the conversion from resistance (kOhm) to ug/m3 (at 20C and 1013 hPa)  ::
-
-	O3 = 89.1177
-	+ 0.03420626 * s.coresistance * log(s.o3resistance)
-	- 0.008836714 * s.light.sensor.bottom
-	- 0.02934928 s.coresistance * s.temperature.ambient
-	- 1.439367 * s.temperature.ambient * log(s.coresistance)
-	+ 1.26521 * log(s.coresistance) * sqrt(s.coresistance)
-	- 0.000343098 * s.coresistance * s.no2resistance
-	+ 0.02761877 * s.no2resistance * log(s.o3resistance)
-	- 0.0002260495 * s.barometer * s.coresistance
-	+ 0.0699428 * s.humidity
-	+ 0.008435412 * s.temperature.unit * sqrt(s.no2resistance)
+Source code for ANN Gas Calibration: https://github.com/Geonovum/smartemission/tree/master/etl/calibration/src
 
 GPS Data
 --------

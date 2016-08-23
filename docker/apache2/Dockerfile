@@ -19,7 +19,7 @@ RUN export LANGUAGE=en_US.UTF-8 && \
 	dpkg-reconfigure locales && \
 	apt-get update && \
 	apt-get -y upgrade  && \
-    apt-get install -y openssh-server apache2 supervisor libapache2-mod-wsgi python-flask python-psycopg2 phppgadmin
+    apt-get install -y openssh-server apache2 supervisor libapache2-mod-wsgi gdal-bin python-gdal python-flask python-psycopg2 phppgadmin
 
 RUN mkdir -p /var/lock/apache2 /var/run/apache2 /var/run/sshd /var/log/supervisor
 

@@ -68,10 +68,12 @@ class RefineFilter(Filter):
         # ts_list (timeseries list) is an array of dict, each dict containing raw sensor values
         ts_list = record_in['data']['timeseries']
         gid_raw = record_in['gid']
+        unique_id = record_in['unique_id']
+        log.info('processing unique_id=%s gid_raw=%d ts_count=%d' % (unique_id, gid_raw, len(ts_list)))
         device_id = record_in['device_id']
         day = record_in['day']
         hour = record_in['hour']
-
+        validate_errs = 0
         for sensor_vals in ts_list:
             # Go through all the configured sensor outputs we need to calc values for
             for sensor_name in self.sensor_names:
@@ -83,6 +85,7 @@ class RefineFilter(Filter):
 
                     sensor_def = SENSOR_DEFS[sensor_name]
                     if 'input' not in sensor_def or 'converter' not in sensor_def:
+                        log.warn('No input or converter defined for %s in SENSOR_DEFS' % sensor_name)
                         continue
 
                     # get raw input value(s)
@@ -92,11 +95,13 @@ class RefineFilter(Filter):
                     if not input_valid:
                         # log.warn('id=%d-%d-%d-%s gid_raw=%d: invalid input for %s: detail=%s' % (
                         # device_id, day, hour, sensor_name, gid_raw, str(input_name), reason))
+                        validate_errs += 1
                         continue
 
                     value_raw, input_name_0 = get_raw_value(input_name, sensor_vals)
                     if value_raw is None:
                         # No use to proceed without raw input value(s)
+                        validate_errs += 1
                         continue
 
                     # First all common attrs (device_id, time etc)
@@ -124,10 +129,12 @@ class RefineFilter(Filter):
 
                             valid, reason = check_value('latitude', sensor_vals, value=lat)
                             if not valid:
+                                validate_errs += 1
                                 continue
 
                             valid, reason = check_value('longitude', sensor_vals, value=lon)
                             if not valid:
+                                validate_errs += 1
                                 continue
 
                             # Both lat and lon are valid!
@@ -135,6 +142,7 @@ class RefineFilter(Filter):
 
                         # No 'point' proceeding without a location
                         if 'point' not in record:
+                            validate_errs += 1
                             continue
 
                         # GPS height. TODO use air pressure
@@ -179,6 +187,7 @@ class RefineFilter(Filter):
                     if not output_valid:
                         log.warn('id=%d-%d-%d-%s gid_raw=%d: invalid output for %s: detail=%s' % (
                             device_id, day, hour, sensor_name, gid_raw, sensor_name, reason))
+                        validate_errs += 1
                         continue
 
                     # Finally calculate calibrated value and recalc  average
@@ -219,5 +228,5 @@ class RefineFilter(Filter):
             rec['value_raw'] = int(round(rec['value_raw']))
 
         packet.data = records_out
-
+        log.info('Result unique_id=%s gid_raw=%d record_count=%d val_errs=%d' % (unique_id, gid_raw, len(records_out), validate_errs))
         return packet

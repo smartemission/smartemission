@@ -1,2 +1,4 @@
-This dir contains a backup of the settings file and the database initial structure.
+This dir contains a backup of the settings file and the database 
+initial structure.
 
+DANGER: to clear the DB run ``db-restore.sh``.

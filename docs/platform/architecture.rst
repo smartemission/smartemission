@@ -81,7 +81,7 @@ The ETL design comprises these main processing steps:
 The services to be published to are:
 
 * *SOS ETL*: transform and publish to the 52N SOS DB via SOS-Transactional (SOS-T)
-* *Things ETL*:  transform and publish to the SensorUp SensorThings API (via REST)
+* *Things ETL*:  transform and publish to the SensorUp SensorThings API (STA, via REST)
 * Publication via *GeoServer* WMS (needs SLDs) and WFS directly
 * *XYZ*: any other ETL, e.g. providing bulk download as CSV
 
@@ -141,7 +141,7 @@ Docker Containers will be created for:
 * ``SensorThings`` : container running SensorUp SensorThings server (or API?)
 * ``Stetl`` : container for the Python-based ETL framework used
 * ``PostGIS`` : container running PostgreSQL with PostGIS extension
-* ``SensorUp STA``: container running Sensor Things API (STA) server from SensorUp
+* ``SensorUp STA``: container running Sensor Things API (STA) server from SensorUp (TBD)
 
 The *Networking and Linking* capabilities of Docker will be applied to link Docker Containers,
 for example to link GeoServer  and the other application servers to PostGIS.

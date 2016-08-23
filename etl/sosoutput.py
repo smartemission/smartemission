@@ -89,15 +89,14 @@ class SOSTOutput(HttpOutput):
             if statuscode != 200:
                 log.warn('FAIL InsertSensor for station: rec=%s res=%s' % (str(packet.data), res))
             else:
-                log.info('YES InsertSensor OK! res=%s' % res)
-                log.info('POSTing InsertObservation! try 2 - payload=%s' % payload)
+                log.info('YES InsertSensor OK! id=%s POSTing InsertObservation! try 2' % id)
                 statuscode, statusmessage, res = HttpOutput.post(self, packet, payload)
                 if statuscode == 200:
-                    log.info('YES InsertObservation! try 2 payload=%s res=%s' % (payload, res))
+                    log.info('YES InsertObservation! try 2 OK!! %s' % id)
                 else:
                     log.warn('FAIL InsertObservation payload=%s res=%s' % (payload, res))
         elif statuscode == 200:
-            log.info('YES inserted Observation! try 1 res=%s' % res)
+            log.info('YES inserted Observation! try 1 id=%s' % id)
 
         log.info('====END InsertObservation id=%s' % id)
 
