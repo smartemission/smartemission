@@ -44,10 +44,30 @@ Performance evaluation
 Parameter optimization
 ======================
 
-* Meta-parameters optimization
-* Try random parameters from distribution
+Training a neural network optimizes the weights between the nodes. However, the training process is also susceptible
+to parameters. For example, the number of hidden nodes, the activation function of the hidden nodes, the learning
+rate, etc. can be set. For a complete list of all the parameters see the
+`documentation of MLPRegressor <http://scikit-learn.org/dev/modules/generated/sklearn.neural_network.MLPRegressor
+.html#sklearn.neural_network.MLPRegressor>`_.
 
-Tr
+Choosing different parameters for the neural network learning influences the performance and complexity of the model.
+For example, using to little hidden nodes results in a model that cannot fit the pattern in the data. On the other
+side, using to many hidden nodes models a relationship that is to complex and does not generalize to new data.
+
+Parameter optimization is the process of evaluating different parameters.
+`RandomizedSearchCV <http://scikit-learn.org/stable/modules/generated/sklearn.grid_search.GridSearchCV.html#sklearn
+.grid_search.GridSearchCV>`_
+from sklearn is used to try different parameters and evaluate them using cross-validation. This method trains and
+evaluates a neural network n_iter times. The actual code looks like this: ::
+
+     gs = RandomizedSearchCV(gs_pipe, grid, n_iter, measure_rmse, n_jobs=n_jobs, cv=cv_k, verbose=verbose,
+                                error_score=np.NaN)
+     gs.fit(x, y)
+
+The first argument *gs_pipe* is the pipeline that filters the data and applies a neural network, *grid* is a collection
+with distributions of possible parameters, *n_iter* is the number of parameters to try, *measure_rmse* is a function
+that computes the RMSE performance and *cv_k* specifies the number of cross-validations to run for each parameter
+setting. The other parameters control the process.
 
 Choosing best model
 ===================
