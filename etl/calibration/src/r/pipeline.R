@@ -10,7 +10,8 @@ library(gridExtra)
 source("io.R")
 source("preproc.R")
 source("interpolate.R")
-source("features.R")
+source("C.R")
+# source("features.R")
 
 folder <- "~/Data/GemeenteNijmegen/SmartEmission"
 nrow <- -1
