@@ -51,12 +51,14 @@ Choosing best model
 ===================
 
 A good model has a good performance but is also as simple as possible. Simpler models are less likely to overfit, i.e
- simple models are less likely to fit relations that do not generalize to new data. For this reason, the simplest
- model that performs about as well (e.g. 1 standard deviation) as the best model is selected.
+simple models are less likely to fit relations that do not generalize to new data. For this reason, the simplest
+model that performs about as well (e.g. 1 standard deviation) as the best model is selected.
 
 For each gas component this results in models with different learning parameters. Differences are in the size of the
 hidden layers, the learning rate, the regularization parameter, the momentum and the activation function. For more
-information about these parameters check the documentation of MLPRegressor: http://scikit-learn.org/dev/modules/generated/sklearn.neural_network.MLPRegressor.html#sklearn.neural_network.MLPRegressor
+information about these parameters check the
+`documentation of MLPRegressor <http://scikit-learn.org/dev/modules/generated/sklearn.neural_network.MLPRegressor
+.html#sklearn.neural_network.MLPRegressor>`_
 The parameters for each gas component are listed below: ::
 
     CO_final = {'mlp__hidden_layer_sizes': [56], 'mlp__learning_rate_init': [0.000052997], 'mlp__alpha': [0.0132466772],
@@ -80,9 +82,10 @@ gas components are used to predict the hypothetical RIVM measurements of the gas
 Three steps are taken to convert the raw Jose measurement to hypothetical RIVM measurements.
 
 * The measurements are converted to the units with which the model is learned. For gas components this is kOhm, for
-temperature this is Celsius, humidity is in percent and pressure in hPa.
-* A roling mean removes extreme measurements. Currently the previous rolling mean has a weight of 0.995 and the new
-value a weight of 0.005. Thus alpha is 0.005 in the following code: ::
+ temperature this is Celsius, humidity is in percent and pressure in hPa.
+
+* A roling mean removes extreme measurements. Currently the previous rolling mean has a weight of 0.995 and the ne
+ value a weight of 0.005. Thus alpha is 0.005 in the following code: ::
 
     def running_mean(previous_val, new_val, alpha):
         if new_val is None:
@@ -93,8 +96,8 @@ value a weight of 0.005. Thus alpha is 0.005 in the following code: ::
         val = new_val * alpha + previous_val * (1.0 - alpha)
         return val
 
-* For each gas component a neural network model is used to predict the hypothetical RIVM measurements. Predictions
-are only made when all gas components are available. The actual prediction is made with this code: ::
+* For each gas component a neural network model is used to predict the hypothetical RIVM measurements. Prediction
+ are only made when all gas components are available. The actual prediction is made with this code: ::
 
     value_array = np.array([s_barometer, s_humidity, s_temperatureambient, s_temperatureunit, o3_running_means['co'],
      o3_running_means['no2'], o3_running_means['o3']]).reshape(1, -1)
