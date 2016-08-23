@@ -27,14 +27,30 @@ Pre-processing
 Neural networks
 ===============
 
-* Neural network to predict RIVM values from Jose values
+There are several options to model the relationship between the Jose measurements and RIVM measurements. For this
+project is chosen for a feed-forward neural network. Its advantage is that it can model complex non-linear relations.
+The disadvantage is that understanding the model is hard.
 
-image of neural network
+A neural network can be though of as a graph (see Figure 1). A graph contains nodes and edges. The neural network
+specifies the relation between the input nodes and output nodes by several edges and hidden layers. The values for
+the input nodes are clamped to the independent variables in the dataset, i.e. the Jose measurements. The value of the
+output node should be as close as possible to the dependent variable, i.e. the RIVM measurement.
 
-.. show image of neural network
+The hidden nodes take a weighted average (resembled by de edges to each of the inputs) and then apply an activation
+function. The activation function squashes the weighted average to a finite range (e.g. [-1, 1]). This allows the
+neural network to transform the inputs in a non-linear way to the output variable.
+
+.. figure:: _static/calibration/neural_network.png
+   :align: center
+
+   *Figure 1 - The structure of a feed-forward neural network can be visualized as a graph*
+
+.. alternatives
 
 Training neural network
 =======================
+
+.. input output specification
 
 A neural network is completely specified by the the weights between the nodes and the activation function of the
 nodes. The latter is specified on beforehand and thus only the weights should be learned during the training phase.
