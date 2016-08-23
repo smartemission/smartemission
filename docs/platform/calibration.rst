@@ -20,20 +20,35 @@ Pre-processing
 * Remove measurements with error values
 * Interpolation
 * Merge Jose and RIVM data
+* Filtering data
+* Select subset because of redundancy
 * Save data that is used for calibration
 
-Method
-======
+Neural networks
+===============
 
-* Low-pass filter gas-measurements
 * Neural network to predict RIVM values from Jose values
 
-Training model
-==============
+image of neural network
 
-* Select subset of data points because of redundancy
-* Python code for learning model
-* Description of learning process, how to get weights for neural network
+.. show image of neural network
+
+Training neural network
+=======================
+
+A neural network is completely specified by the the weights between the nodes and the activation function of the
+nodes. The latter is specified on beforehand and thus only the weights should be learned during the training phase.
+
+There is no way of efficiently finding the optimal weights of an arbitrary neural network. Therefore, a lot of
+methods are proposed to iteratively approach the global optimum.
+
+Most of them are based on the idea of back-propagation. With *back-propagation* the error for each of the records in
+the data is used to change the weights slightly. The change in weights makes the error for that specific record lower
+. However, it might increase the error on other records. Therefore, only a tiny alteration is made for each error in
+each record.
+
+As an addition the used `L-BFGS method <https://en.wikipedia.org/wiki/Limited-memory_BFGS>`_ also uses the first and
+second derivatives of the error function to converge faster to a solution.
 
 Performance evaluation
 ======================
@@ -77,6 +92,8 @@ The first argument *gs_pipe* is the pipeline that filters the data and applies a
 with distributions of possible parameters, *n_iter* is the number of parameters to try, *measure_rmse* is a function
 that computes the RMSE performance and *cv_k* specifies the number of cross-validations to run for each parameter
 setting. The other parameters control the process.
+
+.. show image of cross validation
 
 Choosing best model
 ===================
