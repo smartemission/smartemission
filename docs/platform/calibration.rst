@@ -4,15 +4,32 @@
 Calibration
 ===========
 
-* Content
-* Offline learning vs online predictions
+The Jose sensors produce noisy and biased measurements of gas components on a wrong scale. The data is noisy because
+two consecutive measurements of the same gas component can vary a lot. The measurements are biased because the gas
+sensors are cross sensitive for (at least) temperature and other gas components. The measurements are on the wrong
+scale because the results in kOhm instead of the more interpretable ug/m^2 or ppm.
+
+To solve these issues Jose sensor is calibrated using RIVM measurements of the same gas components (see "Data").
+After the calibration the gas concentrations that RIVM would measure on the same location can be predicted. Before
+calibration the data from Jose and RIVM is preprocessed to obtain a data set suitable for machine learning (see
+"Pre-processing"). An artificial neural network is used to model the relationship (see "Neural networks" and
+"Training a neural network"). To compare several models cross validation and the Root Mean Squared Error  is used (see
+"Performance evaluation"). Multiple models are learned from which the best is chosen (see "Parameter optimization"
+and "Choosing the best model"). This model is used to predict RIVM measurements (see "Online prediction").
 
 Data
 ====
 
-* Jose
-* RIVM
-    - minutes
+The used data comes from two pairs of Jose and RIVM sensors that are located close to each other. One pair of Jose
+and RIVM sensors is located at the Graafseweg, close to the Keizer Karelplein. The other pair is located at the
+Ruyterstraat in Nijmegen.
+
+Data was gathered for a period of february 2016 to *now*.
+
+Data from RIVM is delivered by Jan Vonk from the RIVM. Data from the Jose sensors is delivered by Robert Kieboom.
+
+The RIVM data has a record for every minute. The Jose data is more irregular because sometimes the sensors were not
+on or wifi connection was lost. When available about 3 measurements per minute are provided.
 
 Pre-processing
 ==============
@@ -40,7 +57,7 @@ The disadvantage is that understanding the model is hard.
 
 A neural network can be though of as a graph (see Figure 1). A graph contains nodes and edges. The neural network
 specifies the relation between the input nodes and output nodes by several edges and hidden layers. The values for
-the input nodes are clamped to the independent variables in the dataset, i.e. the Jose measurements. The value of the
+the input nodes are clamped to the independent variables in the data set, i.e. the Jose measurements. The value of the
 output node should be as close as possible to the dependent variable, i.e. the RIVM measurement.
 
 The hidden nodes take a weighted average (resembled by de edges to each of the inputs) and then apply an activation
@@ -54,8 +71,8 @@ neural network to transform the inputs in a non-linear way to the output variabl
 
 .. alternatives
 
-Training neural network
-=======================
+Training a neural network
+=========================
 
 .. input output specification
 
@@ -80,7 +97,7 @@ To evaluate the performance of the model the
 `Root Mean Squared Error <https://en.wikipedia.org/wiki/Root-mean-square_deviation>`_ (RMSE) is used. In other words,
 the RMSE is the average error (prediction - actual value) of the model. Lower RMSE are better.
 
-Testing the model on the same data as it is trained on could lead to overfitting. This means that the model learn
+Testing the model on the same data as it is trained on could lead to over-fitting. This means that the model learn
 relations that are not there in practice. Because the same data is used to asses the performance of the model this
 would not be unveiled. For this reason the performance evaluation needs to be done on different data then the
 learning of the model. For example, 90% of the data is used to train the model and 10% is used to test the model.
@@ -118,10 +135,10 @@ setting. The other parameters control the process.
 
 .. show image of cross validation
 
-Choosing best model
-===================
+Choosing the best model
+=======================
 
-A good model has a good performance but is also as simple as possible. Simpler models are less likely to overfit, i.e
+A good model has a good performance but is also as simple as possible. Simpler models are less likely to over-fit, i.e
 simple models are less likely to fit relations that do not generalize to new data. For this reason, the simplest
 model that performs about as well (e.g. 1 standard deviation) as the best model is selected.
 
@@ -167,7 +184,7 @@ Three steps are taken to convert the raw Jose measurement to hypothetical RIVM m
 * The measurements are converted to the units with which the model is learned. For gas components this is kOhm, for
   temperature this is Celsius, humidity is in percent and pressure in hPa.
 
-* A roling mean removes extreme measurements. Currently the previous rolling mean has a weight of 0.995 and the ne
+* A rolling mean removes extreme measurements. Currently the previous rolling mean has a weight of 0.995 and the ne
   value a weight of 0.005. Thus alpha is 0.005 in the following code: ::
 
     def running_mean(previous_val, new_val, alpha):
