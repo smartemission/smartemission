@@ -12,17 +12,24 @@ Data
 
 * Jose
 * RIVM
+    - minutes
 
 Pre-processing
 ==============
 
-* In R
-* Remove measurements with error values
-* Interpolation
-* Merge Jose and RIVM data
-* Filtering data
-* Select subset because of redundancy
-* Save data that is used for calibration
+Before using the data form Jose and RIVM it needs to be pre-processed:
+
+* Erroneous measurements are removed based on the error logs from RIVM and Jose.
+* Extremely unlikely measurements are removed (e.g. gas concentrations below 0)
+* The RIVM data is interpolated to each time a Jose measurement was taken.
+* The RIVM data is merged with the Jose data. For each Jose measurement the corresponding RIVM measurements are now
+  known.
+* A rolling mean is applied to the gas components of the Jose data. Actually this step is done during the parameter
+optimization to find out which length of rolling mean should be used.
+* A random subset of 10% of the data is chosen to prevent redundant measurements. Actually this step is done during
+the parameter optimization.
+
+The pre-processing is done in R.
 
 Neural networks
 ===============
