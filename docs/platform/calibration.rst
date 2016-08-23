@@ -38,8 +38,17 @@ Training model
 Performance evaluation
 ======================
 
-* Cross validation
-* RMSE
+To evaluate the performance of the model the
+`Root Mean Squared Error <https://en.wikipedia.org/wiki/Root-mean-square_deviation>`_ (RMSE) is used. In other words,
+the RMSE is the average error (prediction - actual value) of the model. Lower RMSE are better.
+
+Testing the model on the same data as it is trained on could lead to overfitting. This means that the model learn
+relations that are not there in practice. Because the same data is used to asses the performance of the model this
+would not be unveiled. For this reason the performance evaluation needs to be done on different data then the
+learning of the model. For example, 90% of the data is used to train the model and 10% is used to test the model.
+This process can be repeated when using a different 10% to test the data. With the 90%-10% ratio this process can be
+repeated 10 times. This is called cross validation. In practice, cross validation with 5 different splits of the data
+is used.
 
 Parameter optimization
 ======================
@@ -83,16 +92,28 @@ information about these parameters check the
 .html#sklearn.neural_network.MLPRegressor>`_.
 The parameters for each gas component are listed below: ::
 
-    CO_final = {'mlp__hidden_layer_sizes': [56], 'mlp__learning_rate_init': [0.000052997], 'mlp__alpha': [0.0132466772],
-            'mlp__momentum': [0.3377605568], 'mlp__activation': ['relu'], 'mlp__algorithm': ['l-bfgs'],
-            'filter__alpha': [0.005]}
-
-    O3_final = {'mlp__hidden_layer_sizes': [42], 'mlp__learning_rate_init': [0.220055322], 'mlp__alpha': [0.2645091504],
-                'mlp__momentum': [0.7904790613], 'mlp__activation': ['logistic'], 'mlp__algorithm': ['l-bfgs'],
+    CO_final = {'mlp__hidden_layer_sizes': [56],
+                'mlp__learning_rate_init': [0.000052997],
+                'mlp__alpha': [0.0132466772],
+                'mlp__momentum': [0.3377605568],
+                'mlp__activation': ['relu'],
+                'mlp__algorithm': ['l-bfgs'],
                 'filter__alpha': [0.005]}
 
-    NO2_final = {'mlp__hidden_layer_sizes': [79], 'mlp__learning_rate_init': [0.0045013008], 'mlp__alpha': [0.1382210543],
-                 'mlp__momentum': [0.473310471], 'mlp__activation': ['tanh'], 'mlp__algorithm': ['l-bfgs'],
+    O3_final = {'mlp__hidden_layer_sizes': [42],
+                'mlp__learning_rate_init': [0.220055322],
+                'mlp__alpha': [0.2645091504],
+                'mlp__momentum': [0.7904790613],
+                'mlp__activation': ['logistic'],
+                'mlp__algorithm': ['l-bfgs'],
+                'filter__alpha': [0.005]}
+
+    NO2_final = {'mlp__hidden_layer_sizes': [79],
+                 'mlp__learning_rate_init': [0.0045013008],
+                 'mlp__alpha': [0.1382210543],
+                 'mlp__momentum': [0.473310471],
+                 'mlp__activation': ['tanh'],
+                 'mlp__algorithm': ['l-bfgs'],
                  'filter__alpha': [0.005]}
 
 Online predictions
@@ -122,7 +143,7 @@ Three steps are taken to convert the raw Jose measurement to hypothetical RIVM m
   are only made when all gas components are available. The actual prediction is made with this code: ::
 
     value_array = np.array([s_barometer, s_humidity, s_temperatureambient, s_temperatureunit, o3_running_means['co'],
-     o3_running_means['no2'], o3_running_means['o3']]).reshape(1, -1)
+                            o3_running_means['no2'], o3_running_means['o3']]).reshape(1, -1)
     with open(pipeline_objects['o3'], 'rb') as f:
         # s = f.read()
         o3_pipeline = pickle.load(f)
