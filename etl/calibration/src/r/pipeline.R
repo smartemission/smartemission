@@ -34,6 +34,7 @@ jose_14 <- preproc_jose(jose_14)
 # jose_14 <- preproc_jose_types(jose_14)
 jose_12 <- preproc_jose_bad_values(jose_12, min.date = "2016-02-10")
 jose_14 <- preproc_jose_bad_values(jose_14)
+jose_12 <- jose_12[datetime > ymd_hms("20160401010101"), s.coresistance := NA]
 
 ## Save and reload data ------------------------------------------
 save(rivm_14,
@@ -83,14 +84,17 @@ save(air, air_jose, air_rivm, file = file.path(folder, "rivm_jose_df_feat.rda"))
 ## CSV -------------------------------------------------------------------------
 load(file.path(folder, "rivm_jose_df_feat.rda"))
 
-csv.air <- air_jose[, grep("baro|cores|humidity|no2res|o3res|temp|secs", colnames(air_jose))]
+csv.air <- air_jose[, grep("baro|co2|humidity|no2res|o3res|temp|secs", colnames(air_jose))]
 
 csv.air <- data.table(na.approx(csv.air, maxgap = 100, na.rm = TRUE))
 na.idx <- rowSums(is.na(csv.air)) == 0
 csv.air <- cbind(csv.air[na.idx,], air_rivm[na.idx, c("O3_Waarden", "NO2_Waarden", "CO_Waarden")])
-# csv.air <- csv.air[sample(1:nrow(csv.air), nrow(csv.air)/5),]
-csv.air$CO_Waarden[csv.air$CO_Waarden > 1250] <- NA
-csv.air$NO2_Waarden[csv.air$NO2_Waarden > 140] <- NA
+csv.air$CO_Waarden[csv.air$CO_Waarden < 0] <- NA
+csv.air$CO_Waarden[csv.air$CO_Waarden > 2000] <- NA
+csv.air$NO2_Waarden[csv.air$NO2_Waarden < 0] <- NA
+csv.air$NO2_Waarden[csv.air$NO2_Waarden > 250] <- NA
+csv.air$O3_Waarden[csv.air$O3_Waarden < 0] <- NA
+csv.air$O3_Waarden[csv.air$O3_Waarden > 200] <- NA
 
 
 write.csv(csv.air, file = file.path(folder, "train.csv"), row.names = FALSE)

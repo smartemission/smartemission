@@ -484,7 +484,7 @@ SENSOR_DEFS = {
         {
             'label': 'CO',
             'unit': 'ug/m3',
-            'input': ['s_o3resistance', 's_no2resistance', 's_coresistance', 's_temperatureambient',
+            'input': ['s_o3resistance', 's_no2resistance', 's_co2', 's_temperatureambient',
                       's_temperatureunit', 's_humidity', 's_barometer', 's_lightsensorbottom'],
             'converter': ohm_co_to_ugm3,
             'type': int,
@@ -504,7 +504,7 @@ SENSOR_DEFS = {
         {
             'label': 'NO2',
             'unit': 'ug/m3',
-            'input': ['s_o3resistance', 's_no2resistance', 's_coresistance', 's_temperatureambient',
+            'input': ['s_o3resistance', 's_no2resistance', 's_co2', 's_temperatureambient',
                       's_temperatureunit', 's_humidity', 's_barometer', 's_lightsensorbottom'],
             'converter': ohm_no2_to_ugm3,
             'type': int,
@@ -524,7 +524,7 @@ SENSOR_DEFS = {
         {
             'label': 'O3',
             'unit': 'ug/m3',
-            'input': ['s_o3resistance', 's_no2resistance', 's_coresistance', 's_temperatureambient',
+            'input': ['s_o3resistance', 's_no2resistance', 's_co2', 's_temperatureambient',
                       's_temperatureunit', 's_humidity', 's_barometer', 's_lightsensorbottom'],
             'converter': ohm_o3_to_ugm3,
             'type': int,
