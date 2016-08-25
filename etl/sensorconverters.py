@@ -1,10 +1,9 @@
-import time
-from calendar import timegm
-from datetime import datetime, tzinfo, timedelta
-import re
 import math
+import re
+from datetime import datetime, tzinfo, timedelta
+
 # from stetl.util import Util
-from os import sys, path
+from os import path
 
 import pickle
 import numpy as np
@@ -21,6 +20,17 @@ running_mean_param = {'co': {'co2': 0.005, 'no2': 0.005, 'o3': 0.005},
 running_means = {'co': {'co2': None, 'no2': None, 'o3': None},
                  'no2': {'co2': None, 'no2': None, 'o3': None},
                  'o3': {'co2': None, 'no2': None, 'o3': None}}
+
+
+def load_pipeline(name):
+    with open(pipeline_objects[name], 'rb') as f:
+        return pickle.load(f)
+
+
+no2_pipeline = load_pipeline('no2')
+o3_pipeline = load_pipeline('o3')
+co_pipeline = load_pipeline('co')
+
 
 # log = Util.get_log("SensorConverters")
 
@@ -104,8 +114,6 @@ def ohm_co_to_ugm3(input, json_obj, sensor_def):
         value_array = np.array(
             [s_barometer, s_humidity, s_temperatureambient, s_temperatureunit, co_running_means['co2'],
              co_running_means['no2'], co_running_means['o3']]).reshape(1, -1)
-        with open(pipeline_objects['co'], 'rb') as f:
-            co_pipeline = pickle.load(f)
         val = co_pipeline.predict(value_array)[0]
 
     return val
@@ -138,8 +146,6 @@ def ohm_no2_to_ugm3(input, json_obj, sensor_def):
         value_array = np.array(
             [s_barometer, s_humidity, s_temperatureambient, s_temperatureunit, no2_running_means['co2'],
              no2_running_means['no2'], no2_running_means['o3']]).reshape(1, -1)
-        with open(pipeline_objects['no2'], 'rb') as f:
-            no2_pipeline = pickle.load(f)
         val = no2_pipeline.predict(value_array)[0]
 
     return val
@@ -173,9 +179,6 @@ def ohm_o3_to_ugm3(input, json_obj, sensor_def):
         value_array = np.array(
             [s_barometer, s_humidity, s_temperatureambient, s_temperatureunit, o3_running_means['co2'],
              o3_running_means['no2'], o3_running_means['o3']]).reshape(1, -1)
-        with open(pipeline_objects['o3'], 'rb') as f:
-            # s = f.read()
-            o3_pipeline = pickle.load(f)
         val = o3_pipeline.predict(value_array)[0]
 
     # log.info('device: %d : O3 : ohm=%d ugm3=%d' % (device, input, val))
