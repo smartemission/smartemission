@@ -128,7 +128,8 @@ preproc_jose_types <- function(df) {
 preproc_jose_bad_values <-
   function(df,
            max.dilution = 1,
-           max.co2.ppm = 10000,
+           max.co2.ppm = 2000,
+           min.co2.ppm = 250,
            max.no2.resistance = 2000,
            min.temp = -40,
            max.temp = 100,
@@ -163,6 +164,8 @@ preproc_jose_bad_values <-
     ## CO2 ----------------------------------------------------------------------
     high_co2 <- df$s.co2 > max.co2.ppm
     df$s.co2[high_co2] <- NA
+    low_co2 <- df$s.co2 < min.co2.ppm
+    df$s.co2[low_co2] <- NA
 
     ## NO2 ---------------------------------------------------------------------
     high_no2 <- df$s.no2resistance > max.no2.resistance
