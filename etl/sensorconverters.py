@@ -11,26 +11,16 @@ import numpy as np
 # Make absolute location for pickled calibration objects
 file_dir = path.dirname(path.abspath(__file__))
 
-pipeline_objects = {'co': path.join(file_dir, 'calibration/model/pipeline_co.pkl'),
-                    'no2': path.join(file_dir, 'calibration/model/pipeline_no2.pkl'),
-                    'o3': path.join(file_dir, 'calibration/model/pipeline_o3.pkl')}
+pipeline_files = {'co': path.join(file_dir, 'calibration/model/pipeline_co.pkl'),
+                  'no2': path.join(file_dir, 'calibration/model/pipeline_no2.pkl'),
+                  'o3': path.join(file_dir, 'calibration/model/pipeline_o3.pkl')}
+pipeline_objects = {key: pickle.load(open(value, 'rb')) for (key, value) in pipeline_files.iteritems()}
 running_mean_param = {'co': {'co2': 0.005, 'no2': 0.005, 'o3': 0.005},
                       'no2': {'co2': 0.005, 'no2': 0.005, 'o3': 0.005},
                       'o3': {'co2': 0.005, 'no2': 0.005, 'o3': 0.005}}
 running_means = {'co': {'co2': None, 'no2': None, 'o3': None},
                  'no2': {'co2': None, 'no2': None, 'o3': None},
                  'o3': {'co2': None, 'no2': None, 'o3': None}}
-
-
-def load_pipeline(name):
-    with open(pipeline_objects[name], 'rb') as f:
-        return pickle.load(f)
-
-
-no2_pipeline = load_pipeline('no2')
-o3_pipeline = load_pipeline('o3')
-co_pipeline = load_pipeline('co')
-
 
 # log = Util.get_log("SensorConverters")
 
@@ -87,11 +77,18 @@ def running_mean(previous_val, new_val, alpha):
     return val
 
 
-def ohm_co_to_ugm3(input, json_obj, sensor_def):
-    global running_means
+def update_running_mean(running_means, running_means_param, obs):
+    # co_running_means = running_means['co']
+    # co_running_means_param = running_mean_param['co']
+    for (key, value) in obs.iteritems():
+        running_means[key] = running_mean(running_means[key], obs[key], running_means_param[key])
+    # co_running_means['co2'] = running_mean(co_running_means['co2'], s_co2, co_running_means_param['co2'])
+    # co_running_means['no2'] = running_mean(co_running_means['no2'], s_no2resistance, co_running_means_param['no2'])
+    # co_running_means['o3'] = running_mean(co_running_means['o3'], s_o3resistance, co_running_means_param['o3'])
+    return running_means
 
-    val = None
 
+def convert_observations(input, json_obj, sensor_def):
     # Original value in kOhm
     s_o3resistance = ohm_to_kohm(json_obj['s_o3resistance'])
     s_no2resistance = ohm_no2_to_kohm(json_obj['s_no2resistance'])
@@ -101,88 +98,36 @@ def ohm_co_to_ugm3(input, json_obj, sensor_def):
     s_temperatureunit = convert_temperature(json_obj['s_temperatureunit'])
     s_humidity = convert_humidity(json_obj['s_humidity'])
     s_barometer = convert_barometer(json_obj['s_barometer'])
+    return (s_o3resistance, s_no2resistance, s_co2, s_temperatureambient, s_temperatureunit, s_humidity, s_barometer)
 
-    # Filter value
-    co_running_means = running_means['co']
-    co_running_means_param = running_mean_param['co']
-    co_running_means['co2'] = running_mean(co_running_means['co2'], s_co2, co_running_means_param['co2'])
-    co_running_means['no2'] = running_mean(co_running_means['no2'], s_no2resistance, co_running_means_param['no2'])
-    co_running_means['o3'] = running_mean(co_running_means['o3'], s_o3resistance, co_running_means_param['o3'])
+
+def ohm_to_ugm3(input, json_obj, sensor_def, gas):
+    global running_means
+
+    val = None
+    (o3, no2, co2, temp_amb, temp_unit, humidity, baro) = convert_observations(None, json_obj, None)
+    filter_obs = {'co2': co2, 'o3': o3, 'no2': no2}
+    running_means[gas] = update_running_mean(running_means[gas], running_mean_param[gas], filter_obs)
+    gasses = running_means[gas]
 
     # Predict RIVM value if all values are available
-    if None not in [s_co2, s_no2resistance, s_o3resistance]:
-        value_array = np.array(
-            [s_barometer, s_humidity, s_temperatureambient, s_temperatureunit, co_running_means['co2'],
-             co_running_means['no2'], co_running_means['o3']]).reshape(1, -1)
-        val = co_pipeline.predict(value_array)[0]
+    if None not in [o3, no2, co2, temp_amb, temp_unit, humidity, baro]:
+        value_array = np.array([baro, humidity, temp_amb, temp_unit, gasses['co2'], gasses['no2'], gasses['o3']])
+        val = pipeline_objects[gas].predict(value_array.reshape(1, -1))[0]
 
     return val
+
+
+def ohm_co_to_ugm3(input, json_obj, sensor_def):
+    return ohm_to_ugm3(input, json_obj, sensor_def, 'co')
 
 
 def ohm_no2_to_ugm3(input, json_obj, sensor_def):
-    global running_means
-
-    val = None
-
-    # Original value in kOhm
-    s_o3resistance = ohm_to_kohm(json_obj['s_o3resistance'])
-    s_no2resistance = ohm_no2_to_kohm(json_obj['s_no2resistance'])
-    # s_coresistance = ohm_to_kohm(json_obj['s_coresistance'])
-    s_co2 = ppb_co2_to_ppm(json_obj['s_co2'])
-    s_temperatureambient = convert_temperature(json_obj['s_temperatureambient'])
-    s_temperatureunit = convert_temperature(json_obj['s_temperatureunit'])
-    s_humidity = convert_humidity(json_obj['s_humidity'])
-    s_barometer = convert_barometer(json_obj['s_barometer'])
-
-    # Filter value
-    no2_running_means = running_means['no2']
-    no2_running_means_param = running_mean_param['no2']
-    no2_running_means['co2'] = running_mean(no2_running_means['co2'], s_co2, no2_running_means_param['co2'])
-    no2_running_means['no2'] = running_mean(no2_running_means['no2'], s_no2resistance, no2_running_means_param['no2'])
-    no2_running_means['o3'] = running_mean(no2_running_means['o3'], s_o3resistance, no2_running_means_param['o3'])
-
-    # Predict RIVM value if all values are available
-    if None not in [s_co2, s_no2resistance, s_o3resistance]:
-        value_array = np.array(
-            [s_barometer, s_humidity, s_temperatureambient, s_temperatureunit, no2_running_means['co2'],
-             no2_running_means['no2'], no2_running_means['o3']]).reshape(1, -1)
-        val = no2_pipeline.predict(value_array)[0]
-
-    return val
+    return ohm_to_ugm3(input, json_obj, sensor_def, 'no2')
 
 
-# http://smartplatform.readthedocs.io/en/latest/data.html#o3-calibration
 def ohm_o3_to_ugm3(input, json_obj, sensor_def):
-    global running_means
-
-    val = None
-
-    # Original value in kOhm
-    s_o3resistance = ohm_to_kohm(json_obj['s_o3resistance'])
-    s_no2resistance = ohm_no2_to_kohm(json_obj['s_no2resistance'])
-    # s_coresistance = ohm_to_kohm(json_obj['s_coresistance'])
-    s_co2 = ppb_co2_to_ppm(json_obj['s_co2'])
-    s_temperatureambient = convert_temperature(json_obj['s_temperatureambient'])
-    s_temperatureunit = convert_temperature(json_obj['s_temperatureunit'])
-    s_humidity = convert_humidity(json_obj['s_humidity'])
-    s_barometer = convert_barometer(json_obj['s_barometer'])
-
-    # Filter value
-    o3_running_means = running_means['o3']
-    o3_running_means_param = running_mean_param['o3']
-    o3_running_means['co2'] = running_mean(o3_running_means['co2'], s_co2, o3_running_means_param['co2'])
-    o3_running_means['no2'] = running_mean(o3_running_means['no2'], s_no2resistance, o3_running_means_param['no2'])
-    o3_running_means['o3'] = running_mean(o3_running_means['o3'], s_o3resistance, o3_running_means_param['o3'])
-
-    # Predict RIVM value if all values are available
-    if None not in [s_co2, s_no2resistance, s_o3resistance]:
-        value_array = np.array(
-            [s_barometer, s_humidity, s_temperatureambient, s_temperatureunit, o3_running_means['co2'],
-             o3_running_means['no2'], o3_running_means['o3']]).reshape(1, -1)
-        val = o3_pipeline.predict(value_array)[0]
-
-    # log.info('device: %d : O3 : ohm=%d ugm3=%d' % (device, input, val))
-    return val
+    return ohm_to_ugm3(input, json_obj, sensor_def, 'o3')
 
 
 def ohm_to_kohm(input, json_obj=None, sensor_def=None):
