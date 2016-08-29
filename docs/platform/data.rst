@@ -204,9 +204,11 @@ The `Refiner` implements five data-processing steps:
 
 Validation deals with removing ``outliers``, values outside specific intervals.
 Calibration and Conversion go hand-in-hand: in many cases, like Temperature,
-the sensor-values are already calibrated but in another value unit like milliKelvin.
-Here a straight conversion applies. In particularly raw gasvalues may come in resistance
-values (kOhm). There is no linear relationship with their values in mg/m3 or ppm.
+the sensor-values are already calibrated but provided in another unit like milliKelvin.
+Here a straightforward conversion applies. In particularly raw
+gasvalues may come in resistance
+values (kOhm). There is no linear relationship with these resistance-values
+and standard gas concentration units like mg/m3 or ppm.
 In that case Calibration needs to be applied.
 
 Calibration
@@ -390,7 +392,8 @@ Below are typical values as obtained via the raw sensor API ::
 
 
 Below each of these sensor values are elaborated.
-All conversions are implemented in using two Python scripts, used in the Refiner ETL:
+All conversions are implemented in using two Python scripts, called from the
+Refiner ETL:
 
 * `sensordefs.py <https://github.com/Geonovum/smartemission/blob/master/etl/sensordefs.py>`_ definitions of sensors
 * `sensorconverters.py <https://github.com/Geonovum/smartemission/blob/master/etl/sensorconverters.py>`_ converter routines
@@ -557,8 +560,8 @@ desired indicators are specified, for example:
 ``temperature,humidity,pressure,noiseavg,noiselevelavg,co2,o3,co,no2,o3raw,coraw,no2raw``.
 In this fashion the Refiner remains generic: driven by required indicators and their Entries.
 
-Gas Components
---------------
+Gas Calibration with ANN
+------------------------
 
 Within the SE project a separate activity is performed for gas-calibration based on Big Data Analysis
 statistical methods. Values coming from SE sensors were compared to actual RIVM values. By matching predicted
@@ -681,10 +684,72 @@ Python code: ::
 Publisher
 =========
 
-To be supplied. Implementation:
+The ``Publisher`` ETL process reads "Refined" indicator data and publishes
+these to various web-services. Most specifically this entails publication to:
 
-* https://github.com/Geonovum/smartemission/blob/master/etl/publisher.sh
-* https://github.com/Geonovum/smartemission/blob/master/etl/publisher.cfg
-* https://github.com/Geonovum/smartemission/blob/master/etl/smartemdb.py
-* https://github.com/Geonovum/smartemission/blob/master/etl/sosoutput.py
-* database: https://github.com/Geonovum/smartemission/blob/master/etl/db/db-schema-refined.sql (source schema)
+* OGC Sensor Observation Service (SOS)
+* OGC Sensor Things API (STA)
+
+For both SOS and STA the transactional/REST web-services are used.
+
+Publishing to OGC WMS and WFS is not explicitly required: these
+services can directly use the PostGIS database tables and VIEWs
+produced by the ``Refiner``. For WMS, GeoServer WMS Dimension for the "time" column is
+used together with SLDs that show values, in order to provide historical data via WMS.
+WFS can be used for bulk download.
+
+General
+-------
+
+The ETL chain is setup using the `smartemdb.RefinedDbInput` class directly coupled
+to a Stetl Output class, specific for the web-service published to.
+
+Sensor Observation Service (SOS)
+--------------------------------
+
+The `sosoutput.SOSTOutput` class is used to publish to a(ny) SOS using the standardized
+SOS-Transactional web-service. The implementation is reasonably straightforward, with the following
+specifics:
+
+``JSON``: JSON is used as encoding for SOS-T requests
+
+``Lazy sensor insertion``: If `InsertObservation` returns HTTP statuscode 400 an `InsertSensor`
+request is submitted. If that is succesful the same `InsertObservation` is attempted again.
+
+``SOS-T Templates``: all SOS-T requests are built using template files. In these files a complete
+request is contained, but with specific parameters, like `station_id` symbolically defined. At publication
+time these are substituted.  Below an excerpt of an `InsertObservation` template: ::
+
+	{{
+	  "request": "InsertObservation",
+	  "service": "SOS",
+	  "version": "2.0.0",
+	  "offering": "offering-{station_id}",
+	  "observation": {{
+	    "identifier": {{
+	      "value": "{unique_id}",
+	      "codespace": "http://www.opengis.net/def/nil/OGC/0/unknown"
+	    }},
+	    "type": "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement",
+	    "procedure": "station-{station_id}",
+	    "observedProperty": "{component}",
+	    "featureOfInterest": {{
+	      "identifier": {{
+	        "value": "fid-{station_id}",
+	        "codespace": "http://www.opengis.net/def/nil/OGC/0/unknown"
+        .
+        .
+
+
+
+Implementation
+--------------
+
+Below are links to the sources of the Publisher implementation.
+
+* ETL run script: https://github.com/Geonovum/smartemission/blob/master/etl/publisher.sh
+* Stetl conf: https://github.com/Geonovum/smartemission/blob/master/etl/publisher.cfg
+* Refined DB Input: https://github.com/Geonovum/smartemission/blob/master/etl/smartemdb.py
+* SOS-T publication: https://github.com/Geonovum/smartemission/blob/master/etl/sosoutput.py
+* SOS-T templates: https://github.com/Geonovum/smartemission/blob/master/etl/sostemplates
+* Input database schema: https://github.com/Geonovum/smartemission/blob/master/etl/db/db-schema-refined.sql (source schema)
