@@ -570,7 +570,7 @@ was to use linear analysis methods. However, further along in the project the us
 of `Artificial Neural Networks (ANN) <https://en.wikipedia.org/wiki/Artificial_neural_network>`_
 appeared to be the most promising.
 
-To be supplied further.
+Gas Calibration for SE is described more extensively in :ref:`calibration`.
 
 Source code for ANN Gas Calibration: https://github.com/Geonovum/smartemission/tree/master/etl/calibration/src
 
