@@ -1,29 +1,24 @@
 
 read_rivm <- function(folder, file, nrow = -1) {
   colType <- c("Begintijd" = "character", "Eindtijd" = "character")
-  df <- read.csv(file.path(folder, file), colClasses = colType, nrow = nrow)
-  df <- rename(df, c("Begintijd" = "datetime"))
+  df <- fread(file.path(folder, file), colClasses = colType, nrows = nrow)
   df <- prefix_columns(df, c(3:6, 19:22), "Druk")
-  df <- prefix_columns(df, 7:10, "CO")
-  df <- prefix_columns(df, c(11:14, 23:26), "NO2")
-  df <- prefix_columns(df, c(15:18, 31:34), "T")
-  df <- prefix_columns(df, 27:30, "O3")
-  d_format <- "%d-%m-%Y %H:%M"
-  df$datetime <- strptime(df$datetime, format = d_format)
-  df$Eindtijd <- strptime(df$Eindtijd, format = d_format)
+  df <- prefix_columns(df, c(7:10, 23:26), "CO")
+  df <- prefix_columns(df, c(11:14, 27:30), "NO2")
+  df <- prefix_columns(df, c(15:18, 35:38), "T")
+  df <- prefix_columns(df, 31:34, "O3")
+  df <- rename(df, c("Begintijd" = "datetime"), warn_duplicated = FALSE)
+  df$datetime <- dmy_hm(df$datetime)
+  df$Eindtijd <- dmy_hm(df$Eindtijd)
   df <- delete_suffix_columns(df)
   return(df)
 }
 
 read_jose <- function(folder, file, nrow = -1) {
-  df <- read.csv(file.path(folder, file), header = FALSE, 
-                 col.names = c("datetime", "Column", "Value"),
-                 colClasses = c("datetime"="character"), 
-                 nrow = nrow)
-  df$datetime <- as.character(df$datetime)
-  df <- reshape(df, timevar = "Column", idvar = "datetime", direction = "wide")
-  d_format <- "%m/%d/%Y %H:%M:%S"
-  df$datetime <- strptime(df$datetime, format = d_format)
+  df <- fread(file.path(folder, file),
+                 colClasses = c("datetime" = "character"),
+                 nrows = nrow)
+  df$datetime <- ymd_hms(df$datetime)
   df <- df[order(df$datetime), ]
   return(df)
 }

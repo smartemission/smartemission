@@ -12,6 +12,7 @@ Contents:
    intro.rst
    architecture.rst
    data.rst
+   calibration.rst
    services.rst
    installation.rst
    administration.rst

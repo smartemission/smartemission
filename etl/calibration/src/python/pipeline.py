@@ -18,12 +18,12 @@ from data import save_with_pickle, save_with_csv, get_data
 from filter import Filter
 from measures import rmse
 from misc import merge_two_dicts
-from params import dist_test
+from params import dist_test, CO_final, O3_final, NO2_final
 from results import save_fit_plot
 
 FOLDER_DATA = '/home/pieter/Data/GemeenteNijmegen/SmartEmission/'
 FOLDER_SAVE = '/home/pieter/Data/GemeenteNijmegen/SmartEmission/models'
-FOLDER_PLOT = 'results'
+FOLDER_PLOT = '/home/pieter/Documents/GemeenteNijmegen/ANNCalibration/results'
 
 
 def param_optimization(grid, train_file='train.csv', col_predict='O3_Waarden', cv_k=5, n_part=.1, verbose=1, n_jobs=-1,
@@ -35,7 +35,7 @@ def param_optimization(grid, train_file='train.csv', col_predict='O3_Waarden', c
     # Create pipeline elements
     mlp = nn.MLPRegressor(activation='logistic', algorithm='l-bfgs', max_iter=5000, early_stopping=True)
     ss = StandardScaler()
-    fil = Filter(x_all.to_records(), 1, ('s.coresistance', 's.no2resistance', 's.o3resistance'), 'secs')
+    fil = Filter(x_all.to_records(), 1, ('s.co2', 's.no2resistance', 's.o3resistance'), 'secs')
     measure_rmse = make_scorer(rmse, greater_is_better=False)
 
     # Do randomized grid search
@@ -73,7 +73,9 @@ def param_optimization(grid, train_file='train.csv', col_predict='O3_Waarden', c
 
 
 if __name__ == '__main__':
-    param_optimization(dist_test, col_predict='CO_Waarden', n_iter=3, verbose=1, cv_k=3, n_part=0.001)
-    # param_optimization(CO_final, col_predict='CO_Waarden', n_iter=100, verbose=3, cv_k=5, n_part=0.1)
-    # param_optimization(O3_final, col_predict='O3_Waarden', n_iter=100, verbose=3, cv_k=5, n_part=0.1)
-    # param_optimization(NO2_final, col_predict='NO2_Waarden', n_iter=100, verbose=3, cv_k=5, n_part=0.1)
+    # param_optimization(dist_test, col_predict='CO_Waarden', n_iter=3, verbose=3, cv_k=3, n_part=0.0001)
+    # param_optimization(dist_test, col_predict='O3_Waarden', n_iter=3, verbose=3, cv_k=3, n_part=0.0001)
+    # param_optimization(dist_test, col_predict='NO2_Waarden', n_iter=3, verbose=3, cv_k=3, n_part=0.0001)
+    param_optimization(CO_final, col_predict='CO_Waarden', n_iter=1, verbose=3, cv_k=10, n_part=0.1)
+    param_optimization(O3_final, col_predict='O3_Waarden', n_iter=1, verbose=3, cv_k=10, n_part=0.1)
+    param_optimization(NO2_final, col_predict='NO2_Waarden', n_iter=1, verbose=3, cv_k=10, n_part=0.1)

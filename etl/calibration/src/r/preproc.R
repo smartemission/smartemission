@@ -17,64 +17,65 @@ preproc_jose <- function(df) {
   # s.Latitude remove 0
   # S.CO2 remove 0
   # For all, compute floats from int, read documentation sensors
-  df <- cbind(df, jose_preproc_power_state(df$Value.P.Powerstate))
-  df$Value.P.Powerstate <- NULL
-  
-  df <- cbind(df, jose_preproc_error_state(df$Value.P.ErrorStatus))
-  df$Value.P.ErrorStatus <- NULL
-  
-  df <-
-    cbind(df,
-          jose_preproc_split_mode(df$Value.P.COHeaterMode, "p.co.heater"))
-  df$Value.P.COHeaterMode <- NULL
-  df <-
-    cbind(df, jose_preproc_split_mode(df$Value.P.11, "p.no2.heater"))
-  df$Value.P.11 <- NULL
-  
-  df$Value.S.RtcDate <- NULL
-  df$Value.S.RtcTime <- NULL
-  
-  df$Value.S.TemperatureUnit <-
-    (df$Value.S.TemperatureUnit / 1000.0) - 273.15
-  df$Value.S.TemperatureAmbient <-
-    (df$Value.S.TemperatureAmbient / 1000.0) - 273.15
-  
-  df$Value.S.Humidity <- df$Value.S.Humidity / 1000.0 # %RH
-  
-  df$Value.S.Barometer <- df$Value.S.Barometer / 100.0
-  
-  df$Value.S.AcceleroX <- (df$Value.S.AcceleroX - 512.0) / 256.0
-  df$Value.S.AcceleroY <- (df$Value.S.AcceleroY - 512.0) / 256.0
-  df$Value.S.AcceleroZ <- (df$Value.S.AcceleroZ - 512.0) / 256.0
-  
-  df <- cbind(df, jose_preproc_rain_sensor(df$Value.S.Rain))
-  df$Value.S.Rain <- NULL
-  
-  if ("Value.S.CO2" %in% names(df))
-    df$Value.S.CO2 <- df$Value.S.CO2 / 1000.0 # ppb
-  if ("Value.S.COResistance" %in% names(df))
-    df$Value.S.COResistance <- df$Value.S.COResistance / 1000.0
-  if ("Value.S.No2Resistance" %in% names(df))
-    df$Value.S.No2Resistance <- df$Value.S.No2Resistance / 1000.0
-  if ("Value.S.O3Resistance" %in% names(df))
-    df$Value.S.O3Resistance <- df$Value.S.O3Resistance / 1000.0
-  
-  df <- cbind(df, jose_preproc_sat_info(df$Value.S.SatInfo))
-  df$Value.S.SatInfo <- NULL
-  
-  df$Value.S.Latitude <- jose_preproc_gps(df$Value.S.Latitude)
-  df$Value.S.Longitude <- jose_preproc_gps(df$Value.S.Longitude)
-  
-  df <- df[, -grep("Audio", names(df))]
-  
-  names(df) <- tolower(gsub("^Value.", "", names(df)))
+
+  # df <- cbind(df, jose_preproc_power_state(df$P.Powerstate))
+  # df$P.Powerstate <- NULL
+
+  # df <- cbind(df, jose_preproc_error_state(df$P.ErrorStatus))
+  # df$P.ErrorStatus <- NULL
+  #
+  # df <-
+  #   cbind(df,
+  #         jose_preproc_split_mode(df$P.COHeaterMode, "p.co.heater"))
+  # df$P.COHeaterMode <- NULL
+  # df <-
+  #   cbind(df, jose_preproc_split_mode(df$P.11, "p.no2.heater"))
+  # df$P.11 <- NULL
+  #
+  # df$S.RtcDate <- NULL
+  # df$S.RtcTime <- NULL
+
+  df$S.TemperatureUnit <-
+    (df$S.TemperatureUnit / 1000.0) - 273.15
+  df$S.TemperatureAmbient <-
+    (df$S.TemperatureAmbient / 1000.0) - 273.15
+
+  df$S.Humidity <- df$S.Humidity / 1000.0 # %RH
+
+  df$S.Barometer <- df$S.Barometer / 100.0
+
+  df$S.AcceleroX <- (df$S.AcceleroX - 512.0) / 256.0
+  df$S.AcceleroY <- (df$S.AcceleroY - 512.0) / 256.0
+  df$S.AcceleroZ <- (df$S.AcceleroZ - 512.0) / 256.0
+
+  df <- cbind(df, jose_preproc_rain_sensor(df$S.Rain))
+  df$S.Rain <- NULL
+
+  if ("S.CO2" %in% names(df))
+    df$S.CO2 <- df$S.CO2 / 1000.0 # ppb
+  if ("S.COResistance" %in% names(df))
+    df$S.COResistance <- df$S.COResistance / 1000.0
+  if ("S.No2Resistance" %in% names(df))
+    df$S.No2Resistance <- df$S.No2Resistance / 1000.0
+  if ("S.O3Resistance" %in% names(df))
+    df$S.O3Resistance <- df$S.O3Resistance / 1000.0
+
+  # df <- cbind(df, jose_preproc_sat_info(df$S.SatInfo))
+  # df$S.SatInfo <- NULL
+
+  # df$S.Latitude <- jose_preproc_gps(df$S.Latitude)
+  # df$S.Longitude <- jose_preproc_gps(df$S.Longitude)
+
+  df <- df[, -grep("Audio", names(df)), with = FALSE]
+
+  names(df) <- tolower(gsub("^", "", names(df)))
   df <- rename(
     df,
     c(
       "p.unitserialnumber" = "p.unit.serial.number",
-      "p.18" = "p.unknown.18",
-      "p.17" = "p.unknown.17",
-      "p.19" = "p.unknown.19",
+      # "p.18" = "p.unknown.18",
+      # "p.17" = "p.unknown.17",
+      # "p.19" = "p.unknown.19",
       "s.rgbcolor" = "s.rgb.color",
       "s.lightsensorblue" = "s.light.sensor.blue",
       "s.lightsensorgreen" = "s.light.sensor.green",
@@ -85,29 +86,29 @@ preproc_jose <- function(df) {
       "s.lightsensorbottom" = "s.light.sensor.bottom",
       "s.lightsensortop" = "s.light.sensor.top",
       "s.temperatureambient" = "s.temperature.ambient",
-      "s.temperatureunit" = "s.temperature.unit",
-      "s.secondofday" = "s.second.of.day",
-      "p.totaluptime" = "p.total.up.time",
-      "p.sessionuptime" = "p.session.up.time",
-      "p.basetimer" = "p.base.timer"
+      "s.temperatureunit" = "s.temperature.unit"
+      # "s.secondofday" = "s.second.of.day",
+      # "p.totaluptime" = "p.total.up.time",
+      # "p.sessionuptime" = "p.session.up.time",
+      # "p.basetimer" = "p.base.timer"
     )
   )
-  
-  df <- df[, order(names(df))]
-  
+
+  # df <- df[, order(names(df))]
+
   return(df)
 }
 
 preproc_jose_types <- function(df) {
-  df$s.satinfo.fix <-
-    factor(
-      df$s.satinfo.fix,
-      levels = c("0", "1", "2", "3"),
-      labels = c("No GPS", "No fix", "2D fix", "3D fix")
-    )
-  df$p.no2.heater.mode <-
-    factor(df$p.no2.heater.mode,
-           levels = c("0", "256", "2048", "2034", "2560", "2816"))
+  # df$s.satinfo.fix <-
+  #   factor(
+  #     df$s.satinfo.fix,
+  #     levels = c("0", "1", "2", "3"),
+  #     labels = c("No GPS", "No fix", "2D fix", "3D fix")
+  #   )
+  # df$p.no2.heater.mode <-
+  #   factor(df$p.no2.heater.mode,
+  #          levels = c("0", "256", "2048", "2034", "2560", "2816"))
   df$p.co.heater.mode <-
     factor(
       df$p.co.heater.mode,
@@ -127,12 +128,13 @@ preproc_jose_types <- function(df) {
 preproc_jose_bad_values <-
   function(df,
            max.dilution = 1,
-           max.co2.ppm = 10000,
+           max.co2.ppm = 2000,
+           min.co2.ppm = 250,
            max.no2.resistance = 2000,
            min.temp = -40,
            max.temp = 100,
            max.barometer = 1100,
-           min.date = "2016-02-01", 
+           min.date = "2016-02-01",
            max.date = "2999-01-01") {
     # p.error.booting
     # p.power.error
@@ -147,26 +149,28 @@ preproc_jose_bad_values <-
     # p.power.pm.sensor.on    <> ?
     # s.satinfo.num           <> s.lat/long-itude = nothing
     # s.satinfo.dillution     <> s.lat/long-itude = nothing
-    
+
     ## Data before 10 feb ------------------------------------------------------
     good_date <- df$datetime > strptime(min.date, format = "%Y-%m-%d") &
       df$datetime < strptime(max.date, format = "%Y-%m-%d")
     df <- df[good_date, ]
-    
+
     # GPS -----------------------------------------------------------------------
-    low_lat_long <- df$s.latitude == 0 | df$s.longitude == 0
-    high_dilution <- df$s.satinfo.dilution > max.dilution
-    df$s.latitude[low_lat_long | high_dilution] <- NA
-    df$s.longitude[low_lat_long | high_dilution] <- NA
-    
+    # low_lat_long <- df$s.latitude == 0 | df$s.longitude == 0
+    # high_dilution <- df$s.satinfo.dilution > max.dilution
+    # df$s.latitude[low_lat_long | high_dilution] <- NA
+    # df$s.longitude[low_lat_long | high_dilution] <- NA
+
     ## CO2 ----------------------------------------------------------------------
     high_co2 <- df$s.co2 > max.co2.ppm
     df$s.co2[high_co2] <- NA
-    
+    low_co2 <- df$s.co2 < min.co2.ppm
+    df$s.co2[low_co2] <- NA
+
     ## NO2 ---------------------------------------------------------------------
     high_no2 <- df$s.no2resistance > max.no2.resistance
     df$s.no2resistance[high_no2] <- NA
-    
+
     ## Temperature --------------------------------------------------------------
     low_temp <- df$s.temperature.unit < min.temp
     high_temp <- df$s.temperature.unit > max.temp
@@ -174,14 +178,14 @@ preproc_jose_bad_values <-
     low_temp <- df$s.temperature.ambient < min.temp
     high_temp <- df$s.temperature.ambient > max.temp
     df$s.temperature.ambient[low_temp | high_temp] <- NA
-    
+
     ## Pressure ----------------------------------------------------------------
     high_pressure <- df$s.barometer > max.barometer
     df$s.barometer[high_pressure] <- NA
-    
+
     ## Remove s.10 col
-    df$s.10 <- NULL
-    
+    # df$s.10 <- NULL
+
     return(df)
   }
 
