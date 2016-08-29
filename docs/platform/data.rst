@@ -7,6 +7,10 @@ Data Management
 This chapter describes all technical aspects related to data/ETL within
 the Smart Emission Data Platform
 based on the (ETL-)design described within the :ref:`architecture` chapter.
+
+As sensor data is continuously generated, also the ETL processing
+is continuous.
+
 As indicated there are three ETL-steps in sequence:
 
 * Harvester - fetch raw sensor values from "Whale server"
@@ -16,33 +20,198 @@ As indicated there are three ETL-steps in sequence:
 Implementation for all ETL can be found here:
 https://github.com/Geonovum/smartemission/blob/master/etl
 
-The `ETL-framework Stetl <http://stetl.org>`_ is used for all ETL-steps using
+General
+=======
+
+This section describes general aspects applicable to all ETL processing.
+
+Stetl Framework
+---------------
+
+The `ETL-framework Stetl <http://stetl.org>`_ is used for all ETL-steps.
+The Stetl framework is general-purpose and written in Python. A specific ETL-process
+is constructed by a Stetl config file. This config file specifies
+the Inputs, Filters and Outputs and parameters for that ETL-process. Stetl provides a
+multitude of reusable Inputs, Filters and Outputs. For example
+ready-to-use Outputs for Postgres and HTTP. For specific processing
+specific Inputs, Filters and Outputs can be developed by deriving from
+Stetl-base classes. This applies
+also to the SE-project.
+
+For each ETL-step a specific Stetl config file is developed with
+some SE-specific Components.
+
+Deployment of Stetl processes is effected using
 a generic `Stetl Docker Image <https://github.com/Geonovum/smartemission/blob/master/docker/stetl>`_
-is reused in every ETL-step. Each of the three ETL-steps are expanded below.
+is reused in every ETL-step.
+
+ETL Scheduling
+--------------
+
+The three ETL steps are running as scheduled processes using Unix `cron` activated with the
+`SE Platform cronfile <https://github.com/Geonovum/smartemission/blob/master/platform/cronfile.txt>`_.
+
+Sync-tracking
+-------------
+
+Any continuous ETL, in particular in combination with data from remote systems, is liable to a multitude of
+failures: a remote server may be down, systems may be upgraded or restarted, the
+ETL software itself may be upgraded. Somehow an ETL-component needs to "keep track"
+of its last successful data processing: specifically for which device, which sensor and
+which timestamp. As programmatic tracking may suffer those same vulnerabilities, it
+was chosen to use the PostgreSQL database for tracking. Each of the three main steps
+will track its synchronization within a Postgres table. In the cases of the Harvester
+and the Refiner this synchronization is even strongly coupled to a PG `TRIGGER`: i.e.
+only if data has been successfully written/committed to the DB will the
+sync-state be updated. An ETL-process will always resume at the point of the
+last saved sync-state.
+
+
+Why Multistep?
+--------------
+
+Although all ETL could be performed within a single, continuous process, there are several
+reasons why a multistep, scheduled ETL processing from all Harvested data
+has been beneficial. This in combination with "sync-tracking" provides
+the following benefits:
+
+* clear separation of concerns: Harvesting, Refining, Publishing
+* all or individual ETL-steps can be "replayed" whenever some bug/enhancement appeared during development
+* being more lean towards server downtime and network failures
+
+Each of the three ETL-steps are expanded below.
 
 Harvester
 =========
 
-To be supplied. Implementation:
+The ``Harvester`` as its name implies, regularly fetches raw sensor data from
+the remote raw sensor data-collector, a.k.a. the "CityGIS Whale Server".
+The Harvester uses the ``Raw Sensor API`` web-service that was specifically
+developed for the project. Via this API timeseries data is fetched as JSON
+for each station (device). Each JSON data element contains the
+raw data for all sensors within a single station as accumulated in the current or previous
+hour. These JSON data blobs are stored by the Harvester within a Postgres DB unmodified.
+In this fashion we always will have access to the original raw data.
 
-* https://github.com/Geonovum/smartemission/blob/master/etl/harvester.sh
-* https://github.com/Geonovum/smartemission/blob/master/etl/harvester.cfg
-* https://github.com/Geonovum/smartemission/blob/master/etl/rawsensorapi.py
-* database: https://github.com/Geonovum/smartemission/blob/master/etl/db/db-schema-raw.sql
+The Harvester, like all other ETL is developed using the `Stetl ETL framework <http://stetl.org>`_.
+As Stetl already supplies a Postgres/PostGIS output, only a specific
+reader for the Raw Sensor API needed to be developed:
+the `RawSensorTimeseriesInput <https://github.com/Geonovum/smartemission/blob/master/etl/rawsensorapi.py>`_.
+
+Like indicated, the Harvester will regularly fetch data, as scheduled by the
+system's crontab
+
+Database
+--------
+
+The main table where the Harvester stores its data. Note the use of the ``data`` field
+as ``json`` column. The ``device_id`` is the unique station id. ::
+
+	CREATE TABLE smartem_raw.timeseries (
+	  gid serial,
+	  unique_id character varying (16) not null,
+	  insert_time timestamp with time zone default current_timestamp,
+	  device_id integer not null,
+	  day integer not null,
+	  hour integer not null,
+	  data json,
+	  complete boolean default false,
+	  PRIMARY KEY (gid)
+	) WITHOUT OIDS;
+
+Implementation
+--------------
+
+Below are links to the various implementation files related to the ``Harvester``.
+
+* Shell script: https://github.com/Geonovum/smartemission/blob/master/etl/harvester.sh
+* Stetl config: https://github.com/Geonovum/smartemission/blob/master/etl/harvester.cfg
+* Stetl input: https://github.com/Geonovum/smartemission/blob/master/etl/rawsensorapi.py
+* Database: https://github.com/Geonovum/smartemission/blob/master/etl/db/db-schema-raw.sql
+
+Last Values
+-----------
 
 The "Last" values ETL is an optimization/shorthand to provide all three ETL-steps
-for only the last/current sensor values within a single ETL process. Implementation:
+(Harvest, Refine, Publish) for only the last/current
+sensor values within a single ETL process. All refined data is stored within a single
+DB-table. This table maintains only last values, no history, thus data is overwritten
+constantly. ``value_stale`` denotes when an indicator has not provided a fresh values in
+2 hours. ::
+
+	CREATE TABLE smartem_rt.last_device_output (
+	  gid serial,
+	  unique_id character varying,
+	  insert_time timestamp with time zone default current_timestamp,
+	  device_id integer,
+	  device_name character varying (32),
+	  name character varying,
+	  label character varying,
+	  unit  character varying,
+	  time timestamp with time zone,
+	  value_raw integer,
+	  value_stale integer,
+	  value real,
+	  altitude integer default 0,
+	  point geometry(Point,4326),
+	  PRIMARY KEY (gid)
+	) WITHOUT OIDS;
+
+Via Postgres VIEWs, the last values for each indicator are extracted, e.g. for the
+purpose of providing a per-indicator WMS/WFS layer. For example: ::
+
+	CREATE VIEW smartem_rt.v_last_measurements_NO2_raw AS
+	  SELECT device_id, device_name, label, unit,
+	    name, value_raw, value_stale, time AS sample_time, value, point, gid, unique_id
+	  FROM smartem_rt.last_device_output WHERE value_stale = 0 AND name = 'no2raw'
+	                                                ORDER BY device_id, gid DESC;
+
+
+In addition, this last-value data from the `last_device_output` table
+is unlocked using a subsetted web-service based on the
+52North SOS-REST API.
+
+Implementation file for the ``Last Values ETL``:
 
 * https://github.com/Geonovum/smartemission/blob/master/etl/last.sh
 * https://github.com/Geonovum/smartemission/blob/master/etl/last.cfg
 * https://github.com/Geonovum/smartemission/blob/master/etl/rawsensorapi.py
 * database: https://github.com/Geonovum/smartemission/blob/master/etl/db/db-schema-last.sql
 
+NB theoretically last values could be obtained by setting VIEWs on the Refined
+data tables and the SOS. However in previous projects this rendered significant
+performance implications. Also the Last Values API was historically developed
+first before refined history data and SOS were available in the project.
+
 Refiner
 =======
 
-Most raw sensor values as harvested from the CityGIS-platform need to be converted
-and calibrated to units and values that approximate the "real situation" as much as possible.
+Most raw sensor values as harvested from the CityGIS-platform via the Raw Sensor API
+need to be converted
+and calibrated to standardized units and values. Also values may
+be out of range. The sensors themselves will produce an excess data typically every
+few seconds while for many indicators (gasses, meteo) conditions will not change
+significantly within seconds. Also to make data manageable in all subsequent publication
+steps (SOS, WMS etc) a form of ``aggregation`` is required.gr
+
+The `Refiner` implements five data-processing steps:
+
+* Validation (pre)
+* Calibration
+* Conversion
+* Aggregation
+* Validation (post)
+
+Validation deals with removing ``outliers``, values outside specific intervals.
+Calibration and Conversion go hand-in-hand: in many cases, like Temperature,
+the sensor-values are already calibrated but in another value unit like milliKelvin.
+Here a straight conversion applies. In particularly raw gasvalues may come in resistance
+values (kOhm). There is no linear relationship with their values in mg/m3 or ppm.
+In that case Calibration needs to be applied.
+
+Calibration
+-----------
+
 Especially for gas-components this may be a challenge. Here raw sensor-values are expressed in
 kOhms (NO2, O3 and CO) except for CO2 which is given in ppb. Audio-values are already provided in decibels.
 Meteo-values are more standard and obvious to convert (e.g. milliKelvin to deegree Celsius).
