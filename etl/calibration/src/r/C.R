@@ -1,3 +1,5 @@
+folder <- "~/Data/GemeenteNijmegen/SmartEmission"
+
 col_jose <- c("datetime",
               "S.O3Resistance",
               "S.No2Resistance",

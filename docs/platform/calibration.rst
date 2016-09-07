@@ -20,7 +20,7 @@ RIVM measurements.
 <calibration.html#pre-processing>`_ before using it to `train
 <calibration.html#training-a-neural-network>`_ a `Artificial Neural Network
 <calibration.html#neural-networks>`_. The `performance
-<calibration.html#performance>`_ is `optimized <calibration
+<calibration.html#performance-evaluation>`_ is `optimized <calibration
 .html#parameter-optimization>`_ and the `best model is chosen <calibration
 .html#choosing-the-best-model>`_ for `online predictions <calibration
 .html#online-predictions>`_.
@@ -28,18 +28,25 @@ RIVM measurements.
 Data
 ====
 
-This section describes ...
-
-The used data comes from two pairs of Jose and RIVM sensors that are located close to each other. One pair of Jose
-and RIVM sensors is located at the Graafseweg, close to the Keizer Karelplein. The other pair is located at the
-Ruyterstraat in Nijmegen.
+The used data comes from two pairs of Jose and RIVM sensors that are located
+close to each other. They are located at the Graafseweg and Ruyterstraat in
+Nijmegen.
 
 Data was gathered for a period of february 2016 to *now*.
 
-Data from RIVM is delivered by Jan Vonk from the RIVM. Data from the Jose sensors is delivered by Robert Kieboom.
+Data from RIVM is delivered by Jan Vonk from the RIVM. Data from the Jose
+sensors is delivered by Robert Kieboom.
 
-The RIVM data has a record for every minute. The Jose data is more irregular because sometimes the sensors were not
-on or wifi connection was lost. When available about 3 measurements per minute are provided.
+The RIVM data has a record for every minute. Data from the Jose sensors have
+more irregularities due to lost wifi connection or power issues. The figure
+below shows the valid gas measurements that were taken by Jose sensors.
+
+.. figure:: _static/calibration/jose_measurements.png
+   :align: center
+
+   *Figure 1 - Valid gas measurements taken by Jose sensors*
+
+.. alternatives
 
 Pre-processing
 ==============
@@ -65,7 +72,8 @@ There are several options to model the relationship between the Jose measurement
 project is chosen for a feed-forward neural network. Its advantage is that it can model complex non-linear relations.
 The disadvantage is that understanding the model is hard.
 
-A neural network can be though of as a graph (see Figure 1). A graph contains nodes and edges. The neural network
+A neural network can be though of as a graph (see Figure 2). A graph
+contains nodes and edges. The neural network
 specifies the relation between the input nodes and output nodes by several edges and hidden layers. The values for
 the input nodes are clamped to the independent variables in the data set, i.e. the Jose measurements. The value of the
 output node should be as close as possible to the dependent variable, i.e. the RIVM measurement.
@@ -75,9 +83,10 @@ function. The activation function squashes the weighted average to a finite rang
 neural network to transform the inputs in a non-linear way to the output variable.
 
 .. figure:: _static/calibration/neural_network.png
-:align: center
+   :align: center
 
-   *Figure 1 - The structure of a feed-forward neural network can be visualized as a graph*
+   *Figure 2 - The structure of a feed-forward neural network can be
+   visualized as a graph*
 
 .. alternatives
 
