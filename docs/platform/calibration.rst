@@ -4,21 +4,31 @@
 Calibration
 ===========
 
-The Jose sensors produce noisy and biased measurements of gas components on a wrong scale. The data is noisy because
-two consecutive measurements of the same gas component can vary a lot. The measurements are biased because the gas
-sensors are cross sensitive for (at least) temperature and other gas components. The measurements are on the wrong
-scale because the results in kOhm instead of the more interpretable ug/m^2 or ppm.
+This chapter describes how gas measurements in kOhm and ppb are translated
+to the 'better interpretable values' of ug/m3.
 
-To solve these issues Jose sensor is calibrated using RIVM measurements of the same gas components (see "Data").
-After the calibration the gas concentrations that RIVM would measure on the same location can be predicted. Before
-calibration the data from Jose and RIVM is preprocessed to obtain a data set suitable for machine learning (see
-"Pre-processing"). An artificial neural network is used to model the relationship (see "Neural networks" and
-"Training a neural network"). To compare several models cross validation and the Root Mean Squared Error  is used (see
-"Performance evaluation"). Multiple models are learned from which the best is chosen (see "Parameter optimization"
-and "Choosing the best model"). This model is used to predict RIVM measurements (see "Online prediction").
+The challenge is that Jose sensors produce noisy and biased measurements of
+gas components on a wrong scale. The data is noisy because two consecutive
+measurements of the same gas component can vary a lot. The measurements are
+biased because the gas sensors are cross sensitive for (at least)
+temperature and other gas components. The measurements are on the wrong
+scale because the results in kOhm instead of the more interpretable ug/m^2
+or ppm. These issues are fixed by calibrating the Jose sensors to reliable
+RIVM measurements.
+
+`Data <calibration.html#data>`_ from Jose and RIVM is `pre-processed
+<calibration.html#pre-processing>`_ before using it to `train
+<calibration.html#training-a-neural-network>`_ a `Artificial Neural Network
+<calibration.html#neural-networks>`_. The `performance
+<calibration.html#performance>`_ is `optimized <calibration
+.html#parameter-optimization>`_ and the `best model is chosen <calibration
+.html#choosing-the-best-model>`_ for `online predictions <calibration
+.html#online-predictions>`_.
 
 Data
 ====
+
+This section describes ...
 
 The used data comes from two pairs of Jose and RIVM sensors that are located close to each other. One pair of Jose
 and RIVM sensors is located at the Graafseweg, close to the Keizer Karelplein. The other pair is located at the
@@ -65,7 +75,7 @@ function. The activation function squashes the weighted average to a finite rang
 neural network to transform the inputs in a non-linear way to the output variable.
 
 .. figure:: _static/calibration/neural_network.png
-   :align: center
+:align: center
 
    *Figure 1 - The structure of a feed-forward neural network can be visualized as a graph*
 
