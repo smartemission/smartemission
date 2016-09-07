@@ -175,7 +175,8 @@ for their use in Docker Containers.
 Test and Production
 -------------------
 
-In order to provide a continuous/uninterrupted service both a Test and Production deployment will be
+In order to provide a continuous/uninterrupted service both a
+Test and Production deployment will be
 setup within the FIWARE Lab environment. For local development on PC/Mac/Linux
 a Vagrant environment with Docker can be setup.
 
