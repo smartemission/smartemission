@@ -12,7 +12,7 @@ gas components on a wrong scale. The data is noisy because two consecutive
 measurements of the same gas component can vary a lot. The measurements are
 biased because the gas sensors are cross sensitive for (at least)
 temperature and other gas components. The measurements are on the wrong
-scale because the results in kOhm instead of the more interpretable ug/m^2
+scale because the results in kOhm instead of the more interpretable ug/m3
 or ppm. These issues are fixed by calibrating the Jose sensors to reliable
 RIVM measurements.
 
