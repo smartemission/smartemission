@@ -1,6 +1,7 @@
 library(ggplot2)
 library(dplyr)
 library(tidyr)
+library(handypandy)
 
 source("C.R")
 
@@ -26,3 +27,4 @@ ggplot(df, aes(x = datetime, y = gas)) +
   theme_bw() +
   xlab("") +
   ylab("")
+fig.save(png, "~/Documents/GemeenteNijmegen/smartemission/docs/platform/_static/jose_measurements.png")
