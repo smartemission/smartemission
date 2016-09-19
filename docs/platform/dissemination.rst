@@ -61,3 +61,34 @@ Meeting held in Nijmegen, on July 12 2016.
 
 * `Gas Calibration - Pieter Marsman <_static/dissemination/project-meeting-12jul2016/pmarsman-gas-calibratie-120712.pdf>`_
 
+Geospatial World Forum 24 may 2016
+==================================
+
+Smart Emission was presented at the Geospatial World Forum (GWF) in Rotterdam on may 24, 2016.
+The presentation from Smart Emission is here:
+
+* `Smart Emission <_static/dissemination/gwf-2016/smart-emission-gwf-24mei2016-grothe.pdf>`_
+
+Sensor Webs Conference 30 aug 2016
+==================================
+
+Smart Emission was presented at the Geospatial Sensor Webs conference organized by 52°North in Münster Germany.
+
+*"Under the motto “Geospatial Sensor Webs”, the 52°North Open Innovation Network aims to provide a forum*
+*in which sensor web researchers and practitioners can present and discuss their ideas, use cases and solutions. ...*
+*The 2016 Workshop and Conference continues the series of 52°North workshops on Sensor Web technologies, which started in 2013."*
+
+Slides
+------
+
+All presentations can be found online at
+http://52north.org/about/other-activities/geospatial-sensor-webs-conference/program/tuesday
+
+The presentation from Smart Emission is here:
+
+* `Smart Emission, building a spatial data infrastructure for an environmental citizen sensor network <_static/dissemination/sensorweb-munster-30aug2016/smart-emission-munster-pres.pdf>`_
+
+Links
+-----
+
+* `Conference web site <http://52north.org/about/other-activities/geospatial-sensor-webs-conference>`_
