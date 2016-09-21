@@ -7,34 +7,40 @@ import numpy as np
 import pandas as pd
 import sys
 
+import matplotlib.pyplot as plt
 
-def save_with_pickle(obj, name, folder):
-    f_name = '%012.0f_%s.pkl' % (time.time(), name)
+
+
+def timed_filename(name, extention):
+    return '%012.0f_%s.%s' % (time.time(), name, extention)
+
+
+def save_pickle(obj, name, folder):
+    f_name = timed_filename(name, 'pkl')
     f_path = os.path.join(folder, f_name)
     with open(f_path, 'wb') as f:
         pickle.dump(obj, f)
 
 
-def json_save(obj, name, folder):
-    f_name = '%012.0f_%s.json' % (time.time(), name)
+def save_json(obj, name, folder):
+    f_name = timed_filename(name, 'json')
     f_path = os.path.join(folder, f_name)
     with open(f_path, 'w') as f:
         json.dumps(obj, f)
 
 
-def save_with_csv(obj, name, folder):
-    f_name = '%012.0f_%s.csv' % (time.time(), name)
+def save_csv(obj, name, folder):
+    f_name = timed_filename(name, 'csv')
     f_path = os.path.join(folder, f_name)
     with open(f_path, 'w') as f:
         pd.DataFrame.from_dict(obj).to_csv(f)
 
 
-def output_save(name, folder):
-    f_name = '%012.0f_%s.txt' % (time.time(), name)
+def save_txt(obj, name, folder):
+    f_name = timed_filename(name, 'txt')
     f_path = os.path.join(folder, f_name)
-    f = open(f_path, 'w')
-    sys.stdout = f
-    sys.stderr = f
+    with open(f_path, 'w') as f:
+        f.write(obj)
 
 
 def get_data(folder, train_file, col_predict, n_part):
@@ -59,3 +65,13 @@ def get_data(folder, train_file, col_predict, n_part):
     sample_y = y.iloc[idx].copy()
 
     return x, y, sample_x, sample_y
+
+def save_fit_plot(x, y, fit, name, folder):
+    predicted = fit.predict(x)
+    fig, ax = plt.subplots()
+    ax.scatter(y, predicted)
+    ax.plot([y.min(), y.max()], [y.min(), y.max()], 'k--', lw=4)
+    ax.set_xlabel('Measured')
+    ax.set_ylabel('Predicted')
+    f_name = timed_filename(name, 'pdf')
+    plt.savefig(os.path.join(folder, f_name))
