@@ -1,5 +1,6 @@
 <sml:SensorML
-        xmlns:swe="http://www.opengis.net/swe/1.0.1" xmlns:sml="http://www.opengis.net/sensorML/1.0.1"
+        xmlns:swe="http://www.opengis.net/swe/1.0.1"
+        xmlns:sml="http://www.opengis.net/sensorML/1.0.1"
         xmlns:gml="http://www.opengis.net/gml"
         version="1.0.1">
     <sml:member>
