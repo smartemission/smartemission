@@ -7,7 +7,7 @@ from distributions import ExpDistribution
 
 dist_01 = {'mlp__hidden_layer_sizes': randint(2, 150), 'mlp__learning_rate_init': ExpDistribution(uniform(-12, 11)),
            'mlp__alpha': ExpDistribution(uniform(-12, 11)), 'mlp__momentum': uniform(),
-           'mlp__activation': ['logistic', 'tanh', 'relu'], 'mlp__algorithm': ['l-bfgs', 'adam'],
+           'mlp__activation': ['logistic', 'tanh', 'relu'], 'mlp__algorithm': ['l-bfgs'],
            'filter__alpha': ExpDistribution(uniform(-10, 9))}
 
 CO_dist_02 = {'mlp__hidden_layer_sizes': randint(2, 150), 'mlp__learning_rate_init': ExpDistribution(uniform(-12, 12)),

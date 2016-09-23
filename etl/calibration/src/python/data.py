@@ -68,9 +68,12 @@ def get_data(folder, train_file, col_predict, n_part):
 
 def save_fit_plot(x, y, fit, name, folder):
     predicted = fit.predict(x)
+    linfit = np.polyfit(y, predicted, 1)
+
     fig, ax = plt.subplots()
-    ax.scatter(y, predicted)
-    ax.plot([y.min(), y.max()], [y.min(), y.max()], 'k--', lw=4)
+    ax.scatter(y, predicted, s = 1, alpha = .1)
+    ax.plot([y.min(), y.max()], [y.min(), y.max()], 'k--', lw=2)
+    ax.plot(y, np.poly1d(linfit)(y), 'g--', lw=2)
     ax.set_xlabel('Measured')
     ax.set_ylabel('Predicted')
     f_name = timed_filename(name, 'pdf')

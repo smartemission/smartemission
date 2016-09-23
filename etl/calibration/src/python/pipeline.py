@@ -9,11 +9,10 @@ from sklearn.model_selection import RandomizedSearchCV
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
-from data import save_pickle, save_csv, get_data, save_fit_plot, save_txt, \
-    save_json
+from data import save_pickle, save_csv, get_data, save_fit_plot, save_txt
 from filter import Filter
 from measures import rmse
-from params import dist_test
+from params import dist_01
 
 FOLDER_DATA = '../../io/data'
 FOLDER_SAVE = '../../io/models'
@@ -21,8 +20,8 @@ FOLDER_PERF = '../../io/performance'
 
 
 def param_optimization(grid, col_predict, cv_k=5, n_part=.1,
-                       train_file='train.csv', verbose=1, n_jobs=-1,
-                       n_iter=10):
+                       train_file='train.csv', verbose=1, n_jobs=-1, n_iter=10,
+                       save=True):
     # Load data
     x_all, y_all, x, y = get_data(FOLDER_DATA, train_file, col_predict, n_part)
     if verbose > 0: print('Using %d data points from now on' % x.shape[0])
@@ -56,35 +55,37 @@ def param_optimization(grid, col_predict, cv_k=5, n_part=.1,
     pipe2.set_params(**gs.best_params_)
     pipe2.fit(x2, y)
 
-    # Save gridsearch results
-    save_pickle(gs, col_predict + '_grid_search', FOLDER_SAVE)
-    save_csv(gs.results_, col_predict + '_grid_search_scores', FOLDER_PERF)
-    save_txt(str(gs.get_params(True)), col_predict + '_grid_search_parameters',
-             FOLDER_SAVE)
+    if save:
+        # Save gridsearch results
+        save_pickle(gs, col_predict + '_grid_search', FOLDER_SAVE)
+        save_csv(gs.results_, col_predict + '_grid_search_scores', FOLDER_PERF)
+        save_txt(str(gs.get_params(True)),
+                 col_predict + '_grid_search_parameters', FOLDER_SAVE)
 
-    # Save best estimator
-    save_pickle(gs.best_estimator_, col_predict + '_best_estimator', FOLDER_SAVE)
-    save_fit_plot(x, y, gs.best_estimator_, col_predict + '_best_estimator_scatter',
-                  FOLDER_PERF)
-    save_txt(str(gs.best_estimator_.get_params(True)), col_predict +
-            '_best_estimator_parameters', FOLDER_SAVE)
+        # Save best estimator
+        save_pickle(gs.best_estimator_, col_predict + '_best_estimator',
+                    FOLDER_SAVE)
+        save_fit_plot(x, y, gs.best_estimator_,
+                      col_predict + '_best_estimator_scatter', FOLDER_PERF)
+        save_txt(str(gs.best_estimator_.get_params(True)),
+                 col_predict + '_best_estimator_parameters', FOLDER_SAVE)
 
-    # Save actual estimator
-    save_pickle(pipe2, col_predict + '_actual_estimator', FOLDER_SAVE)
-    save_fit_plot(x2, y, pipe2, col_predict + '_actual_estimator_scatter',
-                  FOLDER_PERF)
-    save_txt(str(pipe2.get_params(True)), col_predict +
-              '_actual_estimator_parameters', FOLDER_SAVE)
+        # Save actual estimator
+        save_pickle(pipe2, col_predict + '_actual_estimator', FOLDER_SAVE)
+        save_fit_plot(x2, y, pipe2, col_predict + '_actual_estimator_scatter',
+                      FOLDER_PERF)
+        save_txt(str(pipe2.get_params(True)),
+                 col_predict + '_actual_estimator_parameters', FOLDER_SAVE)
 
 
 if __name__ == '__main__':
-    param_optimization(dist_test, 'CO_Waarden', n_iter=2, verbose=3, cv_k=2,
-                       n_part=0.0001)
+    # param_optimization(dist_test, 'CO_Waarden', n_iter=2, verbose=3, cv_k=2,
+    #                    n_part=0.0001)
     # param_optimization(dist_test, 'O3_Waarden', n_iter=3, verbose=3, cv_k=3, n_part=0.0001)
     # param_optimization(dist_test, 'NO2_Waarden', n_iter=3, verbose=3, cv_k=3, n_part=0.0001)
-    # param_optimization(CO_final, 'CO_Waarden', n_iter=1, verbose=3,
-    #                    cv_k=10, n_part=0.1)
-    # param_optimization(O3_final, 'O3_Waarden', n_iter=1, verbose=3,
-    #                    cv_k=10, n_part=0.1)
-    # param_optimization(NO2_final, 'NO2_Waarden', n_iter=1,
-    #                    verbose=3, cv_k=10, n_part=0.1)
+    param_optimization(dist_01, 'CO_Waarden', n_iter=5, verbose=3, cv_k=5,
+                       n_part=0.1)
+    param_optimization(dist_01, 'O3_Waarden', n_iter=5, verbose=3, cv_k=5,
+                       n_part=0.1)
+    param_optimization(dist_01, 'NO2_Waarden', n_iter=5, verbose=3, cv_k=5,
+                       n_part=0.1)
