@@ -92,3 +92,18 @@ Links
 -----
 
 * `Conference web site <http://52north.org/about/other-activities/geospatial-sensor-webs-conference>`_
+
+Evaluation Meeting 21 sep 2016
+==============================
+
+An internal and external evalution meeting was held on sept 21, 2016
+in "Wijkcentrum De Biezantijn", Nijmegen.
+
+Slides
+------
+
+The presentation from Smart Emission is here:
+
+* `Status update Data Platform (Just van den Broecke) <_static/dissemination/evaluatie-21sep2016/evaluatie-bijeenk-210916-status.pdf>`_
+* `SE Data Platform Overview (Just van den Broecke) <_static/dissemination/evaluatie-21sep2016/evaluatie-bijeenk-210916.pdf>`_
+
