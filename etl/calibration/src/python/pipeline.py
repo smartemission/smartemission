@@ -20,14 +20,14 @@ FOLDER_PERF = '../../io/performance'
 
 
 def param_optimization(grid, col_predict, cv_k=5, n_part=.1,
-                       train_file='train.csv', verbose=1, n_jobs=-1, n_iter=10,
+                       train_file='train.csv', verbose=1, n_jobs=1, n_iter=10,
                        save=True):
     # Load data
     x_all, y_all, x, y = get_data(FOLDER_DATA, train_file, col_predict, n_part)
     if verbose > 0: print('Using %d data points from now on' % x.shape[0])
 
     # Create pipeline elements
-    mlp = nn.MLPRegressor(activation='logistic', algorithm='l-bfgs',
+    mlp = nn.MLPRegressor(activation='logistic', solver='l-bfgs',
                           max_iter=5000, early_stopping=True)
     ss = StandardScaler()
     fil = Filter(x_all.to_records(), 1,
