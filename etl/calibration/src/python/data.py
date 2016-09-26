@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 import sys
 
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 
 
@@ -67,7 +67,9 @@ def get_data(folder, train_file, col_predict, n_part):
     return x, y, sample_x, sample_y
 
 def save_fit_plot(x, y, fit, name, folder):
-    predicted = fit.predict(x)
+    pass
+
+"""    predicted = fit.predict(x)
     linfit = np.polyfit(y, predicted, 1)
 
     fig, ax = plt.subplots()
@@ -78,3 +80,5 @@ def save_fit_plot(x, y, fit, name, folder):
     ax.set_ylabel('Predicted')
     f_name = timed_filename(name, 'pdf')
     plt.savefig(os.path.join(folder, f_name))
+"""
+
