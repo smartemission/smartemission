@@ -27,8 +27,8 @@ def param_optimization(grid, col_predict, cv_k=5, n_part=.1,
     if verbose > 0: print('Using %d data points from now on' % x.shape[0])
 
     # Create pipeline elements
-    mlp = nn.MLPRegressor(activation='logistic', solver='lbgfs',
-                          max_iter=5000, early_stopping=True)
+    mlp = nn.MLPRegressor(activation='logistic', solver='lbgfs', max_iter=5000,
+                          early_stopping=True)
     ss = StandardScaler()
     fil = Filter(x_all.to_records(), 1,
                  ('s.co2', 's.no2resistance', 's.o3resistance'), 'secs')
@@ -58,7 +58,8 @@ def param_optimization(grid, col_predict, cv_k=5, n_part=.1,
     if save:
         # Save gridsearch results
         save_pickle(gs, col_predict + '_grid_search', FOLDER_SAVE)
-        save_csv(gs.cv_results_, col_predict + '_grid_search_scores', FOLDER_PERF)
+        save_csv(gs.cv_results_, col_predict + '_grid_search_scores',
+                 FOLDER_PERF)
         save_txt(str(gs.get_params(True)),
                  col_predict + '_grid_search_parameters', FOLDER_SAVE)
 
@@ -79,13 +80,15 @@ def param_optimization(grid, col_predict, cv_k=5, n_part=.1,
 
 
 if __name__ == '__main__':
-    param_optimization(dist_02, 'CO_Waarden', n_iter=2, verbose=3, cv_k=2,
-                       n_part=0.0001)
+    print("Number of models to try:")
+    n_iter = input()
+    # param_optimization(dist_test, 'CO_Waarden', n_iter=2, verbose=3, cv_k=2,
+    #                    n_part=0.0001)
     # param_optimization(dist_test, 'O3_Waarden', n_iter=3, verbose=3, cv_k=3, n_part=0.0001)
     # param_optimization(dist_test, 'NO2_Waarden', n_iter=3, verbose=3, cv_k=3, n_part=0.0001)
-    # param_optimization(dist_01, 'CO_Waarden', n_iter=2, verbose=3, cv_k=2,
-    #                    n_part=0.02)
-    # param_optimization(dist_01, 'O3_Waarden', n_iter=5, verbose=3, cv_k=5,
-    #                    n_part=0.02)
-    # param_optimization(dist_01, 'NO2_Waarden', n_iter=5, verbose=3, cv_k=5,
-    #                    n_part=0.02)
+    param_optimization(dist_01, 'CO_Waarden', n_iter=n_iter, verbose=3,
+                       cv_k=5, n_part=0.02)
+    param_optimization(dist_01, 'O3_Waarden', n_iter=n_iter, verbose=3,
+                       cv_k=5, n_part=0.02)
+    param_optimization(dist_01, 'NO2_Waarden', n_iter=n_iter, verbose=3,
+                       cv_k=5, n_part=0.02)
