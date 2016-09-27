@@ -12,7 +12,7 @@ from sklearn.preprocessing import StandardScaler
 from data import save_pickle, save_csv, get_data, save_fit_plot, save_txt
 from filter import Filter
 from measures import rmse
-from params import dist_01
+from params import dist_01, dist_test, dist_02
 
 FOLDER_DATA = '../../io/data'
 FOLDER_SAVE = '../../io/models'

@@ -10,10 +10,11 @@ class ExpDistribution:
         self.original_distribution = original_distribution
 
     def rvs(self, random_state=None):
-        return exp(self.original_distribution.rvs(random_state=random_state))
+        return pow(10, self.original_distribution.rvs(
+            random_state=random_state))
 
 
-class TupleDistribution:
+class VaryingLengthTupleDistribution:
     """
     Sample tuples where each item stems from a source distribution
     Note: this is not a normalized distribution
@@ -28,3 +29,16 @@ class TupleDistribution:
         for i in range(num_layers):
             layers.append(self.layer_size_distribution.rvs(random_state=random_state))
         return tuple(layers)
+
+
+class FixedLengthTupleDistribution:
+    """
+    Tuples where each element stems from a specified distribution
+    Note: this is not a normalized distribution
+    """
+    def __init__(self, distributions):
+        self.distributions = distributions
+
+    def rvs(self, random_state = None):
+        return tuple([dist.rvs(random_state=random_state) for dist in
+                      self.distributions])
