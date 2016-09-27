@@ -8,7 +8,7 @@ import pandas as pd
 import sys
 
 # import matplotlib.pyplot as plt
-
+from sklearn.model_selection import train_test_split
 
 
 def timed_filename(name, extention):
@@ -55,14 +55,13 @@ def get_data(folder, train_file, col_predict, n_part):
     cols_predict = ['O3_Waarden', 'NO2_Waarden', 'CO_Waarden']
     x = x.drop([i for i in cols_predict if i is not col_predict], 1)
     x = x.dropna()
+
     y = x[col_predict].copy()
     x = x.drop(col_predict, 1)
 
-    # Sample data
-    n = int(x.shape[0] * n_part)
-    idx = np.random.choice(x.shape[0], n)
-    sample_x = x.iloc[idx, :].copy()
-    sample_y = y.iloc[idx].copy()
+    hours = np.round(x['secs'] / 60 / 60 / 24 / 5) # each 5 days
+    _, sample_x, _, sample_y = train_test_split(x, y, test_size=n_part,
+                                         stratify = hours)
 
     return x, y, sample_x, sample_y
 
