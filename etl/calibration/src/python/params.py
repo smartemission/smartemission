@@ -47,5 +47,5 @@ dist_02 = {'mlp__hidden_layer_sizes': layer_size,
 #              'mlp__momentum': [0.473310471], 'mlp__activation': ['tanh'], 'mlp__solver': ['lbgfs'],
 #              'filter__alpha': [0.005]}
 
-dist_test = dist_01
+dist_test = dist_01.copy()
 dist_test['mlp__hidden_layer_sizes'] = randint(2, 10)
