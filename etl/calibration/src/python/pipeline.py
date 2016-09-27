@@ -79,12 +79,12 @@ def param_optimization(grid, col_predict, cv_k=5, n_part=.1,
 
 
 if __name__ == '__main__':
-    # param_optimization(dist_test, 'CO_Waarden', n_iter=2, verbose=3, cv_k=2,
-    #                    n_part=0.0001)
+    param_optimization(dist_02, 'CO_Waarden', n_iter=2, verbose=3, cv_k=2,
+                       n_part=0.0001)
     # param_optimization(dist_test, 'O3_Waarden', n_iter=3, verbose=3, cv_k=3, n_part=0.0001)
     # param_optimization(dist_test, 'NO2_Waarden', n_iter=3, verbose=3, cv_k=3, n_part=0.0001)
-    param_optimization(dist_01, 'CO_Waarden', n_iter=2, verbose=3, cv_k=2,
-                       n_part=0.02)
+    # param_optimization(dist_01, 'CO_Waarden', n_iter=2, verbose=3, cv_k=2,
+    #                    n_part=0.02)
     # param_optimization(dist_01, 'O3_Waarden', n_iter=5, verbose=3, cv_k=5,
     #                    n_part=0.02)
     # param_optimization(dist_01, 'NO2_Waarden', n_iter=5, verbose=3, cv_k=5,
