@@ -59,9 +59,9 @@ def get_data(folder, train_file, col_predict, n_part):
     y = x[col_predict].copy()
     x = x.drop(col_predict, 1)
 
-    hours = np.round(x['secs'] / 60 / 60 / 24 / 5) # each 5 days
+    strata = np.round(x['secs'] / 60 / 60 / 24 / 5) # each 5 days
     _, sample_x, _, sample_y = train_test_split(x, y, test_size=n_part,
-                                         stratify = hours)
+                                         stratify = strata)
 
     return x, y, sample_x, sample_y
 
