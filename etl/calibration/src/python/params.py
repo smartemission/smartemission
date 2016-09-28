@@ -15,7 +15,6 @@ dist_01 = {'mlp__hidden_layer_sizes': randint(2, 150),
            'filter__alpha': ExpDistribution(uniform(-6, 6))}
 
 layer_size = FixedLengthTupleDistribution([randint(25, 150), randint(2, 50)])
-layer_size = FixedLengthTupleDistribution([randint(2, 10), randint(2, 5)])
 dist_02 = {'mlp__hidden_layer_sizes': layer_size,
            'mlp__activation': ['logistic', 'tanh', 'relu'],
            'mlp__solver': ['sgd'],
