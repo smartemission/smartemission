@@ -27,33 +27,32 @@ def param_optimization(grid, col_predict, cv_k=5, n_part=.1,
     if verbose > 0: print('Using %d data points from now on' % x.shape[0])
 
     # Create pipeline elements
-    mlp = nn.MLPRegressor(activation='logistic', solver='lbgfs', max_iter=5000,
-                          early_stopping=True)
+    mlp = nn.MLPRegressor()
     ss = StandardScaler()
     fil = Filter(x_all.to_records(), 1,
                  ('s.co2', 's.no2resistance', 's.o3resistance'), 'secs')
-    measure_rmse = make_scorer(rmse, greater_is_better=False)
+    # measure_rmse = make_scorer(rmse, greater_is_better=False)
 
     # Do randomized grid search
     gs_steps = [('filter', fil), ('scale', ss), ('mlp', mlp)]
     gs_pipe = Pipeline(gs_steps)
-    gs = RandomizedSearchCV(gs_pipe, grid, n_iter, measure_rmse, n_jobs=n_jobs,
+    gs = RandomizedSearchCV(gs_pipe, grid, n_iter, n_jobs=n_jobs,
                             cv=cv_k, verbose=verbose, error_score=np.NaN)
     gs.fit(x, y)
     print("Best parameters are:\n%s" % gs.best_params_)
     print("Best score is:\n%f" % gs.best_score_)
 
     # Filter data
-    fil.alpha = gs.best_params_['filter__alpha']
-    x2 = fil.transform(x)
-    x2 = x2.drop('secs', axis=1)
+    # fil.alpha = gs.best_params_['filter__alpha']
+    # x2 = fil.transform(x)
+    # x2 = x2.drop('secs', axis=1)
 
     # Learn online estimator
-    steps2 = [('scale', ss), ('mlp', mlp)]
-    pipe2 = Pipeline(steps2)
-    del gs.best_params_['filter__alpha']
-    pipe2.set_params(**gs.best_params_)
-    pipe2.fit(x2, y)
+    # steps2 = [('scale', ss), ('mlp', mlp)]
+    # pipe2 = Pipeline(steps2)
+    # del gs.best_params_['filter__alpha']
+    # pipe2.set_params(**gs.best_params_)
+    # pipe2.fit(x2, y)
 
     if save:
         # Save gridsearch results
@@ -64,19 +63,19 @@ def param_optimization(grid, col_predict, cv_k=5, n_part=.1,
                  col_predict + '_grid_search_parameters', FOLDER_SAVE)
 
         # Save best estimator
-        save_pickle(gs.best_estimator_, col_predict + '_best_estimator',
-                    FOLDER_SAVE)
-        save_fit_plot(x, y, gs.best_estimator_,
-                      col_predict + '_best_estimator_scatter', FOLDER_PERF)
-        save_txt(str(gs.best_estimator_.get_params(True)),
-                 col_predict + '_best_estimator_parameters', FOLDER_SAVE)
+        # save_pickle(gs.best_estimator_, col_predict + '_best_estimator',
+        #             FOLDER_SAVE)
+        # save_fit_plot(x, y, gs.best_estimator_,
+        #               col_predict + '_best_estimator_scatter', FOLDER_PERF)
+        # save_txt(str(gs.best_estimator_.get_params(True)),
+        #          col_predict + '_best_estimator_parameters', FOLDER_SAVE)
 
         # Save actual estimator
-        save_pickle(pipe2, col_predict + '_actual_estimator', FOLDER_SAVE)
-        save_fit_plot(x2, y, pipe2, col_predict + '_actual_estimator_scatter',
-                      FOLDER_PERF)
-        save_txt(str(pipe2.get_params(True)),
-                 col_predict + '_actual_estimator_parameters', FOLDER_SAVE)
+        # save_pickle(pipe2, col_predict + '_actual_estimator', FOLDER_SAVE)
+        # save_fit_plot(x2, y, pipe2, col_predict + '_actual_estimator_scatter',
+        #               FOLDER_PERF)
+        # save_txt(str(pipe2.get_params(True)),
+        #          col_predict + '_actual_estimator_parameters', FOLDER_SAVE)
 
 
 if __name__ == '__main__':
