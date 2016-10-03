@@ -33,14 +33,13 @@ def param_optimization(grid, col_predict, cv_k=5, n_part=.1,
     ss = StandardScaler()
     fil = Filter(x_all.to_records(), 1,
                  ('s.co2', 's.no2resistance', 's.o3resistance'), 'secs')
-    measure_rmse = make_scorer(rmse, greater_is_better=False)
+    # measure_rmse = make_scorer(rmse, greater_is_better=False)
 
     # Do randomized grid search
     gs_steps = [('filter', fil), ('scale', ss), ('mlp', mlp)]
     gs_pipe = Pipeline(gs_steps)
     gs = RandomizedSearchCV(gs_pipe, grid, n_iter, n_jobs=n_jobs,
-                            cv=cv_k, verbose=verbose, error_score=np.NaN,
-                            scoring=measure_rmse)
+                            cv=cv_k, verbose=verbose, error_score=np.NaN)
     gs.fit(x, y)
     print("Best parameters are:\n%s" % gs.best_params_)
     print("Best score is:\n%f" % gs.best_score_)
