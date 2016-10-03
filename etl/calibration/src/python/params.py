@@ -11,7 +11,8 @@ dist_01 = {'mlp__hidden_layer_sizes': randint(2, 150),
            'mlp__alpha': ExpDistribution(uniform(-6, 5)),
            'mlp__learning_rate': ['constant'], 'mlp__max_iter': [200],
            'mlp__learning_rate_init': ExpDistribution(uniform(-6, 5)),
-           'filter__alpha': ExpDistribution(uniform(-6, 6))}
+           # no2 results analysis shows good range between 0.1 and 0.001
+           'filter__alpha': ExpDistribution(uniform(-3, 2))}
 
 layer_size = FixedLengthTupleDistribution([randint(25, 150), randint(2, 50)])
 dist_02 = {'mlp__hidden_layer_sizes': layer_size,
