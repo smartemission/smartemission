@@ -81,11 +81,14 @@ def param_optimization(grid, col_predict, cv_k=5, n_part=.1,
 
 
 if __name__ == '__main__':
-    print("Specify number of model and number of batches:")
+    print("Specify number of models:")
     n_iter = int(input())
+    print("Specify number of batches:")
     n_batches = int(input())
+    print("Specify column to predict (O3_Waarden, NO2_Waarden, CO_Waarden):")
+    y_col = str(input())
     n_iter = int(ceil(n_iter / n_batches))
     for i in range(n_batches):
-        param_optimization(dist_01, 'O3_Waarden', n_iter=n_iter, verbose=3,
+        param_optimization(dist_01, y_col, n_iter=n_iter, verbose=3,
                            cv_k=9, n_part=0.02, n_jobs = -1)
 

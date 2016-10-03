@@ -53,7 +53,7 @@ def get_data(folder, train_file, col_predict, n_part):
 
     # Select columns
     cols_predict = ['O3_Waarden', 'NO2_Waarden', 'CO_Waarden']
-    x = x.drop([i for i in cols_predict if i is not col_predict], 1)
+    x = x.drop([i for i in cols_predict if i != col_predict], 1)
     x = x.dropna()
 
     y = x[col_predict].copy()
