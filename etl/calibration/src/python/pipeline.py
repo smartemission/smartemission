@@ -12,7 +12,9 @@ from sklearn.preprocessing import StandardScaler
 from data import save_pickle, save_csv, get_data, save_fit_plot, save_txt
 from filter import Filter
 from measures import rmse
+
 from params import dist_01, dist_test, dist_02, NO2_final, CO_final, O3_final
+from math import ceil
 
 FOLDER_DATA = '../../io/data'
 FOLDER_SAVE = '../../io/models'
@@ -80,15 +82,11 @@ def param_optimization(grid, col_predict, cv_k=5, n_part=.1,
 
 
 if __name__ == '__main__':
-    print("Number of models to try:")
-    n_iter = input()
-    # param_optimization(dist_test, 'CO_Waarden', n_iter=2, verbose=3, cv_k=2,
-    #                    n_part=0.0001)
-    # param_optimization(dist_test, 'O3_Waarden', n_iter=3, verbose=3, cv_k=3, n_part=0.0001)
-    # param_optimization(dist_test, 'NO2_Waarden', n_iter=3, verbose=3, cv_k=3, n_part=0.0001)
-    param_optimization(dist_01, 'CO_Waarden', n_iter=n_iter, verbose=3,
-                       cv_k=5, n_part=0.02)
-    param_optimization(dist_01, 'O3_Waarden', n_iter=n_iter, verbose=3,
-                       cv_k=5, n_part=0.02)
-    param_optimization(dist_01, 'NO2_Waarden', n_iter=n_iter, verbose=3,
-                       cv_k=5, n_part=0.02)
+    print("Specify number of model and number of batches:")
+    n_iter = int(input())
+    n_batches = int(input())
+    n_iter = int(ceil(n_iter / n_batches))
+    for i in range(n_batches):
+        param_optimization(dist_01, 'O3_Waarden', n_iter=n_iter, verbose=3,
+                           cv_k=9, n_part=0.02, n_jobs = -1)
+
