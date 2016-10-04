@@ -41,7 +41,7 @@ RUN sudo pip install --upgrade pip
 RUN pip install pytz
 
 # Development version of scikit-learn
-RUN pip install Cython numpy scipy git+git://github.com/scikit-learn/scikit-learn.git
+RUN pip install Cython numpy scipy scikit-learn==0.18
 
 # Get latest Stetl from git
 RUN git clone https://github.com/geopython/stetl /opt/stetl

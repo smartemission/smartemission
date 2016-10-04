@@ -3,12 +3,9 @@ import os
 import pickle
 import time
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import sys
-
-# import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
 
 
 def timed_filename(name, extention):
@@ -49,11 +46,12 @@ def get_data(folder, train_file, col_predict, n_part):
 
     # Remove outliers for CO
     if col_predict is 'CO_Waarden':
-        x = x[np.abs(x.CO_Waarden - x.CO_Waarden.mean()) <= (10 * x.CO_Waarden.std())]
+        x = x[np.abs(x.CO_Waarden - x.CO_Waarden.mean()) <= (
+        10 * x.CO_Waarden.std())]
 
     # Select columns
     cols_predict = ['O3_Waarden', 'NO2_Waarden', 'CO_Waarden']
-    x = x.drop([i for i in cols_predict if i is not col_predict], 1)
+    x = x.drop([i for i in cols_predict if i != col_predict], 1)
     x = x.dropna()
 
     y = x[col_predict].copy()
@@ -68,22 +66,18 @@ def get_data(folder, train_file, col_predict, n_part):
     sample_x = x.iloc[idx, :].copy()
     sample_y = y.iloc[idx].copy()
 
-
     return x, y, sample_x, sample_y
 
-def save_fit_plot(x, y, fit, name, folder):
-    pass
 
-"""    predicted = fit.predict(x)
+def save_fit_plot(x, y, fit, name, folder):
+    predicted = fit.predict(x)
     linfit = np.polyfit(y, predicted, 1)
 
     fig, ax = plt.subplots()
-    ax.scatter(y, predicted, s = 1, alpha = .1)
+    ax.scatter(y, predicted, s=1, alpha=.1)
     ax.plot([y.min(), y.max()], [y.min(), y.max()], 'k--', lw=2)
     ax.plot(y, np.poly1d(linfit)(y), 'g--', lw=2)
     ax.set_xlabel('Measured')
     ax.set_ylabel('Predicted')
     f_name = timed_filename(name, 'pdf')
     plt.savefig(os.path.join(folder, f_name))
-"""
-

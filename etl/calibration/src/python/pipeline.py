@@ -30,7 +30,7 @@ def param_optimization(grid, col_predict, cv_k=5, n_part=.1,
     if verbose > 0: print('Using %d data points from now on' % x.shape[0])
 
     # Create pipeline elements
-    mlp = nn.MLPRegressor(activation='logistic', solver='lbgfs', max_iter=5000,
+    mlp = nn.MLPRegressor(activation='logistic', solver='lbfgs', max_iter=5000,
                           early_stopping=True)
     ss = StandardScaler()
     fil = Filter(x_all.to_records(), 1,

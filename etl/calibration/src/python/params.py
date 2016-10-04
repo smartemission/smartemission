@@ -30,7 +30,7 @@ dist_02 = {'mlp__hidden_layer_sizes': layer_size,
 CO_final = {'filter__alpha': [0.0073344041648012058],
             'mlp__alpha': [1.899210794532138e-06], 'mlp__max_iter': [200],
             'mlp__activation': ['relu'], 'mlp__hidden_layer_sizes': [112],
-            'mlp__learning_rate': ['constant'], 'mlp__solver': ['lbgfs'],
+            'mlp__learning_rate': ['constant'], 'mlp__solver': ['lbfgs'],
             'mlp__learning_rate_init': [0.07908998568339845]}
 
 O3_final = {'mlp__activation': ['logistic'],
@@ -39,29 +39,13 @@ O3_final = {'mlp__activation': ['logistic'],
             'filter__alpha': [0.0077038310468374709],
             'mlp__learning_rate_init': [0.0045519457242742473],
             'mlp__hidden_layer_sizes': [141], 'mlp__max_iter': [200],
-            'mlp__solver': ['lbgfs']}
-
-# CO_dist_02 = {'mlp__hidden_layer_sizes': randint(2, 150), 'mlp__learning_rate_init': ExpDistribution(uniform(-12, 12)),
-#               'mlp__alpha': ExpDistribution(uniform(-12, 12)), 'mlp__momentum': uniform(), 'mlp__activation': ['relu'],
-#               'mlp__solver': ['lbgfs'], 'filter__alpha': ExpDistribution(uniform(-12, 12))}
-#
-# CO_final = {'mlp__hidden_layer_sizes': [56], 'mlp__learning_rate_init': [0.000052997], 'mlp__alpha': [0.0132466772],
-#             'mlp__momentum': [0.3377605568], 'mlp__activation': ['relu'], 'mlp__solver': ['lbgfs'],
-#             'filter__alpha': [0.005]}
-#
-# O3_final = {'mlp__hidden_layer_sizes': [42], 'mlp__learning_rate_init': [0.220055322], 'mlp__alpha': [0.2645091504],
-#             'mlp__momentum': [0.7904790613], 'mlp__activation': ['logistic'], 'mlp__solver': ['lbgfs'],
-#             'filter__alpha': [0.005]}
-#
-# NO2_final = {'mlp__hidden_layer_sizes': [79], 'mlp__learning_rate_init': [0.0045013008], 'mlp__alpha': [0.1382210543],
-#              'mlp__momentum': [0.473310471], 'mlp__activation': ['tanh'], 'mlp__solver': ['lbgfs'],
-#              'filter__alpha': [0.005]}
+            'mlp__solver': ['lbfgs']}
 
 NO2_final = {'mlp__learning_rate': ['constant'], 'mlp__activation': ['tanh'],
              'mlp__alpha': [1.4312431413452899e-05],
              'mlp__learning_rate_init': [4.2639692257501962e-05],
              'mlp__hidden_layer_sizes': [71], 'mlp__max_iter': [200],
-             'mlp__solver': ['lbgfs']}
+             'mlp__solver': ['lbfgs'], 'filter__alpha': [0.01358001]}
 
 dist_test = dist_01.copy()
 dist_test['mlp__hidden_layer_sizes'] = randint(2, 10)

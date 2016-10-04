@@ -11,13 +11,13 @@ import numpy as np
 # Make absolute location for pickled calibration objects
 file_dir = path.dirname(path.abspath(__file__))
 
-pipeline_files = {'co': path.join(file_dir, 'calibration/model/pipeline_co.pkl'),
-                  'no2': path.join(file_dir, 'calibration/model/pipeline_no2.pkl'),
-                  'o3': path.join(file_dir, 'calibration/model/pipeline_o3.pkl')}
+pipeline_files = {'co': path.join(file_dir, 'calibration/model/001475573502_CO_Waarden_actual_estimator.pkl'),
+                  'no2': path.join(file_dir, 'calibration/model/001475573540_NO2_Waarden_actual_estimator.pkl'),
+                  'o3': path.join(file_dir, 'calibration/model/001475573493_O3_Waarden_actual_estimator.pkl')}
 pipeline_objects = {key: pickle.load(open(value, 'rb')) for (key, value) in pipeline_files.iteritems()}
-running_mean_param = {'co': {'co2': 0.005, 'no2': 0.005, 'o3': 0.005},
-                      'no2': {'co2': 0.005, 'no2': 0.005, 'o3': 0.005},
-                      'o3': {'co2': 0.005, 'no2': 0.005, 'o3': 0.005}}
+running_mean_param = {'co': {'co2': 0.007334404164801206, 'no2': 0.007334404164801206, 'o3': 0.007334404164801206},
+                      'no2': {'co2': 0.01358001, 'no2': 0.01358001, 'o3': 0.01358001},
+                      'o3': {'co2': 0.007703831046837471, 'no2': 0.007703831046837471, 'o3': 0.007703831046837471}}
 running_means = {'co': {'co2': None, 'no2': None, 'o3': None},
                  'no2': {'co2': None, 'no2': None, 'o3': None},
                  'o3': {'co2': None, 'no2': None, 'o3': None}}
