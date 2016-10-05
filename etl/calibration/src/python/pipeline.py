@@ -6,10 +6,12 @@ import numpy as np
 from sklearn import neural_network as nn
 from sklearn.metrics import make_scorer
 from sklearn.model_selection import RandomizedSearchCV
+from sklearn.model_selection import cross_val_predict
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
-from data import save_pickle, save_csv, get_data, save_fit_plot, save_txt
+from data import save_pickle, save_csv, get_data, save_fit_plot, save_txt, \
+    save_target_pred
 from filter import Filter
 from measures import rmse
 
@@ -57,6 +59,7 @@ def param_optimization(grid, col_predict, cv_k=5, n_part=.1,
     del gs.best_params_['filter__alpha']
     pipe2.set_params(**gs.best_params_)
     pipe2.fit(x2, y)
+    pred2 = cross_val_predict(pipe2, x, y, cv = cv_k)
 
     if save:
         # Save gridsearch results
@@ -80,6 +83,9 @@ def param_optimization(grid, col_predict, cv_k=5, n_part=.1,
                       FOLDER_PERF)
         save_txt(str(pipe2.get_params(True)),
                  col_predict + '_actual_estimator_parameters', FOLDER_SAVE)
+
+        # Save target - prediction pairs
+        save_target_pred(y, pred2, col_predict + '_target_pred', FOLDER_PERF)
 
 
 if __name__ == '__main__':

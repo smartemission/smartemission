@@ -6,6 +6,7 @@ import time
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from sklearn.model_selection import cross_val_predict
 
 
 def timed_filename(name, extention):
@@ -31,6 +32,10 @@ def save_csv(obj, name, folder):
     f_path = os.path.join(folder, f_name)
     with open(f_path, 'w') as f:
         pd.DataFrame.from_dict(obj).to_csv(f)
+
+
+def save_target_pred(target, pred, name, folder):
+    save_csv({'target': target, 'prediction': pred}, name, folder)
 
 
 def save_txt(obj, name, folder):
@@ -70,7 +75,7 @@ def get_data(folder, train_file, col_predict, n_part):
 
 
 def save_fit_plot(x, y, fit, name, folder):
-    predicted = fit.predict(x)
+    predicted = cross_val_predict(fit, x, y, cv = 10)
     linfit = np.polyfit(y, predicted, 1)
 
     fig, ax = plt.subplots()
