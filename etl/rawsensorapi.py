@@ -301,9 +301,9 @@ class RawSensorLastInput(RawSensorAPIInput):
                     continue
 
                 # Unix timestamp to calculate "stale state (0/1)" i.e. if a station has been
-                # active over the last N hours (now 2). We keep all last values but flag inactive stations.
+                # active over the last N hours (now 24). We keep all last values but flag inactive stations.
                 record['time'] = convert_timestamp(sensor_vals['time'])
-                utc_then = datetime.utcnow() - timedelta(hours=2)
+                utc_then = datetime.utcnow() - timedelta(hours=24)
                 tstamp_sample = time.mktime(record['time'].timetuple())
                 tstamp_then = time.mktime(utc_then.timetuple())
                 record['value_stale'] = 0
