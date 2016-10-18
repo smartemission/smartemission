@@ -30,7 +30,7 @@
                             <Mark>
                                 <WellKnownName>triangle</WellKnownName>
                                 <Fill>
-                                    <CssParameter name="fill">#00FF66</CssParameter>
+                                    <CssParameter name="fill">#00FF00</CssParameter>
                                     <CssParameter name="fill-opacity">0.6</CssParameter>
                                 </Fill>
                                 <Stroke>
@@ -38,9 +38,43 @@
                                     <CssParameter name="stroke-width">1</CssParameter>
                                 </Stroke>
                             </Mark>
-                            <Size>12</Size>
+                            <Size>32</Size>
                         </Graphic>
                     </PointSymbolizer>
+                    <TextSymbolizer>
+                        <Label>
+
+                            <ogc:Function name="numberFormat">
+                                <ogc:Literal>##</ogc:Literal>
+                                <ogc:PropertyName>device_id</ogc:PropertyName>
+                            </ogc:Function>
+                        </Label>
+
+                        <Font>
+                            <CssParameter name="font-family">
+                                <ogc:Literal>SansSerif</ogc:Literal>
+                            </CssParameter>
+
+                            <CssParameter name="font-size">
+                                <ogc:Literal>10</ogc:Literal>
+                            </CssParameter>
+                            <CssParameter name="font-weight">
+                                <ogc:Literal>bold</ogc:Literal>
+                            </CssParameter>
+                        </Font>
+                        <LabelPlacement>
+                            <PointPlacement>
+                                <AnchorPoint>
+                                    <AnchorPointX>0.5</AnchorPointX>
+                                    <AnchorPointY>1.95</AnchorPointY>
+                                </AnchorPoint>
+                            </PointPlacement>
+                        </LabelPlacement>
+
+                        <Fill>
+                            <CssParameter name="fill">#555555</CssParameter>
+                        </Fill>
+                    </TextSymbolizer>
                  </Rule>
 
                 <Rule>
@@ -66,9 +100,43 @@
                                      <CssParameter name="stroke-width">1</CssParameter>
                                  </Stroke>
                              </Mark>
-                             <Size>12</Size>
+                             <Size>32</Size>
                          </Graphic>
                      </PointSymbolizer>
+                    <TextSymbolizer>
+                        <Label>
+
+                            <ogc:Function name="numberFormat">
+                                <ogc:Literal>##</ogc:Literal>
+                                <ogc:PropertyName>device_id</ogc:PropertyName>
+                            </ogc:Function>
+                        </Label>
+
+                        <Font>
+                            <CssParameter name="font-family">
+                                <ogc:Literal>SansSerif</ogc:Literal>
+                            </CssParameter>
+
+                            <CssParameter name="font-size">
+                                <ogc:Literal>10</ogc:Literal>
+                            </CssParameter>
+                            <CssParameter name="font-weight">
+                                <ogc:Literal>bold</ogc:Literal>
+                            </CssParameter>
+                        </Font>
+                        <LabelPlacement>
+                            <PointPlacement>
+                                <AnchorPoint>
+                                    <AnchorPointX>0.5</AnchorPointX>
+                                    <AnchorPointY>1.95</AnchorPointY>
+                                </AnchorPoint>
+                            </PointPlacement>
+                        </LabelPlacement>
+
+                        <Fill>
+                            <CssParameter name="fill">#EEEEEE</CssParameter>
+                        </Fill>
+                    </TextSymbolizer>
                   </Rule>
 
             </FeatureTypeStyle>
