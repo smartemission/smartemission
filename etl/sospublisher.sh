@@ -3,7 +3,7 @@
 # ETL for refining raw timeseries values from Smart Emission Raw DB data.
 #
 
-STETL_ARGS="-c publisher.cfg -a options/docker.args"
+STETL_ARGS="-c sospublisher.cfg -a options/docker.args"
 WORK_DIR="`pwd`"
 PG_HOST="postgis"
 SOS52N_HOST="sos52n"
