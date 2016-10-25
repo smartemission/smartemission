@@ -43,7 +43,7 @@ $(document).ready(function () {
     // Show the station side bar popup
     function show_station_popup(feature) {
         var stationId = feature.properties.id;
-        var timeseriesUrl = apiUrl + '/timeseries?format=json&station=' + stationId + '&callback=?';
+        var timeseriesUrl = apiUrl + '/timeseries?format=json&station=' + stationId + '&expanded=true&callback=?';
 
         $.getJSON(timeseriesUrl, function (data) {
             // See to which category an observation belongs by matching the label

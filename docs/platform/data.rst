@@ -745,10 +745,10 @@ time these are substituted.  Below an excerpt of an `InsertObservation` template
 Implementation
 --------------
 
-Below are links to the sources of the Publisher implementation.
+Below are links to the sources of the SOS Publisher implementation.
 
-* ETL run script: https://github.com/Geonovum/smartemission/blob/master/etl/publisher.sh
-* Stetl conf: https://github.com/Geonovum/smartemission/blob/master/etl/publisher.cfg
+* ETL run script: https://github.com/Geonovum/smartemission/blob/master/etl/sospublisher.sh
+* Stetl conf: https://github.com/Geonovum/smartemission/blob/master/etl/sospublisher.cfg
 * Refined DB Input: https://github.com/Geonovum/smartemission/blob/master/etl/smartemdb.py
 * SOS-T publication: https://github.com/Geonovum/smartemission/blob/master/etl/sosoutput.py
 * SOS-T templates: https://github.com/Geonovum/smartemission/blob/master/etl/sostemplates

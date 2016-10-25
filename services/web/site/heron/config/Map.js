@@ -123,6 +123,7 @@ Heron.scratch.urls = {
     MAP5_WMS: 'http://s.map5.nl/map/gast/service?',
     OPENBASISKAART_TMS: 'http://openbasiskaart.nl/mapcache/tms/',
     RO_WMS: 'http://afnemers.ruimtelijkeplannen.nl/afnemers/services?',
+    RIVM_WMS: 'http://geodata.rivm.nl/geoserver/ows?',
     // KNMI_ACT_10MIN: 'https://data.knmi.nl/wms/cgi-bin/wms.cgi?%26source%3D%2FActuele10mindataKNMIstations%2F1%2Fnoversion%2F2014%2F11%2F04%2FKMDS__OPER_P___10M_OBS_L2%2Enc%26'
     KNMI_INSPIRE_WMS: 'http://geoservices.knmi.nl/cgi-bin/inspireviewservice.cgi?DATASET=urn:xkdc:ds:nl.knmi::Actuele10mindataKNMIstations/1/'
 };
