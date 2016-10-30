@@ -558,7 +558,8 @@ class RawSensorTimeseriesInput(RawSensorAPIInput):
         skips = 0
         while self.day == current_day and (self.hour - 1) == current_hour and not self.all_done():
             skips += 1
-            log.info('Skip #%d: device-day-hour: %d-%d-%d (it is still sampling current hour %d)' % (skips, self.device_id, self.day, self.hour, current_hour))
+            log.info('Skip #%d: device-day-hour: %d-%d-%d (still sampling current hour %d)' % (skips, self.device_id, self.day, self.hour, current_hour))
+            # Force to skip to next device, sometimes we have an even later hour
             self.next_hour()
             # 30.okt.16: Fix for #24 #25 gaps in data: because next_hour() may jump to next device and unconditionally fetch current hour...
             # so fix is to use while loop until a valid hour available or we are all done

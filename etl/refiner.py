@@ -114,8 +114,13 @@ class RefineFilter(Filter):
                         record['gid_raw'] = gid_raw
                         record['device_id'] = device_id
                         record['day'] = day
-                        record['hour'] = hour - 1
-                        day_hour = str(record['day']) + str(record['hour'])
+                        record['hour'] = hour
+
+                        # GMT does not know about 24 so we move to 00:00 the next day
+                        day_hour = str(day) + str(hour)
+                        if hour == 24:
+                            day_hour = str(day+1) + '00'
+
                         record['time'] = datetime.strptime('%sGMT' % day_hour, '%Y%m%d%HGMT').replace(tzinfo=pytz.utc)
                         record['name'] = sensor_name
                         record['label'] = sensor_def['label']

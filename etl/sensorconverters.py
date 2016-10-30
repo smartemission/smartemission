@@ -136,8 +136,6 @@ def ohm_to_kohm(input, json_obj=None, sensor_def=None):
 
 def ohm_no2_to_kohm(input, json_obj=None, sensor_def=None):
     val = ohm_to_kohm(input, json_obj, sensor_def)
-    if val > 2000:
-        return None
     return val
 
 

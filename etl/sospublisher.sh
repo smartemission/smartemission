@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# ETL for refining raw timeseries values from Smart Emission Raw DB data.
+# ETL for publishing Smart Emission Refined DB data to a SOS.
 #
 
 STETL_ARGS="-c sospublisher.cfg -a options/docker.args"
@@ -11,7 +11,7 @@ LINK_MAP="--link ${PG_HOST}:${PG_HOST} --link ${SOS52N_HOST}:${SOS52N_HOST}"
 VOL_MAP="-v ${WORK_DIR}:${WORK_DIR}"
 
 IMAGE=geonovum/stetl:latest
-NAME="stetl_publish"
+NAME="stetl_sospublish"
 
 # Stop and remove possibly old containers
 sudo docker stop ${NAME} > /dev/null 2>&1
