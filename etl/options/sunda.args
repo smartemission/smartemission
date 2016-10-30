@@ -14,12 +14,17 @@ pg_schema_raw=smartem_raw
 pg_schema_refined=smartem_refined
 refiner_max_input_records=200
 publisher_max_input_records=50
+stapublisher_max_input_records=30
 
 # Maximum time spent in processing
-max_proc_time_secs=15
+max_proc_time_secs=300
 # time between calling the REST API again
 api_interval_secs=1
 
 sos_host=local.smartemission.nl
 sos_port=8081
 sos_path=/sos52n/service
+
+sta_host=http://vps68361.public.cloudvps.com
+sta_port=8080
+sta_path=/OGCSensorThings/v1.0

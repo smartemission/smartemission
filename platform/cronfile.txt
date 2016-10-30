@@ -11,7 +11,7 @@ SMARTEM=/opt/geonovum/smartem/git
 */3 * * * * cd $SMARTEM/etl; ./last.sh > /var/smartem/log/etl/smartem_last.log 2>&1
 
 # Run Harvester Smartemission
-35,45,55 * * * * cd $SMARTEM/etl; ./harvester.sh >> /var/smartem/log/etl/harvester.log 2>&1
+4,19,33,48 * * * * cd $SMARTEM/etl; ./harvester.sh >> /var/smartem/log/etl/harvester.log 2>&1
 
 # Run Refiner Smartemission
 */5 * * * * cd $SMARTEM/etl; ./refiner.sh > /var/smartem/log/etl/refiner.log 2>&1

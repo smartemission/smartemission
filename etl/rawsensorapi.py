@@ -66,6 +66,7 @@ class RawSensorAPIInput(HttpInput):
 
         if len(self.device_ids) > 0:
             self.device_ids_idx = 0
+            # self.device_ids = [70,71]
 
         log.info('Found %4d devices: %s' % (len(self.device_ids), str(self.device_ids)))
 
@@ -456,7 +457,33 @@ class RawSensorTimeseriesInput(RawSensorAPIInput):
         self.hour = None
         if self.device_id == -1 or self.day == -1:
             return
-        
+
+        # 2016-10-30 08:12:09,921 RawSensorAPI INFO Device: 55, raw days: 5, days=1, day_last=20161030, hour_last=7
+        # 2016-10-30 08:12:09,922 RawSensorAPI INFO Init: fetching timeseries hours list from URL: "http://whale.citygis.nl/sensors/v1/devices/55/timeseries/20161030" ...
+        # 2016-10-30 08:12:10,789 RawSensorAPI INFO 1 processable hours for device 55 day 20161030
+        # 2016-10-30 08:12:10,789 RawSensorAPI INFO Skipped device-day-hour: 55-20161030-8 (it is still sampling current hour 7)
+        # 2016-10-30 08:26:59,172 RawSensorAPI INFO Device: 55, raw days: 5, days=1, day_last=20161030, hour_last=7
+        # 2016-10-30 08:26:59,172 RawSensorAPI INFO Init: fetching timeseries hours list from URL: "http://whale.citygis.nl/sensors/v1/devices/55/timeseries/20161030" ...
+        # 2016-10-30 08:26:59,807 RawSensorAPI INFO 1 processable hours for device 55 day 20161030
+        # 2016-10-30 08:26:59,808 RawSensorAPI INFO self.url = http://whale.citygis.nl/sensors/v1/devices/55/timeseries/20161030/8
+
+        # 2016-10-30 10:37:30,010 RawSensorAPI INFO Init: fetching timeseries days list from URL: "http://whale.citygis.nl/sensors/v1/devices/71/timeseries" ...
+        # 2016-10-30 10:37:30,170 RawSensorAPI INFO Device: 71, raw days: 7, days=1, day_last=20161030, hour_last=9
+        # 2016-10-30 10:37:30,170 RawSensorAPI INFO Init: fetching timeseries hours list from URL: "http://whale.citygis.nl/sensors/v1/devices/71/timeseries/20161030" ...
+        # 2016-10-30 10:37:30,525 RawSensorAPI INFO 1 processable hours for device 71 day 20161030
+        # 2016-10-30 10:37:30,525 RawSensorAPI INFO Skipped device-day-hour: 71-20161030-10 (it is still sampling current hour 9)
+        # 2016-10-30 10:47:17,095 RawSensorAPI INFO Device: 71, raw days: 7, days=1, day_last=20161030, hour_last=9
+        # 2016-10-30 10:47:17,095 RawSensorAPI INFO Init: fetching timeseries hours list from URL: "http://whale.citygis.nl/sensors/v1/devices/71/timeseries/20161030" ...
+        # 2016-10-30 10:47:17,511 RawSensorAPI INFO 1 processable hours for device 71 day 20161030
+        # 2016-10-30 10:47:17,511 RawSensorAPI INFO self.url = http://whale.citygis.nl/sensors/v1/devices/71/timeseries/20161030/10
+        # 2016-10-30 10:57:12,325 RawSensorAPI INFO Init: fetching timeseries days list from URL: "http://whale.citygis.nl/sensors/v1/devices/71/timeseries" ...
+        # 2016-10-30 10:57:12,524 RawSensorAPI INFO Device: 71, raw days: 7, days=1, day_last=20161030, hour_last=10
+        # 2016-10-30 10:57:12,524 RawSensorAPI INFO Init: fetching timeseries hours list from URL: "http://whale.citygis.nl/sensors/v1/devices/71/timeseries/20161030" ...
+        # 2016-10-30 10:57:12,952 RawSensorAPI INFO 0 processable hours for device 71 day 20161030
+
+        # 2016-10-30 12:29:11,534 RawSensorAPI INFO self.url = http://whale.citygis.nl/sensors/v1/devices/71/timeseries/20161030/11 cur_day=20161030 cur_hour=11
+        # 2016-10-30 12:29:13,177 RawSensorAPI INFO Skipped device-day-hour: 71-20161030-12 (it is still sampling current hour 11)
+
         ts_hours_url = self.base_url + '/devices/%d/timeseries/%d' % (self.device_id, self.day)
         log.info('Init: fetching timeseries hours list from URL: "%s" ...' % ts_hours_url)
         # Set the next "last values" URL for device and increment to next
@@ -527,16 +554,21 @@ class RawSensorTimeseriesInput(RawSensorAPIInput):
         current_hour = int(time.strftime('%H',current_time))
 
         # Skip harvesting the current hour as it will not yet be complete, so try the next device, hour
-        if self.day == current_day and (self.hour - 1) == current_hour:
-            log.info('Skipped device-day-hour: %d-%d-%d (it is still sampling current hour %d)' % (self.device_id, self.day, self.hour, current_hour))
+        # 2016-10-30 08:12:10,789 RawSensorAPI INFO Skipped device-day-hour: 55-20161030-8 (it is still sampling current hour 7)
+        skips = 0
+        while self.day == current_day and (self.hour - 1) == current_hour and not self.all_done():
+            skips += 1
+            log.info('Skip #%d: device-day-hour: %d-%d-%d (it is still sampling current hour %d)' % (skips, self.device_id, self.day, self.hour, current_hour))
             self.next_hour()
+            # 30.okt.16: Fix for #24 #25 gaps in data: because next_hour() may jump to next device and unconditionally fetch current hour...
+            # so fix is to use while loop until a valid hour available or we are all done
 
         # Still hours?
         if self.hour > 0:
             # The base method read() will fetch self.url until it is set to None
             # <base_url>/devices/14/timeseries/20160603/18
             self.url = self.base_url + '/devices/%d/timeseries/%d/%d' % (self.device_id, self.day, self.hour)
-            log.info('self.url = ' + self.url)
+            log.info('self.url = %s cur_day=%d cur_hour=%d' % (self.url, current_day, current_hour))
 
         if self.device_id < 0:
             log.info('Processing all devices done')
