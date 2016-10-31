@@ -1,0 +1,19 @@
+{{
+    "description": "${description}",
+
+    "name": "Station-{station_id}",
+    "Locations": [
+      {
+        "name": "Station-{station_id}",
+        "description": "Location of Station {station_id}",
+        "encodingType": "application/vnd.geo+json",
+        "location": {
+          "type": "Feature",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [{station_lat},{station_lon}]
+          }
+        }
+      }
+    ]
+  }}

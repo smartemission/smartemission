@@ -1,0 +1,12 @@
+{
+  "name": "CCIT #361",
+  "description": "This is CCIT #361, Noah’s dad’s office",
+  "encodingType": "application/vnd.geo+json",
+  "feature": {
+    "type": "Feature",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [10,10]
+    }
+  }
+}
