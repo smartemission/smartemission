@@ -12,6 +12,7 @@ from stetl.util import Util
 from stetl.packet import FORMAT
 from stetl.component import Config
 
+from datetime import datetime, timedelta
 import pytz
 from sensordefs import *
 
@@ -119,7 +120,12 @@ class RefineFilter(Filter):
                         # GMT does not know about 24 so we move to 00:00 the next day
                         day_hour = str(day) + str(hour)
                         if hour == 24:
-                            day_hour = str(day+1) + '0'
+                            # Need to move to 00:00 next day if hour is 24
+                            # Just incrementing the day +1 is not enough: we may need to skip to next month
+                            # http://stackoverflow.com/questions/3240458/how-to-increment-the-day-in-datetime-python
+                            next_day = datetime.strptime('%sGMT' % str(day), '%Y%m%dGMT').replace(tzinfo=pytz.utc)
+                            next_day += timedelta(days=1)
+                            day_hour = next_day.strftime('%Y%m%d') + '0'
 
                         record['time'] = datetime.strptime('%sGMT' % day_hour, '%Y%m%d%HGMT').replace(tzinfo=pytz.utc)
                         record['name'] = sensor_name
