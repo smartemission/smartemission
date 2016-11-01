@@ -1,10 +1,10 @@
 {{
-  "Datastream": {
+  "Datastream": {{
     "@iot.id": {datastream_id}
-  },
+  }},
   "phenomenonTime": "{sample_time}",
   "result": {sample_value},
-  "FeatureOfInterest": {
+  "FeatureOfInterest": {{
     "@iot.id": {foi_id}
-  }
+  }}
 }}

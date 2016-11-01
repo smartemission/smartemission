@@ -87,6 +87,9 @@ CREATE TABLE smartem_refined.etl_progress (
 INSERT INTO smartem_refined.etl_progress (worker, source_table, last_gid, last_update)
         VALUES ('publisher', 'timeseries', -1, current_timestamp);
 
+INSERT INTO smartem_refined.etl_progress (worker, source_table, last_gid, last_update)
+        VALUES ('stapublisher', 'timeseries', -1, current_timestamp);
+
 -- VIEWS --
 
 -- Stations
