@@ -66,7 +66,7 @@ class RawSensorAPIInput(HttpInput):
 
         if len(self.device_ids) > 0:
             self.device_ids_idx = 0
-            # self.device_ids = [70,71]
+            self.device_ids = [70,71]
 
         log.info('Found %4d devices: %s' % (len(self.device_ids), str(self.device_ids)))
 
@@ -490,14 +490,21 @@ class RawSensorTimeseriesInput(RawSensorAPIInput):
         json_str = self.read_from_url(ts_hours_url)
         json_obj = self.parse_json_str(json_str)
         hours_all = json_obj['hours']
+
+        # Get the current day and hour in UTC
+        current_day, current_hour = self.get_current_day_hour()
         for h in hours_all:
             hour = int(h)
             if self.day > self.day_last or (self.day == self.day_last and hour > self.hour_last):
-                self.hours.append(hour)
+                if self.day_last == current_day and hour - 1 >= current_hour:
+                    # never append the last hour of today
+                    log.info('Skip current hour from %d to %d for device %d on day %d' % (hour-1, hour, self.device_id, self.day))
+                else:
+                    self.hours.append(hour)
 
         if len(self.hours) > 0:
             self.hours_idx = 0
-        log.info('%d processable hours for device %d day %d' % (len(self.hours), self.device_id, self.day))
+        log.info('processable hours for device %d day %d: %s' % (self.device_id, self.day, str(self.hours)))
 
     def next_day(self):
         # All days for current device done? Try next device
@@ -532,6 +539,13 @@ class RawSensorTimeseriesInput(RawSensorAPIInput):
             # Pick an hour entry
             self.hour, self.hours_idx = self.next_entry(self.hours, self.hours_idx)
 
+    def get_current_day_hour(self):
+        # Get the current day and hour in UTC
+        current_time = time.gmtime()
+        current_day = int(time.strftime('%Y%m%d', current_time))
+        current_hour = int(time.strftime('%H',current_time))
+        return current_day, current_hour
+
     def before_invoke(self, packet):
         """
         Called just before Component invoke.
@@ -549,9 +563,7 @@ class RawSensorTimeseriesInput(RawSensorAPIInput):
         self.next_hour()
 
         # Get the current day and hour in UTC
-        current_time = time.gmtime()
-        current_day = int(time.strftime('%Y%m%d', current_time))
-        current_hour = int(time.strftime('%H',current_time))
+        current_day, current_hour = self.get_current_day_hour()
 
         # Skip harvesting the current hour as it will not yet be complete, so try the next device, hour
         # 2016-10-30 08:12:10,789 RawSensorAPI INFO Skipped device-day-hour: 55-20161030-8 (it is still sampling current hour 7)
