@@ -66,7 +66,7 @@ class RawSensorAPIInput(HttpInput):
 
         if len(self.device_ids) > 0:
             self.device_ids_idx = 0
-            self.device_ids = [70,71]
+            # self.device_ids = [70,71]
 
         log.info('Found %4d devices: %s' % (len(self.device_ids), str(self.device_ids)))
 
