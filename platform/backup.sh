@@ -32,7 +32,7 @@ LOG_FILE=${BACKUP_DIR}/backup_db.log
 # Function : dump_db
 # Purpose  : dump single PG DB
 #
-function dump_db() {
+function dump_db_old() {
     DB=$1
     SCHEMA="all"
 	if [ $# -eq 2 ]
@@ -43,6 +43,36 @@ function dump_db() {
 
     echo "START Dump ${DB} schema ${SCHEMA} op `date`"
     pg_dump -h ${PGHOST} --clean ${SCHEMA_ARG} ${DB} | bzip2 --best > ${BACKUP_DIR}/${DB}-${SCHEMA}.sql.bz2
+    echo "END Dump ${DB} schema ${SCHEMA} op `date`"
+}
+
+#
+# Functie : dump_db
+# Doel    : dump database alles of enkel schema
+#
+function dump_db() {
+	DB=$1
+    SCHEMA="all"
+	if [ $# -eq 2 ]
+	then
+        SCHEMA=$2
+        SCHEMA_ARG="--schema=${SCHEMA}"
+	fi
+
+    echo "START Dump ${DB} schema ${SCHEMA} op `date`"
+	# pg_dump --clean ${ARGS} ${DB} | bzip2 --best > ${BACKUP_DIR}/${DB}.sql.bz2
+	pg_dump \
+	${SCHEMA_ARG} \
+	-h ${PGHOST} \
+	--format custom \
+	--no-password \
+	--no-owner \
+	--compress 7 \
+	--encoding UTF8 \
+	--verbose \
+	--file ${BACKUP_DIR}/${DB}-${SCHEMA}.dmp \
+	${DB}
+
     echo "END Dump ${DB} schema ${SCHEMA} op `date`"
 }
 
