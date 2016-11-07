@@ -25,9 +25,13 @@ then
 fi
 
 
-# bzip2 -c -d $1 | psql -h ${PGHOST} -U ${PGUSER} ${PGDB}
+function __msg() {
+	printf -- "`date` - $1\n"
+}
+
 
 function __restore {
+	# bzip2 -c -d $1 | psql -h ${PGHOST} -U ${PGUSER} ${PGDB}
 
 	# Restore data (db or schema) from dump file
 	__msg "Restoring $PGDUMPFILE in db $PGDB (duurt even...)"
