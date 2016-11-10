@@ -12,3 +12,5 @@ sudo docker exec -it sos52n  rm /usr/local/tomcat/webapps/sos52n/cache.tmp
 pushd ..
 ./run.sh
 popd
+
+echo "DON'T FORGET TO CALL ../../../etl/db/sos-publisher-init.sh TO RESTART PUBLICATION!!"
