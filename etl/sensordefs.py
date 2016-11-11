@@ -170,7 +170,7 @@ SENSOR_DEFS = {
         {
             'label': 'O3Raw',
             'unit': 'Ohm',
-            'min': 3000,
+            'min': 1000,
             'max': 6000000
         },
     's_no2resistance':
