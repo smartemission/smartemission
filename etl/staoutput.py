@@ -213,6 +213,7 @@ class STAOutput(HttpOutput):
         format_args['sample_time'] = t.strftime('%Y-%m-%dT%H:%M:%S' + '+0%d00' % t_offset)
         format_args['sample_value'] = record['value']
         format_args['datastream_id'] = datastream['@iot.id']
+        format_args['details'] = 'gid=%d, raw_gid=%d, station=%d, name=%s' % (record['gid'], record['gid_raw'], record['device_id'], record['name'])
 
         payload = self.post_observation_templ_str.format(**format_args)
 
