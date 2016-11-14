@@ -1,0 +1,39 @@
+{
+  "description": "camping lantern",
+  "properties": {
+    "property1": "it’s waterproof",
+    "property2": "it glows in the dark",
+    "property3": "it repels insects"
+  },
+  "Locations": [
+    {
+      "description": "my backyard",
+      "encodingType": "application/vnd.geo+json",
+      "location": {
+        "type": "Point",
+        "coordinates": [-117.123, 54.123]
+      }
+    }
+  ],
+  "Datastreams": [
+    {
+      "Sensor": {
+        "description": "SensorUp Tempomatic 1000-b",
+        "encodingType": "http://schema.org/description",
+        "metadata": "Calibration date:  Jan 11, 2015"
+      },
+      "unitOfMeasurement": {
+        "name": "Celsius",
+        "symbol": "C",
+        "definition": "http://www.qudt.org/qudt/owl/1.0.0/unit/Instances.html#Celsius"
+      },
+      "description": "Temperature measurement",
+      "observationType": "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement",
+      "ObservedProperty": {
+        "name": "Temperature",
+        "definition": "http://www.qudt.org/qudt/owl/1.0.0/quantity/Instances.html#Temperature",
+        "description": "Temperature of the camping site"
+      }
+    }
+  ]
+}

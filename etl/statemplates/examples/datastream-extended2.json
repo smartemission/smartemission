@@ -1,0 +1,23 @@
+{
+  "name": "oven temperature",
+  "description": "This is a datastream for an oven’s internal temperature.",
+  "unitOfMeasurement": {
+    "name": "degree Celsius",
+    "symbol": "°C",
+    "definition": "http://unitsofmeasure.org/ucum.html#para-30"
+  },
+  "observationType": "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement",
+
+  "phenomenonTime": "2009-01-11T16:22:25.00Z/2011-08-21T08:32:10.00Z",
+  "ObservedProperty": {
+    "name": "DewPoint Temperature",
+    "definition": "http://sweet.jpl.nasa.gov/ontology/property.owl#DewPointTemperature",
+    "description": "The dewpoint temperature is the temperature to which the air must be"
+  },
+  "Sensor": {
+    "name": "DS18B20",
+    "description": "DS18B20 is an air temperature sensor…",
+    "encodingType": "application/pdf",
+    "metadata": "http://datasheets.maxim-ic.com/en/ds/DS18B20.pdf"
+  }
+}

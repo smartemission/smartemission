@@ -4,7 +4,5 @@
   }},
   "phenomenonTime": "{sample_time}",
   "result": {sample_value},
-  "FeatureOfInterest": {{
-    "@iot.id": {foi_id}
-  }}
+  "resultTime": "{sample_time}"
 }}

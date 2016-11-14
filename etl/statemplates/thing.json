@@ -1,19 +1,22 @@
 {{
-    "description": "${description}",
 
-    "name": "Station-{station_id}",
+    "description": "Smart Emission station {station_id}",
+    "properties": {{
+      "id": "{station_id}"
+    }},
+
     "Locations": [
-      {
+      {{
         "name": "Station-{station_id}",
         "description": "Location of Station {station_id}",
         "encodingType": "application/vnd.geo+json",
-        "location": {
+        "location": {{
           "type": "Feature",
-          "geometry": {
+          "geometry": {{
             "type": "Point",
-            "coordinates": [{station_lat},{station_lon}]
-          }
-        }
-      }
+            "coordinates": [{station_lon},{station_lat}]
+          }}
+        }}
+      }}
     ]
   }}
