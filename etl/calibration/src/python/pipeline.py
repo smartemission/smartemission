@@ -42,7 +42,7 @@ def param_optimization(grid, col_predict, cv_k=5, n_part=.1,
     # Do randomized grid search
     gs_steps = [('filter', fil), ('scale', ss), ('mlp', mlp)]
     gs_pipe = Pipeline(gs_steps)
-    gs = RandomizedSearchCV(gs_pipe, grid, n_iter, measure_rmse, n_jobs=n_jobs,
+    gs = RandomizedSearchCV(gs_pipe, grid, n_iter, n_jobs=n_jobs,
                             cv=cv_k, verbose=verbose, error_score=np.NaN)
     gs.fit(x, y)
     print("Best parameters are:\n%s" % gs.best_params_)
