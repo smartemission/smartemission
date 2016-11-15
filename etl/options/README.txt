@@ -1,3 +1,3 @@
-This dir contains host-specific options in order to have configs locally.
-Your .args file must be hostname.args.
+This dir contains specific options in order to have configs locally.
+docker.args is used in all ETL commands (see .sh files).
 

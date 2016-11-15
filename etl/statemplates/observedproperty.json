@@ -1,0 +1,5 @@
+{{
+  "name": "{name}",
+  "definition": "https://github.com/Geonovum/smartemission/blob/master/etl/sensordefs.py",
+  "description": "{name} in {unit}"
+}}

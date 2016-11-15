@@ -1,0 +1,6 @@
+{{
+  "name": "{name}",
+  "description": "Sensor for {name} in {label}",
+  "encodingType": "python",
+  "metadata": "{name}"
+}}

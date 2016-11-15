@@ -12,14 +12,9 @@
     "@iot.id": {thing_id}
   }},
   "ObservedProperty": {{
-    "name": "{name}",
-    "definition": "http://sweet.jpl.nasa.gov/ontology/property.owl",
-    "description": "{label}"
+    "@iot.id": {observedproperty_id}
   }},
   "Sensor": {{
-    "name": "{name}",
-    "description": "{label} sensor for Station {station_id}",
-    "encodingType": "python",
-    "metadata": "https://github.com/Geonovum/smartemission/blob/master/etl/sensordefs.py"
+    "@iot.id": {sensor_id}
   }}
 }}

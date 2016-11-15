@@ -52,38 +52,50 @@ class STAOutput(HttpOutput):
 
         # Template file, to be used as POST body with substituted values
         # TODO use Jinja2 formatting i.s.o. basic string formatting
+        self.entities_list = ['thing', 'datastream', 'observation', 'observedproperty', 'sensor']
+        self.entity_templates = {}
+        self.sensors = {}
+        self.things = {}
+        self.observedproperties = {}
 
-        self.post_thing_templ_path = '%s/thing.json' % self.template_file_root
-        self.post_datastream_templ_path = '%s/datastream.json' % self.template_file_root
-        self.post_observation_templ_path ='%s/observation.json' % self.template_file_root
-        self.post_thing_templ_str = None
-        self.post_datastream_templ_str = None
-        self.post_observation_templ_str = None
         self.base_path = self.path
         self.base_url = 'http://%s:%d%s' % (self.host, self.port, self.path)
 
     def init_templates(self):
         # read all POST payload templates once
+        for entity in self.entities_list:
+            entity_templ_path = '%s/%s.json' % (self.template_file_root, entity)
+            log.info('Init: read template file for: %s from %s' % (entity, entity_templ_path))
+            with open(entity_templ_path, 'r') as f:
+                self.entity_templates[entity] = f.read()
 
-        log.info('Init: read template file: %s' % self.post_thing_templ_path)
-        with open(self.post_thing_templ_path, 'r') as f:
-            self.post_thing_templ_str = f.read()
+    def init_sensors(self):
+        log.info('Init: read all Sensors')
 
-        log.info('Init: read template file: %s' % self.post_datastream_templ_path)
-        with open(self.post_datastream_templ_path, 'r') as f:
-            self.post_datastream_templ_str = f.read()
+        rsp = self.read_from_url(self.base_url + '/Sensors')
+        entity_list = rsp['value']
+        for entity in entity_list:
+            # id = entity['name']
+            try:
+                id = entity['metadata']
+                self.sensors[id] = entity
+            except:
+                pass
 
-        log.info('Init: read template file: %s' % self.post_observation_templ_path)
-        with open(self.post_observation_templ_path, 'r') as f:
-            self.post_observation_templ_str = f.read()
+    def init_observedproperties(self):
+        log.info('Init: read all ObservedProperties')
 
+        rsp = self.read_from_url(self.base_url + '/ObservedProperties')
+        entity_list = rsp['value']
+        for entity in entity_list:
+            id = entity['name']
+            self.observedproperties[id] = entity
 
     def init_things(self):
         log.info('Init: read all Things')
 
         things_rsp = self.read_from_url(self.base_url + '/Things')
         self.things_list = things_rsp['value']
-        self.things = {}
         for thing in self.things_list:
             id = thing['properties']['id']
             thing['datastreams'] = {}
@@ -92,6 +104,32 @@ class STAOutput(HttpOutput):
     def init(self):
         self.init_templates()
         self.init_things()
+        self.init_observedproperties()
+        self.init_sensors()
+
+    def post_sensor(self, record):
+        format_args = dict()
+
+        format_args['name'] = record['name']
+        format_args['label'] = record['unit']
+
+        payload = self.entity_templates['sensor'].format(**format_args)
+        self.path = self.base_path + '/Sensors'
+        statuscode, statusmessage, res = HttpOutput.post(self, None, payload)
+        entity = json.loads(res)
+        return entity
+
+    def post_observedproperty(self, record):
+        format_args = dict()
+
+        format_args['name'] = record['name']
+        format_args['unit'] = record['unit']
+
+        payload = self.entity_templates['observedproperty'].format(**format_args)
+        self.path = self.base_path + '/ObservedProperties'
+        statuscode, statusmessage, res = HttpOutput.post(self, None, payload)
+        entity = json.loads(res)
+        return entity
 
     def post_thing(self, record):
         format_args = dict()
@@ -101,7 +139,7 @@ class STAOutput(HttpOutput):
         format_args['station_lon'] = record['lon']
         format_args['station_lat'] = record['lat']
 
-        payload = self.post_thing_templ_str.format(**format_args)
+        payload = self.entity_templates['thing'].format(**format_args)
         self.path = self.base_path + '/Things'
         statuscode, statusmessage, res = HttpOutput.post(self, None, payload)
         thing = json.loads(res)
@@ -112,15 +150,31 @@ class STAOutput(HttpOutput):
         # 'time': datetime.datetime(2016, 4, 27, 5, 0, tzinfo=psycopg2.tz.FixedOffsetTimezone(offset=120, name=None)),
         # 'lat': 51.472585, , 'lon': 5.671208, , 'altitude': 210, }
         format_args = dict()
-        sensor_def = SENSOR_DEFS[record['name']]
+        name = record['name']
+        sensor_def = SENSOR_DEFS[name]
 
         format_args['thing_id'] = thing['@iot.id']
+
+        # Add sensor is not exists for name
+        sensor = self.sensors.get(name)
+        if not sensor:
+            sensor = self.post_sensor(record)
+            self.sensors[name] = sensor
+        format_args['sensor_id'] = sensor['@iot.id']
+
+        # Add observedproperty is not exists for name
+        observedproperty = self.observedproperties.get(name)
+        if not observedproperty:
+            observedproperty = self.post_observedproperty(record)
+            self.observedproperties[name] = observedproperty
+
+        format_args['observedproperty_id'] = observedproperty['@iot.id']
         format_args['station_id'] = record['device_id']
         format_args['name'] = record['name']
         format_args['label'] = sensor_def['label']
         format_args['unit'] = record['unit']
 
-        payload = self.post_datastream_templ_str.format(**format_args)
+        payload = self.entity_templates['datastream'].format(**format_args)
         self.path = self.base_path + '/Datastreams'
         statuscode, statusmessage, res = HttpOutput.post(self, None, payload)
         datastream = json.loads(res)
@@ -214,7 +268,7 @@ class STAOutput(HttpOutput):
         format_args['datastream_id'] = datastream['@iot.id']
         format_args['details'] = 'gid=%d, raw_gid=%d, station=%d, name=%s' % (record['gid'], record['gid_raw'], record['device_id'], record['name'])
 
-        payload = self.post_observation_templ_str.format(**format_args)
+        payload = self.entity_templates['observation'].format(**format_args)
 
         # REST: post to collection
         self.path = self.base_path + '/Observations'
