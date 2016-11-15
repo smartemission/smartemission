@@ -13,10 +13,9 @@ from sklearn.preprocessing import StandardScaler
 from data import save_pickle, save_csv, get_data, save_fit_plot, save_txt, \
     save_target_pred
 from filter import Filter
-from measures import rmse
 
-from params import dist_01, dist_test, dist_02, NO2_final, CO_final, O3_final, \
-    final_params
+from params import dist_01, dist_test, dist_02, NO2_best, CO_best, O3_best, \
+    best_params
 from math import ceil
 
 FOLDER_DATA = '../../io/data'
@@ -32,12 +31,11 @@ def param_optimization(grid, col_predict, cv_k=5, n_part=.1,
     if verbose > 0: print('Using %d data points from now on' % x.shape[0])
 
     # Create pipeline elements
-    mlp = nn.MLPRegressor(activation='logistic', solver='lbfgs', max_iter=5000,
-                          early_stopping=True)
+    mlp = nn.MLPRegressor()
     ss = StandardScaler()
     fil = Filter(x_all.to_records(), 1,
                  ('s.co2', 's.no2resistance', 's.o3resistance'), 'secs')
-    measure_rmse = make_scorer(rmse, greater_is_better=False)
+    # measure_rmse = make_scorer(rmse, greater_is_better=False)
 
     # Do randomized grid search
     gs_steps = [('filter', fil), ('scale', ss), ('mlp', mlp)]
@@ -95,7 +93,7 @@ if __name__ == '__main__':
     n_batches = int(input())
     print("Specify column to predict (O3_Waarden, NO2_Waarden, CO_Waarden):")
     col_y = raw_input()
-    col_param = final_params[col_y]
+    col_param = best_params[col_y]
     n_iter = int(ceil(n_iter / n_batches))
     for i in range(n_batches):
         param_optimization(col_param, col_y, n_iter=n_iter, verbose=3,
