@@ -169,14 +169,13 @@ class STAOutput(HttpOutput):
 
         statuscode, statusmessage, res = HttpOutput.post(self, packet, payload)
 
-        # InsertObservation may fail when Sensor not in SOS
-        # Try to do an InsertSensor and try InsertObservation again
+        # Check result
         if statuscode in [200, 201]:
-            log.info('YES inserted Observation! id=%s status=%s' % (id, statusmessage))
+            log.info('YES added Observation! id=%s status=%s' % (id, statusmessage))
         else:
-            log.warn('FAIL InsertObservation status=%d payload=%s res=%s' % (statuscode, payload, res))
+            log.warn('FAIL POST Observation status=%d payload=%s res=%s' % (statuscode, payload, res))
 
-        log.info('====END InsertObservation id=%s' % id)
+        log.info('====END POST Observation id=%s' % id)
 
         return statuscode, statusmessage, res
 
@@ -197,8 +196,8 @@ class STAOutput(HttpOutput):
             ds_resp = self.read_from_url(self.base_url + '/Things(%d)/Datastreams?$expand=ObservedProperty' % thing['@iot.id'])
             ds_list = ds_resp['value']
             for ds in ds_list:
-                ds_name = ds['ObservedProperty']['name']
-                thing['datastreams'][ds_name] = ds
+                ds_name_n = ds['ObservedProperty']['name']
+                thing['datastreams'][ds_name_n] = ds
 
             datastream = thing['datastreams'].get(ds_name)
             if not datastream:
