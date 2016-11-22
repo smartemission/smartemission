@@ -11,12 +11,15 @@
 # from sklearn.pipeline import Pipeline
 # from sklearn.preprocessing import StandardScaler
 #
+import getopt
+import sys
+
 from aa_load_data import *
 from ab_prepare_data import *
 from ac_model_data import *
 from ad_visualize import *
-from input_output import save_parameter_optimization, save_final_model, \
-    save_predictions, save_path, save_performances
+from input_output import save_parameter_optimization, save_model, \
+    save_predictions, save_path, save_performances, save_filter
 from params import param_grid, best_params
 
 # from filter import Filter
@@ -101,27 +104,32 @@ from params import param_grid, best_params
 
 
 if __name__ == '__main__':
-    path_param_optim = save_path('parameter_optimization', 'O3_Waarden', 'csv')
-    path_predictions = save_path('predictions', 'O3_Waarden', 'csv')
-    path_performance = save_path('performances', 'O3_Waarden', 'json')
-    path_final_model = save_path('predictions', 'O3_Waarden', 'pkl')
+    col = sys.argv[1]
+    
+    path_param_optim = save_path('parameter_optimization', col, 'csv')
+    path_predictions = save_path('predictions', col, 'csv')
+    path_performance = save_path('performances', col, 'json')
+    path_model = save_path('model', col, 'pkl')
+    path_filter = save_path('filter', col, 'pkl')
 
     df_rivm, df_jose = get_rivm_and_jose_data()
     df_rivm = prepare_rivm(df_rivm)
     df_jose = prepare_jose(df_jose)
-    df = combine_rivm_and_jose(df_rivm, df_jose, 'O3_Waarden')
+    df = combine_rivm_and_jose(df_rivm, df_jose, col)
     df_cv = get_learn_and_validate_sample(df, C.sample_ratio)
-    x_all, y_all = split_data_label(df, 'O3_Waarden')
-    x_cv, y_cv = split_data_label(df_cv, 'O3_Waarden')
+    x_all, y_all = split_data_label(df, col)
+    x_cv, y_cv = split_data_label(df_cv, col)
 
     pipe = get_pipeline(df)
 
     evaluated_param = optimize_param(pipe, param_grid, x=x_cv, y=y_cv)
     save_parameter_optimization(evaluated_param, path_param_optim)
 
-    preds, perfs = cv_predictions(pipe, best_params['O3_Waarden'], x_cv, y_cv)
+    preds, perfs = cv_predictions(pipe, best_params[col], x_cv, y_cv)
     save_predictions(preds, x_cv, y_cv, path_predictions)
     save_performances(perfs, path_performance)
 
-    final_model = learn_model(pipe, best_params['O3_Waarden'], x_cv, y_cv)
-    save_final_model(final_model, path_final_model)
+    model, filter = learn_final_model(pipe, best_params[col], x_cv,
+                                      y_cv)
+    save_model(model, path_model)
+    save_filter(filter, path_filter)

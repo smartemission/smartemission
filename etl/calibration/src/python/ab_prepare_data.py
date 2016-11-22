@@ -3,9 +3,9 @@ from numpy.random import choice
 
 
 def prepare_rivm(df):
-    co_avg = df.CO_Waarden.mean()
-    co_std = df.CO_Waarden.std()
-    df[abs(df.CO_Waarden - co_avg) <= (10 * co_std)] = nan
+    # co_avg = df.CO_Waarden.mean()
+    # co_std = df.CO_Waarden.std()
+    # df['CO_Waarden'][abs(df.CO_Waarden - co_avg) <= (10 * co_std)] = nan
     return df
 
 

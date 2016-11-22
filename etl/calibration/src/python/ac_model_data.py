@@ -41,7 +41,12 @@ def cv_predictions(pipeline, parameters, x, y):
     return predictions, perf
 
 
-def learn_model(pipeline, parameters, x, y):
+def learn_final_model(pipeline, parameters, x, y):
+    fil = pipeline.named_steps['filter']
+    pipeline = Pipeline(pipeline.steps[1:])
+    x = fil.transform(x)
+
+    del parameters['filter__alpha']
     pipeline.set_params(**parameters)
     pipeline.fit(x, y)
-    return pipeline
+    return pipeline, fil

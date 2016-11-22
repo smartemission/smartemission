@@ -39,10 +39,12 @@ class Filter(BaseEstimator, TransformerMixin):
     def transform(self, x):
         cols = list(self.columns)
         new_x = DataFrame.from_records(self.x)
+        new_x['secs'] = new_x['secs'].round().astype(int)
         new_x = new_x.sort_values(self.sort_columns)
         for column in cols:
             new_x[column] = running_mean(new_x.loc[:, column], self.alpha, self.start)
         col = cols + self.sort_columns
         x = x.drop(cols, axis=1)
         x = merge(x, new_x[col], how='left', on=self.sort_columns)
+        x = x.drop(self.sort_columns, axis=1)
         return x
