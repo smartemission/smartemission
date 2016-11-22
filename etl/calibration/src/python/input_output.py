@@ -45,9 +45,8 @@ def save_txt(obj, name, folder):
         f.write(obj)
 
 
-def get_data(folder, train_file, col_predict, n_part):
+def get_csv(folder, train_file, col_predict, n_part):
     # Load data
-    x = pd.read_csv(os.path.join(folder, train_file))
 
     # Remove outliers for CO
     if col_predict is 'CO_Waarden':
@@ -86,3 +85,23 @@ def save_fit_plot(x, y, fit, name, folder):
     ax.set_ylabel('Predicted')
     f_name = timed_filename(name, 'pdf')
     plt.savefig(os.path.join(folder, f_name))
+
+
+def save_parameter_optimization(evaluated_param, path_param_optimization):
+    # todo
+    pass
+
+
+def save_predictions(preds, perf, path_predictions):
+    # todo
+    pass
+
+
+def save_final_model(final_model, path_final_model):
+    # todo
+    pass
+
+
+def save_path(type, gas_component):
+    # todo
+    pass
