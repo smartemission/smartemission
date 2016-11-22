@@ -31,7 +31,7 @@ def optimize_param(pipeline, parameter_grid, x, y):
 
 def cv_predictions(pipeline, parameters, x, y):
     pipeline.set_params(**parameters)
-    predictions = cross_val_predict(pipeline, x, y, cv = C.cv_k)
+    predictions = cross_val_predict(pipeline, x, y, cv=C.cv_k, verbose=3)
 
     perf = dict()
     perf['r2'] = metrics.r2_score(y, predictions)

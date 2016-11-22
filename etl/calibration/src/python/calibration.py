@@ -110,12 +110,13 @@ if __name__ == '__main__':
     df_rivm = prepare_rivm(df_rivm)
     df_jose = prepare_jose(df_jose)
     df = combine_rivm_and_jose(df_rivm, df_jose, 'O3_Waarden')
-    df_cv = get_learn_and_validate_sample(df, 1/1000.0)
+    df_cv = get_learn_and_validate_sample(df, C.sample_ratio)
     x_all, y_all = split_data_label(df, 'O3_Waarden')
     x_cv, y_cv = split_data_label(df_cv, 'O3_Waarden')
 
     pipe = get_pipeline(df)
-    evaluated_param = optimize_param(pipe, param_grid, x = x_cv, y = y_cv)
+
+    evaluated_param = optimize_param(pipe, param_grid, x=x_cv, y=y_cv)
     save_parameter_optimization(evaluated_param, path_param_optim)
 
     preds, perfs = cv_predictions(pipe, best_params['O3_Waarden'], x_cv, y_cv)
@@ -124,7 +125,3 @@ if __name__ == '__main__':
 
     final_model = learn_model(pipe, best_params['O3_Waarden'], x_cv, y_cv)
     save_final_model(final_model, path_final_model)
-
-    # visualize_scatter(preds, perf, data=df)
-    # visualize_timeseries(preds, data=df)
-    # visualize_ann_effect(final_model, data=df)
