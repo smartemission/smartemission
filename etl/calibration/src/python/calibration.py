@@ -24,8 +24,6 @@ from params import param_grid, best_params
 #     save_target_pred
 # from params import best_params
 #
-# FILTER_COLUMNS = ('s.co2', 's.no2resistance', 's.o3resistance')
-#
 # FOLDER_DATA = '../../io/data'
 # FOLDER_SAVE = '../../io/models'
 # FOLDER_PERF = '../../io/performance'
@@ -34,7 +32,7 @@ from params import param_grid, best_params
 # def param_optimization(grid, col_predict, cv_k=5, n_part=.1,
 #                        train_file='train.csv', verbose=1, n_jobs=-1, n_iter=10,
 #                        save=True):
-#     fil, pipe, mlp, ss = pipeline_elements(x_all)
+#
 #     gs = randomized_search(cv_k, grid, pipe, n_iter, n_jobs, verbose, x, y)
 #     pipe2, pred2, x2 = learn_online_estimator(cv_k, fil, gs.best_params_, mlp,
 #                                               ss, x, y)
@@ -89,15 +87,7 @@ from params import param_grid, best_params
 #     return gs
 #
 #
-# def pipeline_elements(x_all):
-#     # Create pipeline elements
-#     mlp = nn.MLPRegressor()
-#     ss = StandardScaler()
-#     fil = Filter(x_all.to_records(), 1, FILTER_COLUMNS, 'secs')
-#     # Do randomized grid search
-#     steps = [('filter', fil), ('scale', ss), ('mlp', mlp)]
-#     pipe = Pipeline(steps)
-#     return fil, pipe, mlp, ss
+
 #
 #
 # def calibrate():
@@ -123,18 +113,22 @@ if __name__ == '__main__':
     df_rivm, df_jose = get_rivm_and_jose_data()
     df_rivm = prepare_rivm(df_rivm)
     df_jose = prepare_jose(df_jose)
-    df = combine_rivm_and_jose(df_rivm, df_jose)
+    df = combine_rivm_and_jose(df_rivm, df_jose, 'O3_Waarden')
+    df_cv = get_learn_and_validate_sample(df, 1/100.0)
+    x_all, y_all = split_data_label(df, 'O3_Waarden')
+    x_cv, y_cv = split_data_label(df_cv, 'O3_Waarden')
 
-    pipe = get_pipeline()
-    evaluated_param = optimize_param(pipe, param_grid, data=df)
-    save_parameter_optimization(evaluated_param, path_param_optim)
-
-    preds, perf = cross_validated_predictions(pipe, best_params['O3_Waarden'])
-    save_predictions(preds, perf, path_predictions)
-
-    final_model = learn_model(pipe, best_params['O3_Waarden'])
-    save_final_model(final_model, path_final_model)
-
-    visualize_scatter(preds, perf, data=df)
-    visualize_timeseries(preds, data=df)
-    visualize_ann_effect(final_model, data=df)
+    pipe = get_pipeline(df)
+    # evaluated_param = optimize_param(pipe, param_grid, data=df)
+    # save_parameter_optimization(evaluated_param, path_param_optim)
+    #
+    # preds, perf = cross_validated_predictions(pipe, best_params['O3_Waarden'])
+    # save_predictions(preds, perf, path_predictions)
+    #
+    # final_model = learn_model(pipe, best_params['O3_Waarden'])
+    # final_model = learn_model(pipe, best_params['O3_Waarden'])
+    # save_final_model(final_model, path_final_model)
+    #
+    # visualize_scatter(preds, perf, data=df)
+    # visualize_timeseries(preds, data=df)
+    # visualize_ann_effect(final_model, data=df)
