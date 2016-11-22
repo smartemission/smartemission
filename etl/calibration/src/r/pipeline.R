@@ -52,8 +52,8 @@ jose_14 <- remove_na_col(jose_14)
 rivm_12 <- remove_na_col(rivm_12)
 rivm_14 <- remove_na_col(rivm_14)
 
-jose_12$secs <- as.numeric(jose_12$datetime, units = "secs")
-jose_14$secs <- as.numeric(jose_14$datetime, units = "secs")
+jose_12$secs <- as.numeric(format(jose_12$datetime, "%Y%m%d%H%M%S"))
+jose_14$secs <- as.numeric(format(jose_14$datetime, "%Y%m%d%H%M%S"))
 
 z_jose_12 <- zooify(jose_12)
 z_jose_14 <- zooify(jose_14)
@@ -73,7 +73,6 @@ load(file.path(folder, f_name))
 # df_14 <- preproc_jose_types(data.table(z_both_14))
 df_12 <- data.table(z_both_12)
 df_14 <- data.table(z_both_14)
-df_14$secs <- df_14$secs + 10000000000
 air <- rbind.fill(df_12, df_14)
 
 air_jose <- air[, 1:26]
@@ -84,7 +83,7 @@ save(air, air_jose, air_rivm, file = file.path(folder, "rivm_jose_df_feat.rda"))
 ## CSV -------------------------------------------------------------------------
 load(file.path(folder, "rivm_jose_df_feat.rda"))
 
-csv.air <- air_jose[, grep("baro|co2|humidity|no2res|o3res|temp|secs", colnames(air_jose))]
+csv.air <- air_jose[, grep("baro|co2|humidity|no2res|o3res|temp|secs|serial", colnames(air_jose))]
 
 csv.air <- data.table(na.approx(csv.air, maxgap = 100, na.rm = TRUE))
 na.idx <- rowSums(is.na(csv.air)) == 0
