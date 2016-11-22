@@ -41,6 +41,7 @@ def cv_predictions(pipeline, parameters, x, y):
     return predictions, perf
 
 
-def learn_model(pipeline, parameters):
-    # todo
-    return None
+def learn_model(pipeline, parameters, x, y):
+    pipeline.set_params(**parameters)
+    pipeline.fit(x, y)
+    return pipeline

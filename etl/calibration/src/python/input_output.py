@@ -88,16 +88,13 @@ def save_predictions(preds, x, y, path):
 
 
 def save_performances(perf, path):
-    print(perf)
     with open(path, 'w') as f:
         json.dump(perf, f)
 
 
-
-
-def save_final_model(final_model, path_final_model):
-    # todo
-    pass
+def save_final_model(final_model, path):
+    with open(path, 'w') as f:
+        pickle.dump(final_model, f)
 
 
 def save_path(type, gas_component, extention):
