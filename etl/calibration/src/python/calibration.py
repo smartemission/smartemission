@@ -16,7 +16,7 @@ from ab_prepare_data import *
 from ac_model_data import *
 from ad_visualize import *
 from input_output import save_parameter_optimization, save_final_model, \
-    save_predictions, save_path
+    save_predictions, save_path, save_performances
 from params import param_grid, best_params
 
 # from filter import Filter
@@ -79,12 +79,7 @@ from params import param_grid, best_params
 #
 #
 # def randomized_search(cv_k, grid, gs_pipe, n_iter, n_jobs, verbose, x, y):
-#     gs = RandomizedSearchCV(gs_pipe, grid, n_iter, n_jobs=n_jobs, cv=cv_k,
-#                             verbose=verbose, error_score=np.NaN)
-#     gs.fit(x, y)
-#     print("Best parameters are:\n%s" % gs.best_params_)
-#     print("Best score is:\n%f" % gs.best_score_)
-#     return gs
+
 #
 #
 
@@ -106,25 +101,28 @@ from params import param_grid, best_params
 
 
 if __name__ == '__main__':
-    path_param_optim = save_path('parameter_optimization', 'O3_Waarden')
-    path_predictions = save_path('predictions', 'O3_Waarden')
-    path_final_model = save_path('predictions', 'O3_Waarden')
+    path_param_optim = save_path('parameter_optimization', 'O3_Waarden', 'csv')
+    path_predictions = save_path('predictions', 'O3_Waarden', 'csv')
+    path_performance = save_path('performances', 'O3_Waarden', 'json')
+    path_final_model = save_path('predictions', 'O3_Waarden', 'pkl')
 
     df_rivm, df_jose = get_rivm_and_jose_data()
     df_rivm = prepare_rivm(df_rivm)
     df_jose = prepare_jose(df_jose)
     df = combine_rivm_and_jose(df_rivm, df_jose, 'O3_Waarden')
-    df_cv = get_learn_and_validate_sample(df, 1/100.0)
+    df_cv = get_learn_and_validate_sample(df, 1/1000.0)
     x_all, y_all = split_data_label(df, 'O3_Waarden')
     x_cv, y_cv = split_data_label(df_cv, 'O3_Waarden')
 
     pipe = get_pipeline(df)
-    # evaluated_param = optimize_param(pipe, param_grid, data=df)
+    # evaluated_param = optimize_param(pipe, param_grid, x = x_cv, y = y_cv)
     # save_parameter_optimization(evaluated_param, path_param_optim)
-    #
-    # preds, perf = cross_validated_predictions(pipe, best_params['O3_Waarden'])
-    # save_predictions(preds, perf, path_predictions)
-    #
+
+
+    preds, perfs = cv_predictions(pipe, best_params['O3_Waarden'], x_cv, y_cv)
+    save_predictions(preds, x_cv, y_cv, path_predictions)
+    save_performances(perfs, path_performance)
+
     # final_model = learn_model(pipe, best_params['O3_Waarden'])
     # final_model = learn_model(pipe, best_params['O3_Waarden'])
     # save_final_model(final_model, path_final_model)

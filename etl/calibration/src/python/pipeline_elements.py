@@ -1,6 +1,6 @@
 from pandas import DataFrame, merge, Series, concat
 from numpy.random import choice
-from numpy import arange, sort, isnan
+from numpy import arange, sort, isnan, copy
 from sklearn.base import BaseEstimator, TransformerMixin
 
 
@@ -22,9 +22,8 @@ class Filter(BaseEstimator, TransformerMixin):
     Pipeline element for sklearn
     Filter a column of the data with a running mean
     """
-
-    def __init__(self, data, alpha, columns, sort_columns, start=0):
-        self.x = data
+    def __init__(self, x, alpha, columns, sort_columns, start=0):
+        self.x = x
         self.start = start
         self.alpha = alpha
         if type(columns) is not list:
@@ -35,17 +34,15 @@ class Filter(BaseEstimator, TransformerMixin):
         self.sort_columns = sort_columns
 
     def fit(self, x, y=None):
-        self.x = self.x.sort_values(self.sort_columns)
-        self.x.reset_index()
-        for column in self.columns:
-            a = running_mean(self.x[column], self.alpha, self.start)
-            # self.x[column] = a
-            self.x[column].update(a)
         return self
 
     def transform(self, x):
-        col = self.columns + self.sort_columns
-        x = x.drop(self.columns, axis=1)
-        x = merge(x, self.x.loc[:, col], how='left', on=self.sort_columns)
-        x = x.drop(self.sort_columns, axis=1)
+        cols = list(self.columns)
+        new_x = DataFrame.from_records(self.x)
+        new_x = new_x.sort_values(self.sort_columns)
+        for column in cols:
+            new_x[column] = running_mean(new_x.loc[:, column], self.alpha, self.start)
+        col = cols + self.sort_columns
+        x = x.drop(cols, axis=1)
+        x = merge(x, new_x[col], how='left', on=self.sort_columns)
         return x

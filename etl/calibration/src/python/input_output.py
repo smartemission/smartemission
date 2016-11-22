@@ -27,17 +27,6 @@ def save_json(obj, name, folder):
         json.dumps(obj, f)
 
 
-def save_csv(obj, name, folder):
-    f_name = timed_filename(name, 'csv')
-    f_path = os.path.join(folder, f_name)
-    with open(f_path, 'w') as f:
-        pd.DataFrame.from_dict(obj).to_csv(f)
-
-
-def save_target_pred(target, pred, name, folder):
-    save_csv({'target': target, 'prediction': pred}, name, folder)
-
-
 def save_txt(obj, name, folder):
     f_name = timed_filename(name, 'txt')
     f_path = os.path.join(folder, f_name)
@@ -87,14 +76,23 @@ def save_fit_plot(x, y, fit, name, folder):
     plt.savefig(os.path.join(folder, f_name))
 
 
-def save_parameter_optimization(evaluated_param, path_param_optimization):
-    # todo
-    pass
+def save_parameter_optimization(evaluated_param, path):
+    with open(path, 'w') as f:
+        pd.DataFrame.from_dict(evaluated_param).to_csv(f)
 
 
-def save_predictions(preds, perf, path_predictions):
-    # todo
-    pass
+def save_predictions(preds, x, y, path):
+    preds = pd.DataFrame({'prediction': preds, 'target': y})
+    with open(path, 'w') as f:
+        pd.concat([x, preds], axis = 1).to_csv(f, index = False)
+
+
+def save_performances(perf, path):
+    print(perf)
+    with open(path, 'w') as f:
+        json.dump(perf, f)
+
+
 
 
 def save_final_model(final_model, path_final_model):
@@ -102,6 +100,6 @@ def save_final_model(final_model, path_final_model):
     pass
 
 
-def save_path(type, gas_component):
-    # todo
-    pass
+def save_path(type, gas_component, extention):
+    fname = timed_filename(type, extention)
+    return os.path.join('../../io/results', gas_component, fname)
