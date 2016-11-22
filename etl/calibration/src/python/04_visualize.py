@@ -1,7 +1,7 @@
 from os import path
 from time import mktime, gmtime
 
-import matplotlib.pyplot as plt
+from matplotlib import pyplot as plt
 
 
 def save_fit_plot(x, y, fit, folder):

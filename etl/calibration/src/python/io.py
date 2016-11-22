@@ -52,7 +52,7 @@ def get_data(folder, train_file, col_predict, n_part):
     # Remove outliers for CO
     if col_predict is 'CO_Waarden':
         x = x[np.abs(x.CO_Waarden - x.CO_Waarden.mean()) <= (
-        10 * x.CO_Waarden.std())]
+            10 * x.CO_Waarden.std())]
 
     # Select columns
     cols_predict = ['O3_Waarden', 'NO2_Waarden', 'CO_Waarden']
@@ -75,7 +75,7 @@ def get_data(folder, train_file, col_predict, n_part):
 
 
 def save_fit_plot(x, y, fit, name, folder):
-    predicted = cross_val_predict(fit, x, y, cv = 10)
+    predicted = cross_val_predict(fit, x, y, cv=10)
     linfit = np.polyfit(y, predicted, 1)
 
     fig, ax = plt.subplots()

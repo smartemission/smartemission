@@ -30,30 +30,29 @@ dist_02 = {'mlp__hidden_layer_sizes': layer_size,
            'filter__alpha': ExpDistribution(uniform(-6, 6))}
 
 CO_best = {'filter__alpha': [0.0073344041648012058],
-            'mlp__alpha': [1.899210794532138e-06], 'mlp__max_iter': [200],
-            'mlp__activation': ['relu'], 'mlp__hidden_layer_sizes': [112],
-            'mlp__learning_rate': ['constant'], 'mlp__solver': ['lbfgs'],
-            'mlp__learning_rate_init': [0.07908998568339845],
+           'mlp__alpha': [1.899210794532138e-06], 'mlp__max_iter': [200],
+           'mlp__activation': ['relu'], 'mlp__hidden_layer_sizes': [112],
+           'mlp__learning_rate': ['constant'], 'mlp__solver': ['lbfgs'],
+           'mlp__learning_rate_init': [0.07908998568339845],
            'mlp__early_stopping': [True]}
 
 O3_best = {'mlp__activation': ['logistic'],
-            'mlp__alpha': [1.4863204889431821e-05],
-            'mlp__learning_rate': ['constant'],
-            'filter__alpha': [0.0077038310468374709],
-            'mlp__learning_rate_init': [0.0045519457242742473],
-            'mlp__hidden_layer_sizes': [141], 'mlp__max_iter': [200],
-            'mlp__solver': ['lbfgs'],
-           'mlp__early_stopping': [True]}
+           'mlp__alpha': [1.4863204889431821e-05],
+           'mlp__learning_rate': ['constant'],
+           'filter__alpha': [0.0077038310468374709],
+           'mlp__learning_rate_init': [0.0045519457242742473],
+           'mlp__hidden_layer_sizes': [141], 'mlp__max_iter': [200],
+           'mlp__solver': ['lbfgs'], 'mlp__early_stopping': [True]}
 
 NO2_best = {'mlp__learning_rate': ['constant'], 'mlp__activation': ['tanh'],
-             'mlp__alpha': [1.4312431413452899e-05],
-             'mlp__learning_rate_init': [4.2639692257501962e-05],
-             'mlp__hidden_layer_sizes': [71], 'mlp__max_iter': [200],
-             'mlp__solver': ['lbfgs'], 'filter__alpha': [0.01358001],
-           'mlp__early_stopping': [True]}
+            'mlp__alpha': [1.4312431413452899e-05],
+            'mlp__learning_rate_init': [4.2639692257501962e-05],
+            'mlp__hidden_layer_sizes': [71], 'mlp__max_iter': [200],
+            'mlp__solver': ['lbfgs'], 'filter__alpha': [0.01358001],
+            'mlp__early_stopping': [True]}
 
 dist_test = dist_01.copy()
 dist_test['mlp__hidden_layer_sizes'] = randint(2, 10)
 
 best_params = {'CO_Waarden': CO_best, 'O3_Waarden': O3_best,
-                'NO2_Waarden': NO2_best}
+               'NO2_Waarden': NO2_best}
