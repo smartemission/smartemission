@@ -263,7 +263,7 @@ def calc_audio_level(db):
 def convert_noise_level(value, json_obj, sensor_def):
     return calc_audio_level(value)
 
-# Converts audio var and populates average
+# Converts audio var and populates average NB all in dB(A) !
 # Logaritmisch optellen van de waarden per frequentieband voor het verkrijgen van de totaalwaarde:
 #
 # 10^(waarde/10)
@@ -283,6 +283,7 @@ def convert_noise_avg(value, json_obj, sensor_def):
     for input_name in input_names:
         input_value = json_obj[input_name]
 
+        # decode dB(A) values into 3 bands (0,1,2)
         bands = [float(input_value & 255), float((input_value >> 8) & 255), float((input_value >> 16) & 255)]
 
         # determine average of these 3 bands
@@ -297,7 +298,7 @@ def convert_noise_avg(value, json_obj, sensor_def):
                 continue
             band_cnt += 1
 
-            # convert band value Decibel to Bel and then get "real" value (power 10)
+            # convert band value Decibel(A) to Bel and then get "real" value (power 10)
             band_avg += math.pow(10, band_val / 10)
             # print '%s : band[%d]=%f band_avg=%f' %(name, i, bands[i], band_avg)
 

@@ -4,5 +4,8 @@
   }},
   "phenomenonTime": "{sample_time}",
   "result": {sample_value},
-  "resultTime": "{sample_time}"
+  "resultTime": "{sample_time}",
+  "parameters": {{
+      {parameters}
+  }}
 }}

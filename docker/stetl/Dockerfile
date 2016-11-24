@@ -40,6 +40,9 @@ RUN sudo pip install --upgrade pip
 # Timezone support in Python
 RUN pip install pytz
 
+# Requests support in Python
+RUN pip install requests
+
 # Development version of scikit-learn
 RUN pip install Cython numpy scipy scikit-learn==0.18
 
