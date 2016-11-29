@@ -1016,7 +1016,7 @@ Heron.options.map.layers = [
         {layers: "lucht:actueel_no2", format: "image/png", transparent: true},
         {
             isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
-            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize'
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize', opacity: 0.8
         }
     ),
 
@@ -1026,7 +1026,7 @@ Heron.options.map.layers = [
         {layers: "actueel_o3", format: "image/png", transparent: true},
         {
             isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
-            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize'
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize', opacity: 0.8
         }
     ),
 
@@ -1036,7 +1036,7 @@ Heron.options.map.layers = [
         {layers: "actueel_pm10", format: "image/png", transparent: true},
         {
             isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
-            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize'
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize', opacity: 0.8
         }
     ),
 
@@ -1046,7 +1046,7 @@ Heron.options.map.layers = [
         {layers: "lucht:actueel_lki", format: "image/png", transparent: true},
         {
             isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
-            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize'
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize', opacity: 0.8
         }
     ),
 
