@@ -1,19 +1,13 @@
 {{
 
+    "name": "{station_id}",
     "description": "Smart Emission station {station_id}",
     "properties": {{
       "id": "{station_id}"
     }},
-
     "Locations": [
-      {{
-        "name": "Station-{station_id}",
-        "description": "Location of Station {station_id}",
-        "encodingType": "application/vnd.geo+json",
-        "location": {{
-           "coordinates": [{station_lon}, {station_lat}],
-           "type": "Point"
+        {{
+          "@iot.id": {location_id}
         }}
-      }}
     ]
-  }}
+}}

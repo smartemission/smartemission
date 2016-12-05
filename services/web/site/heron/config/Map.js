@@ -1006,6 +1006,54 @@ Heron.options.map.layers = [
     // More KNMI at: http://geoservices.knmi.nl/WMSexamplesinADAGUC.html
     // http://geoservices.knmi.nl/cgi-bin/INTER_OPER_R___OBSERV__L3.cgi?
 
+
+    /*
+     * START: Atlas Leefomgeving
+     */
+    new OpenLayers.Layer.WMS(
+        "Atlas Leefomgeving - NO2 Actueel",
+        'https://www.atlasleefomgeving.nl/atlas-kaartservice/kaart/wms/indicator/stikstof_4186?',
+        {layers: "lucht:actueel_no2", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize', opacity: 0.8
+        }
+    ),
+
+    new OpenLayers.Layer.WMS(
+        "Atlas Leefomgeving - O3 Actueel",
+        'https://www.atlasleefomgeving.nl/atlas-kaartservice/kaart/wms/indicator/ozon_act_4187?',
+        {layers: "actueel_o3", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize', opacity: 0.8
+        }
+    ),
+
+    new OpenLayers.Layer.WMS(
+        "Atlas Leefomgeving - PM10 Actueel",
+        'https://www.atlasleefomgeving.nl/atlas-kaartservice/kaart/wms/indicator/fijnstof_4189?',
+        {layers: "actueel_pm10", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize', opacity: 0.8
+        }
+    ),
+
+    new OpenLayers.Layer.WMS(
+        "Atlas Leefomgeving - LKI Actueel",
+        'https://www.atlasleefomgeving.nl/atlas-kaartservice/kaart/wms/indicator/luchtkwa_4183?',
+        {layers: "lucht:actueel_lki", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize', opacity: 0.8
+        }
+    ),
+
+    /*
+     * END: Atlas Leefomgeving
+     */
+
     /*
      * RIVM: All Stations
      */
@@ -1570,6 +1618,30 @@ Heron.options.layertree.tree = [
         {nodeType: "gx_layer", layer: "Smart Emission - Timeseries Barometer", text: "Air Pressure - History"},
         {nodeType: "gx_layer", layer: "Smart Emission - Current Humidity", text: "Humidity - Current"},
         {nodeType: "gx_layer", layer: "Smart Emission - Timeseries Humidity", text: "Humidity - History"}
+    ]
+    },
+    {
+        text: 'Atlas Leefomgeving', expanded: true, children: [
+        {
+            nodeType: "gx_layer",
+            layer: "Atlas Leefomgeving - NO2 Actueel",
+            text: "NO2 - Current"
+        },
+        {
+            nodeType: "gx_layer",
+            layer: "Atlas Leefomgeving - O3 Actueel",
+            text: "O3 - Current"
+        },
+        {
+            nodeType: "gx_layer",
+            layer: "Atlas Leefomgeving - PM10 Actueel",
+            text: "PM10 - Current"
+        },
+        {
+            nodeType: "gx_layer",
+            layer: "Atlas Leefomgeving - LKI Actueel",
+            text: "Air Quality Index - Current"
+        }
     ]
     },
     {

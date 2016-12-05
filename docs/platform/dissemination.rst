@@ -107,3 +107,16 @@ The presentation from Smart Emission is here:
 * `Status update Data Platform (Just van den Broecke) <_static/dissemination/evaluatie-21sep2016/evaluatie-bijeenk-210916-status.pdf>`_
 * `SE Data Platform Overview (Just van den Broecke) <_static/dissemination/evaluatie-21sep2016/evaluatie-bijeenk-210916.pdf>`_
 
+Presentation 28 nov 2016
+========================
+
+An internal presentation on Smart Emission, AirSensEUR and SensorThings API was held on nov 28, 2016
+at the "Springplank" lunch meetup at Geonovum.
+
+Slides
+------
+
+The presentation slides are here:
+
+* `Smart Emission and more (Just van den Broecke) <_static/dissemination/geonovum-28nov2016/SE-Geonovum-161128-v1.pdf>`_
+
