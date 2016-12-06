@@ -3,7 +3,7 @@ Parameter distributions or lists to explore using random/grid search
 """
 from scipy.stats import randint, uniform
 
-from distributions import ExpDistribution
+from pipe_distributions import ExpDistribution
 
 param_grid = {'mlp__hidden_layer_sizes': randint(2, 150),
               'mlp__activation': ['logistic', 'tanh', 'relu'],

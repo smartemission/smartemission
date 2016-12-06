@@ -1,7 +1,5 @@
 import pandas as pd
 
-from C import path_prepared_file
-
 
 def get_rivm_and_jose_data_from_prepared_file(path):
     return pd.read_csv(path)

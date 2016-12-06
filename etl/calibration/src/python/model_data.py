@@ -6,7 +6,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from numpy import nan
 
-from pipeline_elements import Filter
+from pipe_elements import Filter
 import C
 
 

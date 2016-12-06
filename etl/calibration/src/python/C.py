@@ -1,7 +1,5 @@
 from numpy import linspace
 
-path_prepared_file = '../../io/data/train.csv'
-
 # Preparation
 sample_ratio = 1/45.0
 
