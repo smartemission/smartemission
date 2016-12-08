@@ -17,7 +17,7 @@ sospublisher_max_input_records=1200
 stapublisher_max_input_records=1200
 
 # Maximum time spent in processing, safest is about half the time between runs
-max_proc_time_secs=600
+max_proc_time_secs=6000
 
 # time between calling the REST API again
 api_interval_secs=1
