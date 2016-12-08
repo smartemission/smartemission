@@ -35,16 +35,6 @@ class SubtractFilter(Filter):
         """
         pass
 
-    @Config(ptype=dict, default=[], required=True)
-    def device_ids(self):
-        """
-        Device ids for which data should be subtracted
-
-        Required: True
-
-        Default: []
-        """
-
     def __init__(self, configdict, section):
         Filter.__init__(self, configdict, section, consumes=FORMAT.record,
                         produces=FORMAT.record_array)
@@ -69,10 +59,6 @@ class SubtractFilter(Filter):
         ts_list = record_in['data']['timeseries']
         log.info('processing unique_id=%s gid_raw=%d ts_count=%d' % (
             unique_id, gid_raw, len(ts_list)))
-
-        if device_id not in self.device_ids:
-            packet.data = []
-            return packet
 
         for sensor_vals in ts_list:
             # log.debug(str(sensor_vals))
@@ -120,7 +106,6 @@ class SubtractFilter(Filter):
                         validate_errs += 1
                         continue
 
-                    # First all common attrs (device_id, time etc)
                     record[sensor_name] = value_raw
 
             except Exception, e:
