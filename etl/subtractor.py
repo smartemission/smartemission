@@ -77,9 +77,17 @@ class SubtractFilter(Filter):
         validate_errs = 0
         for sensor_vals in ts_list:
             # log.debug(str(sensor_vals))
+
+            if 'time' not in sensor_vals:
+                log.warn('Sensor values without time are of no use')
+                continue
+
+            record = dict()
+            record['device_id'] = device_id
+            record['time'] = sensor_vals['time']
+
             # Go through all the configured sensor outputs we need to calc values for
             for sensor_name in self.sensor_names:
-                record = None
                 try:
                     # sensor name should be in sensor defs
                     if sensor_name not in SENSOR_DEFS:
@@ -110,17 +118,18 @@ class SubtractFilter(Filter):
                         validate_errs += 1
                         continue
 
-                    # # First all common attrs (device_id, time etc)
+                    # First all common attrs (device_id, time etc)
+                    record[sensor_name] = value_raw
+
+
                     # value_avg = None
                     # value_raw_avg = None
 
 
                     # if sensor_name not in records_out:
                     # Start new record with common data
-                    record = dict()
                     # gid_raw refers to harvested record
                     # record['gid_raw'] = gid_raw
-                    record['device_id'] = device_id
                     # record['day'] = day
                     # record['hour'] = hour
 
@@ -135,8 +144,6 @@ class SubtractFilter(Filter):
                     #     day_hour = next_day.strftime('%Y%m%d') + '0'
                     #
                     # record['time'] = datetime.strptime('%sGMT' % day_hour, '%Y%m%d%HGMT').replace(tzinfo=pytz.utc)
-                    record['time'] = sensor_vals['time']
-                    record['name'] = sensor_name
                     # record['label'] = sensor_def['label']
                     # record['unit'] = sensor_def['unit']
                     # record['sample_count'] = 0
@@ -196,7 +203,6 @@ class SubtractFilter(Filter):
                     #                                               SENSOR_DEFS[input_name_0]['unit'])
                     # else:
                     #     # First value for avg
-                    record['value_raw'] = value_raw
 
 
                     # Do the conversion/calibration in 3 steps
@@ -237,10 +243,10 @@ class SubtractFilter(Filter):
                     log.error('Exception refining %s gid_raw=%d dev=%d day-hour=%d-%d, err=%s' % (
                         sensor_name, gid_raw, device_id, day, hour, str(e)))
                     traceback.print_exc(file=sys.stdout)
-                else:
-                    # No error and output value: assign record to result list
-                    if record and 'value_raw' in record:
-                        records_out.append(record)
+
+            # Only save results when measuring something
+            if len(record) > 2:
+                records_out.append(record)
 
                         # if output_name == 'v_audiolevel' and 'v_audioavg' in ts_list:
                         #     # average dB value as raw value
@@ -248,11 +254,13 @@ class SubtractFilter(Filter):
 
         # make records into a list() and round all (raw) values
         # records_out = records_out.values()
+        #
+        # # Values are float, all outputs should be ints, so round
+        # for rec in records_out:
+        #     # rec['value'] = int(round(rec['value']))
+        #     rec['value_raw'] = int(round(rec['value_raw']))
 
-        # Values are float, all outputs should be ints, so round
-        for rec in records_out:
-            # rec['value'] = int(round(rec['value']))
-            rec['value_raw'] = int(round(rec['value_raw']))
+        log.debug(records_out)
 
         packet.data = records_out
         log.info('Result unique_id=%s gid_raw=%d record_count=%d val_errs=%d' % (unique_id, gid_raw, len(records_out), validate_errs))
