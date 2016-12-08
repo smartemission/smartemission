@@ -64,7 +64,7 @@ class SubtractFilter(Filter):
         record_in = packet.data
 
         # Start list of output records
-        records_out = {}
+        records_out = []
 
         # ts_list (timeseries list) is an array of dict, each dict containing raw sensor values
         ts_list = record_in['data']['timeseries']
@@ -76,14 +76,17 @@ class SubtractFilter(Filter):
         hour = record_in['hour']
         validate_errs = 0
         for sensor_vals in ts_list:
+            # log.debug(str(sensor_vals))
             # Go through all the configured sensor outputs we need to calc values for
             for sensor_name in self.sensor_names:
                 record = None
                 try:
+                    # sensor name should be in sensor defs
                     if sensor_name not in SENSOR_DEFS:
                         log.warn('Sensor name %s not defined in SENSOR_DEFS' % sensor_name)
                         continue
 
+                    # sensor def should have an input and converter elements
                     sensor_def = SENSOR_DEFS[sensor_name]
                     if 'input' not in sensor_def or 'converter' not in sensor_def:
                         log.warn('No input or converter defined for %s in SENSOR_DEFS' % sensor_name)
@@ -99,6 +102,7 @@ class SubtractFilter(Filter):
                         validate_errs += 1
                         continue
 
+                    # value should be available
                     value_raw, input_name_0 = get_raw_value(input_name, sensor_vals)
                     if value_raw is None:
                         # No use to proceed without raw input value(s)
@@ -106,90 +110,94 @@ class SubtractFilter(Filter):
                         validate_errs += 1
                         continue
 
-                    # First all common attrs (device_id, time etc)
-                    value_avg = None
-                    value_raw_avg = None
-                    if sensor_name not in records_out:
-                        # Start new record with common data
-                        record = dict()
-                        # gid_raw refers to harvested record
-                        record['gid_raw'] = gid_raw
-                        record['device_id'] = device_id
-                        record['day'] = day
-                        record['hour'] = hour
+                    # # First all common attrs (device_id, time etc)
+                    # value_avg = None
+                    # value_raw_avg = None
 
-                        # GMT does not know about 24 so we move to 00:00 the next day
-                        day_hour = str(day) + str(hour)
-                        if hour == 24:
-                            # Need to move to 00:00 next day if hour is 24
-                            # Just incrementing the day +1 is not enough: we may need to skip to next month
-                            # http://stackoverflow.com/questions/3240458/how-to-increment-the-day-in-datetime-python
-                            next_day = datetime.strptime('%sGMT' % str(day), '%Y%m%dGMT').replace(tzinfo=pytz.utc)
-                            next_day += timedelta(days=1)
-                            day_hour = next_day.strftime('%Y%m%d') + '0'
 
-                        record['time'] = datetime.strptime('%sGMT' % day_hour, '%Y%m%d%HGMT').replace(tzinfo=pytz.utc)
-                        record['name'] = sensor_name
-                        record['label'] = sensor_def['label']
-                        record['unit'] = sensor_def['unit']
-                        record['sample_count'] = 0
+                    # if sensor_name not in records_out:
+                    # Start new record with common data
+                    record = dict()
+                    # gid_raw refers to harvested record
+                    # record['gid_raw'] = gid_raw
+                    record['device_id'] = device_id
+                    # record['day'] = day
+                    # record['hour'] = hour
 
-                        # Point location TODO: average, but for now assume static
-                        if 's_longitude' in sensor_vals and 's_latitude' in sensor_vals:
-                            lon = SENSOR_DEFS['longitude']['converter'](sensor_vals['s_longitude'])
-                            lat = SENSOR_DEFS['latitude']['converter'](sensor_vals['s_latitude'])
+                    # # GMT does not know about 24 so we move to 00:00 the next day
+                    # day_hour = str(day) + str(hour)
+                    # if hour == 24:
+                    #     # Need to move to 00:00 next day if hour is 24
+                    #     # Just incrementing the day +1 is not enough: we may need to skip to next month
+                    #     # http://stackoverflow.com/questions/3240458/how-to-increment-the-day-in-datetime-python
+                    #     next_day = datetime.strptime('%sGMT' % str(day), '%Y%m%dGMT').replace(tzinfo=pytz.utc)
+                    #     next_day += timedelta(days=1)
+                    #     day_hour = next_day.strftime('%Y%m%d') + '0'
+                    #
+                    # record['time'] = datetime.strptime('%sGMT' % day_hour, '%Y%m%d%HGMT').replace(tzinfo=pytz.utc)
+                    record['time'] = sensor_vals['time']
+                    record['name'] = sensor_name
+                    # record['label'] = sensor_def['label']
+                    # record['unit'] = sensor_def['unit']
+                    # record['sample_count'] = 0
 
-                            valid, reason = check_value('latitude', sensor_vals, value=lat)
-                            if not valid:
-                                log.warn('Latitude is not valid')
-                                validate_errs += 1
-                                continue
+                    # # Point location TODO: average, but for now assume static
+                    # if 's_longitude' in sensor_vals and 's_latitude' in sensor_vals:
+                    #     lon = SENSOR_DEFS['longitude']['converter'](sensor_vals['s_longitude'])
+                    #     lat = SENSOR_DEFS['latitude']['converter'](sensor_vals['s_latitude'])
+                    #
+                    #     valid, reason = check_value('latitude', sensor_vals, value=lat)
+                    #     if not valid:
+                    #         log.warn('Latitude is not valid')
+                    #         validate_errs += 1
+                    #         continue
+                    #
+                    #     valid, reason = check_value('longitude', sensor_vals, value=lon)
+                    #     if not valid:
+                    #         log.warn('Longitude is not valid')
+                    #         validate_errs += 1
+                    #         continue
+                    #
+                    #     # Both lat and lon are valid!
+                    #     record['point'] = 'SRID=4326;POINT(%f %f)' % (lon, lat)
+                    #
+                    # # No 'point' proceeding without a location
+                    # if 'point' not in record:
+                    #     log.warn('No point in proceding without location')
+                    #     validate_errs += 1
+                    #     continue
 
-                            valid, reason = check_value('longitude', sensor_vals, value=lon)
-                            if not valid:
-                                log.warn('Longitude is not valid')
-                                validate_errs += 1
-                                continue
+                    # # GPS height. TODO use air pressure
+                    # record['altitude'] = 0
+                    # if 's_altimeter' in sensor_vals:
+                    #     altitude = SENSOR_DEFS['altitude']['converter'](sensor_vals['s_altimeter'])
+                    #     valid, reason = check_value('altitude', sensor_vals, value=altitude)
+                    #     if not valid:
+                    #         altitude = 0
+                    #
+                    #     # altitude valid!
+                    #     record['altitude'] = altitude
 
-                            # Both lat and lon are valid!
-                            record['point'] = 'SRID=4326;POINT(%f %f)' % (lon, lat)
+                    # else:
+                    #     # Record for sensor_name already exists: will add to average later
+                    #     record = records_out[sensor_name]
+                    #     if 'value' in record:
+                    #         value_avg = record['value']
+                    #     if 'value_raw' in record:
+                    #         value_raw_avg = record['value_raw']
 
-                        # No 'point' proceeding without a location
-                        if 'point' not in record:
-                            log.warn('No point in proceding without location')
-                            validate_errs += 1
-                            continue
+                    # # Calculate values, also keep raw value, min and max
+                    # record['sample_count'] += 1
+                    # if value_raw_avg is not None:
+                    #     # M = M + (x-M)/n
+                    #     # Here M is the (cumulative moving) average, x is the new value in the
+                    #     # sequence, n is the count of values.
+                    #     record['value_raw'] = self.moving_average(value_raw_avg, value_raw, record['sample_count'],
+                    #                                               SENSOR_DEFS[input_name_0]['unit'])
+                    # else:
+                    #     # First value for avg
+                    record['value_raw'] = value_raw
 
-                        # GPS height. TODO use air pressure
-                        record['altitude'] = 0
-                        if 's_altimeter' in sensor_vals:
-                            altitude = SENSOR_DEFS['altitude']['converter'](sensor_vals['s_altimeter'])
-                            valid, reason = check_value('altitude', sensor_vals, value=altitude)
-                            if not valid:
-                                altitude = 0
-
-                            # altitude valid!
-                            record['altitude'] = altitude
-
-                    else:
-                        # Record for sensor_name already exists: will add to average later
-                        record = records_out[sensor_name]
-                        if 'value' in record:
-                            value_avg = record['value']
-                        if 'value_raw' in record:
-                            value_raw_avg = record['value_raw']
-
-                    # Calculate values, also keep raw value, min and max
-                    record['sample_count'] += 1
-                    if value_raw_avg is not None:
-                        # M = M + (x-M)/n
-                        # Here M is the (cumulative moving) average, x is the new value in the
-                        # sequence, n is the count of values.
-                        record['value_raw'] = self.moving_average(value_raw_avg, value_raw, record['sample_count'],
-                                                                  SENSOR_DEFS[input_name_0]['unit'])
-                    else:
-                        # First value for avg
-                        record['value_raw'] = value_raw
 
                     # Do the conversion/calibration in 3 steps
                     # 1) check inputs (available and valid)
@@ -197,29 +205,33 @@ class SubtractFilter(Filter):
                     # 3) check output (available and valid)
 
                     # 1) check inputs
-                    value = sensor_def['converter'](value_raw, sensor_vals, sensor_def)
-                    output_valid, reason = check_value(sensor_name, sensor_vals, value=value)
-                    if not output_valid:
-                        log.warn('id=%d-%d-%d-%s gid_raw=%d: invalid output for %s: detail=%s' % (
-                            device_id, day, hour, sensor_name, gid_raw, sensor_name, reason))
-                        validate_errs += 1
-                        continue
+
+                    # At this point the data for calibration should be saved
+
+
+                    # value = sensor_def['converter'](value_raw, sensor_vals, sensor_def)
+                    # output_valid, reason = check_value(sensor_name, sensor_vals, value=value)
+                    # if not output_valid:
+                    #     log.warn('id=%d-%d-%d-%s gid_raw=%d: invalid output for %s: detail=%s' % (
+                    #         device_id, day, hour, sensor_name, gid_raw, sensor_name, reason))
+                    #     validate_errs += 1
+                    #     continue
 
                     # Finally calculate calibrated value and recalc  average
-                    if value_avg is not None:
-                        # Recalc avg
-                        record['value'] = self.moving_average(value_avg, value, record['sample_count'], sensor_def['unit'])
-
-                        # Set min/max
-                        if value < record['value_min']:
-                            record['value_min'] = value
-                        if value > record['value_max']:
-                            record['value_max'] = value
-                    else:
-                        # First value for avg
-                        record['value'] = value
-                        record['value_min'] = value
-                        record['value_max'] = value
+                    # if value_avg is not None:
+                    #     # Recalc avg
+                    #     record['value'] = self.moving_average(value_avg, value, record['sample_count'], sensor_def['unit'])
+                    #
+                    #     # Set min/max
+                    #     if value < record['value_min']:
+                    #         record['value_min'] = value
+                    #     if value > record['value_max']:
+                    #         record['value_max'] = value
+                    # else:
+                    #     # First value for avg
+                    #     record['value'] = value
+                    #     record['value_min'] = value
+                    #     record['value_max'] = value
 
                 except Exception, e:
                     log.error('Exception refining %s gid_raw=%d dev=%d day-hour=%d-%d, err=%s' % (
@@ -227,19 +239,19 @@ class SubtractFilter(Filter):
                     traceback.print_exc(file=sys.stdout)
                 else:
                     # No error and output value: assign record to result list
-                    if record and 'value' in record:
-                        records_out[sensor_name] = record
+                    if record and 'value_raw' in record:
+                        records_out.append(record)
 
                         # if output_name == 'v_audiolevel' and 'v_audioavg' in ts_list:
                         #     # average dB value as raw value
                         #     record['value_raw'] = sensor_vals['v_audioavg']
 
         # make records into a list() and round all (raw) values
-        records_out = records_out.values()
+        # records_out = records_out.values()
 
         # Values are float, all outputs should be ints, so round
         for rec in records_out:
-            rec['value'] = int(round(rec['value']))
+            # rec['value'] = int(round(rec['value']))
             rec['value_raw'] = int(round(rec['value_raw']))
 
         packet.data = records_out
