@@ -43,6 +43,9 @@ RUN pip install pytz
 # Requests support in Python
 RUN pip install requests
 
+# Geohash https://en.wikipedia.org/wiki/Geohash support in Python
+RUN pip install geohash
+
 # Development version of scikit-learn
 RUN pip install Cython numpy scipy scikit-learn==0.18
 

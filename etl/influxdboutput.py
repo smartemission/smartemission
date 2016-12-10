@@ -6,6 +6,8 @@
 # Author: Just van den Broecke
 #
 import time
+import calendar
+import Geohash
 
 from stetl.outputs.httpoutput import HttpOutput
 from stetl.util import Util
@@ -33,6 +35,7 @@ class InfluxDbOutput(HttpOutput):
     database = smartemission
     measurement = joseraw
     tags_map = {{'station': 'device_id', 'component': 'name' }}
+    geohash_wkt_attr = point
     fields_map = {{'value': 'value'}}
     time_attr = time
     user = theuser
@@ -54,7 +57,7 @@ class InfluxDbOutput(HttpOutput):
     @Config(ptype=str, required=True)
     def measurement(self):
         """
-        The "measurement" is a table-like entity in an InfluxDB database
+        The required "measurement" is a table-like entity in an InfluxDB database
 
         Required: True
 
@@ -62,21 +65,22 @@ class InfluxDbOutput(HttpOutput):
         """
         pass
 
-    @Config(ptype=dict, required=True)
+    @Config(ptype=dict, default=None, required=False)
     def tags_map(self):
         """
-        The tag keys, sort of free-to-choose columns with their mappings to attributes in incoming records.
+        The optional tag keys, sort of free-to-choose columns with their mappings to attributes in incoming records.
         Example: {'station': 'device_id', 'component': 'name' }
         Required: True
 
-        Default: N.A.
+        Default: None
         """
         pass
 
     @Config(ptype=dict, required=True)
     def fields_map(self):
         """
-        The actual value fields with their mapping to record attributes.
+        The actual value fields with their mapping to record attributes. At least one field is required.
+        Example: {'value': 'val', 'value_raw': 'rawval' }
 
         Required: True
 
@@ -84,10 +88,33 @@ class InfluxDbOutput(HttpOutput):
         """
         pass
 
+    @Config(ptype=dict, default=None, required=False)
+    def geohash_map(self):
+        """
+        Optional mapping to lat/lon attributes in record for Geohash tag.
+        Example: geohash_map = {{'lat': 'latitude', 'lon': 'longitude' }}
+        Required: False
+
+        Default: None
+        """
+        pass
+
+    @Config(ptype=str, default=None, required=False)
+    def geohash_wkt_attr(self):
+        """
+        Optional attribute-name in record that contains a WKT POINT to be used for Geohash tag.
+        Example: geohash_wkt_attr = point
+        Required: False
+
+        Default: None
+        """
+        pass
+
     @Config(ptype=str, required=True)
     def time_attr(self):
         """
-        The time record attribute to use for InfluxDB time field.
+        The single required time record attribute to use for InfluxDB time field. NB this attribute
+        is now supposed to be a Python datetime object in UTC time. We may add TZ support later.
 
         Required: True
 
@@ -103,12 +130,18 @@ class InfluxDbOutput(HttpOutput):
 
         # Construct the template line to be used for each data frame
         # e.g. 'joseraw,station=%s,component=%s value=%s %s'
-        self.tags = self.tags_map.keys()
-        self.fields = self.fields_map.keys()
-        self.tags_template = ''
-        for tag in self.tags:
-            self.tags_template += ',' + tag + '=%s'
+        self.tags_template = None
+        if self.tags_map:
+            self.tags = self.tags_map.keys()
+            self.tags_template = ''
+            for tag in self.tags:
+                self.tags_template += ',' + tag + '=%s'
 
+        self.geohash_template = None
+        if self.geohash_map or self.geohash_wkt_attr:
+            self.geohash_template = ',geohash=%s'
+
+        self.fields = self.fields_map.keys()
         self.fields_template = ' '
         for field in self.fields:
             self.fields_template += field + '=%s '
@@ -135,17 +168,46 @@ class InfluxDbOutput(HttpOutput):
         for record in records:
 
             # Make Timestamp in Unixtime nanosecs, e.g. 1434055562000000000
-            # delete: DELETE FROM joseraw WHERE time > '1970-01-01'
-            tstamp_nanos = int(time.mktime(record[self.time_attr].timetuple()) * nanos)
+            # NB assumed is that time is in UTC!
+            # See http://stackoverflow.com/questions/2956886/python-calendar-timegm-vs-time-mktime
+            # mktime assumes local timezone!
+            # tstamp_nanos = int(time.mktime(record[self.time_attr].timetuple()) * nanos)
+            tstamp_nanos = int(calendar.timegm(record[self.time_attr].timetuple()) * nanos)
 
-            # Create tags substring
-            tag_values = []
-            for tag in self.tags:
-                tag_values.append(str(record[self.tags_map[tag]]))
-            tag_values = tuple(tag_values)
-            tags = self.tags_template % tag_values
+            # Create optional tags substring
+            tags = ''
+            if self.tags_template:
+                tag_values = []
+                for tag in self.tags:
+                    tag_values.append(str(record[self.tags_map[tag]]))
+                tag_values = tuple(tag_values)
+                tags = self.tags_template % tag_values
 
-            # Create fields substring
+            # Optional geohash, see https://github.com/vinsci/geohash/
+            if self.geohash_template:
+                lat = None
+                lon = None
+                # Option 1: map to record attrs
+                if self.geohash_map:
+                    lat = record.get(self.geohash_map['lat'])
+                    lon = record.get(self.geohash_map['lon'])
+
+                # Option 2: map to WKT-encoded Point in record
+                elif self.geohash_wkt_attr:
+                    # WKT example: 'SRID=4326;POINT(5.670993 51.472393)'
+                    wkt = record.get(self.geohash_wkt_attr)
+                    if wkt:
+                        # TODO: Poor-man's extraction: should be using regex or geo-lib
+                        # NB the order is lon, lat in WKT!
+                        lon = float(wkt.split('(')[1].split(' ')[0])
+                        lat = float(wkt.split(' ')[1].split(')')[0])
+
+                if lat and lon:
+                    geohash = Geohash.encode(lat, lon)
+                    geohash_tag = self.geohash_template % geohash
+                    tags += geohash_tag
+
+            # Create required fields substring
             field_values = []
             for field in self.fields:
                 field_values.append(str(record[self.fields_map[field]]))
