@@ -3,22 +3,29 @@
 # Run the InfluxDB from https://hub.docker.com/_/influxdb/.
 #
 
-GIT="/opt/geonovum/smartem/git"
-LOG="/var/smartem/log"
+LOG_DIR="/var/smartem/log/influxdb"
+DATA_DIR="/var/smartem/data/influxdb"
 NAME="influxdb"
-IMAGE="influxdb:1.1"
+IMAGE="influxdb:1.1.1"
 
-mkdir -p /var/smartem/data/influxdb
+sudo mkdir -p ${DATA_DIR}
+sudo mkdir -p ${LOG_DIR}
 
-VOL_MAP="-v /var/smartem/data/influxdb:/var/lib/influxdb -v ${GIT}/services/influxdb/config/influxdb.conf:/etc/influxdb/influxdb.conf:ro"
+script_dir=${0%/*}
+pushd ${script_dir}
+script_dir=$PWD
+popd
 
+VOL_MAP="-v ${DATA_DIR}:/var/lib/influxdb -v ${LOG_DIR}:/var/log/influxdb -v ${script_dir}/config/influxdb.conf:/etc/influxdb/influxdb.conf:ro"
+
+# 8083 is admin, 8086 API
 PORT_MAP="-p 8083:8083 -p 8086:8086"
 
 # Stop and remove possibly old containers
 sudo docker stop ${NAME} > /dev/null 2>&1
 sudo docker rm ${NAME} > /dev/null 2>&1
 
-# Finally run
+# Finally run, keeping DB-data, config and logs on the host
 sudo docker run --name ${NAME} ${PORT_MAP} ${VOL_MAP} -d -t ${IMAGE} -config /etc/influxdb/influxdb.conf
 
 # generate conf: docker run --rm influxdb influxd config > influxdb.conf

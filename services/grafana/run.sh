@@ -3,6 +3,7 @@
 # Run Grafana from http://docs.grafana.org/installation/docker/
 #
 # On first run the config, data and log dirs are copied from container to /var/smartem/* dirs.
+# InfluxDB needs to run first.
 # NB Change the default password there!
 
 GIT="/opt/geonovum/smartem/git"
@@ -11,12 +12,14 @@ DATA_DIR="/var/smartem/data"
 CONFIG_DIR="/var/smartem/config"
 NAME="grafana"
 IMAGE="grafana/grafana:develop"
+INFLUX_HOST=influxdb
 
 # Volume maps for initial and full run
 VOL_MAP_PART=" "
 VOL_MAP_FULL="-v ${DATA_DIR}/grafana:/var/lib/grafana -v ${LOG_DIR}/grafana:/var/log/grafana -v ${CONFIG_DIR}/grafana:/etc/grafana"
 
 PORT_MAP="-p 3000:3000"
+LINK_MAP="--link ${INFLUX_HOST}:${INFLUX_HOST}"
 
 # Restart with volume mapping(s) provided in $1
 function restart_image() {
@@ -27,7 +30,7 @@ function restart_image() {
   sudo docker rm ${NAME} > /dev/null 2>&1
   echo "restart ${NAME} with volumes: ${VOL_MAP}"
   # Finally run with all mappings
-  sudo docker run --name ${NAME} ${PORT_MAP} ${VOL_MAP} -d ${IMAGE}
+  sudo docker run --name ${NAME} ${PORT_MAP} ${VOL_MAP} ${LINK_MAP} -d ${IMAGE}
 }
 
 # Some tricky stuff to get all Grafana dirs on host when non-existing on host
