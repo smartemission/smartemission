@@ -1,9 +1,20 @@
 #!/bin/bash
 #
-# ETL for reading last values from Smart Emission CityGIS Raw Sensor API
+# Variable settings shared by all scripts.
 #
-export PGUSER=docker
-export PGPASSWORD=docker
+
+HNAME=`hostname`
+
+echo "Using host-specific options for ${HNAME}"
+
+pushd ../options
+. ${HNAME}.args
+popd
+
+export PGUSER=${pg_user}
+export PGPASSWORD=${pg_password}
+export PGDB=${pg_database}
+
 # Use local connection, we do not expose PG to outside world
 export PGHOST=`sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' postgis`
-export PGDB=gis
+# export INFLUXHOST=`sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' influxdb`

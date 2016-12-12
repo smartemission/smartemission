@@ -1,0 +1,79 @@
+# Host-specific settings - EXAMPLE - copy these to your hostname.args file and change for local situation
+
+
+#
+# PostGIS DB: credentials and settings
+#
+
+# postgis docker container IP is mapped by docker via --link option
+pg_host=postgis
+pg_user=youruser
+pg_password=yourpw
+pg_port=5432
+pg_database=gis
+pg_schema=smartem
+pg_schema_rt=smartem_rt
+pg_schema_raw=smartem_raw
+pg_schema_refined=smartem_refined
+
+#
+# ETL: Refiner-settings
+#
+# Maximum records to process per ETL-run
+refiner_max_input_records=20
+
+
+#
+# ETL: Harvester-settings
+#
+raw_device_url=http://whale.citygis.nl/sensors/v1
+
+# Maximum time spent in processing
+max_proc_time_secs=20
+
+# Time between calling the Whale API again
+api_interval_secs=1
+
+#
+# SOS Publication and API Server credentials
+#
+sos_host=sos52n
+sos_port=8080
+sos_path=/sos52n/service
+sospublisher_max_input_records=50
+
+#
+# SensorThings API settings and Server credentials
+#
+sta_host=sta.smartemission.nl
+sta_port=8080
+sta_path=/OGCSensorThings/v1.0
+sta_user=nijmegen
+sta_password=yourpw
+stapublisher_max_input_records=100
+
+#
+# InfluxDB: settings and Server credentials
+#
+influx_host=influxdb
+influx_port=8086
+influx_admin_user=youruser
+influx_admin_password=yourpw
+
+# Project Smartemission
+influx_se_database=smartemission
+influx_se_writer=youruser
+influx_se_writer_password=yourpw
+influx_se_reader=youruser
+influx_se_reader_password=yourpw
+influx_se_measurement_raw=joseraw
+influx_se_measurement_refined=joserefined
+
+# Project AirSensEUR (RIVM)
+influx_as_database=airsenseur
+influx_as_writer=youruser
+influx_as_writer_password=yourpw
+influx_as_reader=youruser
+influx_as_reader_password=yourpw
+influx_as_measurement_geonovum=geonovum
+influx_as_measurement_rivm=rivm

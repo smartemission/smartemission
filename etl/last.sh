@@ -3,7 +3,7 @@
 # ETL for reading last values from Smart Emission CityGIS Raw Sensor API
 #
 
-STETL_ARGS="-c last.cfg -a options/docker.args"
+STETL_ARGS="-c last.cfg -a options/`hostname`.args"
 WORK_DIR="`pwd`"
 PG_HOST=postgis
 IMAGE=geonovum/stetl:latest

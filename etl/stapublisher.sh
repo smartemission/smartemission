@@ -3,7 +3,7 @@
 # ETL for publishing Smart Emission Refined DB data to a remote Sensor Things API (STA).
 #
 
-STETL_ARGS="-c stapublisher.cfg -a options/docker.args"
+STETL_ARGS="-c stapublisher.cfg -a options/`hostname`.args"
 WORK_DIR="`pwd`"
 PG_HOST="postgis"
 LINK_MAP="--link ${PG_HOST}:${PG_HOST}"

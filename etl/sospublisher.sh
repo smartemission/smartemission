@@ -3,7 +3,7 @@
 # ETL for publishing Smart Emission Refined DB data to a SOS.
 #
 
-STETL_ARGS="-c sospublisher.cfg -a options/docker.args"
+STETL_ARGS="-c sospublisher.cfg -a options/`hostname`.args"
 WORK_DIR="`pwd`"
 PG_HOST="postgis"
 SOS52N_HOST="sos52n"

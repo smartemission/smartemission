@@ -46,7 +46,7 @@ class InfluxDbOutput(HttpOutput):
     @Config(ptype=str, required=True)
     def database(self):
         """
-        The "database" is a db-like entity in an InfluxDB database
+        The "database" is a db-like entity in an InfluxDB server instance.
 
         Required: True
 
@@ -57,7 +57,7 @@ class InfluxDbOutput(HttpOutput):
     @Config(ptype=str, required=True)
     def measurement(self):
         """
-        The required "measurement" is a table-like entity in an InfluxDB database
+        The required "measurement" is a table-like entity in an InfluxDB database.
 
         Required: True
 
