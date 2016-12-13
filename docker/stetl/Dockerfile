@@ -47,7 +47,7 @@ RUN pip install requests
 RUN pip install geohash
 
 # Development version of scikit-learn
-RUN pip install Cython numpy scipy scikit-learn==0.18
+RUN pip install Cython numpy pandas scipy scikit-learn==0.18
 
 # Get latest Stetl from git
 RUN git clone https://github.com/geopython/stetl /opt/stetl
