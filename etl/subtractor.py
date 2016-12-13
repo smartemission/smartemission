@@ -5,7 +5,7 @@
 #
 
 
-# Author: Just van den Broecke - 2015
+# Author: Pieter Marsman - 2016
 import sys
 import traceback
 from stetl.component import Config
@@ -75,6 +75,8 @@ class SubtractFilter(Filter):
                 # Go through all the configured sensor outputs we need to calc values for
                 for sensor_name in self.sensor_names:
                     # sensor name should be in sensor defs
+                    record[sensor_name] = None
+
                     if sensor_name not in SENSOR_DEFS:
                         log.warn(
                             'Sensor name %s not defined in SENSOR_DEFS' % sensor_name)
@@ -112,12 +114,9 @@ class SubtractFilter(Filter):
                 log.error('Exception refining gid_raw=%d dev=%d, err=%s' % (
                     gid_raw, device_id, str(e)))
                 traceback.print_exc(file=sys.stdout)
-            else:
+            finally:
                 # Only save results when measuring something
-                if len(record) > 1:
-                    records_out.append(record)
-
-        log.debug(records_out)
+                records_out.append(record)
 
         packet.data = records_out
         log.info(
