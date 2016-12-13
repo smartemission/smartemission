@@ -44,7 +44,7 @@ RUN pip install pytz
 RUN pip install requests
 
 # Development version of scikit-learn
-RUN pip install Cython numpy scipy scikit-learn==0.18
+RUN pip install Cython numpy pandas scipy scikit-learn==0.18
 
 # Get latest Stetl from git
 RUN git clone https://github.com/geopython/stetl /opt/stetl
