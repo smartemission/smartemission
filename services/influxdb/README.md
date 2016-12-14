@@ -106,7 +106,7 @@ DELETE FROM joseraw WHERE time > '1970-01-01'
 ## Geospatial Data
 
 While InfluxDB has no specific geospatial support, a common way to tag measurements with lat/lon values is
-via Geohash (https://en.wikipedia.org/wiki/Geohash). The common Python module is https://github.com/vinsci/geohash.
+via [Geohash](https://en.wikipedia.org/wiki/Geohash). The common Python module is https://github.com/vinsci/geohash.
 Tools like Grafana can interpret geohashes in Dashboards when the tag name is `geohash`.
 
 A line would be like:
