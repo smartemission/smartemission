@@ -13,6 +13,8 @@ from stetl.filter import Filter
 from stetl.packet import FORMAT
 from stetl.util import Util
 
+from dateutil import parser
+
 from sensordefs import *
 
 log = Util.get_log("SubtractFilter")
@@ -63,19 +65,19 @@ class SubtractFilter(Filter):
         for sensor_vals in ts_list:
             # log.debug(str(sensor_vals))
 
-            try:
-                if 'time' not in sensor_vals:
-                    log.warn('Sensor values without time are of no use')
-                    continue
+            if 'time' not in sensor_vals:
+                log.warn('Sensor values without time are of no use')
+                continue
 
-                record = dict()
-                record['device_id'] = device_id
-                record['time'] = sensor_vals['time']
+            # Go through all the configured sensor outputs we need to calc values for
+            for sensor_name in self.sensor_names:
 
-                # Go through all the configured sensor outputs we need to calc values for
-                for sensor_name in self.sensor_names:
+                try:
                     # sensor name should be in sensor defs
-                    record[sensor_name] = None
+                    record = dict()
+                    record['device_id'] = device_id
+                    record['time'] = parser.parse(sensor_vals['time'])
+                    record['name'] = sensor_name
 
                     if sensor_name not in SENSOR_DEFS:
                         log.warn(
@@ -108,15 +110,15 @@ class SubtractFilter(Filter):
                         validate_errs += 1
                         continue
 
-                    record[sensor_name] = value_raw
+                    record['value'] = value_raw
 
-            except Exception, e:
-                log.error('Exception refining gid_raw=%d dev=%d, err=%s' % (
-                    gid_raw, device_id, str(e)))
-                traceback.print_exc(file=sys.stdout)
-            finally:
-                # Only save results when measuring something
-                records_out.append(record)
+                except Exception, e:
+                    log.error('Exception refining gid_raw=%d dev=%d, err=%s' % (
+                        gid_raw, device_id, str(e)))
+                    traceback.print_exc(file=sys.stdout)
+                else:
+                    # Only save results when measuring something
+                    records_out.append(record)
 
         packet.data = records_out
         log.info(

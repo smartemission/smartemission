@@ -162,6 +162,8 @@ class InfluxDbOutput(HttpOutput):
             # packet data is single record
             records = [packet.data]
 
+        log.info("Creating payload from %d records" % len(records))
+
         payload = ''
         nanos = int(1000 * 1000 * 1000) # constant for time conversion
 
@@ -216,5 +218,7 @@ class InfluxDbOutput(HttpOutput):
 
             # Assemble InfluxDB line protocol string, each measurement on a new line
             payload += self.template_data_line % (tags, fields, tstamp_nanos)
+
+        log.info("Created payload of %d characters" % len(payload))
 
         return payload
