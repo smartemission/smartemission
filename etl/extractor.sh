@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# ETL for refining raw timeseries values from Smart Emission Raw DB data.
+# ETL for extracting raw timeseries values from Smart Emission Raw DB data.
 #
 
 STETL_ARGS="-c extractor.cfg -a options/`hostname`.args"

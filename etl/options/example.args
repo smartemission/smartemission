@@ -15,6 +15,7 @@ pg_schema=smartem
 pg_schema_rt=smartem_rt
 pg_schema_raw=smartem_raw
 pg_schema_refined=smartem_refined
+pg_schema_extracted=smartem_extracted
 
 #
 # ETL: Refiner-settings
@@ -33,6 +34,11 @@ max_proc_time_secs=20
 
 # Time between calling the Whale API again
 api_interval_secs=1
+
+#
+# ETL: Extractor-settings
+#
+extractor_max_input_records=4000
 
 #
 # SOS Publication and API Server credentials
@@ -68,6 +74,7 @@ influx_se_reader=youruser
 influx_se_reader_password=yourpw
 influx_se_measurement_raw=joseraw
 influx_se_measurement_refined=joserefined
+influx_se_measurement_extract=joseextract
 
 # Project AirSensEUR (RIVM)
 influx_as_database=airsenseur

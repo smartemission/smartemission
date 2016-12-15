@@ -222,3 +222,9 @@ class InfluxDbOutput(HttpOutput):
         log.info("Created payload of %d characters" % len(payload))
 
         return payload
+
+    def invoke(self, packet):
+        packet = self.write(packet)
+        # packet.consume()
+        return packet
+
