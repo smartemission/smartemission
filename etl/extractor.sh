@@ -3,12 +3,12 @@
 # ETL for refining raw timeseries values from Smart Emission Raw DB data.
 #
 
-STETL_ARGS="-c subtractor.cfg -a options/`hostname`.args"
+STETL_ARGS="-c extractor.cfg -a options/`hostname`.args"
 WORK_DIR="`pwd`"
 PG_HOST=postgis
 INFLUX_HOST=influxdb
 IMAGE=geonovum/stetl:latest
-NAME="stetl_subtract"
+NAME="stetl_extract"
 
 # Stop and remove possibly old containers
 sudo docker stop ${NAME} > /dev/null 2>&1

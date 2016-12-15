@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Filter to consume a raw record of Smart Emission data (one hour for one
-# device), and subtract these, producing records.
+# device), and extract these, producing records.
 #
 
 
@@ -17,19 +17,19 @@ from dateutil import parser
 
 from sensordefs import *
 
-log = Util.get_log("SubtractFilter")
+log = Util.get_log("ExtractorFilter")
 
 
-class SubtractFilter(Filter):
+class ExtractFilter(Filter):
     """
-    Filter to consume single raw record with sensor (single hour) timeseries values and subtract these for each component.
+    Filter to consume single raw record with sensor (single hour) timeseries values and extract these for each component.
     Input is a single timeseries record for a single hour with all sensorvalues for a single device within that hour.
     """
 
     @Config(ptype=list, default=[], required=True)
     def sensor_names(self):
         """
-        The output sensor names to subtract.
+        The output sensor names to extract.
 
         Required: True
 
