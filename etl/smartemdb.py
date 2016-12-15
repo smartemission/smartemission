@@ -110,6 +110,10 @@ class RawDbInput(PostgresDbInput):
 
 
 class RefinedDbInput(PostgresDbInput):
+    """
+    Reads SmartEmission refined timeseries data from table and converts to recordlist.
+    """
+
     @Config(ptype=int, required=True, default=10)
     def max_input_records(self):
         """
@@ -117,9 +121,6 @@ class RefinedDbInput(PostgresDbInput):
         """
         pass
 
-    """
-    Reads SmartEmission refined timeseries data from table and converts to recordlist.
-    """
     def __init__(self, configdict, section):
         PostgresDbInput.__init__(self, configdict, section)
         self.progress_query = self.cfg.get('progress_query')
