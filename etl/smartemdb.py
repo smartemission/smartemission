@@ -126,6 +126,7 @@ class RefinedDbInput(PostgresDbInput):
         self.progress_query = self.cfg.get('progress_query')
         self.progress_update = self.cfg.get('progress_update')
         self.db = None
+        self.last_id = None
 
     def after_chain_invoke(self, packet):
         """
