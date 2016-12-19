@@ -193,8 +193,11 @@ class LastIdFilter(PostgresDbInput):
         Called right after entire Component Chain invoke.
         Used to update last id of processed file record.
         """
-        log.info('Updating progress table with last_id= %d' % self.last_id)
-        self.db.execute(self.progress_update % self.last_id)
-        self.db.commit(close=False)
-        log.info('Update progress table ok')
+        if self.last_id is not None:
+            log.info('Updating progress table with last_id= %d' % self.last_id)
+            self.db.execute(self.progress_update % self.last_id)
+            self.db.commit(close=False)
+            log.info('Update progress table ok')
+        else:
+            log.info('No update for progress table')
         return True
