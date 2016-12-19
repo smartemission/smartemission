@@ -78,6 +78,11 @@ class ExtractFilter(Filter):
             log.info("Device id %d not in selected device ids %s",
                      device_id, str(self.device_ids))
         else:
+
+            record = dict()
+            record['device_id'] = device_id
+            record['gid'] = gid
+
             for sensor_vals in ts_list:
                 # log.debug(str(sensor_vals))
 
@@ -85,17 +90,14 @@ class ExtractFilter(Filter):
                     log.warn('Sensor values without time are of no use')
                     continue
 
+                record['time'] = parser.parse(sensor_vals['time'])
+
                 # Go through all the configured sensor outputs we need to calc values for
                 for sensor_name in self.sensor_names:
 
-                    try:
-                        # sensor name should be in sensor defs
-                        record = dict()
-                        record['device_id'] = device_id
-                        record['time'] = parser.parse(sensor_vals['time'])
-                        record['name'] = sensor_name
-                        record['gid'] = gid
+                    sensor_record = dict(record)
 
+                    try:
                         if sensor_name not in SENSOR_DEFS:
                             log.warn(
                                 'Sensor name %s not defined in SENSOR_DEFS' % sensor_name)
@@ -127,7 +129,9 @@ class ExtractFilter(Filter):
                             validate_errs += 1
                             continue
 
-                        record['value'] = value_raw
+                        # sensor name should be in sensor defs
+                        sensor_record['name'] = sensor_name
+                        sensor_record['value'] = value_raw
 
                     except Exception, e:
                         log.error('Exception extracting gid=%d dev=%d, '
@@ -135,7 +139,7 @@ class ExtractFilter(Filter):
                         traceback.print_exc(file=sys.stdout)
                     else:
                         # Only save results when measuring something
-                        records_out.append(record)
+                        records_out.append(sensor_record)
 
         packet.data = records_out
         log.info(
