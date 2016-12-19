@@ -9,6 +9,7 @@ import sys
 import traceback
 from stetl.component import Config
 from stetl.filter import Filter
+from stetl.inputs.dbinput import PostgresDbInput
 from stetl.packet import FORMAT
 from stetl.util import Util
 
@@ -51,6 +52,7 @@ class ExtractFilter(Filter):
         Filter.__init__(self, configdict, section, consumes=FORMAT.record,
                         produces=FORMAT.record_array)
         self.current_record = None
+        self.last_id = None
 
     def invoke(self, packet):
         if packet.data is None or packet.is_end_of_doc() or packet.is_end_of_stream():
@@ -143,11 +145,30 @@ class ExtractFilter(Filter):
         return packet
 
 
-class ProgressFilter(Filter):
+class LastIdFilter(PostgresDbInput):
+
+    @Config(ptype=str, required=True)
+    def progress_update(self):
+        """
+        Query to update progress
+
+        Required: True
+
+        Default: ""
+        """
+        pass
+
+    @Config(ptype=str, required=True)
+    def id_key(self):
+        """
+        Key to select from record array
+
+        Required: True
+        """
 
     def __init__(self, configdict, section):
-        Filter.__init__(self, configdict, section, consumes=FORMAT.record_array,
-                        produces=FORMAT.record)
+        PostgresDbInput.__init__(self, configdict, section)
+        self.last_id = None
 
     def invoke(self, packet):
         if packet.data is None or packet.is_end_of_doc() or packet.is_end_of_stream():
@@ -155,17 +176,21 @@ class ProgressFilter(Filter):
             return packet
 
         record_in = packet.data
-        record_out = {}
-
-        log.info("Computing maximum gid in from %d records", len(record_in))
 
         if len(record_in) > 0:
-            record_out = dict()
-            record_out['id'] = 1
-            record_out['gid'] = max([rec['gid'] for rec in record_in])
+            self.last_id = max(self.last_id, record_in[self.id_key])
 
-            log.info("Maximum gid is %d", record_out["gid"])
-
-        packet.data = record_out
+        log.info("Maximum gid is %d", self.last_id)
 
         return packet
+
+    def after_chain_invoke(self, packet):
+        """
+        Called right after entire Component Chain invoke.
+        Used to update last id of processed file record.
+        """
+        log.info('Updating progress table with last_id= %d' % self.last_id)
+        self.db.execute(self.progress_update % self.last_id)
+        self.db.commit(close=False)
+        log.info('Update progress table ok')
+        return True

@@ -7,6 +7,9 @@ CREATE SCHEMA smartem_extracted;
 DROP TABLE IF EXISTS smartem_extracted.extractor_progress CASCADE;
 CREATE TABLE smartem_extracted.extractor_progress (
   id serial,
-  gid integer not null,
+  last_gid integer not null,
+  last_update timestamp with time zone default current_timestamp,
   PRIMARY KEY (id)
 ) WITHOUT OIDS;
+
+INSERT INTO smartem_extracted.extractor_progress(last_gid) VALUES (0);
