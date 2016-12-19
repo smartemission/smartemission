@@ -68,6 +68,8 @@ class ExtractFilter(Filter):
         device_id = record_in['device_id']
         unique_id = record_in['unique_id']
         gid = record_in['gid']
+        day = record_in['day']
+        hour = record_in['hour']
         validate_errs = 0
 
         ts_list = record_in['data']['timeseries']
@@ -75,8 +77,8 @@ class ExtractFilter(Filter):
             unique_id, gid, len(ts_list)))
 
         if str(device_id) not in self.device_ids:
-            log.info("Device id %d not in selected device ids %s",
-                     device_id, str(self.device_ids))
+            log.info("Device id %d not in selected device ids %s", device_id,
+                     str(self.device_ids))
         else:
 
             record = dict()
@@ -98,31 +100,19 @@ class ExtractFilter(Filter):
                     sensor_record = dict(record)
 
                     try:
-                        if sensor_name not in SENSOR_DEFS:
-                            log.warn(
-                                'Sensor name %s not defined in SENSOR_DEFS' % sensor_name)
-                            continue
-
-                        # sensor def should have an input and converter elements
-                        sensor_def = SENSOR_DEFS[sensor_name]
-                        if 'input' not in sensor_def or 'converter' not in sensor_def:
-                            log.warn(
-                                'No input or converter defined for %s in SENSOR_DEFS' % sensor_name)
-                            continue
-
                         # get raw input value(s)
                         # i.e. in some cases multiple inputs are required (e.g. audio bands)
-                        input_name = sensor_def['input']
-                        input_valid, reason = check_value(input_name, sensor_vals)
-                        if not input_valid:
-                            # log.warn('id=%d-%d-%d-%s gid=%d: invalid input for %s: detail=%s' % (
-                            # device_id, day, hour, sensor_name, gid, str(input_name), reason))
+                        valid, reason = check_value(sensor_name, sensor_vals)
+                        if not valid:
+                            # log.warn(
+                            #     'id=%d-%d-%d-%s gid=%d: invalid input for %s: detail=%s' % (
+                            #         device_id, day, hour, sensor_name, gid,
+                            #         sensor_name, reason))
                             validate_errs += 1
                             continue
 
                         # value should be available
-                        value_raw, input_name_0 = get_raw_value(input_name,
-                                                                sensor_vals)
+                        value_raw, _ = get_raw_value(sensor_name, sensor_vals)
                         if value_raw is None:
                             # No use to proceed without raw input value(s)
                             log.warn('Value raw is None for %s' % sensor_name)
@@ -142,15 +132,13 @@ class ExtractFilter(Filter):
                         records_out.append(sensor_record)
 
         packet.data = records_out
-        log.info(
-            'Result unique_id=%s gid=%d record_count=%d val_errs=%d' % (
-                unique_id, gid, len(records_out), validate_errs))
+        log.info('Result unique_id=%s gid=%d record_count=%d val_errs=%d' % (
+            unique_id, gid, len(records_out), validate_errs))
 
         return packet
 
 
 class LastIdFilter(PostgresDbInput):
-
     @Config(ptype=str, required=True)
     def progress_update(self):
         """
