@@ -45,6 +45,9 @@ class RawDbInput(PostgresDbInput):
 
     def __init__(self, configdict, section):
         PostgresDbInput.__init__(self, configdict, section)
+
+        # NB the last_gis is automatically set via TRIGGER
+        # in the PostgresDB output
         self.progress_query = self.cfg.get('progress_query')
         self.db = None
 
@@ -67,10 +70,17 @@ class RawDbInput(PostgresDbInput):
     def init(self):
         PostgresDbInput.init(self)
 
+        self.read_gids()
+        self.read_records()
+
+    def read_gids(self):
+
         # get gid where to start
         last_gid_tuples = self.raw_query(self.last_gid_query)
         if len(last_gid_tuples) == 1:
             self.last_gid, = last_gid_tuples[0]
+
+    def read_records(self):
 
         # One time: get all gid's to be processed
         raw_query = self.gids_query % (self.last_gid, self.last_gid + self.max_input_records)
@@ -78,32 +88,36 @@ class RawDbInput(PostgresDbInput):
         ts_gid_recs = self.tuples_to_records(ts_gid_tuples, ['gid'])
 
         log.info('read timeseries_recs: %d' % len(ts_gid_recs))
+        self.ts_gids = []
         for rec in ts_gid_recs:
             self.ts_gids.append(rec['gid'])
 
-        # Pick a first device id
-        # self.device_id, self.device_ids_idx = self.next_entry(self.device_ids, self.device_ids_idx)
-
     def read(self, packet):
 
-        # Get last processed id of measurementss table
-        # rowcount = self.db.execute(self.progress_query)
-        # progress_rec = self.db.cursor.fetchone()
-        # self.last_gid = progress_rec[3]
-        # log.info('progress record: %s' % str(progress_rec))
+        # Next entry from ts record list
         self.ts_gid, self.ts_gids_idx = self.next_entry(self.ts_gids, self.ts_gids_idx)
 
         # No more records to process?
         if self.ts_gid < 0:
-            packet.set_end_of_stream()
-            log.info('Nothing to do. All file_records done')
-            return packet
+            if self.read_once:
+                # One round: we're done
+                packet.set_end_of_stream()
+                log.info('Nothing to do. All file_records done')
+                return packet
+            else:
+                # Continue fetching recs from from last_gid
+                self.last_gid += self.max_input_records
+                self.read_records()
+                self.ts_gids_idx = 0
+                if len(self.ts_gids) > 0:
+                    self.ts_gid, self.ts_gids_idx = self.next_entry(self.ts_gids, self.ts_gids_idx)
+                    log.info('Continuing from gid=%d' % self.ts_gid)
+                else:
+                    packet.set_end_of_stream()
+                    log.info('Nothing to do. read_once=False, All file_records done')
+                    return packet
 
-        ts_data_rec = self.do_query(self.data_query % self.ts_gid)
-
-        # Remember last id processed for next query     (automatically done via trigger)
-
-        packet.data = ts_data_rec
+        packet.data = self.do_query(self.data_query % self.ts_gid)
         # log.info('data: %s' % str(packet.data))
 
         return packet

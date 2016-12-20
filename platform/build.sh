@@ -19,4 +19,4 @@ do
   popd
 done
 
-echo "READY: now run ./install.sh install SE Data Platform system daemon"
+echo "READY: now run ./init-databases.sh to create and init all databases (use with CARE as it DELETES all existing data!)"

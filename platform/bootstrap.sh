@@ -10,7 +10,8 @@
 # Bring system uptodate
 
 # set time right adn configure timezone and locale
-echo "Europe/Amsterdam" > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata
+sudo echo "Europe/Amsterdam" > /etc/timezone
+sudo dpkg-reconfigure -f noninteractive tzdata
 
 sudo apt-get update
 sudo apt-get -y upgrade
@@ -27,7 +28,7 @@ sudo echo "deb https://apt.dockerproject.org/repo ubuntu-trusty main" >  /etc/ap
 
 # Need 9.4 version of PG client, not in Ubuntu 14.4, so get from PG Repo
 sudo echo "deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main" > /etc/apt/sources.list.d/pgdg.list
-curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+sudo curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 
 sudo apt-get update
 
@@ -66,7 +67,7 @@ sudo mkdir -p /var/smartem/data
 sudo mkdir -p /var/smartem/backup
 
 # Postfix: choose Local System
-sudo apt-get install postfix
+sudo apt-get -y install postfix
 
 # Smart Emission Github
 sudo mkdir -p /opt/geonovum/smartem

@@ -6,6 +6,7 @@ Administration
 
 This chapter describes the operation and maintenance aspects for the Smart Emission platform. For example:
 
+* installing/setting up the entire platform
 * how to start stop servers
 * managing the ETL
 * where to find logfiles
@@ -14,12 +15,18 @@ This chapter describes the operation and maintenance aspects for the Smart Emiss
 Platform Overall
 ================
 
-To install the entire platform and run it as a system service.
+To install the entire platform on Ubuntu Linux on an empty Virtual Machine (VM)
+make all databases ready and run it as a system service.
 From the ``GIT_HOME/platform`` dir do:
 
+* ``sudo su -`` - become root
 * ``./bootstrap.sh`` - makes empty Ubuntu system ready for Docker and Platform
-* ``./build.sh``  - builds all Docker images
-* ``./install.sh``  - installs system service "smartem"
+* ``./build.sh``  - builds all Docker images (be patient)
+* ``init-databases.sh`` - creates and initializes all databases (**NB WILL DESTROY ANY EXISTING DATA!**)
+* ``./install.sh``  - installs system service "smartem" in ``/etc/init.d``
+
+For the ``init-databases.sh`` script you need to add a file ``<myhostname>.args`` under ``etl/options`` similar
+to ``example.args`` where ``<myhostname>`` is the result of the ``hostname`` command.
 
 Now use the standard Linux "service" commands:  ::
 

@@ -12,8 +12,8 @@ at https://github.com/Geonovum/smartemission/tree/master/docs/platform/_static/d
 Workshop 17 dec 2015
 ====================
 
-In the context of the `Smart Emission project <http://www.ru.nl/gpm/onderzoek/research-projects/smart-emission>` a workshop was held at Geonovum
-on Dec 17, 2015. The main subjects were:
+In the context of the `Smart Emission project <http://www.ru.nl/gpm/onderzoek/research-projects/smart-emission>`_
+a workshop was held at Geonovum on Dec 17, 2015. The main subjects were:
 
 * presenting OGC standards in general (WMS, WFS, CSW) and in particular Sensor-related (SWE, SOS)
 * hands-on demo's for several clients and visualisations (QGIS, ArcGIS and Heron)
