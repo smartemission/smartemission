@@ -11,6 +11,7 @@ In particular:
 * WFS and WMS-Time services
 * OWS SOS (REST) service
 * SensorThings API
+* InfluxDB and Grafana
 
 Architecture
 ============

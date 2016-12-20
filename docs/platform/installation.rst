@@ -437,7 +437,42 @@ GeoServer is accessed via the ``web`` container via the AJP Apache2 proxy (port 
 sos - 52North  SOS
 ~~~~~~~~~~~~~~~~~~
 
-TBS, will be similar to GeoServer: Tomcat with .war file and keeping config outside Docker container
+Similar to GeoServer: Tomcat with .war file and keeping config outside Docker container
 and mapping DB to ``postgis`` container.
+See https://github.com/Geonovum/smartemission/tree/master/docker/sos52n.
+
+influxdb - InfluxDB
+~~~~~~~~~~~~~~~~~~~
+
+This runs the InfluxDB service as a Docker container. See https://www.influxdata.com:
+
+> InfluxDB is an open source database written in Go specifically to handle time
+> series data with high availability and high performance requirements.
+> InfluxDB installs in minutes without external dependencies, yet is
+> flexible and scalable enough for complex deployments.
+
+The Docker image comes from https://hub.docker.com/_/influxdb/
+
+See https://github.com/Geonovum/smartemission/tree/master/services/influxdb.
+
+To be supplied further.
+
+grafana - Grafana
+~~~~~~~~~~~~~~~~~
+
+From http://grafana.org
+
+> Grafana is an open source metric analytics and visualization suite.
+> It is most commonly used for visualizing time series data for infrastructure and
+> application analytics but many use it in other domains including industrial sensors,
+> home automation, weather, and process control."
+
+Watch the demo and be amazed: http://play.grafana.org
+Documentation: http://docs.grafana.org
+
+See https://github.com/Geonovum/smartemission/tree/master/services/grafana.
+
+To be supplied further.
+
 
 

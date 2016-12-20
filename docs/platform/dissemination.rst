@@ -88,6 +88,19 @@ The presentation from Smart Emission is here:
 
 * `Smart Emission, building a spatial data infrastructure for an environmental citizen sensor network <_static/dissemination/sensorweb-munster-30aug2016/smart-emission-munster-pres.pdf>`_
 
+Papers
+------
+
+For this conference the SE project submitted a paper for the proceedings.
+The proceedings named *"Proceedings of the Geospatial Sensor Webs Conference 2016"*, Münster, Germany, August 29 - 31, 2016 by
+Simon Jirka, Christoph Stasch, Ann Hitchcock (Eds) can be found online at
+http://ceur-ws.org/Vol-1762/
+
+The SE-paper *"Smart Emission - Building a Spatial Data Infrastructure for an Environmental Citizen Sensor Network"*
+by Michel Grothe et al is here as PDF:
+
+* `Smart Emission - Building a Spatial Data Infrastructure for an Environmental Citizen Sensor Network <_static/dissemination/sensorweb-munster-30aug2016/paper-munster-conf.pdf>`_
+
 Links
 -----
 
@@ -120,3 +133,23 @@ The presentation slides are here:
 
 * `Smart Emission and more (Just van den Broecke) <_static/dissemination/geonovum-28nov2016/SE-Geonovum-161128-v1.pdf>`_
 
+Symposium RIVM "Samen meten aan Luchtkwaliteit"
+===============================================
+
+Op 7 december 2016 organiseerde het RIVM centrum Milieukwaliteit het
+symposium *"Samen meten aan luchtkwaliteit: innovatie, sensoren en citizen science"*.
+Tijdens het symposium kwamen partijen bijeen die de lokale luchtmetingen naar een hoger plan tillen.
+
+SE held a workshop on "Data". Links below:
+
+* `Agenda Symposium <http://www.rivm.nl/Documenten_en_publicaties/Algemeen_Actueel/Agenda_Items/Agenda_2016/Symposium_Samen_meten_aan_luchtkwaliteit_innovatie_sensoren_en_citizen_science>`_
+* `Aankondiging <http://rivm.nl/media/SamenMetenAanLuchtkwaliteit/SaveTheDate/index.html>`_
+
+Slides
+------
+
+The presentation slides (PDF and PPT)
+from the Smart Emission Data workshop (Verdonk, Nouwens, van den Broecke, Geurts) are here:
+
+* `Smart Emission Workshop on Data (PDF) <_static/dissemination/symposium-samen-meten-rivm-7dec2016/SmartEmission_Nijmegen_RIVM_samenmeten.pdf>`_
+* `Smart Emission Workshop on Data (Powerpoint) <_static/dissemination/symposium-samen-meten-rivm-7dec2016/SmartEmission_Nijmegen_RIVM_samenmeten.pptx>`_
