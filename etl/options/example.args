@@ -42,6 +42,9 @@ api_interval_secs=1
 #
 extractor_max_input_records=4000
 
+# Should we stop after one round or continue until all done
+extractor_raw_read_once=True
+
 #
 # SOS Publication and API Server credentials
 #
