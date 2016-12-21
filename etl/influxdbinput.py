@@ -58,7 +58,7 @@ class InfluxDbInput(DbInput):
         Required: True
         """
 
-    def __init__(self, configdict, section, produces=FORMAT.record):
+    def __init__(self, configdict, section, produces=FORMAT.record_array):
         DbInput.__init__(self, configdict, section, produces)
         self.client = None
 
@@ -73,10 +73,10 @@ class InfluxDbInput(DbInput):
 
         if result.error is not None:
             log.warning("Error while querying influxdb: %s", result.error)
-            result_out = dict()
+            result_out = list()
 
         else:
-            result_out = result.raw["series"][0]
+            result_out = list(result.get_points())
 
         return result_out
 
@@ -84,10 +84,7 @@ class InfluxDbInput(DbInput):
         log.info("Querying database: %s", self.query)
 
         result_out = self.query_db(self.query)
-
-        if len(result_out) > 0:
-            log.info("Received %d values with %d columms",
-                     len(result_out['values']), len(result_out['columns']))
+        log.info("Received %s results" % len(result_out))
 
         packet.data = result_out
         packet.set_end_of_stream()
