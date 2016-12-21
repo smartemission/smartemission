@@ -49,6 +49,9 @@ RUN pip install geohash
 # Development version of scikit-learn
 RUN pip install Cython numpy pandas scipy scikit-learn==0.18
 
+# Influxdb python client
+RUN pip install influxdb
+
 # Get latest Stetl from git
 RUN git clone https://github.com/geopython/stetl /opt/stetl
 
