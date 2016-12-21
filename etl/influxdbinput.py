@@ -69,6 +69,7 @@ class InfluxDbInput(DbInput):
                                      self.password, self.database)
 
     def query_db(self, query):
+        log.info("Querying database: %s", query)
         result = self.client.query(query)
 
         if result.error is not None:
@@ -78,17 +79,14 @@ class InfluxDbInput(DbInput):
         else:
             result_out = list(result.get_points())
 
+        log.info("Received %s results" % len(result_out))
+
         return result_out
 
     def read(self, packet):
-        log.info("Querying database: %s", self.query)
-
         result_out = self.query_db(self.query)
-        log.info("Received %s results" % len(result_out))
-
         packet.data = result_out
         packet.set_end_of_stream()
-
         return packet
 
 
@@ -110,22 +108,15 @@ class CalibrationInfluxDbInput(InfluxDbInput):
         Required: True
         """
 
-    def get_jose_data(host, port, user, password, dbname, series_name,
-                      limit=None):
-        query = "SELECT * FROM %s" % series_name
-        if limit is not None:
-            query += " LIMIT %d" % limit
-
-        client = DataFrameClient(host, port, user, password, dbname)
-        client.switch_database(dbname)
-        df = client.query(query)[series_name]
-        return df
+    def __init__(self, configdict, section, produces=FORMAT.record):
+        InfluxDbInput.__init__(self, configdict, section, produces)
 
     def read(self, packet):
         results_out = dict()
-        results_out["jose"] = self.client.query(self.query_jose)
-        results_out["rivm"] = self.client.query(self.query_rivm)
+        results_out["jose"] = self.query_db(self.query_jose)
+        results_out["rivm"] = self.query_db(self.query_rivm)
 
         packet.data = results_out
+        packet.set_end_of_stream()
 
         return packet
