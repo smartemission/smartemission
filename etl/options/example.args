@@ -16,6 +16,7 @@ pg_schema_rt=smartem_rt
 pg_schema_raw=smartem_raw
 pg_schema_refined=smartem_refined
 pg_schema_extracted=smartem_extracted
+pg_schema_harvest_rivm=smartem_harvest_rivm
 
 #
 # ETL: Refiner-settings
@@ -36,6 +37,11 @@ max_proc_time_secs=20
 
 # Time between calling the Whale API again
 api_interval_secs=1
+
+#
+# ETL: Harvester-RIVM-settings
+#
+rivm_sos_base_url=http://inspire.rivm.nl/sos/eaq/api/v1/timeseries/
 
 #
 # ETL: Extractor-settings

@@ -153,7 +153,15 @@ class LastIdFilter(PostgresDbInput):
     @Config(ptype=str, required=True)
     def id_key(self):
         """
-        Key to select from record array
+        Key to select id from record array
+
+        Required: True
+        """
+
+    @Config(ptype=str, default=None, required=False)
+    def name_key(self):
+        """
+        Key to select name from record array
 
         Required: True
         """
@@ -163,16 +171,25 @@ class LastIdFilter(PostgresDbInput):
         self.last_id = None
 
     def invoke(self, packet):
+        self.last_id = dict()
+
         if packet.data is None or packet.is_end_of_doc() or packet.is_end_of_stream():
             log.info("No packet data or end of doc/stream")
             return packet
 
         record_in = packet.data
+        if type(record_in) is not list:
+            record_in = [record_in]
+        for record in record_in:
+            if self.name_key is not None:
+                name = record[self.name_key]
+            else:
+                name = "all"
+            if len(record) > 0:
+                new = record[self.id_key]
+                self.last_id[name] = max(self.last_id.get(name, -1), new)
 
-        if len(record_in) > 0:
-            self.last_id = max(self.last_id, record_in[self.id_key])
-
-        log.info("Maximum gid is %d", self.last_id)
+        log.info("Maximum gids are %s", str(self.last_id))
 
         return packet
 
@@ -181,9 +198,10 @@ class LastIdFilter(PostgresDbInput):
         Called right after entire Component Chain invoke.
         Used to update last id of processed file record.
         """
-        if self.last_id is not None:
-            log.info('Updating progress table with last_id= %d' % self.last_id)
-            self.db.execute(self.progress_update % self.last_id)
+        for name, progress in self.last_id.iteritems():
+            param = (progress, name)
+            log.info('Updating progress table with (id=%d, name=%s)' % param)
+            self.db.execute(self.progress_update % param)
             self.db.commit(close=False)
             log.info('Update progress table ok')
         else:
