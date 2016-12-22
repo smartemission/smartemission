@@ -52,6 +52,11 @@ extractor_max_input_records=4000
 extractor_raw_read_once=True
 
 #
+# Calibration-settings
+#
+calibration_gas=O3_Waarden
+
+#
 # SOS Publication and API Server credentials
 #
 sos_host=sos52n
