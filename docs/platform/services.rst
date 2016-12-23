@@ -9,19 +9,34 @@ converted/transformed data as described in the `data chapter <data.html>`_.
 In particular:
 
 * WFS and WMS-Time services
-* OWS SOS (REST) service
+* OWS SOS (plus REST) service
+* Smart Emission SOS Emulator service for Last Values
 * SensorThings API
 * InfluxDB
 * Grafana
 
-Architecture
+Web Frontend
 ============
 
-Figure 1 sketches the overall architecture with emphasis on the flow of data (arrows).
-Circles depict harvesting/ETL processes. Server-instances are in rectangles. Datastores
-the "DB"-icons.
+All webservices, APIs and the website http://data.smartemission.nl are provided
+via an Apache2 HTTP server. This server is the main outside entry to the platform
+and run via Docker.
 
-TBS
+Website and Viewers are run as a standard HTML website. The various API/OGC web-services
+are forwarded via proxies to the backed-servers. For example GeoServer
+and the 52North SOS are connected via ``mod-proxy-ajp``.
+
+The SOS Emulator for Last Values is hosted as a Python Flask app.
+
+Implementation
+--------------
+
+* Docker image: https://github.com/Geonovum/smartemission/tree/master/docker/apache2
+* Main dir: https://github.com/Geonovum/smartemission/tree/master/services/web
+* Running: https://github.com/Geonovum/smartemission/tree/master/services/web/run.sh
+* SOS Emulator: https://github.com/Geonovum/smartemission/tree/master/services/api/sosrest
+* Website and Viewers: https://github.com/Geonovum/smartemission/tree/master/services/web/site
+* Apache2 config: https://github.com/Geonovum/smartemission/tree/master/services/web/config/sites-enabled
 
 WFS and WMS Services
 ====================
@@ -88,9 +103,27 @@ at http://sta.smartemission.nl:8080/OGCSensorThings/v1.0.
 InfluxDB
 ========
 
-InfluxDB has been added later in the project to
+InfluxDB has been added later in the project to support the Calibration process.
+For now this service is used internally to collect both raw Sensor data and
+calibrated RIVM data.
 
+At a later stage InfluxDB may get a more central role in the platform.
 
+Implementation
+--------------
 
+* Docker image: https://hub.docker.com/_/influxdb/
+* Running: https://github.com/Geonovum/smartemission/tree/master/services/influxdb
 
+Grafana
+=======
 
+Grafana has been added later in the project to support InfluxDB visualization.
+
+At a later stage Grafana may get a more central role in the platform.
+
+Implementation
+--------------
+
+* Docker image: https://github.com/grafana/grafana-docker
+* Running: https://github.com/Geonovum/smartemission/tree/master/services/grafana

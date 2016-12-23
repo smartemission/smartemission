@@ -11,9 +11,11 @@ Use the command ./run.sh
 
 Several service endpoints are available:
 
-/sosemu the SOS emulator, temporary SOS untill full SOS available
+/sosemu the SOS emulator, temporary SOS until full SOS available
 /geoserver  proxy to backend GeoServer for WMS, WFS
-/sos proxy to backed SOS (TBS)
+/sos52n proxy to backed SOS 
+
+The SensorThings API is hosted externally.
 
 ## Apps
 
@@ -24,9 +26,9 @@ Several SE apps are hosted:
 
 ## Configuring
 
-The website is configured via the Apache2 site-config file config/sites-enabled/000-default.conf
+The website is configured via the Apache2 [site-config file](config/sites-enabled/000-default.conf).
 
-To use admin features a file "htpasswd" should be created in the directory config/admin. 
+To use admin features a file "htpasswd" should be created in the directory [config/admin](config/admin). 
 Create there by using the command:
 
 htpasswd -c htpasswd <username>
