@@ -93,6 +93,7 @@ influx_se_reader_password=yourpw_se
 influx_se_measurement_raw=joseraw
 influx_se_measurement_refined=joserefined
 influx_se_measurement_extract=joseextract
+influx_se_measurement_rivm=rivm
 
 # Project AirSensEUR (RIVM)
 # Note: use different creditials for smartemission as for airsenseur otherwise
