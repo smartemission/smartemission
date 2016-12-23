@@ -17,6 +17,9 @@ As indicated there are three ETL-steps in sequence:
 * Refiner - validate, convert, calibrate and aggregate raw sensor values
 * Publisher - publish refined values to various (OGC) services
 
+The ``Extractor`` is used for Calibration purposes: to publish raw indicators
+from the sensors into an ``InfluxDB`` time-series DB.
+
 Implementation for all ETL can be found here:
 https://github.com/Geonovum/smartemission/blob/master/etl
 
@@ -717,7 +720,7 @@ specifics:
 request is submitted. If that is succesful the same `InsertObservation` is attempted again.
 
 ``SOS-T Templates``: all SOS-T requests are built using template files. In these files a complete
-request is contained, but with specific parameters, like `station_id` symbolically defined. At publication
+request is contained, with specific parameters, like `station_id` symbolically defined. At publication
 time these are substituted.  Below an excerpt of an `InsertObservation` template: ::
 
 	{{
@@ -741,9 +744,16 @@ time these are substituted.  Below an excerpt of an `InsertObservation` template
         .
 
 
+Deleting SOS Entities
+~~~~~~~~~~~~~~~~~~~~~
+
+Also re-init of the 52North SOS DB is possible via the
+`sos-clear.py script <https://github.com/Geonovum/smartemission/blob/master/services/sos52n/config/sos-clear.py>`_
+(use with care!). This needs to go hand-in-hand with
+a `restart of the STA Publisher <https://github.com/Geonovum/smartemission/blob/master/etl/db/sos-publisher-init.sh>`_ .
 
 Implementation
---------------
+~~~~~~~~~~~~~~
 
 Below are links to the sources of the SOS Publisher implementation.
 
@@ -752,4 +762,97 @@ Below are links to the sources of the SOS Publisher implementation.
 * Refined DB Input: https://github.com/Geonovum/smartemission/blob/master/etl/smartemdb.py
 * SOS-T publication: https://github.com/Geonovum/smartemission/blob/master/etl/sosoutput.py
 * SOS-T templates: https://github.com/Geonovum/smartemission/blob/master/etl/sostemplates
+* Input database schema: https://github.com/Geonovum/smartemission/blob/master/etl/db/db-schema-refined.sql (source input schema)
+* Re-init SOS DB schema (.sh): https://github.com/Geonovum/smartemission/blob/master/services/sos52n/config/sos-clear.py
+* Restart SOS Publisher (.sh): https://github.com/Geonovum/smartemission/blob/master/etl/db/sos-publisher-init.sh  (inits last gis published to -1)
+
+Sensor Things API (STA)
+-----------------------
+
+The `STAOutput <https://github.com/Geonovum/smartemission/blob/master/etl/staoutput.py>`_ class
+is used to publish to any SensorThings API server using the standardized
+`OGC SensorThings REST API <http://docs.opengeospatial.org/is/15-078r6/15-078r6.html>`_.
+The implementation is reasonably straightforward, with the following specifics:
+
+``JSON``: JSON is used as encoding for STA requests.
+
+``Lazy Entity Insertion``: At ``POST Observation`` it is determined via a REST GET requests if the corresponding
+STA Entities, ``Thing``, ``Location``, ``DataStream`` etc are present. If not these are inserted
+via ``POST`` requests to the STA REST API and cached locally in the ETL process for the duration
+of the ``ETL Run``.
+
+``STA Templates``: all STA requests are built using
+`STA template files <https://github.com/Geonovum/smartemission/blob/master/etl/statemplates>`_.
+In these files a complete request body (POST or PATCH)
+is contained, with specific parameters, like ``station_id`` symbolically defined. At publication
+time these are substituted.
+
+Below the ``POST Location`` STA template: ::
+
+	{{
+	  "name": "{station_id}",
+	  "description": "Location of Station {station_id}",
+	  "encodingType": "application/vnd.geo+json",
+	  "location": {{
+	     "coordinates": [{lon}, {lat}],
+	     "type": "Point"
+	  }}
+	}}
+
+	{{
+
+The ``location_id`` is returned from the GET. NB ``Location`` may also be ``PATCHed`` if
+the  ``Location`` of the ``Thing`` has changed.
+
+Below the ``POST Thing`` STA template: ::
+
+	{{
+	    "name": "{station_id}",
+	    "description": "Smart Emission station {station_id}",
+	    "properties": {{
+	      "id": "{station_id}"
+	    }},
+	    "Locations": [
+	        {{
+	          "@iot.id": {location_id}
+	        }}
+	    ]
+	}}
+
+Similarly ``DataStream``, ``ObservedProperty`` are POSTed if non-existing.
+Finally the ``POST Observation`` STA template: ::
+
+	{{
+	  "Datastream": {{
+	    "@iot.id": {datastream_id}
+	  }},
+	  "phenomenonTime": "{sample_time}",
+	  "result": {sample_value},
+	  "resultTime": "{sample_time}",
+	  "parameters": {{
+	      {parameters}
+	  }}
+	}}
+
+Deleting STA Entities
+~~~~~~~~~~~~~~~~~~~~~
+
+Also deletion of all Entities is possible via the
+`staclear.py script <https://github.com/Geonovum/smartemission/blob/master/etl/db/staclear.py>`_
+(use with care!). This needs to go hand-in-hand with
+a `restart of the STA Publisher <https://github.com/Geonovum/smartemission/blob/master/etl/db/sta-publisher-init.sh>`_ .
+
+Implementation
+~~~~~~~~~~~~~~
+
+Below are links to the sources of the STA Publisher implementation.
+
+* ETL run script: https://github.com/Geonovum/smartemission/blob/master/etl/stapublisher.sh
+* Stetl conf: https://github.com/Geonovum/smartemission/blob/master/etl/stapublisher.cfg
+* Refined DB Input: https://github.com/Geonovum/smartemission/blob/master/etl/smartemdb.py
+* STA publication: https://github.com/Geonovum/smartemission/blob/master/etl/staoutput.py
+* STA templates: https://github.com/Geonovum/smartemission/blob/master/etl/statemplates
 * Input database schema: https://github.com/Geonovum/smartemission/blob/master/etl/db/db-schema-refined.sql (source schema)
+* Restart STA publisher (.sh): https://github.com/Geonovum/smartemission/blob/master/etl/db/sta-publisher-init.sh  (inits last gis published to -1)
+* Clear/init STA server (.sh): https://github.com/Geonovum/smartemission/blob/master/etl/db/staclear.sh  (deletes all Entities!)
+* Clear/init STA server (.py): https://github.com/Geonovum/smartemission/blob/master/etl/db/staclear.py  (deletes all Entities!)

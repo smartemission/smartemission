@@ -13,7 +13,7 @@ in the Stetl Framework.
 All ETL processes are invoked using the same [Stetl Docker image](../docker/stetl/Dockerfile) and
 scheduled via `cron`: [cronfile.txt](../platform/cronfile.txt)
 
-The ETL is multi-step as follows.
+The main ETL is multi-step as follows.
 
 ## Step 1: Fetching from RAW Sensor remote API
 
@@ -64,5 +64,14 @@ but the project needed to develop the SmartApp with last values.
 
 - Last: get and convert last sensor-values for all devices: [last.cfg](last.cfg).
 
-As a result this raw sensor-data is stored in PostGIS [db-schema-last.sql](db/db-schema-last.sql). 
+As a result this raw sensor-data is stored in PostGIS [db-schema-last.sql](db/db-schema-last.sql).
+ 
+## Calibration
 
+In order to collect reference data and generate the ANN Calibration Estimator, 
+three additional ETL processes have been added later in the project (dec 2016):
+
+- [Extractor](extractor.cfg): to extract raw (Jose) Sensor Values from the Harvested (Step 1) RawDBInput into InfluxDB
+- [Harvester_RIVM](harvester_rivm.cfg): to extract calibrated gas samples (hour averages) from RIVM LML SOS into InfluxDB
+- [Calibrator](calibrator.cfg): to read/merge RIVM and Jose values from InfluxDB to create the ANN Estimator object (pickled)
+ 

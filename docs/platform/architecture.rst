@@ -21,7 +21,7 @@ streams into a MongoDB database using JSON. This MongoDB database is the source 
 where all raw sensor data streams of the Jose Sensor installation are stored. A dedicated
 REST API – the Raw Sensor API - is developed by CityGIS and Geonovum for
 further distribution of the SE data to other platforms, like the SE Data Distribution platform
-hosted at the FIWARE Lab NL and the main subject of this chapter.
+hosted at the FIWARE Lab NL (**NB FIWARE Postponed**) and the main subject of this chapter.
 
 .. figure:: _static/arch/praatplaat.jpg
    :align: center
@@ -133,7 +133,7 @@ The Docker Containers as sketched in Figure 4 are deployed.
 
    *Figure 4 - Docker Deployment - Container View*
 
-Docker Containers will be created for:
+Docker Containers will be created/used for:
 
 * ``Web``  front-end (Apache2) webserving (viewers/apps)  and proxy to backend web-APIs
 * ``GeoServer``  : container with Tomcat running GeoServer
@@ -141,7 +141,8 @@ Docker Containers will be created for:
 * ``SensorThings`` : container running SensorUp SensorThings server (or API?)
 * ``Stetl`` : container for the Python-based ETL framework used
 * ``PostGIS`` : container running PostgreSQL with PostGIS extension
-* ``SensorUp STA``: container running Sensor Things API (STA) server from SensorUp (TBD)
+* ``SensorUp STA``: container running Sensor Things API (STA) server from SensorUp (see below)
+* ``InfluxDB``: container running InfluxDB server from `InfluxData <https://www.influxdata.com>`_
 
 The *Networking and Linking* capabilities of Docker will be applied to link Docker Containers,
 for example to link GeoServer  and the other application servers to PostGIS.
@@ -158,7 +159,7 @@ Thus in first instance FIWARE will be used as a cloud-based computing platform (
 At a later phase in the project standard FIWARE components for IoT like Orion may be
 integrated. Also, several Smart Emission Docker Containers will be generalized for
 potential addition to the FIWARE Platform as Generic Enablers (GEs) and to be included within
-the FIWARE Catalog as components for FIWARE Blueprints.
+the FIWARE Catalog as components for FIWARE Blueprints. **NB FIWARE has been postponed**.
 
 The list of Docker Containers, each with their related Docker Image:
 
@@ -167,10 +168,12 @@ The list of Docker Containers, each with their related Docker Image:
 * ``stetl`` - All ETL tasks - image: ``geonovum/stetl``
 * ``geoserver`` - GeoServer web app - image: ``geonovum/geoserver`` based on ``kartoza/geoserver``
 * ``sos52n`` - 52North SOS web app -  - image: ``geonovum/sos52n``
+* ``influxdb`` - InfluxDB Timeseries DB - image: ``influxdb:1.1.1`` (from `DockerHub <https://hub.docker.com/_/influxdb/>`_)
 
 See https://github.com/Geonovum/smartemission/blob/master/docker for the generic images
-and https://github.com/Geonovum/smartemission/blob/master/etl and https://github.com/Geonovum/smartemission/blob/master/services
-for their use in Docker Containers.
+and https://github.com/Geonovum/smartemission/blob/master/etl
+and https://github.com/Geonovum/smartemission/blob/master/services
+for their use/deployment in Docker Containers.
 
 Test and Production
 -------------------
@@ -183,5 +186,10 @@ a Vagrant environment with Docker can be setup.
 NB since FIWARE is not yet available we run on standard VPS systems.
 
 The Test and Production environments have separate IP-adresses and domains:
-`test.smartemission.nl <http://test.smartemission.nl>`_ and  `data.smartemission.nl  <http://data.smartemission.nl>`_ respectively.
+`test.smartemission.nl <http://test.smartemission.nl>`_
+and  `data.smartemission.nl  <http://data.smartemission.nl>`_ respectively.
+
+NB the SensorThings API server is hosted and maintained externally by SensorUp at
+http://sta.smartemission.nl:8080/OGCSensorThings/v1.0.
+
 
