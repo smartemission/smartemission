@@ -26,6 +26,7 @@ query "CREATE USER ${influx_admin_user} WITH PASSWORD '${influx_admin_password}'
 query "SHOW GRANTS FOR ${influx_admin_user}"
 
 # Initialize for Smart Emission
+query "DROP DATABASE ${influx_se_database}"
 query "CREATE DATABASE ${influx_se_database}"
 query "DROP USER ${influx_se_writer}"
 query "DROP USER ${influx_se_reader}"
@@ -37,6 +38,7 @@ query "SHOW GRANTS FOR ${influx_se_writer}"
 query "SHOW GRANTS FOR ${influx_se_reader}"
 
 # Initialize for AirSensEUR
+query "DROP DATABASE ${influx_as_database}"
 query "CREATE DATABASE ${influx_as_database}"
 query "DROP USER ${influx_as_writer}"
 query "DROP USER ${influx_as_reader}"
