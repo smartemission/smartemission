@@ -83,20 +83,24 @@ influx_admin_user=youruser
 influx_admin_password=yourpw
 
 # Project Smartemission
+# Note: use different creditials for smartemission as for airsenseur otherwise
+# the second user overwrites the first one
 influx_se_database=smartemission
-influx_se_writer=youruser
-influx_se_writer_password=yourpw
-influx_se_reader=youruser
-influx_se_reader_password=yourpw
+influx_se_writer=youruser_se
+influx_se_writer_password=yourpw_se
+influx_se_reader=youruser_se
+influx_se_reader_password=yourpw_se
 influx_se_measurement_raw=joseraw
 influx_se_measurement_refined=joserefined
 influx_se_measurement_extract=joseextract
 
 # Project AirSensEUR (RIVM)
+# Note: use different creditials for smartemission as for airsenseur otherwise
+# the second user overwrites the first one
 influx_as_database=airsenseur
-influx_as_writer=youruser
-influx_as_writer_password=yourpw
-influx_as_reader=youruser
-influx_as_reader_password=yourpw
+influx_as_writer=youruser_as
+influx_as_writer_password=yourpw_as
+influx_as_reader=youruser_as
+influx_as_reader_password=yourpw_as
 influx_as_measurement_geonovum=geonovum
 influx_as_measurement_rivm=rivm
