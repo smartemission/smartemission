@@ -6,6 +6,8 @@ from stetl.util import Util
 
 from datetime import datetime, timedelta
 
+import re
+
 log = Util.get_log("SosInput")
 
 # http://inspire.rivm.nl/sos/eaq/api/v1/features/?service=RIVM_inspire&locale=en
@@ -98,13 +100,23 @@ class SosInput(HttpInput):
         log.info("Received json object of length %d" % len(json_obj))
 
         info = self.current_feature_info()
-        name = info['label']
+        id = info['id']
+        label = info['label']
+        station_name = info['station']['properties']['label']
+        # feature_name = info['parameters']['feature']['label']
+        phenomenon_name = info['parameters']['phenomenon']['label']
+
         lat, lon, alt = info['station']['geometry']['coordinates']
         for elem in json_obj:
-            elem['name'] = name
-            elem['latitude'] = lat
-            elem['longitude'] = lon
+            elem['id'] = id
+            elem['label'] = SosInput.save_name(label)
+            elem['station_name'] = SosInput.save_name(station_name)
+            elem['phenomenon_name'] = SosInput.save_name(phenomenon_name)
+            elem['lat'] = lat
+            elem['lon'] = lon
             elem['altitude'] = alt
+            elem['datetime'] = datetime.fromtimestamp(elem['timestamp'] /
+                                                       1000)
 
         return json_obj
 
@@ -158,6 +170,10 @@ class SosInput(HttpInput):
             raise e
 
         return json_obj
+
+    @staticmethod
+    def save_name(text):
+        return re.subn(r'\W', '_', text)[0].lower().strip()
 
 
 class RIVMSosInput(SosInput, PostgresDbInput):
