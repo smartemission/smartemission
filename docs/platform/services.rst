@@ -11,7 +11,8 @@ In particular:
 * WFS and WMS-Time services
 * OWS SOS (REST) service
 * SensorThings API
-* InfluxDB and Grafana
+* InfluxDB
+* Grafana
 
 Architecture
 ============
@@ -81,6 +82,13 @@ SensorThings API
 ================
 
 For the SensorThings API the SensorUp STA implementation is used.
+The SensorThings API server is installed and maintained externally by SensorUp
+at http://sta.smartemission.nl:8080/OGCSensorThings/v1.0.
+
+InfluxDB
+========
+
+InfluxDB has been added later in the project to
 
 
 
