@@ -5,6 +5,8 @@
 #
 # Author: Just van den Broecke
 #
+import base64
+import httplib
 import time
 import calendar
 import Geohash
@@ -222,9 +224,3 @@ class InfluxDbOutput(HttpOutput):
         log.info("Created payload of %d characters" % len(payload))
 
         return payload
-
-    def invoke(self, packet):
-        packet = self.write(packet)
-        # packet.consume()
-        return packet
-
