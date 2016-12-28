@@ -96,7 +96,7 @@ Docker won't start
 ------------------
 
 This may happen after a Ubuntu (kernel) upgrade.
-In syslog ``"[graphdriver] prior storage driver \"aufs\" failed: driver not supported" ``.
+In syslog *"[graphdriver] prior storage driver \"aufs\" failed: driver not supported"*.
 
 * Solution: https://github.com/docker/docker/issues/14026 : Remove dir ``/var/lib/docker/aufs``.
 
