@@ -12,7 +12,7 @@ $(document).ready(function () {
     var template = Handlebars.compile(source);
 
     // URL of the Smart Emission SOS REST API
-    //var apiUrl = 'http://api.smartemission.nl/sosemu/api/v1';
+    // var apiUrl = 'http://api.smartemission.nl/sosemu/api/v1';
     var apiUrl = '/sosemu/api/v1';
 
     // See http://stackoverflow.com/questions/11916780/changing-getjson-to-jsonp
@@ -177,8 +177,8 @@ $(document).ready(function () {
         console.log('Sidebar is hidden.');
     });
 
-    sidebar.on(sidebar.getCloseButton(), 'click', function () {
-        console.log('Close button clicked.');
-    });
+    //sidebar.on(sidebar.getCloseButton(), 'click', function () {
+    //    console.log('Close button clicked.');
+    //});
 
 });
