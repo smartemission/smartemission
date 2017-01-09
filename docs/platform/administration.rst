@@ -93,7 +93,6 @@ Be sure to have no ETL nor services running. ::
 
 	service smartem stop
 
-
 Restore Databases
 -----------------
 
@@ -132,6 +131,7 @@ Services are restored as follows: ::
 
     # Check restores via the viewers: smartApp, Heron and SOS Viewer
 
+	# TODO Grafana
 
 Data Management
 ===============
