@@ -3,6 +3,7 @@
 # Run the 52NorthSOS Docker image with local and PostGIS Docker mappings.
 #
 
+script_dir=${0%/*}
 GIT="/opt/geonovum/smartem/git"
 LOG="/var/smartem/log"
 TC_LOG="${LOG}/tomcat-sos52n"
@@ -37,7 +38,7 @@ function restart_image() {
   
   # Finally run with all mappings
   sudo docker run --name ${NAME} ${LINK_MAP} ${PORT_MAP} ${VOL_MAP} -d ${IMAGE}
-  sudo docker cp config/jsclient/settings.json sos52n:/usr/local/tomcat/webapps/sos52n/static/client/jsClient
+  sudo docker cp ${script_dir}/config/jsclient/settings.json sos52n:/usr/local/tomcat/webapps/sos52n/static/client/jsClient
 }
 
 # Some tricky stuff to get full SOS data dir on host when non-existing on host
