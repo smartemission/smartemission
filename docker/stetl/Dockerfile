@@ -52,6 +52,9 @@ RUN pip install Cython numpy pandas scipy scikit-learn==0.18
 # Influxdb python client
 RUN pip install influxdb
 
+# Pretty visualization support in python
+RUN pip install seaborn matplotlib
+
 # Get latest Stetl from git
 RUN git clone https://github.com/geopython/stetl /opt/stetl
 
