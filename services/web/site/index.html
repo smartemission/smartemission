@@ -1,164 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Meta, title, CSS, favicons, etc. -->
+    <title>Smart Emission (SE) Platform</title>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
     <meta name="description"
-          content="Bootstrap, a sleek, intuitive, and powerful mobile first front-end framework for faster and easier web development.">
+          content="Smart Emission Data Platform using Bootstrap, a sleek, intuitive, and powerful mobile first front-end framework for faster and easier web development.">
     <meta name="keywords"
-          content="HTML, CSS, JS, JavaScript, framework, bootstrap, front-end, frontend, web development">
-    <meta name="author"
-          content="Just van den Broecke - Geonovum original: Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <link rel="shortcut icon" href="favicon.ico">
+          content="SOS, SensorThings API, WMS, WFS, SensorWeb, IoT, Nijmegen">
+    <meta name="author"  content="Just van den Broecke - Geonovum">
+ <!-- <link rel="shortcut icon" href="favicon.ico"> -->
 
-    <title>Smart Emission</title>
-
-
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-
-    <!-- Documentation extras
-    <link href="css/bootstrap-docs.min.css" rel="stylesheet"> -->
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- Favicons
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
-    <link rel="shortcut icon" href="../assets/ico/favicon.ico">   -->
-
-
+    <link rel="stylesheet" href="home/lib/bootstrap/3.3.7/css/bootstrap-united.min.css">
+    <link rel="stylesheet" type="text/css" href="home/app/css/style.css">
 </head>
 <body>
-<div class="container">
-    <h1>Smart Emission - Data Platform</h1>
-    <p>Dit is het Smart Emission Data Platform.
-        Deze levert toegang tot de data uit de Smart Emission sensoren
-        via web services (web APIs) en een aantal apps.
-        Deze site en onderliggende diensten zijn ontwikkeld door <a href="http://Geonovum.nl">Geonovum</a>
-        en draait binnen het <a href="http://fiware-lab.nl">Fiware Lab NL</a>.
-        De algemene Smart Emission website vind je op <a
-                href="http://smartemission.ruhosting.nl">www.smartemission.nl</a>
-    </p>
-    <p>
-        <i>"Het Smart Emission project draait om het in kaart brengen van luchtkwaliteit, geluid,
-            trillingen en meteorologische indicatoren in de stad op een fijnmazig schaalniveau,
-            door inwoners met zogenoemde burger-sensor-netwerken."</i> (Bron: <a
-            href="http://smartemission.ruhosting.nl">SE-Website</a>)
-    </p>
-    <h2>Apps</h2>
-    <p>Vooral dankzij gebruik standaarden (zie APIs) zijn verschillende apps op platform aangesloten</p>
-    <h3>Apps - Smart Emission</h3>
-    <p>Apps ontwikkeld binnen SE project</p>
-    <ul>
-        <li><a href="smartapp">SmartApp</a> - voor Mobiel/Tablet</li>
-	<li><a href="heron">Heron App</a> - voor Desktop</li>
-        <li><a href="sos52n/static/client/jsClient/index.html">SOS Viewer (52North)</a> - Timeseries, Charts, Download
-            History
-	</li>
-        <li><a href="http://whale.citygis.nl/sensorviewer2">Whale Viewer</a> - viewer voor ruwe Sensor data</li>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="index.html">SE Platform</a>
+    </div>
+    <div id="tabs">
+      <ul class="nav navbar-nav" id="navtabs">
+          <li class="active"><a href="#home" data-url="home/pages/home.html">Home</a></li>
+        <li><a href="#docs" data-url="home/pages/docs.html">Documentatie</a></li>
+        <li><a href="#viewers" data-url="home/pages/viewers.html">Viewers</a></li>
+        <li><a href="#apis" data-url="home/pages/apis.html">APIs</a></li>
+        <li><a href="#links" data-url="home/pages/links.html">Links</a></li>
+      </ul>
+        <div class="nav navbar-nav navbar-right site-logo">
+            <img src="home/app/media/smart-emission-logo-klein.png"/>
+        </div>
+      </div>
+    </div>
+</nav>
 
-    </ul>
-    <h3>Apps - Third Party</h3>
-    <p>Apps gemaakt door derden aangesloten op de SE APIs</p>
-    <ul>
-        <li><a href="http://apollo.imagem.nl/SensorSmartMapp">Smart M-App</a> - ontwikkeld door Imagem</li>
-        <li><a href="http://www.luchtradarutrecht.nl/">Luchtradar Utrecht</a> - ontwikkeld door gem. Utrecht/JCDecaux</li>
-    </ul>
-
-    <h2>APIs</h2>
-    <!-- http://inspire.rivm.nl/sos/eaq/api/v1/ RIVM SOS -->
-    <ul>
-        <li><a href="sosemu">SOS REST API</a> - JSON/HTML REST API alleen voor laatste waarden</li>
-        <li><a href="sos52n/service?service=SOS&request=GetCapabilities">SOS API - 52North</a> - full SOS API voor alle (historische) waarden - <a
-                href="sos52n/documentation">(docs)</a></li>
-        <li><a href="sos52n/api/v1/">SOS REST API - 52North</a> - 52North SOS REST API voor alle (historische) waarden -
-            <a href="sos52n/static/doc/api-doc/index.html">(docs)</a></li>
-         <li><a href="geoserver/wms?service=WMS&request=GetCapabilities">WMS API</a> - WMS including WMS-Dimensions for
-            Time
-        </li>
-        <li><a href="geoserver/wfs?service=WFS&request=GetCapabilities">WFS API</a> - WFS, e.g. for Download Timeseries
-        </li>
-        <li><a href="http://sta.smartemission.nl:8080/OGCSensorThings/v1.0">OGC SensorThings API</a> - SensorThings API (STA, by SensorUp, in test)
-        </li>
-    </ul>
-    <h2>Download Timeseries</h2>
-    <p>Download of refined (validated, calibrated, aggregated) and raw timeseries (history) data is possible in various
-        ways.
-        Apart from the SOS/WMS/WFS APIs above data can be downloaded via the Viewers.</p>
-    <h3>52North Viewer (SOS)</h3>
-    <p>
-        See the <a href="sos52n/static/client/jsClient/index.html">SOS Viewer (52North)</a>. When viewing
-        the Chart, click in "I" (Info) button on the right under each component.
-        NB: there is
-        a <a href="https://github.com/52North/js-sensorweb-client/issues/154">known bug in the 52North Viewer</a>: the download button disappears when changing the color of the indicator/component.
-    </p>
-    <h3>Heron Viewer (WFS)</h3>
-    <p>
-        Download as CSV and other formats via WFS using the <a href="heron">Heron Viewer</a>:
-    </p>
-    <ul>
-        <li>Choose the <i>Binoculairs</i> <img
-                src="http://lib.heron-mc.org/heron/latest/resources/images/silk/find.png"> icon within the top-toolbar
-        </li>
-        <li> A search form window pops up</li>
-        <li>Choose Station and Component</li>
-        <li>press the "Zoeken" button. Searching may take some time...be patient</li>
-        <li>A result table-grid appears. Choose "Download" and choose download format, e.g. CSV, Excel, GML etc</li>
-    </ul>
-    <p>
-    Advanced: it is even possible to download RIVM historic data (from 2014 on): enable the Layer RIVM Stations. Choose
-    the Search form "Door geometriën te tekenen"
-    </p>
-    <h3>Direct (WFS)</h3>
-    <p>For raw/direct download via your browser or a download tool like curl, a quick WFS download be done this
-        base URL:</p>
-    <p>
-        <code>http://data.smartemission.nl/geoserver/wfs?request=GetFeature&typename=timeseries_<strong>component</strong>&outputformat=csv&CQL_FILTER=device_id=<strong>station
-        id</strong></code>
-    </p>
-    <p>
-        where <strong>component</strong> is one of 'co2', 'co', 'coraw', 'no2', 'no2raw', 'o3', 'o3raw', 'temperature', 'pressure', 'humidity',
-        'noise_level_avg' and
-        <strong>station id</strong> a station number like 12.
-    </p>
-    <p>
-        Example: <a
-            href="geoserver/wfs?request=GetFeature&typename=timeseries_no2&cql_filter=device_id=20&outputformat=csv">all
-        NO2 hourly averages station 20 (CSV)</a>
-    </p>
-
-    <h2>Documentatie</h2>
-    <ul>
-        <li><a href="http://smartplatform.readthedocs.org/en/latest/">Smart Emission Data Platform</a> - Technische
-            documentatie Data Platform
-        </li>
-    </ul>
-    <h2>Links</h2>
-    <ul>
-        <li><a href="http://smartemission.ruhosting.nl">Smart Emission Website</a></li>
-        <li><a href="http://www.ru.nl/gpm/onderzoek/research-projects/smart-emission">Project Info</a></li>
-        <li><a href="https://github.com/Geonovum/smartemission">Code op GitHub</a></li>
-    </ul>
-    <h2>Partners</h2>
-    <p>
-        <img src="se-partners.jpg"/>
-    </p>
+<div id="page">
+    <div class="container">
+        <p>SE Data platform, klik op links for content.</p>
+    </div>
 </div>
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-
-<!-- Latest compiled and minified JavaScript -->
-<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-<!-- <script src="js/bootstrap-docs.min.js"></script>   -->
-
+<script src="home/lib/jquery/1.11.3/jquery.min.js"></script>
+<script src="home/lib/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="home/app/js/index.js"></script>
 
 </body>
 </html>
