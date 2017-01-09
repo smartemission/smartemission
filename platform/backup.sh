@@ -19,6 +19,8 @@ SE_DATA_DIR=/var/smartem/data
 pushd ${SE_DATA_DIR}
   tar -cvzf ${BACKUP_DIR}/geoserver_data.tar.gz geoserver
   tar -cvzf ${BACKUP_DIR}/sos52n_data.tar.gz sos52n
+  tar -cvzf ${BACKUP_DIR}/grafana_data.tar.gz grafana
+  tar -cvzf ${BACKUP_DIR}/influxdb_data.tar.gz influxdb
 popd
 
 # Databases
@@ -80,7 +82,7 @@ echo "START backup databases on `date`" > ${LOG_FILE}
 
 dump_db postgres >> ${LOG_FILE} 2>&1
 
-SCHEMAS="smartem_rt smartem_raw smartem_refined sos52n1"
+SCHEMAS="smartem_rt smartem_raw smartem_refined smartem_extract smartem_harvest-rivm sos52n1"
 for SCHEMA in ${SCHEMAS}
 do
 	dump_db gis ${SCHEMA} >> ${LOG_FILE} 2>&1

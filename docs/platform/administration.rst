@@ -77,6 +77,62 @@ each year-month. Backups can be accessed via ``sftp`` : ::
 	-rw-r--r--    0 1120     1122        13570 Jun  2 16:39 SETEST-2016-06/gis.sql.bz2
 
 
+Restoring
+=========
+
+To restore, when e.g. the /var/smartem dir is inadvertently deleted (as has happened once), the
+entire data and services can be restored in minutes. Only all logging info cannot be restored.
+Also handy when moving data to another server.
+
+Latest nightly backups should be under ``/var/smartem/backup``, in worser cases under the ``vps backup`` (see above).
+
+Stop the Platform
+-----------------
+
+Be sure to have no ETL nor services running. ::
+
+	service smartem stop
+
+
+Restore Databases
+-----------------
+
+PostGIS and InfluxDB can be restored as follows. ::
+
+	# Be sure to have no dangling data (dangerous!)
+	/bin/rm -rf /var/smartem/data/postgresql   # contains all PG data
+
+	# Restart PostGIS: this recreates  /var/smartem/data/postgresql
+	~/git/services/postgis/run.sh
+
+	# Restore PostGIS data for each PG DB schema
+    ~/git/platform/restore-db.sh /var/smartem/backup/gis-smartem_rt.dmp
+    ~/git/platform/restore-db.sh /var/smartem/backup/gis-smartem_refined.dmp
+    ~/git/platform/restore-db.sh /var/smartem/backup/gis-smartem_extract.dmp
+    ~/git/platform/restore-db.sh /var/smartem/backup/gis-smartem_harvest-rivm.dmp
+    ~/git/platform/restore-db.sh /var/smartem/backup/gis-smartem_raw.dmp    # big one
+    ~/git/platform/restore-db.sh /var/smartem/backup/gis-sos52n1.dmp
+
+	# Restore InfluxDB data
+    cd /var/smartem/data
+    tar xzvf ../backup/influxdb_data.tar.gz
+
+Restore Services
+----------------
+
+Services are restored as follows: ::
+
+    # Restore GeoServer data/config
+    cd /var/smartem/data
+    tar xzvf ../backup/geoserver_data.tar.gz
+
+    # Restore SOS 52North config
+    cd /var/smartem/data
+    tar xzvf ../backup/sos52n_data.tar.gz
+
+    # Check restores via the viewers: smartApp, Heron and SOS Viewer
+
+
 Data Management
 ===============
 
