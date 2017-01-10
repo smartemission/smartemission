@@ -111,4 +111,4 @@ influx_as_measurement_rivm=rivm
 # Grafana Dashboard Viewer
 #
 
-grafana_admin_password=airsense52
+grafana_admin_password=grafana_admin_pw
