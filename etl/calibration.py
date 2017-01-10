@@ -21,7 +21,7 @@ from sklearn.preprocessing import StandardScaler
 
 from calibration_parameters import param_grid
 
-log = Util.get_log("Calibration")
+log = Util.get_log('Calibration')
 
 
 class MergeRivmJose(Filter):
@@ -53,8 +53,8 @@ class MergeRivmJose(Filter):
         df_rivm = pd.DataFrame.from_records(rivm)
         df_jose = pd.DataFrame.from_records(jose)
 
-        log.info("Received rivm data with shape (%d, %d)" % df_rivm.shape)
-        log.info("Received jose data with shape (%d, %d)" % df_jose.shape)
+        log.info('Received rivm data with shape (%d, %d)' % df_rivm.shape)
+        log.info('Received jose data with shape (%d, %d)' % df_jose.shape)
 
         # Rename stations
         df_jose = df_jose.replace({'station': self.map_jose})
@@ -80,13 +80,13 @@ class MergeRivmJose(Filter):
         # Concatenate RIVM and Jose
         df = pd.merge(df_rivm, df_jose, 'outer', ['time', 'station'])
         del df.index.name
-        log.info("Merged RIVM and Jose data. New shape = (%d, %d)." % df.shape)
+        log.info('Merged RIVM and Jose data. New shape = (%d, %d).' % df.shape)
 
         df = df.dropna()
-        log.info("Dropping NA values. New shape = (%d, %d)." % df.shape)
+        log.info('Dropping NA values. New shape = (%d, %d).' % df.shape)
 
         packet.data = df.to_dict('records')
-        log.info("Returning packet of length %d", len(packet.data))
+        log.info('Returning packet of length %d', len(packet.data))
 
         return packet
 
@@ -167,12 +167,12 @@ class Calibrator(Filter):
 
     def invoke(self, packet):
 
-        log.info("Receiving packet of size %d" % len(packet.data))
+        log.info('Receiving packet of size %d' % len(packet.data))
 
         result_out = dict()
 
         df = pd.DataFrame.from_records(packet.data)
-        log.info("Created data frame with shape (%d, %d)" % df.shape)
+        log.info('Created data frame with shape (%d, %d)' % df.shape)
 
         # Fitler data
         df = Calibrator.filter_data(df, [self.target, 'time'],
@@ -182,26 +182,26 @@ class Calibrator(Filter):
         df_sample = df.sample(frac=1 / float(self.inverse_sample_fraction))
         del df_sample['station']
         del df_sample['time']
-        log.info("Sample dataframe, keeping 1 out of every %d rows. New "
-                 "shape (%d, %d)" %
+        log.info('Sample dataframe, keeping 1 out of every %d rows. New '
+                 'shape (%d, %d)' %
                  (self.inverse_sample_fraction, df_sample.shape[0],
                   df_sample.shape[1]))
 
         # Split into label and data
         x, y = Calibrator.split_data_label(df_sample, self.target)
-        log.info("Starting randomized cross validated search to find best "
-                 "parameters. Running %d iterations with %d cross "
-                 "validations of %d cores" %
+        log.info('Starting randomized cross validated search to find best '
+                 'parameters. Running %d iterations with %d cross '
+                 'validations of %d cores' %
                  (self.random_search_iterations,  self.cv_k, self.n_jobs))
-        log.info("Finding relation from %s to %s" %
+        log.info('Finding relation from %s to %s' %
                  (str(x.columns.values), self.target))
         gs = RandomizedSearchCV(self.pipeline, param_grid,
                                 self.random_search_iterations,
                                 n_jobs=self.n_jobs, cv=self.cv_k,
                                 error_score=nan)
         gs.fit(x, y)
-        log.info("Best result from randomized search: %.2f" % gs.best_score_)
-        log.info("Best parameters from randomized search: %s" % str(gs.best_params_))
+        log.info('Best result from randomized search: %.2f' % gs.best_score_)
+        log.info('Best parameters from randomized search: %s' % str(gs.best_params_))
 
         for gs_keys in ['cv_results_', 'best_estimator_', 'best_score_',
                         'best_params_', 'best_index_', 'scorer_', 'n_splits_']:
@@ -210,7 +210,7 @@ class Calibrator(Filter):
         result_out['data'] = df
 
         packet.data = result_out
-        log.info("Returning result of %d length, with keys %s." % (
+        log.info('Returning result of %d length, with keys %s.' % (
             len(packet.data), packet.data.keys()))
 
         return packet
@@ -250,12 +250,24 @@ class Calibrator(Filter):
 
 
 class Visualization(Output):
+
     @Config(ptype=str, required=True)
     def file_path(self):
         """
         The path where to save the visualization images. Should contain a %s that is replaced by the image name.
 
         Required: True
+        """
+
+    @Config(ptype=bool, default=False, required=True)
+    def clear_output_folder(self):
+        """
+        If the results folder should be cleared before putting the new
+        results in.
+
+        Default: False
+
+        Required: False
         """
 
     def __init__(self, configdict, section):
@@ -274,192 +286,222 @@ class Visualization(Output):
         self.cv_results_ = record_in['cv_results_']
         self.target = record_in['target']
 
-        dirname = os.path.dirname(self.file_path)
-        if not os.path.exists(dirname):
-            log.info("Creating dir %s" % dirname)
-            os.makedirs(dirname)
-        self.visualize()
+        if self.clear_output_folder:
+            Visualization.create_empty_folder(os.path.dirname(self.file_path))
+        self.visualization()
 
         return packet
 
-    def visualize(self):
+    def visualization(self):
         pass
+    
+    def save_fig(self, file_name, file_extension='png'):
+        file_path = self.file_path % ("%s.%s" %(file_name, file_extension))
+        sns.plt.savefig(file_path)
+        log.info('Saved figure to %s' % file_path)
+
+    @staticmethod
+    def close_plot():
+        sns.plt.close()
+
+    @staticmethod
+    def create_empty_folder(folder):
+        # Create folder and delete content if exist
+        if not os.path.exists(folder):
+            log.info('Creating dir %s' % folder)
+            os.makedirs(folder)
+        for the_file in os.listdir(folder):
+            file_path = os.path.join(folder, the_file)
+            try:
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
+            except Exception as e:
+                log.info("Error while deleting file: %s" % str(e))
 
 
-class ModelVisualization(Visualization):
+class PerformanceVisualization(Visualization):
+
     def __init__(self, configdict, section):
         Visualization.__init__(self, configdict, section)
-        self.df_sample = None
-        self.expl_var = None
+        self.df_meta = None
+        self.r2 = None
         self.rmse = None
 
-    def visualize(self):
-        self.visualize_init()
-        sns.plt.close()
-        self.visualize_error_scatter()
-        sns.plt.close()
-        self.visualize_error_histogram()
-        sns.plt.close()
-        self.visualize_time_series("20150101", "20170101")
-        sns.plt.close()
-        for col in self.df.columns.values:
-            self.visualize_occurance(col)
-            sns.plt.close()
-        self.visualize_input_output_relation()
-        sns.plt.close()
+    def visualization(self):
+        self.visualization_init()
+        self.visualization_error_scatter()
+        self.visualization_error_histogram()
+        self.visualization_time_series('20150101', '20170101')
 
-    def visualize_init(self):
+    def visualization_init(self):
+        self.df_meta = self.df[['time', 'station', self.target]].copy()
+
         x = self.df.copy()
         del x['station']
         del x[self.target]
         del x['time']
-        self.df['Target'] = self.df[self.target]
-        self.df['Prediction'] = self.model.predict(x)
-        self.df['Error'] = self.df['Prediction'] - self.df['Target']
-        self.df['time'] = pd.to_datetime(self.df['time'])
-        self.df_sample = self.df.sample(min(1000, self.df.shape[0]))
 
-        self.expl_var = explained_variance_score(self.df_sample['Target'],
-                                                 self.df_sample['Prediction']) * 100
-        self.rmse = mean_squared_error(self.df_sample['Target'],
-                                       self.df_sample['Prediction']) ** .5
+        self.df_meta['Prediction'] = self.model.predict(x)
+        self.df_meta['Error'] = self.df_meta['Prediction'] - self.df[self.target]
+        self.df_meta['time'] = pd.to_datetime(self.df_meta['time'])
 
-    def visualize_error_scatter(self):
-        # Create title (use both explained variance and rmse to hava a scale
-        # relative and absolute measurement of performance)
+        target = self.df[self.target]
+        prediction = self.df_meta['Prediction']
+        self.r2 = explained_variance_score(target, prediction) * 100
+        self.rmse = mean_squared_error(target, prediction) ** .5
+
+    def visualization_error_scatter(self):
+        log.info('Visualizing error as scatterplot')
+        # Using relative and absolute performance measure
         title = 'Actual vs. Predicted\nRMSE=%.1f ug/m3, Explained ' \
-                'var=%.0f%%' % (self.rmse, self.expl_var)
+                'var=%.0f%%' % (self.rmse, self.r2)
 
-        # Plot using seaborn
-        g = sns.regplot('Prediction', 'Target', self.df)
+        g = sns.regplot('Prediction', self.target, self.df_meta)
         g.set_title(title)
         g.set_aspect('equal', 'box')
 
-        # Save
-        file_path = self.file_path % 'error_scatter.png'
-        sns.plt.savefig(file_path)
-        log.info("Saved scatterplot to %s" % file_path)
+        self.save_fig('error_scatter')
+        Visualization.close_plot()
 
-    def visualize_error_histogram(self):
+    def visualization_error_histogram(self):
+        log.info('Visualizing error as histogram')
         # Create title (use both explained variance and rmse to hava a scale
         # relative and absolute measurement of performance)
         title = 'Histogram of error\nRMSE=%.1f ug/m3, Explained var=%.0f%%' % \
-                (self.rmse, self.expl_var)
+                (self.rmse, self.r2)
 
         # Plot using seaborn
-        g = sns.distplot(self.df['Error'], 100)
+        g = sns.distplot(self.df_meta['Error'], 100)
         g.set_title(title)
 
-        # Save
-        file_path = self.file_path % 'error_histogram.png'
-        sns.plt.savefig(file_path)
-        log.info("Saved scatterplot to %s" % file_path)
+        self.save_fig('error_histogram')
+        self.close_plot()
 
-    def visualize_time_series(self, start, end):
+    def visualization_time_series(self, start, end):
+        log.info("Visualizing time series from %s to %s" % (start, end))
         start = pd.to_datetime(start)
         end = pd.to_datetime(end)
 
-        time_series = self.df.copy().sort_values('time')
+        time_series = self.df_meta.copy().sort_values('time')
         time_series = time_series[(time_series['time'] >= start) &
-                                (time_series['time'] <= end)]
+                                  (time_series['time'] <= end)]
         time_series['station'] = time_series['station'].astype(int).astype(str)
 
-        log.info("Shape df: (%d, %d)" % self.df.shape)
-        log.info("Shape timeseries: (%d, %d)" % time_series.shape)
-
         sns.set_style('darkgrid')
-        sns.plt.plot(time_series['time'], time_series['Target'])
+        sns.plt.plot(time_series['time'], time_series[self.target])
         sns.plt.plot(time_series['time'], time_series['Prediction'])
         sns.plt.xlabel('Time')
         sns.plt.ylabel(self.target)
         sns.plt.legend(['Target', 'Prediction'])
         sns.plt.show()
 
-        file_path = self.file_path % 'timeseries.png'
-        sns.plt.savefig(file_path)
-        log.info('Saving timeseries plot to %s' % file_path)
+        self.save_fig('time_series')
+        Visualization.close_plot()
 
-    def visualize_occurance(self, col):
-        title = "Occurance of %s" % col
 
-        g = sns.distplot(self.df[col], 100)
-        g.set_title(title)
+class ModelVisualization(Visualization):
 
-        # Save
-        file_name = "histogram_%s.png" % col
-        file_path = self.file_path % file_name
-        sns.plt.savefig(file_path)
-        log.info("Saved scatterplot to %s" % file_path)
+    def visualization(self):
+        for col in self.df.columns.values:
+            if col not in ['time', 'station', self.target]:
+                self.visualization_input_output_relation(col)
 
-    def visualize_input_output_relation(self):
-        pass
+    def visualization_input_output_relation(self, col, n_val=100, n_sim=100):
+        log.info('Visualizing input/output relation %s' % col)
+        val = pd.np.linspace(self.df[col].min(), self.df[col].max(), n_val)
+        df = self.df.sample(n_sim)
+        df = pd.concat([df] * n_val)
+        df[col] = pd.np.repeat(val, n_sim)
+
+        for df_col in ['station', 'time', self.target]:
+            del df[df_col]
+
+        df['Prediction'] = self.model.predict(df)
+        df['id'] = pd.np.tile(pd.np.arange(0, n_sim), n_val)
+
+        sns.tsplot(df, col, 'id', value='Prediction', err_style='unit_traces')
+
+        self.save_fig('effect_%s' % col)
+        self.close_plot()
+
+
+class DataVisualization(Visualization):
+    
+    def visualization(self):
+        for col in self.df.columns.values:
+            self.visualization_occurrence(col)
+
+    def visualization_occurrence(self, col):
+        log.info('Visualizing occurrence of %s' % col)
+        title = 'Occurrence of %s' % col
+
+        try:
+            g = sns.distplot(self.df[col], 100)
+            g.set_title(title)
+
+            self.save_fig('histogram_%s' % col)
+
+        except pd.np.linalg.LinAlgError, e:
+            log.info('Could not plot histogram for %s because of: %s' %
+                      (col, str(e)))
+        except TypeError, e:
+            log.info('Could not plot histogram for %s because of: %s' %
+                     (col, str(e)))
+
+        Visualization.close_plot()
 
 
 class SearchVisualization(Visualization):
-    def write(self, packet):
-        pass
 
-    def visualize(self):
-        self.visualize_search()
+    def __init__(self, configdict, section):
+        Visualization.__init__(self, configdict, section)
+        self.param_perf = None
 
-    def visualize_search(self):
-        pass
+    def visualization(self):
+        self.init_visualization()
+        for col in param_grid.keys():
+            self.visualize_search_parameter(col)
+
+    def init_visualization(self):
+        log.debug("\n%s" % self.cv_results_)
+        self.param_perf = pd.DataFrame(self.cv_results_)
+        log.debug("\n%s" % self.param_perf)
+        log.debug("\n%s" % self.param_perf.dtypes)
+
+    def visualize_search_parameter(self, param):
+        log.info('Visualizing parameter performance of %s' % param)
+
+        title = "Explained variances for different levels of %s" % param
+        col = "param_%s" % param
+        col_score = "mean_test_score"
+        col_type = type(self.param_perf[col][0])
+
+        log.debug(self.param_perf[col][0])
+        log.debug(col_type)
 
 
 
-#
-# def visualize_occurance(pred, col, path):
-#     p = ggplot(pred, aes(col)) + geom_histogram(bins=100) + xlab(
-#         col) + ylab('Count') + ggtitle('Occurance of %s values' % col)
-#     p.save(path)
-#
-# def plot_ann_effect(pipeline, filter, df, col, val, limits, name, path):
-#     n_times = 100
-#     n_val = val.shape[0]
-#     df = df.drop(['prediction', 'target'], axis=1)
-#     df = filter.transform(df)
-#     df = df.sample(n_times)
-#     df = concat([df] * n_val)
-#     df[col] = repeat(val, n_times)
-#     df['prediction'] = pipeline.predict(df)
-#     df['id'] = tile(arange(0, n_times), n_val)
-#
-#     p = ggplot(df, aes(x=col, y='prediction', group='id')) + geom_line(
-#         alpha=.5) + xlab('Jose measurement of %s' % col) + ylab(
-#         'Prediction for %s' % name) + ylim(limits[0], limits[1]) + ggtitle(
-#         'Effect of %s on predictions for %s' % (col, name))
-#     p.save(path)
-#
-# if __name__ == '__main__':
-#     col = sys.argv[1]
-#     t = float(sys.argv[2])
-#
-#     f_param_optim = save_path('parameter_optimization', col, 'csv', t)
-#     f_predictions = save_path('predictions', col, 'csv', t)
-#     f_performance = save_path('performances', col, 'json', t)
-#     f_model = save_path('model', col, 'pkl', t)
-#     f_filter = save_path('filter', col, 'pkl', t)
-#
-#     f_scatter = save_path('scatter', col, 'png', t)
-#     f_residual = save_path('residual', col, 'png', t)
-#     f_timeseries = save_path('timeseries', col, 'png', t)
-#
-#     pred = load_predictions(f_predictions)
-#     perf = load_performances(f_performance)
-#     model = load_model(f_model)
-#     filter = load_filter(f_filter)
-#
-#     visualize_scatter(pred.copy(), perf, col, ax_limits[col], f_scatter)
-#     visualize_residuals(pred.copy(), perf, res_limits[col], col,
-#                         f_residual)
-#     visualize_timeseries(pred.copy(), "20160515", "20160526",
-#                          ax_limits[col], col, f_timeseries)
-#
-#     for name in pred.columns.values:
-#         f_occurance = save_path('histogram_%s' % name, col, 'png', t)
-#         visualize_occurance(pred.copy(), name, f_occurance)
-#
-#     for k, v in effect_plots.iteritems():
-#         f_effect = save_path('ann_effect_%s' % k, col, 'png', t)
-#         plot_ann_effect(model, filter, pred.copy(), k, v, ax_limits[col],
-#                         col, f_effect)
+        # try:
+        if col_type is str or col_type is bool:
+            g = sns.swarmplot(col, col_score, data=self.param_perf)
+        else:
+        # except Exception, e:
+        #     log.debug('%s is not number' % param)
+        #     log.debug(e)
+            g = sns.residplot(col, col_score, self.param_perf)
+
+        g.set(ylim=(0, 1))
+        g.set_title(title)
+
+        self.save_fig('parameter_%s' % param)
+        self.close_plot()
+
+
+# done time, station, target, prediction, error in different data frame
+# done plot decorator
+# done split viz into multiple classes
+# done remove viz dir before inserting new viz
+# todo save rivm in influx with station as station, without component
+# todo check if viz can be smaller
+# todo check time histogram (TypeError?)
+# done visualize search
