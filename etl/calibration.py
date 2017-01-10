@@ -365,15 +365,15 @@ class ModelVisualization(Visualization):
         log.info("Shape timeseries: (%d, %d)" % timeseries.shape)
 
         sns.set_style('darkgrid')
-        plt.plot(timeseries['time'], timeseries['Target'])
-        plt.plot(timeseries['time'], timeseries['Prediction'])
-        plt.xlabel('Time')
-        plt.ylabel(self.target)
-        plt.legend(['Target', 'Prediction'])
-        plt.show()
+        sns.plt.plot(timeseries['time'], timeseries['Target'])
+        sns.plt.plot(timeseries['time'], timeseries['Prediction'])
+        sns.plt.xlabel('Time')
+        sns.plt.ylabel(self.target)
+        sns.plt.legend(['Target', 'Prediction'])
+        sns.plt.show()
 
         file_path = self.file_path % 'timeseries.png'
-        plt.savefig(file_path)
+        sns.plt.savefig(file_path)
         log.info('Saving timeseries plot to %s' % file_path)
 
 
