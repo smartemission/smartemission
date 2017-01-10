@@ -7,9 +7,9 @@
 # NB Change the default password there!
 
 GIT="/opt/geonovum/smartem/git"
-LOG_DIR="/var/smartem/log"
-DATA_DIR="/var/smartem/data"
-CONFIG_DIR="/var/smartem/config"
+LOG_DIR="/var/smartem/log/grafana"
+DATA_DIR="/var/smartem/data/grafana"
+CONFIG_DIR="/var/smartem/config/grafana"
 NAME="grafana"
 IMAGE="grafana/grafana:develop"
 INFLUX_HOST=influxdb

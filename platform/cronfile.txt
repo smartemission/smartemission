@@ -23,6 +23,12 @@ SMARTEM=/opt/geonovum/smartem/git
 # Run SensorThings API Publisher Smartemission
 */10 * * * * cd $SMARTEM/etl; ./stapublisher.sh >> /var/smartem/log/etl/stapublisher.log 2>&1
 
+# Run Jose Extractor (from PG Raw timerseries to InfluxDB)
+*/20 * * * * cd $SMARTEM/etl; ./extractor.sh >> /var/smartem/log/etl/extractor.log 2>&1
+
+# Run RIVM Harvester (from SOS to InfluxDB)
+*/15 * * * * cd $SMARTEM/etl; ./harvester_rivm.sh >> /var/smartem/log/etl/harvester_rivm.log 2>&1
+
 # refresh smartem website
 # */4 * * * * cd $SMARTEM; ./refresh-git.sh
 
