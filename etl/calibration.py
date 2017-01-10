@@ -69,23 +69,18 @@ class MergeRivmJose(Filter):
         jose_time = pd.DataFrame({'time': jose_index})
         df_rivm = jose_time.merge(df_rivm, 'outer').set_index('time')
         df_rivm = df_rivm.sort_index().interpolate().ffill().loc[jose_index]
+        df_rivm = df_rivm.reset_index()
 
         # Pivot Jose
         df_jose = df_jose.pivot_table('value', ['station', 'time'],
                                       'component').reset_index()
+        df_rivm = df_rivm.pivot_table('value', ['station', 'time'],
+                                      'component').reset_index()
 
         # Concatenate RIVM and Jose
-        df_rivm = df_rivm.reset_index()
-        df_jose = df_jose.reset_index()
         df = pd.merge(df_rivm, df_jose, 'outer', ['time', 'station'])
-
+        del df.index.name
         log.info("Merged RIVM and Jose data. New shape = (%d, %d)." % df.shape)
-
-        # Select rows and columns
-        del df['component']
-        del df['index']
-        del df['station']
-        del df['time']
 
         df = df.dropna()
         log.info("Dropping NA values. New shape = (%d, %d)." % df.shape)
@@ -180,36 +175,39 @@ class Calibrator(Filter):
         log.info("Created data frame with shape (%d, %d)" % df.shape)
 
         # Fitler data
-        df = Calibrator.filter_data(df, self.target, self.filter_alpha)
+        df = Calibrator.filter_data(df, [self.target, 'time'],
+                                         self.filter_alpha)
 
         # Sample to prevent over fitting
-        df = df.sample(frac=1 / float(self.inverse_sample_fraction))
+        df_sample = df.sample(frac=1 / float(self.inverse_sample_fraction))
+        del df_sample['station']
+        del df_sample['time']
         log.info("Sample dataframe, keeping 1 out of every %d rows. New "
-                 "shape (%d, %d)" % (
-                     self.inverse_sample_fraction, df.shape[0], df.shape[1]))
+                 "shape (%d, %d)" %
+                 (self.inverse_sample_fraction, df_sample.shape[0],
+                  df_sample.shape[1]))
 
         # Split into label and data
-        x, y = Calibrator.split_data_label(df, self.target)
-        x, x_test, y, y_test = train_test_split(x, y, test_size=.9)
-
+        x, y = Calibrator.split_data_label(df_sample, self.target)
         log.info("Starting randomized cross validated search to find best "
                  "parameters. Running %d iterations with %d cross "
-                 "validations of %d cores" % (
-                     self.random_search_iterations, self.cv_k, self.n_jobs))
+                 "validations of %d cores" %
+                 (self.random_search_iterations,  self.cv_k, self.n_jobs))
+        log.info("Finding relation from %s to %s" %
+                 (str(x.columns.values), self.target))
         gs = RandomizedSearchCV(self.pipeline, param_grid,
                                 self.random_search_iterations,
                                 n_jobs=self.n_jobs, cv=self.cv_k,
                                 error_score=nan)
         gs.fit(x, y)
         log.info("Best result from randomized search: %.2f" % gs.best_score_)
-        log.info("Best parameters from randomized search: %s" % str(
-            gs.best_params_))
+        log.info("Best parameters from randomized search: %s" % str(gs.best_params_))
 
         for gs_keys in ['cv_results_', 'best_estimator_', 'best_score_',
                         'best_params_', 'best_index_', 'scorer_', 'n_splits_']:
             result_out[gs_keys] = getattr(gs, gs_keys)
-        result_out['out_of_bag'] = (x_test, y_test)
         result_out['target'] = self.target
+        result_out['data'] = df
 
         packet.data = result_out
         log.info("Returning result of %d length, with keys %s." % (
@@ -225,8 +223,11 @@ class Calibrator(Filter):
 
     @staticmethod
     def filter_data(df, target, alpha):
-        # todo use rolling mean for time series data
-        cols = [df_col for df_col in df.columns if df_col is not target]
+        # todo use rolling mean for time series data (i.e. also account for
+        # longer gaps in the data)
+        if type(target) is not list:
+            target = [target]
+        cols = [df_col for df_col in df.columns if df_col not in target]
         for col in cols:
             df[col] = Calibrator.running_mean(df[col], alpha)
         return df
@@ -261,30 +262,21 @@ class Visualization(Output):
         Output.__init__(self, configdict, section, consumes=FORMAT.record)
         self.model = None
         self.oob = None
-        self.x = None
-        self.y = None
         self.df = None
         self.cv_results_ = None
-        self.err = False
+        self.target = None
 
     def write(self, packet):
         record_in = packet.data
 
         self.model = record_in['best_estimator_']
-
-        self.oob = record_in['out_of_bag']
-        self.x = self.oob[0]
-        self.y = self.oob[1]
-        self.df = self.x.copy()
-        self.df['Target'] = self.y
-
+        self.df = record_in['data']
         self.cv_results_ = record_in['cv_results_']
-
         self.target = record_in['target']
 
         dirname = os.path.dirname(self.file_path)
-        log.info("Creating dir %s" % dirname)
         if not os.path.exists(dirname):
+            log.info("Creating dir %s" % dirname)
             os.makedirs(dirname)
         self.visualize()
 
@@ -297,32 +289,93 @@ class Visualization(Output):
 class ModelVisualization(Visualization):
     def __init__(self, configdict, section):
         Visualization.__init__(self, configdict, section)
-        self.pred = None
+        self.df_sample = None
+        self.expl_var = None
+        self.rmse = None
 
     def visualize(self):
-        self.pred = self.model.predict(self.x)
-        self.df['Prediction'] = self.pred
-
-        self.visualize_error()
+        self.visualize_init()
+        sns.plt.close()
+        self.visualize_error_scatter()
+        sns.plt.close()
+        self.visualize_error_histogram()
+        sns.plt.close()
+        self.visualize_time_series("20150101", "20170101")
+        sns.plt.close()
         self.visualize_input_output_relation()
+        sns.plt.close()
 
-    def visualize_error(self):
+    def visualize_init(self):
+        x = self.df.copy()
+        del x['station']
+        del x[self.target]
+        del x['time']
+        self.df['Target'] = self.df[self.target]
+        self.df['Prediction'] = self.model.predict(x)
+        self.df['Error'] = self.df['Prediction'] - self.df['Target']
+        self.df['time'] = pd.to_datetime(self.df['time'])
+        self.df_sample = self.df.sample(min(1000, self.df.shape[0]))
+
+        self.expl_var = explained_variance_score(self.df_sample['Target'],
+                                                 self.df_sample['Prediction']) * 100
+        self.rmse = mean_squared_error(self.df_sample['Target'],
+                                       self.df_sample['Prediction']) ** .5
+
+    def visualize_error_scatter(self):
         # Create title (use both explained variance and rmse to hava a scale
         # relative and absolute measurement of performance)
-        expl_var = explained_variance_score(self.y, self.pred)
-        rmse = mean_squared_error(self.y, self.pred) ** .5
-        title = 'RMSE=%.1f ug/m3, Explained var=%.0f%%' % (
-            rmse, expl_var * 100)
+        title = 'Actual vs. Predicted\nRMSE=%.1f ug/m3, Explained ' \
+                'var=%.0f%%' % (self.rmse, self.expl_var)
 
         # Plot using seaborn
         g = sns.regplot('Prediction', 'Target', self.df)
         g.set_title(title)
-        g.set_aspect('equal', 'datalim')
+        g.set_aspect('equal', 'box')
 
         # Save
-        file_path = self.file_path % 'scatter.png'
+        file_path = self.file_path % 'error_scatter.png'
         sns.plt.savefig(file_path)
         log.info("Saved scatterplot to %s" % file_path)
+
+    def visualize_error_histogram(self):
+        # Create title (use both explained variance and rmse to hava a scale
+        # relative and absolute measurement of performance)
+        title = 'Histogram of error\nRMSE=%.1f ug/m3, Explained var=%.0f%%' % \
+                (self.rmse, self.expl_var)
+
+        # Plot using seaborn
+        g = sns.distplot(self.df['Error'], 100)
+        g.set_title(title)
+
+        # Save
+        file_path = self.file_path % 'error_histogram.png'
+        sns.plt.savefig(file_path)
+        log.info("Saved scatterplot to %s" % file_path)
+
+    def visualize_time_series(self, start, end):
+        start = pd.to_datetime(start)
+        end = pd.to_datetime(end)
+
+        timeseries = self.df.copy().sort_values('time')
+        timeseries = timeseries[(timeseries['time'] >= start) &
+                                (timeseries['time'] <= end)]
+        timeseries['station'] = timeseries['station'].astype(int).astype(str)
+
+        log.info("Shape df: (%d, %d)" % self.df.shape)
+        log.info("Shape timeseries: (%d, %d)" % timeseries.shape)
+
+        sns.set_style('darkgrid')
+        plt.plot(timeseries['time'], timeseries['Target'])
+        plt.plot(timeseries['time'], timeseries['Prediction'])
+        plt.xlabel('Time')
+        plt.ylabel(self.target)
+        plt.legend(['Target', 'Prediction'])
+        plt.show()
+
+        file_path = self.file_path % 'timeseries.png'
+        plt.savefig(file_path)
+        log.info('Saving timeseries plot to %s' % file_path)
+
 
     def visualize_input_output_relation(self):
         pass
@@ -338,17 +391,7 @@ class SearchVisualization(Visualization):
     def visualize_search(self):
         pass
 
-# def visualize_residuals(pred, perf, limits, name, path):
-#     pred['residual'] = pred['target'] - pred['prediction']
-#
-#     title = '%s\nRMSE=%.2f, Explained var=%.2f%%' % (
-#     name, perf['rmse'], perf['expl_var'])
-#     p = ggplot(pred, aes('residual')) + geom_histogram(bins=500) + xlab(
-#         'Residual (ug\m3)') + ylab('Count') + xlim(limits[0],
-#                                                    limits[1]) + ggtitle(
-#         title)
-#     p.save(path)
-#
+
 # def visualize_timeseries(df, start, end, limits, name, path):
 #     start = to_datetime(start)
 #     end = to_datetime(end)
