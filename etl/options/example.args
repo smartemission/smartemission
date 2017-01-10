@@ -105,3 +105,10 @@ influx_as_reader=youruser_as
 influx_as_reader_password=yourpw_as
 influx_as_measurement_geonovum=geonovum
 influx_as_measurement_rivm=rivm
+
+
+#
+# Grafana Dashboard Viewer
+#
+
+grafana_admin_password=airsense52
