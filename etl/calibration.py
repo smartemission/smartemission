@@ -302,6 +302,9 @@ class ModelVisualization(Visualization):
         sns.plt.close()
         self.visualize_time_series("20150101", "20170101")
         sns.plt.close()
+        for col in self.df.columns.values:
+            self.visualize_occurance(col)
+            sns.plt.close()
         self.visualize_input_output_relation()
         sns.plt.close()
 
@@ -356,17 +359,17 @@ class ModelVisualization(Visualization):
         start = pd.to_datetime(start)
         end = pd.to_datetime(end)
 
-        timeseries = self.df.copy().sort_values('time')
-        timeseries = timeseries[(timeseries['time'] >= start) &
-                                (timeseries['time'] <= end)]
-        timeseries['station'] = timeseries['station'].astype(int).astype(str)
+        time_series = self.df.copy().sort_values('time')
+        time_series = time_series[(time_series['time'] >= start) &
+                                (time_series['time'] <= end)]
+        time_series['station'] = time_series['station'].astype(int).astype(str)
 
         log.info("Shape df: (%d, %d)" % self.df.shape)
-        log.info("Shape timeseries: (%d, %d)" % timeseries.shape)
+        log.info("Shape timeseries: (%d, %d)" % time_series.shape)
 
         sns.set_style('darkgrid')
-        sns.plt.plot(timeseries['time'], timeseries['Target'])
-        sns.plt.plot(timeseries['time'], timeseries['Prediction'])
+        sns.plt.plot(time_series['time'], time_series['Target'])
+        sns.plt.plot(time_series['time'], time_series['Prediction'])
         sns.plt.xlabel('Time')
         sns.plt.ylabel(self.target)
         sns.plt.legend(['Target', 'Prediction'])
@@ -376,6 +379,17 @@ class ModelVisualization(Visualization):
         sns.plt.savefig(file_path)
         log.info('Saving timeseries plot to %s' % file_path)
 
+    def visualize_occurance(self, col):
+        title = "Occurance of %s" % col
+
+        g = sns.distplot(self.df[col], 100)
+        g.set_title(title)
+
+        # Save
+        file_name = "histogram_%s.png" % col
+        file_path = self.file_path % file_name
+        sns.plt.savefig(file_path)
+        log.info("Saved scatterplot to %s" % file_path)
 
     def visualize_input_output_relation(self):
         pass
@@ -392,23 +406,7 @@ class SearchVisualization(Visualization):
         pass
 
 
-# def visualize_timeseries(df, start, end, limits, name, path):
-#     start = to_datetime(start)
-#     end = to_datetime(end)
-#     col_num = 'p.unit.serial.number'
-#
-#     df['secs'] = to_datetime(df['secs'], format='%Y%m%d%H%M%S')
-#     df = melt(df, [col_num, 'secs'], ['prediction', 'target'], 'Type')
-#     df = df[(df['secs'] >= start) & (df['secs'] <= end)]
-#     df[col_num] = df[col_num].astype(int).astype(str)
-#     df['Location'] = df['Type'].str.cat(df['p.unit.serial.number'])
-#
-#     p = ggplot(df, aes(x='secs', y='value', color='Type')) + geom_line(
-#         size=2) + ylab('RIVM measurement / Prediction (ug/m3)') + ylim(
-#         limits[0], limits[1]) + ggtitle(name)
-#     if len(df[col_num].unique()) > 1:
-#         p = p + facet_grid(col_num)
-#     p.save(path)
+
 #
 # def visualize_occurance(pred, col, path):
 #     p = ggplot(pred, aes(col)) + geom_histogram(bins=100) + xlab(
