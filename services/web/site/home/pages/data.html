@@ -1,0 +1,117 @@
+<div class="container">
+    <h1>Data</h1>
+    <p>
+        Data uit het SE-Platform kan via de Viewers bekeken worden of via zogenaamde "APIs"
+        worden opgehaald. Let wel op de Disclaimer met daarin de licentie-voorwaarden (link hierboven)!
+   Fouten of onregelmatigheden in de data kunnen gemeld worden op
+             <a href="https://github.com/Geonovum/smartemission/issues" target="_new">github.com/Geonovum/smartemission/issues</a>. 
+
+    </p>
+    <h2>De APIs</h2>
+    <!-- http://inspire.rivm.nl/sos/eaq/api/v1/ RIVM SOS -->
+    <p>Alle APIs zijn gebaseerd op OGC Standaarden. Er zijn meerdere APIs, afhankelijk van het
+    gebruiks-doel en deels historisch vanuit onderzoek.
+    </p>
+    <table style="width: auto;" class="table table-bordered table-condensed table-responsive">
+        <thead>
+        <tr>
+            <th width="20%">Naam</th>
+            <th>Beschrijving</th>
+            <th>API Link</th>
+            <th>Documentatie</th>
+        </tr>
+        </thead>
+        <tr>
+            <td><strong>SOS API</strong></td>
+            <td>OGC SOS (XML) API voor alle (historische) waarden (<a href="http://52north.org">52North</a>)</td>
+            <td><a href="sos52n/service?service=SOS&request=GetCapabilities">SOS Capabilities</a></td>
+            <td><a href="sos52n/documentation">Docs</a></td>
+        </tr>
+        <tr>
+            <td><strong>SOS REST API</strong></td>
+            <td>idem als REST API voor alle (historische) waarden</td>
+            <td><a href="sos52n/api/v1/">REST Link</a></td>
+            <td><a href="sos52n/static/doc/api-doc/index.html">API Docs</a></td>
+        </tr>
+        <tr>
+            <td><strong>OGC SensorThings API</strong></td>
+            <td>SensorThings REST API (STA) by  <a href="http://www.sensorup.com/">SensorUp</a></td>
+            <td><a href="http://sta.smartemission.nl:8080/OGCSensorThings/v1.0">REST Link</a></td>
+            <td>
+                <a href="https://github.com/opengeospatial/sensorthings">OGC Standard</a>,
+                <a href="https://en.wikipedia.org/wiki/SensorThings_API">Wikipedia</a>
+
+            </td>
+        </tr>
+        <tr>
+            <td><strong>WMS API</strong></td>
+            <td>OGC WMS including WMS-Dimensions for Time</td>
+            <td><a href="geoserver/wms?service=WMS&request=GetCapabilities">WMS Capabilities</a></td>
+            <td><a href="http://www.opengeospatial.org/standards/wms">OGC Standard</a></td>
+        </tr>
+        <tr>
+            <td><strong>WFS API</strong></td>
+            <td>OGC WFS e.g. for Download Timeseries</td>
+            <td><a href="geoserver/wfs?service=WFS&request=GetCapabilities">WFS Capabilities</a></td>
+            <td><a href="http://www.opengeospatial.org/standards/wfs">OGC Standard</a></td>
+        </tr>
+        <tr>
+            <td><strong>SOSEmu REST API*</strong></td>
+            <td>SE JSON/HTML REST API alleen voor laatste waarden</td>
+            <td><a href="sosemu">REST Link</a></td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+
+    <p>
+      *NB de SOSEmu REST API is tijdelijk en zal uitgefaseerd worden.
+    </p>
+    <h2>Download Timeseries</h2>
+    <p>Download of refined (validated, calibrated, aggregated) and raw timeseries (history) data is possible in various
+        ways.
+        Apart from the SOS/WMS/WFS APIs above data can be downloaded via the Viewers.</p>
+    <h3>52North Viewer (SOS)</h3>
+    <p>
+        See the <a href="sos52n/static/client/jsClient/index.html">SOS Viewer (52North)</a>. When viewing
+        the Chart, click in "I" (Info) button on the right under each component.
+        NB: there is
+        a <a href="https://github.com/52North/js-sensorweb-client/issues/154">known bug in the 52North Viewer</a>: the download button disappears when changing the color of the indicator/component.
+    </p>
+    <h3>Heron Viewer (WFS)</h3>
+    <p>
+        Download as CSV and other formats via WFS using the <a href="heron">Heron Viewer</a>:
+    </p>
+    <ul>
+        <li>Choose the <i>Binoculairs</i> <img
+                src="http://lib.heron-mc.org/heron/latest/resources/images/silk/find.png"> icon within the top-toolbar
+        </li>
+        <li> A search form window pops up</li>
+        <li>Choose Station and Component</li>
+        <li>press the "Zoeken" button. Searching may take some time...be patient</li>
+        <li>A result table-grid appears. Choose "Download" and choose download format, e.g. CSV, Excel, GML etc</li>
+    </ul>
+    <p>
+    Advanced: it is even possible to download RIVM historic data (from 2014 on): enable the Layer RIVM Stations. Choose
+    the Search form "Door geometriën te tekenen"
+    </p>
+    <h3>Direct (WFS)</h3>
+    <p>For raw/direct download via your browser or a download tool like curl, a quick WFS download be done this
+        base URL:</p>
+    <p>
+        <code>http://data.smartemission.nl/geoserver/wfs?request=GetFeature&typename=timeseries_<strong>component</strong>&outputformat=csv&CQL_FILTER=device_id=<strong>station
+        id</strong></code>
+    </p>
+    <p>
+        where <strong>component</strong> is one of 'co2', 'co', 'coraw', 'no2', 'no2raw', 'o3', 'o3raw', 'temperature', 'pressure', 'humidity',
+        'noise_level_avg' and
+        <strong>station id</strong> a station number like 12.
+    </p>
+    <p>
+        Example: <a
+            href="geoserver/wfs?request=GetFeature&typename=timeseries_no2&cql_filter=device_id=20&outputformat=csv">all
+        NO2 hourly averages station 20 (CSV)</a>
+    </p>
+
+
+</div>
+

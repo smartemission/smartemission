@@ -2,9 +2,11 @@
 #
 # Run Grafana from http://docs.grafana.org/installation/docker/
 #
-# On first run the config, data and log dirs are copied from container to /var/smartem/* dirs.
+# On first run the config, data and log dirs are copied from container to /var/smartem/*/grafana dirs.
 # InfluxDB needs to run first.
 # NB Change the default password there!
+
+SCRIPT_DIR=${0%/*}
 
 GIT="/opt/geonovum/smartem/git"
 LOG_DIR="/var/smartem/log/grafana"
@@ -16,10 +18,14 @@ INFLUX_HOST=influxdb
 
 # Volume maps for initial and full run
 VOL_MAP_PART=" "
-VOL_MAP_FULL="-v ${DATA_DIR}/grafana:/var/lib/grafana -v ${LOG_DIR}/grafana:/var/log/grafana -v ${CONFIG_DIR}/grafana:/etc/grafana"
+VOL_MAP_FULL="-v ${DATA_DIR}:/var/lib/grafana -v ${LOG_DIR}:/var/log/grafana -v ${CONFIG_DIR}:/etc/grafana"
 
 PORT_MAP="-p 3000:3000"
 LINK_MAP="--link ${INFLUX_HOST}:${INFLUX_HOST}"
+
+# Get Admin Pwd from local options file
+source ${SCRIPT_DIR}/../../etl/options/`hostname`.args
+ENV_MAP="-e GF_SECURITY_ADMIN_PASSWORD=${grafana_admin_password}"
 
 # Restart with volume mapping(s) provided in $1
 function restart_image() {
@@ -30,7 +36,7 @@ function restart_image() {
   sudo docker rm ${NAME} > /dev/null 2>&1
   echo "restart ${NAME} with volumes: ${VOL_MAP}"
   # Finally run with all mappings
-  sudo docker run --name ${NAME} ${PORT_MAP} ${VOL_MAP} ${LINK_MAP} -d ${IMAGE}
+  sudo docker run --name ${NAME} ${PORT_MAP} ${VOL_MAP} ${LINK_MAP} ${ENV_MAP} -d ${IMAGE}
 }
 
 # Some tricky stuff to get all Grafana dirs on host when non-existing on host
@@ -52,9 +58,12 @@ if [ ! -d "${CONFIG_DIR}" ]; then
    sudo docker cp ${NAME}:/var/lib/grafana ${DATA_DIR}
    sudo docker cp ${NAME}:/var/log/grafana ${LOG_DIR}
 
+   sudo cp ${SCRIPT_DIR}/config/* ${CONFIG_DIR}
+
    # Rerun with full volume mapping
    restart_image ${VOL_MAP_FULL}
 else
    echo "Ok, using existing ${CONFIG_DIR} dir on host"
+   sudo cp ${SCRIPT_DIR}/config/* ${CONFIG_DIR}
    restart_image ${VOL_MAP_FULL}
 fi
