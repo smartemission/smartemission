@@ -222,3 +222,15 @@ class RIVMSosInput(SosInput, PostgresDbInput):
                      "for %s" % self.current_feature())
 
         log.info("Next timestamp is %s" % self.current_date().isoformat())
+
+    def format_data(self, data):
+        json_obj = SosInput.format_data(self, data)
+
+        for elem in json_obj:
+            # Station name consist of location and component. Strip of
+            # component. Yes, this is a hack to get proper names ;)
+            text = elem['station_name']
+            text = '__'.join(text.split('__')[:-1])
+            elem['station_name'] = text
+
+        return json_obj
