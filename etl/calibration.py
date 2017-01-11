@@ -1,20 +1,21 @@
+import os
 from stetl.component import Config
 from stetl.filter import Filter
 from stetl.output import Output
 from stetl.packet import FORMAT
 from stetl.util import Util
 
-import pandas as pd
-import os
 import matplotlib
+from sklearn.metrics import make_scorer
+from sklearn.model_selection import cross_val_predict
+from sklearn.model_selection import cross_val_score
 
 matplotlib.use('Agg')
+import pandas as pd
 import seaborn as sns
 from numpy import nan
-from sklearn.metrics import explained_variance_score
 from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import RandomizedSearchCV
-from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPRegressor
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
@@ -37,6 +38,16 @@ class MergeRivmJose(Filter):
     def map_rivm(self):
         """
         Mapping between RIVM stations and "location id's"
+
+        Required: True
+        """
+
+    @Config(ptype=int, default=5, required=True)
+    def impute_duration(self):
+        """
+        Number of minutes to impute data
+
+        Default: 5
 
         Required: True
         """
@@ -82,6 +93,10 @@ class MergeRivmJose(Filter):
         del df.index.name
         log.info('Merged RIVM and Jose data. New shape = (%d, %d).' % df.shape)
 
+        # Filling and dropping na
+        df = df.sort_values('time')
+        df = df.fillna(method='pad', limit=self.impute_duration*5) # 5 min
+        log.info("Missing values: %s" % pd.isnull(df).sum().to_dict())
         df = df.dropna()
         log.info('Dropping NA values. New shape = (%d, %d).' % df.shape)
 
@@ -167,47 +182,59 @@ class Calibrator(Filter):
 
     def invoke(self, packet):
 
+        # Unpacking data
         log.info('Receiving packet of size %d' % len(packet.data))
-
-        result_out = dict()
-
         df = pd.DataFrame.from_records(packet.data)
         log.info('Created data frame with shape (%d, %d)' % df.shape)
 
-        # Fitler data
-        df = Calibrator.filter_data(df, [self.target, 'time'],
-                                         self.filter_alpha)
+        # Preprocessing: filter data
+        unfiltered_col = [self.target, 'time']
+        df = Calibrator.filter_data(df, unfiltered_col, self.filter_alpha)
 
         # Sample to prevent over fitting
-        df_sample = df.sample(frac=1 / float(self.inverse_sample_fraction))
-        del df_sample['station']
-        del df_sample['time']
-        log.info('Sample dataframe, keeping 1 out of every %d rows. New '
-                 'shape (%d, %d)' %
-                 (self.inverse_sample_fraction, df_sample.shape[0],
-                  df_sample.shape[1]))
+        df_sample = df.sample(frac=1.0 / float(self.inverse_sample_fraction))
+        df_meta = df_sample[['station', 'time']]
+        df_sample = df_sample.drop(['station', 'time'], axis=1)
+        log.info('Sample data frame, keeping 1 out of every %d rows. New '
+                 'shape %s' % (self.inverse_sample_fraction, df_sample.shape))
 
         # Split into label and data
         x, y = Calibrator.split_data_label(df_sample, self.target)
         log.info('Starting randomized cross validated search to find best '
                  'parameters. Running %d iterations with %d cross '
-                 'validations of %d cores' %
-                 (self.random_search_iterations,  self.cv_k, self.n_jobs))
-        log.info('Finding relation from %s to %s' %
-                 (str(x.columns.values), self.target))
+                 'validations of %d cores' % (
+                     self.random_search_iterations, self.cv_k, self.n_jobs))
+
+        # Do random search
+        log.info('Finding relation from %s to %s' % (
+            ', '.join(x.columns.tolist()), self.target))
         gs = RandomizedSearchCV(self.pipeline, param_grid,
                                 self.random_search_iterations,
                                 n_jobs=self.n_jobs, cv=self.cv_k,
                                 error_score=nan)
         gs.fit(x, y)
-        log.info('Best result from randomized search: %.2f' % gs.best_score_)
-        log.info('Best parameters from randomized search: %s' % str(gs.best_params_))
+        log.info('Best result (%.2f) obtained by using %s' %
+                 (gs.best_score_, gs.best_params_))
 
+        # Compute performance and cross val predictions and add meta
+        pipe = gs.best_estimator_
+        scorer = make_scorer(mean_squared_error, False)
+        mses = cross_val_score(pipe, x, y, None, scorer, self.cv_k)
+        rmse = pd.np.mean(pd.np.sqrt(-mses))
+
+        df_sample = pd.concat([df_sample, df_meta], axis=1)
+        df_sample['pred'] = cross_val_predict(pipe, x, y, None, self.cv_k, -1)
+        df_sample['error'] = df_sample[self.target] - df_sample['pred']
+
+        # Save results
+        result_out = dict()
         for gs_keys in ['cv_results_', 'best_estimator_', 'best_score_',
                         'best_params_', 'best_index_', 'scorer_', 'n_splits_']:
             result_out[gs_keys] = getattr(gs, gs_keys)
         result_out['target'] = self.target
         result_out['data'] = df
+        result_out['sample'] = df_sample
+        result_out['rmse'] = rmse
 
         packet.data = result_out
         log.info('Returning result of %d length, with keys %s.' % (
@@ -250,7 +277,6 @@ class Calibrator(Filter):
 
 
 class Visualization(Output):
-
     @Config(ptype=str, required=True)
     def file_path(self):
         """
@@ -273,18 +299,23 @@ class Visualization(Output):
     def __init__(self, configdict, section):
         Output.__init__(self, configdict, section, consumes=FORMAT.record)
         self.model = None
-        self.oob = None
         self.df = None
+        self.sample = None
         self.cv_results_ = None
         self.target = None
+        self.best_score = None
+        self.rmse = None
 
     def write(self, packet):
         record_in = packet.data
 
         self.model = record_in['best_estimator_']
         self.df = record_in['data']
+        self.sample = record_in['sample']
         self.cv_results_ = record_in['cv_results_']
         self.target = record_in['target']
+        self.best_score = record_in['best_score_']
+        self.rmse = record_in['rmse']
 
         if self.clear_output_folder:
             Visualization.create_empty_folder(os.path.dirname(self.file_path))
@@ -294,9 +325,9 @@ class Visualization(Output):
 
     def visualization(self):
         pass
-    
+
     def save_fig(self, file_name, file_extension='png'):
-        file_path = self.file_path % ("%s.%s" %(file_name, file_extension))
+        file_path = self.file_path % ("%s.%s" % (file_name, file_extension))
         sns.plt.savefig(file_path)
         log.info('Saved figure to %s' % file_path)
 
@@ -320,43 +351,22 @@ class Visualization(Output):
 
 
 class PerformanceVisualization(Visualization):
-
     def __init__(self, configdict, section):
         Visualization.__init__(self, configdict, section)
-        self.df_meta = None
-        self.r2 = None
-        self.rmse = None
 
     def visualization(self):
-        self.visualization_init()
         self.visualization_error_scatter()
         self.visualization_error_histogram()
         self.visualization_time_series('20150101', '20170101')
-
-    def visualization_init(self):
-        self.df_meta = self.df[['time', 'station', self.target]].copy()
-
-        x = self.df.copy()
-        del x['station']
-        del x[self.target]
-        del x['time']
-
-        self.df_meta['Prediction'] = self.model.predict(x)
-        self.df_meta['Error'] = self.df_meta['Prediction'] - self.df[self.target]
-        self.df_meta['time'] = pd.to_datetime(self.df_meta['time'])
-
-        target = self.df[self.target]
-        prediction = self.df_meta['Prediction']
-        self.r2 = explained_variance_score(target, prediction) * 100
-        self.rmse = mean_squared_error(target, prediction) ** .5
 
     def visualization_error_scatter(self):
         log.info('Visualizing error as scatterplot')
         # Using relative and absolute performance measure
         title = 'Actual vs. Predicted\nRMSE=%.1f ug/m3, Explained ' \
-                'var=%.0f%%' % (self.rmse, self.r2)
+                'var=%.0f%%' % (self.rmse, self.best_score*100)
 
-        g = sns.regplot('Prediction', self.target, self.df_meta)
+        g = sns.regplot('pred', self.target, self.sample,
+                        scatter_kws={'alpha': 0.3})
         g.set_title(title)
         g.set_aspect('equal', 'box')
 
@@ -367,11 +377,11 @@ class PerformanceVisualization(Visualization):
         log.info('Visualizing error as histogram')
         # Create title (use both explained variance and rmse to hava a scale
         # relative and absolute measurement of performance)
-        title = 'Histogram of error\nRMSE=%.1f ug/m3, Explained var=%.0f%%' % \
-                (self.rmse, self.r2)
+        title = 'Histogram of error\nRMSE=%.1f ug/m3, Explained var=%.0f%%' % (
+            self.rmse, self.best_score*100)
 
         # Plot using seaborn
-        g = sns.distplot(self.df_meta['Error'], 100)
+        g = sns.distplot(self.sample['error'], 100)
         g.set_title(title)
 
         self.save_fig('error_histogram')
@@ -379,19 +389,25 @@ class PerformanceVisualization(Visualization):
 
     def visualization_time_series(self, start, end):
         log.info("Visualizing time series from %s to %s" % (start, end))
+
         start = pd.to_datetime(start)
         end = pd.to_datetime(end)
+        title = 'Timeseries from %s to %s\nRMSE=%.1f ug/m3, Explained ' \
+                'var=%.0f%%' % (start, end, self.rmse, self.best_score*100)
 
-        time_series = self.df_meta.copy().sort_values('time')
-        time_series = time_series[(time_series['time'] >= start) &
-                                  (time_series['time'] <= end)]
+        time_series = self.sample.copy().sort_values('time')
+        time_series = time_series[
+            (time_series['time'] >= start) & (time_series['time'] <= end)]
         time_series['station'] = time_series['station'].astype(int).astype(str)
 
         sns.set_style('darkgrid')
         sns.plt.plot(time_series['time'], time_series[self.target])
-        sns.plt.plot(time_series['time'], time_series['Prediction'])
+        sns.plt.plot(time_series['time'], time_series['pred'])
+        _, labels = sns.plt.xticks()
+        sns.plt.setp(labels, rotation=15)
         sns.plt.xlabel('Time')
         sns.plt.ylabel(self.target)
+        sns.plt.title(title)
         sns.plt.legend(['Target', 'Prediction'])
         sns.plt.show()
 
@@ -400,7 +416,6 @@ class PerformanceVisualization(Visualization):
 
 
 class ModelVisualization(Visualization):
-
     def visualization(self):
         for col in self.df.columns.values:
             if col not in ['time', 'station', self.target]:
@@ -419,6 +434,8 @@ class ModelVisualization(Visualization):
         df['Prediction'] = self.model.predict(df)
         df['id'] = pd.np.tile(pd.np.arange(0, n_sim), n_val)
 
+        log.debug(df.shape)
+
         sns.tsplot(df, col, 'id', value='Prediction', err_style='unit_traces')
 
         self.save_fig('effect_%s' % col)
@@ -426,7 +443,6 @@ class ModelVisualization(Visualization):
 
 
 class DataVisualization(Visualization):
-    
     def visualization(self):
         for col in self.df.columns.values:
             self.visualization_occurrence(col)
@@ -435,38 +451,38 @@ class DataVisualization(Visualization):
         log.info('Visualizing occurrence of %s' % col)
         title = 'Occurrence of %s' % col
 
-        try:
-            g = sns.distplot(self.df[col], 100)
+        if pd.np.issubdtype(self.df[col].dtype, pd.np.datetime64):
+            # use matplotlib for datetime histogram
+            self.df[col].groupby(self.df[col].dt.date).count().plot(kind="bar",
+                                                                    rot=0)
+            _, labels = sns.plt.xticks()
+            sns.plt.setp(labels, rotation=15)
+
+        else:
+            # use seaborn for other types
+            kde = True
+            if self.df[col].unique().shape[0] <= 1:
+                kde = False
+
+            g = sns.distplot(self.df[col], 100, kde=kde)
             g.set_title(title)
 
-            self.save_fig('histogram_%s' % col)
-
-        except pd.np.linalg.LinAlgError, e:
-            log.info('Could not plot histogram for %s because of: %s' %
-                      (col, str(e)))
-        except TypeError, e:
-            log.info('Could not plot histogram for %s because of: %s' %
-                     (col, str(e)))
-
+        self.save_fig('histogram_%s' % col)
         Visualization.close_plot()
 
 
 class SearchVisualization(Visualization):
-
     def __init__(self, configdict, section):
         Visualization.__init__(self, configdict, section)
         self.param_perf = None
 
     def visualization(self):
-        self.init_visualization()
+        self.visualization_init()
         for col in param_grid.keys():
             self.visualize_search_parameter(col)
 
-    def init_visualization(self):
-        log.debug("\n%s" % self.cv_results_)
+    def visualization_init(self):
         self.param_perf = pd.DataFrame(self.cv_results_)
-        log.debug("\n%s" % self.param_perf)
-        log.debug("\n%s" % self.param_perf.dtypes)
 
     def visualize_search_parameter(self, param):
         log.info('Visualizing parameter performance of %s' % param)
@@ -476,18 +492,9 @@ class SearchVisualization(Visualization):
         col_score = "mean_test_score"
         col_type = type(self.param_perf[col][0])
 
-        log.debug(self.param_perf[col][0])
-        log.debug(col_type)
-
-
-
-        # try:
         if col_type is str or col_type is bool:
             g = sns.swarmplot(col, col_score, data=self.param_perf)
         else:
-        # except Exception, e:
-        #     log.debug('%s is not number' % param)
-        #     log.debug(e)
             g = sns.residplot(col, col_score, self.param_perf)
 
         g.set(ylim=(0, 1))
@@ -501,7 +508,9 @@ class SearchVisualization(Visualization):
 # done plot decorator
 # done split viz into multiple classes
 # done remove viz dir before inserting new viz
-# todo save rivm in influx with station as station, without component
+# done save rivm in influx with station as station, without component
 # todo check if viz can be smaller
-# todo check time histogram (TypeError?)
+# done check time histogram (TypeError?)
 # done visualize search
+# done show number of missing values per column
+# done add add data from new sensors
