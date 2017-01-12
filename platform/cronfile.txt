@@ -29,6 +29,9 @@ SMARTEM=/opt/geonovum/smartem/git
 # Run RIVM Harvester (from SOS to InfluxDB)
 */15 * * * * cd $SMARTEM/etl; ./harvester_rivm.sh >> /var/smartem/log/etl/harvester_rivm.log 2>&1
 
+# Run Calibrator (creates ANN learning model from JoseExtract and RIVM data in InfluxDB and writes to PG
+*/25 * * * * cd $SMARTEM/etl; ./calibrator.sh >> /var/smartem/log/etl/calibrator.log 2>&1
+
 # refresh smartem website
 # */4 * * * * cd $SMARTEM; ./refresh-git.sh
 
