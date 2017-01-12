@@ -119,6 +119,31 @@ class ExtractFilter(Filter):
                             validate_errs += 1
                             continue
 
+                        if 's_longitude' in sensor_vals and 's_latitude' in sensor_vals:
+                            lon = SENSOR_DEFS['longitude']['converter'](sensor_vals['s_longitude'])
+                            lat = SENSOR_DEFS['latitude']['converter'](sensor_vals['s_latitude'])
+
+                            valid, reason = check_value('latitude', sensor_vals, value=lat)
+                            if not valid:
+                                validate_errs += 1
+                                continue
+
+                            valid, reason = check_value('longitude', sensor_vals, value=lon)
+                            if not valid:
+                                validate_errs += 1
+                                continue
+
+                            # Both lat and lon are valid!
+                            # record['point'] = 'SRID=4326;POINT(%f %f)' % (lon, lat)
+                            sensor_record['lat'] = lat
+                            sensor_record['lon'] = lon
+
+                        # No 'point' proceeding without a location
+                        if 'lat' not in sensor_record or \
+                                        'lon' not in sensor_record:
+                            validate_errs += 1
+                            continue
+
                         # sensor name should be in sensor defs
                         sensor_record['name'] = sensor_name
                         sensor_record['value'] = value_raw

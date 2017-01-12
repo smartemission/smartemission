@@ -26,21 +26,6 @@ log = Util.get_log('Calibration')
 
 
 class MergeRivmJose(Filter):
-    @Config(ptype=dict, required=True)
-    def map_jose(self):
-        """
-        Mapping between Jose stations and "location id's"
-
-        Required: True
-        """
-
-    @Config(ptype=dict, required=True)
-    def map_rivm(self):
-        """
-        Mapping between RIVM stations and "location id's"
-
-        Required: True
-        """
 
     @Config(ptype=int, default=5, required=True)
     def impute_duration(self):
@@ -68,12 +53,14 @@ class MergeRivmJose(Filter):
         log.info('Received jose data with shape (%d, %d)' % df_jose.shape)
 
         # Rename stations
-        df_jose = df_jose.replace({'station': self.map_jose})
-        df_rivm = df_rivm.replace({'station': self.map_rivm})
+        df_jose = df_jose.drop('station', 1)
+        df_rivm = df_rivm.drop('station', 1)
+        df_jose['geohash'] = df_jose['geohash'].str.slice(0,7)
+        df_rivm['geohash'] = df_rivm['geohash'].str.slice(0,7)
 
         # Set time as index
-        df_rivm['time'] = pd.to_datetime(df_rivm['time'])
         df_jose['time'] = pd.to_datetime(df_jose['time'])
+        df_rivm['time'] = pd.to_datetime(df_rivm['time'])
 
         # Interpolate RIVM to jose times
         jose_index = df_jose['time'].unique()
@@ -83,13 +70,13 @@ class MergeRivmJose(Filter):
         df_rivm = df_rivm.reset_index()
 
         # Pivot Jose
-        df_jose = df_jose.pivot_table('value', ['station', 'time'],
+        df_jose = df_jose.pivot_table('value', ['geohash', 'time'],
                                       'component').reset_index()
-        df_rivm = df_rivm.pivot_table('value', ['station', 'time'],
+        df_rivm = df_rivm.pivot_table('value', ['geohash', 'time'],
                                       'component').reset_index()
 
         # Concatenate RIVM and Jose
-        df = pd.merge(df_rivm, df_jose, 'outer', ['time', 'station'])
+        df = pd.merge(df_rivm, df_jose, 'outer', ['time', 'geohash'])
         del df.index.name
         log.info('Merged RIVM and Jose data. New shape = (%d, %d).' % df.shape)
 
@@ -187,14 +174,14 @@ class Calibrator(Filter):
         df = pd.DataFrame.from_records(packet.data)
         log.info('Created data frame with shape (%d, %d)' % df.shape)
 
-        # Preprocessing: filter data
-        unfiltered_col = [self.target, 'time']
+        # Pre-processing: filter data
+        unfiltered_col = [self.target, 'time', 'geohash']
         df = Calibrator.filter_data(df, unfiltered_col, self.filter_alpha)
 
         # Sample to prevent over fitting
         df_sample = df.sample(frac=1.0 / float(self.inverse_sample_fraction))
-        df_meta = df_sample[['station', 'time']]
-        df_sample = df_sample.drop(['station', 'time'], axis=1)
+        df_meta = df_sample[['geohash', 'time']]
+        df_sample = df_sample.drop(['geohash', 'time'], axis=1)
         log.info('Sample data frame, keeping 1 out of every %d rows. New '
                  'shape %s' % (self.inverse_sample_fraction, df_sample.shape))
 
@@ -256,6 +243,7 @@ class Calibrator(Filter):
             target = [target]
         cols = [df_col for df_col in df.columns if df_col not in target]
         for col in cols:
+            # log.info('Filtering %s with alpha=%.3f' % (col, alpha))
             df[col] = Calibrator.running_mean(df[col], alpha)
         return df
 
@@ -398,7 +386,6 @@ class PerformanceVisualization(Visualization):
         time_series = self.sample.copy().sort_values('time')
         time_series = time_series[
             (time_series['time'] >= start) & (time_series['time'] <= end)]
-        time_series['station'] = time_series['station'].astype(int).astype(str)
 
         sns.set_style('darkgrid')
         sns.plt.plot(time_series['time'], time_series[self.target])
@@ -418,23 +405,19 @@ class PerformanceVisualization(Visualization):
 class ModelVisualization(Visualization):
     def visualization(self):
         for col in self.df.columns.values:
-            if col not in ['time', 'station', self.target]:
+            if col not in ['time', 'geohash', self.target]:
                 self.visualization_input_output_relation(col)
 
     def visualization_input_output_relation(self, col, n_val=100, n_sim=100):
         log.info('Visualizing input/output relation %s' % col)
         val = pd.np.linspace(self.df[col].min(), self.df[col].max(), n_val)
         df = self.df.sample(n_sim)
+        df = df.drop(['geohash', 'time', self.target], 1)
         df = pd.concat([df] * n_val)
         df[col] = pd.np.repeat(val, n_sim)
 
-        for df_col in ['station', 'time', self.target]:
-            del df[df_col]
-
         df['Prediction'] = self.model.predict(df)
         df['id'] = pd.np.tile(pd.np.arange(0, n_sim), n_val)
-
-        log.debug(df.shape)
 
         sns.tsplot(df, col, 'id', value='Prediction', err_style='unit_traces')
 
@@ -448,7 +431,8 @@ class DataVisualization(Visualization):
             self.visualization_occurrence(col)
 
     def visualization_occurrence(self, col):
-        log.info('Visualizing occurrence of %s' % col)
+        log.info('Visualizing occurrence of %s with type %s' % \
+                 (col, self.df[col].dtype))
         title = 'Occurrence of %s' % col
 
         if pd.np.issubdtype(self.df[col].dtype, pd.np.datetime64):
@@ -457,6 +441,9 @@ class DataVisualization(Visualization):
                                                                     rot=0)
             _, labels = sns.plt.xticks()
             sns.plt.setp(labels, rotation=15)
+
+        elif self.df[col].dtype == object:
+            self.df[col].groupby(self.df[col]).count().plot(kind="bar", rot=0)
 
         else:
             # use seaborn for other types
@@ -514,3 +501,4 @@ class SearchVisualization(Visualization):
 # done visualize search
 # done show number of missing values per column
 # done add add data from new sensors
+# todo use geohash to select records from influxdb

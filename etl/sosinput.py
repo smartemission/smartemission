@@ -107,7 +107,7 @@ class SosInput(HttpInput):
         # feature_name = info['parameters']['feature']['label']
         phenomenon_name = info['parameters']['phenomenon']['label']
 
-        lat, lon, alt = info['station']['geometry']['coordinates']
+        lon, lat, alt = info['station']['geometry']['coordinates']
         for elem in json_obj:
             elem['id'] = feature_id
             elem['label'] = SosInput.save_name(label)

@@ -112,6 +112,18 @@ class InfluxDbOutput(HttpOutput):
         """
         pass
 
+    @Config(ptype=int, default=12, required=False)
+    def geohash_precision(self):
+        """
+        Precision for the geohash. Number of characters to use in the
+        geohash. When no precision is specified the precision of the
+        coordinates are used.
+
+        Default: 12 (the default of Geoahash.encode())
+
+        Required: False
+        """
+
     @Config(ptype=str, required=True)
     def time_attr(self):
         """
@@ -207,7 +219,7 @@ class InfluxDbOutput(HttpOutput):
                         lat = float(wkt.split(' ')[1].split(')')[0])
 
                 if lat and lon:
-                    geohash = Geohash.encode(lat, lon)
+                    geohash = Geohash.encode(lat, lon, self.geohash_precision)
                     geohash_tag = self.geohash_template % geohash
                     tags += geohash_tag
 
