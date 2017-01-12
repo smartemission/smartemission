@@ -17,6 +17,7 @@ pg_schema_raw=smartem_raw
 pg_schema_refined=smartem_refined
 pg_schema_extracted=smartem_extracted
 pg_schema_harvest_rivm=smartem_harvest_rivm
+pg_schema_calibrated=smartem_calibrated
 
 #
 # ETL: Refiner-settings

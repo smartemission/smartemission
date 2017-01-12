@@ -7,6 +7,7 @@
 STETL_ARGS="-c calibrator.cfg -a options/`hostname`.args"
 WORK_DIR="`pwd`"
 INFLUX_HOST=influxdb
+PG_HOST=postgis
 IMAGE=geonovum/stetl:latest
 NAME="stetl_calibrate"
 
@@ -14,4 +15,4 @@ NAME="stetl_calibrate"
 sudo docker stop ${NAME} > /dev/null 2>&1
 sudo docker rm ${NAME} > /dev/null 2>&1
 
-sudo docker run --name ${NAME} ${PORT_MAP} --link ${INFLUX_HOST}:${INFLUX_HOST} -v ${WORK_DIR}:${WORK_DIR} -w ${WORK_DIR} ${IMAGE} ${STETL_ARGS}
+sudo docker run --name ${NAME} ${PORT_MAP} --link ${PG_HOST}:${PG_HOST} --link ${INFLUX_HOST}:${INFLUX_HOST} -v ${WORK_DIR}:${WORK_DIR} -w ${WORK_DIR} ${IMAGE} ${STETL_ARGS}

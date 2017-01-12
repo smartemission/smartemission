@@ -2,10 +2,12 @@ import os
 from stetl.component import Config
 from stetl.filter import Filter
 from stetl.output import Output
+from stetl.outputs.dboutput import PostgresInsertOutput
 from stetl.packet import FORMAT
 from stetl.util import Util
 
 import matplotlib
+import psycopg2
 from sklearn.metrics import make_scorer
 from sklearn.model_selection import cross_val_predict
 from sklearn.model_selection import cross_val_score
@@ -13,6 +15,7 @@ from sklearn.model_selection import cross_val_score
 matplotlib.use('Agg')
 import pandas as pd
 import seaborn as sns
+import pickle
 from numpy import nan
 from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import RandomizedSearchCV
@@ -489,6 +492,23 @@ class SearchVisualization(Visualization):
 
         self.save_fig('parameter_%s' % param)
         self.close_plot()
+
+
+class CalibrationModelSaver(PostgresInsertOutput):
+
+    def before_invoke(self, packet):
+        result_in = packet.data
+
+        result_out = dict()
+        dump = pickle.dumps(result_in['best_estimator_'])
+        result_out['model'] = psycopg2.Binary(dump)
+        result_out['predicts'] = result_in['target']
+        result_out['score'] = result_in['best_score_']
+        result_out['n'] = result_in['sample'].shape[0]
+
+        packet.data = result_out
+
+        return packet
 
 
 # done time, station, target, prediction, error in different data frame
