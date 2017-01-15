@@ -565,14 +565,3 @@ class CalibrationModelInput(PostgresDbInput):
         return packet
 
 
-# done time, station, target, prediction, error in different data frame
-# done plot decorator
-# done split viz into multiple classes
-# done remove viz dir before inserting new viz
-# done save rivm in influx with station as station, without component
-# todo check if viz can be smaller
-# done check time histogram (TypeError?)
-# done visualize search
-# done show number of missing values per column
-# done add add data from new sensors
-# todo use geohash to select records from influxdb
