@@ -468,7 +468,7 @@ class DataVisualization(Visualization):
 class SearchVisualization(Visualization):
     def __init__(self, configdict, section):
         Visualization.__init__(self, configdict, section)
-        self.param_perf = None
+        self.cv_results = None
 
     def visualization(self):
         self.visualization_init()
@@ -476,7 +476,7 @@ class SearchVisualization(Visualization):
             self.visualize_search_parameter(col)
 
     def visualization_init(self):
-        self.param_perf = pd.DataFrame(self.cv_results_)
+        self.cv_results = pd.DataFrame(self.cv_results_)
 
     def visualize_search_parameter(self, param):
         log.info('Visualizing parameter performance of %s' % param)
@@ -484,12 +484,12 @@ class SearchVisualization(Visualization):
         title = "Explained variances for different levels of %s" % param
         col = "param_%s" % param
         col_score = "mean_test_score"
-        col_type = type(self.param_perf[col][0])
+        col_type = type(self.cv_results[col][0])
 
         if col_type is str or col_type is bool:
-            g = sns.swarmplot(col, col_score, data=self.param_perf)
+            g = sns.swarmplot(col, col_score, data=self.cv_results)
         else:
-            g = sns.residplot(col, col_score, self.param_perf)
+            g = self.cv_results.plot(col, col_score, 'scatter')
 
         g.set(ylim=(0, 1))
         g.set_title(title)
