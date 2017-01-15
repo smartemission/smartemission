@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS smartem_calibrated.calibration_models CASCADE;
 CREATE TABLE smartem_calibrated.calibration_models (
   id serial,
   model bytea not null,
+  input_order json,
   predicts character varying (32) not null,
   score float,
   n int,

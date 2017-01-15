@@ -1,3 +1,4 @@
+import json
 import os
 from stetl.component import Config
 from stetl.filter import Filter
@@ -223,6 +224,7 @@ class Calibrator(Filter):
         result_out['data'] = df
         result_out['sample'] = df_sample
         result_out['rmse'] = rmse
+        result_out['column_order'] = x.columns.tolist()
 
         packet.data = result_out
         log.info('Returning result of %d length, with keys %s.' % (
@@ -507,6 +509,7 @@ class CalibrationModelOutput(PostgresInsertOutput):
         result_out['predicts'] = result_in['target']
         result_out['score'] = result_in['best_score_']
         result_out['n'] = result_in['sample'].shape[0]
+        result_out['input_order'] = json.dumps(result_in['column_order'])
 
         packet.data = result_out
 
