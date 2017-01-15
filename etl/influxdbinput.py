@@ -93,30 +93,21 @@ class InfluxDbInput(DbInput):
 class CalibrationInfluxDbInput(InfluxDbInput):
 
     @Config(ptype=str, required=True)
-    def query_jose(self):
+    def key(self):
         """
-        The query for the database to get the Jose data
+        The key where the values are saved in the data
 
         Required: True
         """
-
-    @Config(ptype=str, required=True)
-    def query_rivm(self):
-        """
-        The query for the database to get the RIVM data
-
-        Required: True
-        """
-
-    def __init__(self, configdict, section, produces=FORMAT.record):
-        InfluxDbInput.__init__(self, configdict, section, produces)
 
     def read(self, packet):
-        results_out = dict()
-        results_out["jose"] = self.query_db(self.query_jose)
-        results_out["rivm"] = self.query_db(self.query_rivm)
+        results = packet.data
+        if results is None:
+            results = dict()
 
-        packet.data = results_out
+        results[self.key] = self.query_db(self.query)
+
+        packet.data = results
         packet.set_end_of_stream()
 
         return packet
