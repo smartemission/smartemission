@@ -423,6 +423,9 @@ class ModelVisualization(Visualization):
         df['Prediction'] = self.model.predict(df)
         df['id'] = pd.np.tile(pd.np.arange(0, n_sim), n_val)
 
+        # index should start at 0 for tsplot.
+        # see: https://github.com/mwaskom/seaborn/issues/957
+        df = df.reset_index()
         sns.tsplot(df, col, 'id', value='Prediction', err_style='unit_traces')
 
         self.save_fig('effect_%s' % col)
