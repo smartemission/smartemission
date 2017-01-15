@@ -1,6 +1,7 @@
 import os
 from stetl.component import Config
 from stetl.filter import Filter
+from stetl.inputs.dbinput import PostgresDbInput
 from stetl.output import Output
 from stetl.outputs.dboutput import PostgresInsertOutput
 from stetl.packet import FORMAT
@@ -47,17 +48,16 @@ class MergeRivmJose(Filter):
     def invoke(self, packet):
         # Convert packet data to dataframes
         result_in = packet.data
-        rivm = result_in['rivm']
-        jose = result_in['jose']
-        df_rivm = pd.DataFrame.from_records(rivm)
-        df_jose = pd.DataFrame.from_records(jose)
+        df_rivm = pd.DataFrame.from_records(result_in['rivm'])
+        df_jose = pd.DataFrame.from_records(result_in['jose'])
+        del result_in
 
         log.info('Received rivm data with shape (%d, %d)' % df_rivm.shape)
         log.info('Received jose data with shape (%d, %d)' % df_jose.shape)
 
         # Rename stations
-        df_jose = df_jose.drop('station', 1)
-        df_rivm = df_rivm.drop('station', 1)
+        df_jose.drop('station', 1, inplace = True)
+        df_rivm.drop('station', 1, inplace = True)
         df_jose['geohash'] = df_jose['geohash'].str.slice(0,7)
         df_rivm['geohash'] = df_rivm['geohash'].str.slice(0,7)
 
@@ -178,8 +178,8 @@ class Calibrator(Filter):
         log.info('Created data frame with shape (%d, %d)' % df.shape)
 
         # Pre-processing: filter data
-        unfiltered_col = [self.target, 'time', 'geohash']
-        df = Calibrator.filter_data(df, unfiltered_col, self.filter_alpha)
+        filter_col = ['s_coresistance', 's_no2resistance', 's_o3resistance']
+        df = Calibrator.filter_data(df, filter_col, self.filter_alpha)
 
         # Sample to prevent over fitting
         df_sample = df.sample(frac=1.0 / float(self.inverse_sample_fraction))
@@ -190,14 +190,14 @@ class Calibrator(Filter):
 
         # Split into label and data
         x, y = Calibrator.split_data_label(df_sample, self.target)
+        x = x.reindex_axis(sorted(x.columns), axis=1)
+
+        # Do cross validation
         log.info('Starting randomized cross validated search to find best '
                  'parameters. Running %d iterations with %d cross '
-                 'validations of %d cores' % (
-                     self.random_search_iterations, self.cv_k, self.n_jobs))
-
-        # Do random search
-        log.info('Finding relation from %s to %s' % (
-            ', '.join(x.columns.tolist()), self.target))
+                 'validations of %d cores. Finding relation from %s to %s.' % (
+                     self.random_search_iterations, self.cv_k, self.n_jobs,
+                     ', '.join(x.columns.tolist()), self.target))
         gs = RandomizedSearchCV(self.pipeline, param_grid,
                                 self.random_search_iterations,
                                 n_jobs=self.n_jobs, cv=self.cv_k,
@@ -239,12 +239,12 @@ class Calibrator(Filter):
         return x, y
 
     @staticmethod
-    def filter_data(df, target, alpha):
+    def filter_data(df, cols, alpha):
         # todo use rolling mean for time series data (i.e. also account for
         # longer gaps in the data)
-        if type(target) is not list:
-            target = [target]
-        cols = [df_col for df_col in df.columns if df_col not in target]
+        if type(cols) is not list:
+            cols = [cols]
+        cols = [df_col for df_col in df.columns if df_col in cols]
         for col in cols:
             # log.info('Filtering %s with alpha=%.3f' % (col, alpha))
             df[col] = Calibrator.running_mean(df[col], alpha)
@@ -348,7 +348,7 @@ class PerformanceVisualization(Visualization):
     def visualization(self):
         self.visualization_error_scatter()
         self.visualization_error_histogram()
-        self.visualization_time_series('20150101', '20170101')
+        self.visualization_time_series('20170101', '20170201', 'u1hnvkb')
 
     def visualization_error_scatter(self):
         log.info('Visualizing error as scatterplot')
@@ -378,7 +378,7 @@ class PerformanceVisualization(Visualization):
         self.save_fig('error_histogram')
         self.close_plot()
 
-    def visualization_time_series(self, start, end):
+    def visualization_time_series(self, start, end, geohash):
         log.info("Visualizing time series from %s to %s" % (start, end))
 
         start = pd.to_datetime(start)
@@ -387,8 +387,9 @@ class PerformanceVisualization(Visualization):
                 'var=%.0f%%' % (start, end, self.rmse, self.best_score*100)
 
         time_series = self.sample.copy().sort_values('time')
-        time_series = time_series[
-            (time_series['time'] >= start) & (time_series['time'] <= end)]
+        time_series = time_series[(time_series['time'] >= start) &
+                                  (time_series['time'] <= end) &
+                                  (time_series['geohash'] == geohash)]
 
         sns.set_style('darkgrid')
         sns.plt.plot(time_series['time'], time_series[self.target])
@@ -494,7 +495,7 @@ class SearchVisualization(Visualization):
         self.close_plot()
 
 
-class CalibrationModelSaver(PostgresInsertOutput):
+class CalibrationModelOutput(PostgresInsertOutput):
 
     def before_invoke(self, packet):
         result_in = packet.data

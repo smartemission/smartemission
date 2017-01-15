@@ -12,6 +12,6 @@ CREATE TABLE smartem_calibrated.calibration_models (
   score float,
   n int,
   invalid boolean not null default false,
-  last_update timestamp with time zone default current_timestamp,
+  timestamp timestamp with time zone default current_timestamp,
   PRIMARY KEY (id)
 ) WITHOUT OIDS;

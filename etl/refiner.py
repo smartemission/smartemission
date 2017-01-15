@@ -12,7 +12,6 @@ from stetl.util import Util
 from stetl.packet import FORMAT
 from stetl.component import Config
 
-from datetime import datetime, timedelta
 import pytz
 from sensordefs import *
 
@@ -68,6 +67,7 @@ class RefineFilter(Filter):
 
         # ts_list (timeseries list) is an array of dict, each dict containing raw sensor values
         ts_list = record_in['data']['timeseries']
+        models = record_in['models']
         gid_raw = record_in['gid']
         unique_id = record_in['unique_id']
         log.info('processing unique_id=%s gid_raw=%d ts_count=%d' % (unique_id, gid_raw, len(ts_list)))
@@ -188,9 +188,13 @@ class RefineFilter(Filter):
                         record['value_raw'] = value_raw
 
                     # Do the conversion/calibration in 3 steps
+                    # 0) set model if available
                     # 1) check inputs (available and valid)
                     # 2) convert
                     # 3) check output (available and valid)
+
+                    if sensor_name in models:
+                        sensor_def['model'] = models[sensor_name]
 
                     # 1) check inputs
                     value = sensor_def['converter'](value_raw, sensor_vals, sensor_def)
