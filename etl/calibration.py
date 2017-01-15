@@ -41,7 +41,7 @@ class MergeRivmJose(Filter):
         Required: True
         """
 
-    def __init__(self, configdict, section, consumes=FORMAT.record_array,
+    def __init__(self, configdict, section, consumes=FORMAT.record,
                  produces=FORMAT.record_array):
         Filter.__init__(self, configdict, section, consumes, produces)
 
@@ -56,8 +56,6 @@ class MergeRivmJose(Filter):
         log.info('Received jose data with shape (%d, %d)' % df_jose.shape)
 
         # Rename stations
-        df_jose.drop('station', 1, inplace = True)
-        df_rivm.drop('station', 1, inplace = True)
         df_jose['geohash'] = df_jose['geohash'].str.slice(0,7)
         df_rivm['geohash'] = df_rivm['geohash'].str.slice(0,7)
 
