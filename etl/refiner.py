@@ -193,8 +193,15 @@ class RefineFilter(Filter):
                     # 2) convert
                     # 3) check output (available and valid)
 
-                    if sensor_name in models:
-                        sensor_def['model'] = models[sensor_name]
+                    # 0) set model if available and needed
+                    if 'model' in sensor_def:
+                        if sensor_name not in models:
+                            log.warn('No calibration model given for %s' %
+                                     sensor_name)
+                            validate_errs += 1
+                            continue
+                        else:
+                            sensor_def['model'] = models[sensor_name]
 
                     # 1) check inputs
                     value = sensor_def['converter'](value_raw, sensor_vals, sensor_def)
