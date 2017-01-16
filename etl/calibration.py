@@ -328,7 +328,8 @@ class Visualization(Output):
         self.rmse = record_in['rmse']
 
         if self.clear_output_folder:
-            Visualization.create_empty_folder(os.path.dirname(self.file_path))
+            folder = os.path.dirname(self.file_path) % self.target
+            Visualization.create_empty_folder(folder)
         self.visualization()
 
         return packet
