@@ -463,9 +463,10 @@ class DataVisualization(Visualization):
         title = 'Occurrence of %s' % col
 
         if pd.np.issubdtype(self.df[col].dtype, pd.np.datetime64):
-            # use matplotlib for datetime histogram
-            self.df[col].groupby(self.df[col].dt.date).count().plot(kind="bar",
-                                                                    rot=0)
+            sns.set_style("darkgrid")
+            ax = sns.plt.subplot(111)
+            ax.hist(self.df[col].tolist(), 100, normed = True)
+            ax.xaxis_date()
             _, labels = sns.plt.xticks()
             sns.plt.setp(labels, rotation=15)
 
