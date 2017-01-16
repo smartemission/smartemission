@@ -3,6 +3,7 @@ from stetl.inputs.dbinput import DbInput
 from stetl.packet import FORMAT
 from stetl.util import Util
 
+import pandas as pd
 from influxdb import DataFrameClient
 from influxdb import InfluxDBClient
 
@@ -100,12 +101,30 @@ class CalibrationInfluxDbInput(InfluxDbInput):
         Required: True
         """
 
+    def __init__(self, configdict, section):
+        InfluxDbInput.__init__(self, configdict, section)
+        self.last_timestamp = '1900-01-01T00:00:00Z'
+
     def read(self, packet):
         results = packet.data
         if results is None:
             results = dict()
 
-        results[self.key] = self.query_db(self.query)
+        dfs = []
+        while True:
+            db_ret = self.query_db(self.query % self.last_timestamp)
+            if len(db_ret) > 0:
+                self.last_timestamp = db_ret[-1]['time']
+                log.info('Last timestamp from influxdb is %s' % self.last_timestamp)
+                df = pd.DataFrame.from_records(db_ret)
+                df = df.pivot_table('value', ['geohash', 'time'],
+                                    'component').reset_index()
+                dfs.append(df)
+            else:
+                break
+        df = pd.concat(dfs)
+
+        results[self.key] = df
 
         packet.data = results
         packet.set_end_of_stream()

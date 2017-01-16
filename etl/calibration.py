@@ -49,12 +49,12 @@ class MergeRivmJose(Filter):
     def invoke(self, packet):
         # Convert packet data to dataframes
         result_in = packet.data
-        df_rivm = pd.DataFrame.from_records(result_in['rivm'])
-        df_jose = pd.DataFrame.from_records(result_in['jose'])
-        del result_in
+        df_rivm = result_in['rivm']
+        df_jose = result_in['jose']
 
         log.info('Received rivm data with shape (%d, %d)' % df_rivm.shape)
         log.info('Received jose data with shape (%d, %d)' % df_jose.shape)
+        log.info('Pre-processing geohash and time')
 
         # Rename stations
         df_jose['geohash'] = df_jose['geohash'].str.slice(0,7)
@@ -65,29 +65,25 @@ class MergeRivmJose(Filter):
         df_rivm['time'] = pd.to_datetime(df_rivm['time'])
 
         # Interpolate RIVM to jose times
+        log.info('Interpolating RIVM values towards jose measurements')
         jose_index = df_jose['time'].unique()
         jose_time = pd.DataFrame({'time': jose_index})
         df_rivm = jose_time.merge(df_rivm, 'outer').set_index('time')
         df_rivm = df_rivm.sort_index().interpolate().ffill().loc[jose_index]
         df_rivm = df_rivm.reset_index()
 
-        # Pivot Jose
-        df_jose = df_jose.pivot_table('value', ['geohash', 'time'],
-                                      'component').reset_index()
-        df_rivm = df_rivm.pivot_table('value', ['geohash', 'time'],
-                                      'component').reset_index()
-
         # Concatenate RIVM and Jose
         df = pd.merge(df_rivm, df_jose, 'outer', ['time', 'geohash'])
         del df.index.name
-        log.info('Merged RIVM and Jose data. New shape = (%d, %d).' % df.shape)
+        log.info('RIVM and Jose are merged, new shape (%d, %d)' %  df.shape)
 
         # Filling and dropping na
+        log.info('Filling and dropping missing values')
         df = df.sort_values('time')
         df = df.fillna(method='pad', limit=self.impute_duration*5) # 5 min
         log.info("Missing values: %s" % pd.isnull(df).sum().to_dict())
         df = df.dropna()
-        log.info('Dropping NA values. New shape = (%d, %d).' % df.shape)
+        log.info('Missing values are removed, new shape (%d, %d).' % df.shape)
 
         packet.data = df.to_dict('records')
         log.info('Returning packet of length %d', len(packet.data))

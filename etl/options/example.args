@@ -57,6 +57,7 @@ extractor_raw_read_once=True
 #
 calibration_component=carbon_monoxide__air_
 calibration_location_geohash=(geohash='u1hnvkb' or geohash='u1hnvkc' or geohash='u1hnvm3' or geohash='u178hw8' or geohash = 'u178kt7')
+calibrator_max_input_records = 1000000
 
 #
 # SOS Publication and API Server credentials
