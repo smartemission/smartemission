@@ -116,7 +116,7 @@ class SosInput(HttpInput):
             elem['lat'] = lat
             elem['lon'] = lon
             elem['altitude'] = alt
-            elem['datetime'] = datetime.fromtimestamp(elem['timestamp'] / 1000)
+            elem['datetime'] = datetime.utcfromtimestamp(elem['timestamp'] / 1000)
 
         return json_obj
 
