@@ -113,11 +113,11 @@ class Calibrator(Filter):
         Required: False
         """
 
-    @Config(ptype=str, required=True)
-    def target(self):
+    @Config(ptype=list, required=True)
+    def targets(self):
         """
-        The column to predict, all the other columns will be used for the
-        prediction
+        The columns to predict. For each prediction all the columns that are
+        not in this list will be used for prediction.
 
         Required: True
         """
@@ -158,18 +158,35 @@ class Calibrator(Filter):
                  produces=FORMAT.record):
         Filter.__init__(self, configdict, section, consumes, produces)
         self.pipeline = None
+        self.current_target = None
+        self.current_target_id = None
+        self.other_targets = None
 
     def init(self):
         ss = StandardScaler()
         mlp = MLPRegressor(solver='lbfgs')
         steps = [('scale', ss), ('mlp', mlp)]
         self.pipeline = Pipeline(steps)
+        self.current_target_id = -1
+        if self.has_next_target():
+            self.next_target()
+
+    def next_target(self):
+        self.current_target_id += 1
+        self.current_target = self.targets[self.current_target_id]
+        self.other_targets = self.targets[:]
+        self.other_targets.remove(self.current_target)
+
+    def has_next_target(self):
+        return self.current_target_id + 1 < len(self.targets)
 
     def invoke(self, packet):
+        packet.set_end_of_stream(False)
 
         # Unpacking data
         log.info('Receiving packet of size %d' % len(packet.data))
         df = pd.DataFrame.from_records(packet.data)
+        df = df.drop(self.other_targets, axis=1)
         log.info('Created data frame with shape (%d, %d)' % df.shape)
 
         # Pre-processing: filter data
@@ -184,7 +201,7 @@ class Calibrator(Filter):
                  'shape %s' % (self.inverse_sample_fraction, df_sample.shape))
 
         # Split into label and data
-        x, y = Calibrator.split_data_label(df_sample, self.target)
+        x, y = Calibrator.split_data_label(df_sample, self.current_target)
         x = x.reindex_axis(sorted(x.columns), axis=1)
 
         # Do cross validation
@@ -192,7 +209,7 @@ class Calibrator(Filter):
                  'parameters. Running %d iterations with %d cross '
                  'validations of %d cores. Finding relation from %s to %s.' % (
                      self.random_search_iterations, self.cv_k, self.n_jobs,
-                     ', '.join(x.columns.tolist()), self.target))
+                     ', '.join(x.columns.tolist()), self.current_target))
         gs = RandomizedSearchCV(self.pipeline, param_grid,
                                 self.random_search_iterations,
                                 n_jobs=self.n_jobs, cv=self.cv_k,
@@ -204,19 +221,19 @@ class Calibrator(Filter):
         # Compute performance and cross val predictions and add meta
         pipe = gs.best_estimator_
         scorer = make_scorer(mean_squared_error, False)
-        mses = cross_val_score(pipe, x, y, None, scorer, self.cv_k)
+        mses = cross_val_score(pipe, x, y, None, scorer, self.cv_k, n_jobs=-2)
         rmse = pd.np.mean(pd.np.sqrt(-mses))
 
         df_sample = pd.concat([df_sample, df_meta], axis=1)
         df_sample['pred'] = cross_val_predict(pipe, x, y, None, self.cv_k, -1)
-        df_sample['error'] = df_sample[self.target] - df_sample['pred']
+        df_sample['error'] = df_sample[self.current_target] - df_sample['pred']
 
         # Save results
         result_out = dict()
         for gs_keys in ['cv_results_', 'best_estimator_', 'best_score_',
                         'best_params_', 'best_index_', 'scorer_', 'n_splits_']:
             result_out[gs_keys] = getattr(gs, gs_keys)
-        result_out['target'] = self.target
+        result_out['target'] = self.current_target
         result_out['data'] = df
         result_out['sample'] = df_sample
         result_out['rmse'] = rmse
@@ -225,6 +242,12 @@ class Calibrator(Filter):
         packet.data = result_out
         log.info('Returning result of %d length, with keys %s.' % (
             len(packet.data), packet.data.keys()))
+
+        # Stop calibrating if not targets are left
+        if self.has_next_target():
+            self.next_target()
+        else:
+            packet.set_end_of_stream()
 
         return packet
 
@@ -314,7 +337,8 @@ class Visualization(Output):
         pass
 
     def save_fig(self, file_name, file_extension='png'):
-        file_path = self.file_path % ("%s.%s" % (file_name, file_extension))
+        file_name = "%s.%s" % (file_name, file_extension)
+        file_path = self.file_path % (self.target, file_name)
         sns.plt.savefig(file_path)
         log.info('Saved figure to %s' % file_path)
 

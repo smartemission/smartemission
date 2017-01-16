@@ -4,7 +4,6 @@ from stetl.packet import FORMAT
 from stetl.util import Util
 
 import pandas as pd
-from influxdb import DataFrameClient
 from influxdb import InfluxDBClient
 
 log = Util.get_log("InfluxDbInput")
@@ -103,6 +102,9 @@ class CalibrationInfluxDbInput(InfluxDbInput):
 
     def __init__(self, configdict, section):
         InfluxDbInput.__init__(self, configdict, section)
+        self.last_timestamp = None
+
+    def before_invoke(self, packet):
         self.last_timestamp = '1900-01-01T00:00:00Z'
 
     def read(self, packet):
