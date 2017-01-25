@@ -131,6 +131,7 @@ class RawSensorLastInput(RawSensorAPIInput):
 
     def __init__(self, configdict, section, produces=FORMAT.record_array):
         RawSensorAPIInput.__init__(self, configdict, section, produces)
+        self.models = None
 
 
     def init(self):
@@ -141,6 +142,9 @@ class RawSensorLastInput(RawSensorAPIInput):
         """
         Called just before Component invoke.
         """
+
+        # Assume that there are calibration models in the meta
+        self.models = packet.meta['models']
 
         # The base method read() will fetch self.url until it is set to None
         self.device_id, self.device_ids_idx = self.next_entry(self.device_ids, self.device_ids_idx)
@@ -292,6 +296,14 @@ class RawSensorLastInput(RawSensorAPIInput):
 
                 # Calculate values
                 record['value_raw'] = value_raw
+
+                # set model if available and needed
+                if 'model' in sensor_def:
+                    if sensor_name not in self.models:
+                        log.warn('No calibration model given for %s' % sensor_name)
+                        continue
+                    else:
+                        sensor_def['model'] = self.models[sensor_name]
 
                 value = sensor_def['converter'](value_raw, sensor_vals, sensor_def)
                 output_valid, reason = check_value(sensor_name, sensor_vals, value=value)

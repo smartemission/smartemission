@@ -61,13 +61,14 @@ class RefineFilter(Filter):
 
         # The TS input record: single device with json-field with list of dict for values
         record_in = packet.data
+        record_meta = packet.meta
 
         # Start list of output records
         records_out = {}
 
         # ts_list (timeseries list) is an array of dict, each dict containing raw sensor values
         ts_list = record_in['data']['timeseries']
-        models = record_in['models']
+        models = record_meta['models']
         gid_raw = record_in['gid']
         unique_id = record_in['unique_id']
         log.info('processing unique_id=%s gid_raw=%d ts_count=%d' % (unique_id, gid_raw, len(ts_list)))

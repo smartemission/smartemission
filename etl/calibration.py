@@ -579,8 +579,7 @@ class CalibrationModelInput(PostgresDbInput):
                 'mapping for calibration models to gas components given.')
 
     def invoke(self, packet):
-        if packet.data is not None:
-            packet.data['models'] = self.models
+        packet.meta['models'] = self.models
 
         return packet
 
