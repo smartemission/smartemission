@@ -43,7 +43,7 @@ class MergeRivmJose(Filter):
         """
 
     def __init__(self, configdict, section, consumes=FORMAT.record,
-                 produces=FORMAT.record_array):
+                 produces=FORMAT.record):
         Filter.__init__(self, configdict, section, consumes, produces)
 
     def invoke(self, packet):
@@ -85,8 +85,9 @@ class MergeRivmJose(Filter):
         df = df.dropna()
         log.info('Missing values are removed, new shape (%d, %d).' % df.shape)
 
-        packet.data = df.to_dict('records')
-        log.info('Returning packet of length %d', len(packet.data))
+        # note: not converting to records, because that take a lot of memory.
+        packet.data = {'merged': df}
+        log.info('Returning dict with pandas DataFrame as only element')
 
         return packet
 
@@ -103,7 +104,7 @@ class Calibrator(Filter):
         Required: True
         """
 
-    @Config(ptype=float, default=.01, required=False)
+    @Config(ptype=float, default=1, required=False)
     def filter_alpha(self):
         """
         Control for low-pass filter, higher alpha is more emphasis on new data
@@ -154,7 +155,7 @@ class Calibrator(Filter):
         Required: False
         """
 
-    def __init__(self, configdict, section, consumes=FORMAT.record_array,
+    def __init__(self, configdict, section, consumes=FORMAT.record,
                  produces=FORMAT.record):
         Filter.__init__(self, configdict, section, consumes, produces)
         self.pipeline = None
@@ -185,8 +186,9 @@ class Calibrator(Filter):
 
         # Unpacking data
         log.info('Receiving packet of size %d' % len(packet.data))
-        df = pd.DataFrame.from_records(packet.data)
+        df = packet.data['merged']
         df = df.drop(self.other_targets, axis=1)
+        df = df.reset_index() # we want a clean data frame
         log.info('Created data frame with shape (%d, %d)' % df.shape)
 
         # Pre-processing: filter data
@@ -194,14 +196,14 @@ class Calibrator(Filter):
         df = Calibrator.filter_data(df, filter_col, self.filter_alpha)
 
         # Sample to prevent over fitting
-        df_sample = df.sample(frac=1.0 / float(self.inverse_sample_fraction))
-        df_meta = df_sample[['geohash', 'time']]
-        df_sample = df_sample.drop(['geohash', 'time'], axis=1)
+        df = df.sample(frac=1.0 / float(self.inverse_sample_fraction))
+        df_meta = df[['geohash', 'time']]
+        df = df.drop(['geohash', 'time'], axis=1)
         log.info('Sample data frame, keeping 1 out of every %d rows. New '
-                 'shape %s' % (self.inverse_sample_fraction, df_sample.shape))
+                 'shape %s' % (self.inverse_sample_fraction, df.shape))
 
         # Split into label and data
-        x, y = Calibrator.split_data_label(df_sample, self.current_target)
+        x, y = Calibrator.split_data_label(df, self.current_target)
         x = x.reindex_axis(sorted(x.columns), axis=1)
 
         # Do cross validation
@@ -221,12 +223,13 @@ class Calibrator(Filter):
         # Compute performance and cross val predictions and add meta
         pipe = gs.best_estimator_
         scorer = make_scorer(mean_squared_error, False)
-        mses = cross_val_score(pipe, x, y, None, scorer, self.cv_k, n_jobs=-2)
+        mses = cross_val_score(pipe, x, y, None, scorer, self.cv_k,
+                               n_jobs=self.n_jobs)
         rmse = pd.np.mean(pd.np.sqrt(-mses))
 
-        df_sample = pd.concat([df_sample, df_meta], axis=1)
-        df_sample['pred'] = cross_val_predict(pipe, x, y, None, self.cv_k, -1)
-        df_sample['error'] = df_sample[self.current_target] - df_sample['pred']
+        df = pd.concat([df, df_meta], axis=1)
+        df['pred'] = cross_val_predict(pipe, x, y, None, self.cv_k, -1)
+        df['error'] = df[self.current_target] - df['pred']
 
         # Save results
         result_out = dict()
@@ -234,8 +237,8 @@ class Calibrator(Filter):
                         'best_params_', 'best_index_', 'scorer_', 'n_splits_']:
             result_out[gs_keys] = getattr(gs, gs_keys)
         result_out['target'] = self.current_target
-        result_out['data'] = df
-        result_out['sample'] = df_sample
+        # result_out['data'] = df
+        result_out['sample'] = df
         result_out['rmse'] = rmse
         result_out['column_order'] = x.columns.tolist()
 
@@ -309,7 +312,7 @@ class Visualization(Output):
     def __init__(self, configdict, section):
         Output.__init__(self, configdict, section, consumes=FORMAT.record)
         self.model = None
-        self.df = None
+        # self.df = None
         self.sample = None
         self.cv_results_ = None
         self.target = None
@@ -320,7 +323,7 @@ class Visualization(Output):
         record_in = packet.data
 
         self.model = record_in['best_estimator_']
-        self.df = record_in['data']
+        # self.df = record_in['data']
         self.sample = record_in['sample']
         self.cv_results_ = record_in['cv_results_']
         self.target = record_in['target']
@@ -428,16 +431,23 @@ class PerformanceVisualization(Visualization):
 
 
 class ModelVisualization(Visualization):
+    def __init__(self, configdict, section):
+        Visualization.__init__(self, configdict, section)
+        self.do_not_consider = None
+
     def visualization(self):
-        for col in self.df.columns.values:
-            if col not in ['time', 'geohash', self.target]:
+        self.do_not_consider = ['time', 'geohash', self.target, 'error', 'pred']
+        # todo use packet.data['sample'] instead
+        for col in self.sample.columns.values:
+            if col not in self.do_not_consider:
                 self.visualization_input_output_relation(col)
 
     def visualization_input_output_relation(self, col, n_val=100, n_sim=100):
         log.info('Visualizing input/output relation %s' % col)
-        val = pd.np.linspace(self.df[col].min(), self.df[col].max(), n_val)
-        df = self.df.sample(n_sim)
-        df = df.drop(['geohash', 'time', self.target], 1)
+
+        df = self.sample.drop(self.do_not_consider, 1)
+        val = pd.np.linspace(df[col].min(), df[col].max(), n_val)
+        df = df.sample(n_sim)
         df = pd.concat([df] * n_val)
         df[col] = pd.np.repeat(val, n_sim)
 
@@ -455,32 +465,33 @@ class ModelVisualization(Visualization):
 
 class DataVisualization(Visualization):
     def visualization(self):
-        for col in self.df.columns.values:
+        for col in self.sample.columns.values:
             self.visualization_occurrence(col)
 
     def visualization_occurrence(self, col):
         log.info('Visualizing occurrence of %s with type %s' % \
-                 (col, self.df[col].dtype))
+                 (col, self.sample[col].dtype))
         title = 'Occurrence of %s' % col
 
-        if pd.np.issubdtype(self.df[col].dtype, pd.np.datetime64):
+        if pd.np.issubdtype(self.sample[col].dtype, pd.np.datetime64):
             sns.set_style("darkgrid")
             ax = sns.plt.subplot(111)
-            ax.hist(self.df[col].tolist(), 100, normed = True)
+            ax.hist(self.sample[col].tolist(), 100, normed = True)
             ax.xaxis_date()
             _, labels = sns.plt.xticks()
             sns.plt.setp(labels, rotation=15)
 
-        elif self.df[col].dtype == object:
-            self.df[col].groupby(self.df[col]).count().plot(kind="bar", rot=0)
+        elif self.sample[col].dtype == object:
+            self.sample[col].groupby(self.sample[col]).count().plot(
+                kind="bar", rot=0)
 
         else:
             # use seaborn for other types
             kde = True
-            if self.df[col].unique().shape[0] <= 1:
+            if self.sample[col].unique().shape[0] <= 1:
                 kde = False
 
-            g = sns.distplot(self.df[col], 100, kde=kde)
+            g = sns.distplot(self.sample[col], 100, kde=kde)
             g.set_title(title)
 
         self.save_fig('histogram_%s' % col)
