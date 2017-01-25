@@ -11,26 +11,26 @@ SMARTEM=/opt/geonovum/smartem/git
 */3 * * * * cd $SMARTEM/etl; ./last.sh > /var/smartem/log/etl/smartem_last.log 2>&1
 
 # Run Harvester Smartemission
-12,25,37,49 * * * * cd $SMARTEM/etl; ./harvester.sh >> /var/smartem/log/etl/harvester.log 2>&1
+12,25,37,49 * * * * cd $SMARTEM/etl; ./harvester.sh > /var/smartem/log/etl/harvester.log 2>&1
 
 # Run Refiner Smartemission
-*/5 * * * * cd $SMARTEM/etl; ./refiner.sh >> /var/smartem/log/etl/refiner.log 2>&1
-# 30,35,40,45,50,55 * * * * cd $SMARTEM/etl; ./refiner.sh >> /var/smartem/log/etl/refiner.log 2>&1
+*/15 * * * * cd $SMARTEM/etl; ./refiner.sh > /var/smartem/log/etl/refiner.log 2>&1
+# 30,35,40,45,50,55 * * * * cd $SMARTEM/etl; ./refiner.sh > /var/smartem/log/etl/refiner.log 2>&1
 
 # Run SOS Publisher Smartemission
-*/6 * * * * cd $SMARTEM/etl; ./sospublisher.sh >> /var/smartem/log/etl/sospublisher.log 2>&1
+*/6 * * * * cd $SMARTEM/etl; ./sospublisher.sh > /var/smartem/log/etl/sospublisher.log 2>&1
 
 # Run SensorThings API Publisher Smartemission
-*/10 * * * * cd $SMARTEM/etl; ./stapublisher.sh >> /var/smartem/log/etl/stapublisher.log 2>&1
+*/10 * * * * cd $SMARTEM/etl; ./stapublisher.sh > /var/smartem/log/etl/stapublisher.log 2>&1
 
 # Run Jose Extractor (from PG Raw timerseries to InfluxDB)
-*/20 * * * * cd $SMARTEM/etl; ./extractor.sh >> /var/smartem/log/etl/extractor.log 2>&1
+*/20 * * * * cd $SMARTEM/etl; ./extractor.sh > /var/smartem/log/etl/extractor.log 2>&1
 
 # Run RIVM Harvester (from SOS to InfluxDB)
-*/15 * * * * cd $SMARTEM/etl; ./harvester_rivm.sh >> /var/smartem/log/etl/harvester_rivm.log 2>&1
+*/15 * * * * cd $SMARTEM/etl; ./harvester_rivm.sh > /var/smartem/log/etl/harvester_rivm.log 2>&1
 
 # Run Calibrator (creates ANN learning model from JoseExtract and RIVM data in InfluxDB and writes to PG
-*/25 * * * * cd $SMARTEM/etl; ./calibrator.sh >> /var/smartem/log/etl/calibrator.log 2>&1
+0 8 * * * cd $SMARTEM/etl; ./calibrator.sh > /var/smartem/log/etl/calibrator.log 2>&1
 
 # refresh smartem website
 # */4 * * * * cd $SMARTEM; ./refresh-git.sh
