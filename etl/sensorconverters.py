@@ -4,6 +4,13 @@ from datetime import datetime, tzinfo, timedelta
 
 import pandas as pd
 
+running_means = {'co': {'s_coresistance': None, 's_no2resistance': None,
+                        's_o3resistance': None},
+                 'no2': {'s_coresistance': None, 's_no2resistance': None,
+                         's_o3resistance': None},
+                 'o3': {'s_coresistance': None, 's_no2resistance': None,
+                        's_o3resistance': None}}
+running_mean_alpha = .05
 
 # log = Util.get_log("SensorConverters")
 
@@ -50,6 +57,22 @@ def ppb_o3_to_ugm3(input, json_obj=None, sensor_def=None):
     return input
 
 
+def running_mean(previous_val, new_val, alpha):
+    if new_val is None:
+        return previous_val
+
+    if previous_val is None:
+        previous_val = new_val
+    val = new_val * alpha + previous_val * (1.0 - alpha)
+    return val
+
+
+def update_running_mean(running_means, alpha, obs):
+    for (key, value) in obs.iteritems():
+        running_means[key] = running_mean(running_means[key], obs[key], alpha)
+    return running_means
+
+
 def ohm_to_ugm3(input, json_obj, sensor_def, gas):
     global running_means
 
@@ -64,6 +87,14 @@ def ohm_to_ugm3(input, json_obj, sensor_def, gas):
 
     # select inputs
     json_obj = {k: json_obj[k] for k in sensor_def['input']}
+
+    # filter gas componentet
+    filter_obs = {k: json_obj[k] for k in running_means[gas].keys()}
+    running_means[gas] = update_running_mean(running_means[gas],
+                                             running_mean_alpha, filter_obs)
+    # use gas components as obs
+    for filter_gas, filter_value in running_means[gas].iteritems():
+        json_obj[filter_gas] = filter_value
 
     # Predict RIVM value if all values are available
     x = pd.DataFrame(json_obj, [0])

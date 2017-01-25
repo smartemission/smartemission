@@ -104,6 +104,16 @@ class Calibrator(Filter):
         Required: True
         """
 
+    @Config(ptype=float, default=1, required=False)
+    def filter_alpha(self):
+        """
+        Control for low-pass filter, higher alpha is more emphasis on new data
+
+        Default: 0.01
+
+        Required: False
+        """
+
     @Config(ptype=list, required=True)
     def targets(self):
         """
@@ -180,6 +190,10 @@ class Calibrator(Filter):
         df = df.drop(self.other_targets, axis=1)
         df = df.reset_index().drop('index', axis = 1) # remove possible index
         log.info('Created data frame with shape (%d, %d)' % df.shape)
+
+        # Pre-processing: filter data
+        filter_col = ['s_coresistance', 's_no2resistance', 's_o3resistance']
+        df = Calibrator.filter_data(df, filter_col, self.filter_alpha)
 
         # Sample to prevent over fitting
         df = df.sample(frac=1.0 / float(self.inverse_sample_fraction))
