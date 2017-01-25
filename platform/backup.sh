@@ -82,7 +82,7 @@ echo "START backup databases on `date`" > ${LOG_FILE}
 
 dump_db postgres >> ${LOG_FILE} 2>&1
 
-SCHEMAS="smartem_rt smartem_raw smartem_refined smartem_extract smartem_harvest-rivm sos52n1"
+SCHEMAS="smartem_rt smartem_raw smartem_refined smartem_extracted smartem_harvest_rivm smartem_calibrated sos52n1"
 for SCHEMA in ${SCHEMAS}
 do
 	dump_db gis ${SCHEMA} >> ${LOG_FILE} 2>&1
