@@ -93,13 +93,13 @@ class MergeRivmJose(Filter):
 
 
 class Calibrator(Filter):
-    @Config(ptype=int, default=.01, required=False)
+    @Config(ptype=int, default=1, required=False)
     def inverse_sample_fraction(self):
         """
         Inverse fraction of Jose data to use for calibration. E.g. 10 means
         1/10=0.1.
 
-        Default: 0.01
+        Default: 1
 
         Required: True
         """
@@ -109,7 +109,7 @@ class Calibrator(Filter):
         """
         Control for low-pass filter, higher alpha is more emphasis on new data
 
-        Default: 0.01
+        Default: 1
 
         Required: False
         """
@@ -144,13 +144,13 @@ class Calibrator(Filter):
         Required: False
         """
 
-    @Config(ptype=int, default=-2, required=False)
+    @Config(ptype=int, default=1, required=False)
     def n_jobs(self):
         """
         The number of parallel processes to use. Negative values are
         equivalent to total_cores + 1 - njobs
 
-        Default: -2 (all cores - 1)
+        Default: 1
 
         Required: False
         """
