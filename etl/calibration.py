@@ -178,7 +178,7 @@ class Calibrator(Filter):
         log.info('Receiving packet of size %d' % len(packet.data))
         df = packet.data['merged']
         df = df.drop(self.other_targets, axis=1)
-        df = df.reset_index() # we want a clean data frame
+        df = df.reset_index().drop('index', axis = 1) # remove possible index
         log.info('Created data frame with shape (%d, %d)' % df.shape)
 
         # Sample to prevent over fitting
