@@ -64,26 +64,27 @@ class MergeRivmJose(Filter):
         df_jose['time'] = pd.to_datetime(df_jose['time'])
         df_rivm['time'] = pd.to_datetime(df_rivm['time'])
 
+        # Interpolating Jose
+        df_jose = df_jose.set_index(['geohash', 'time'])
+        df_jose = df_jose.interpolate(limit = self.impute_duration*5,
+                                      limit_direction='both')
+        df_jose = df_jose.reset_index()
+
         # Interpolate RIVM to jose times
         log.info('Interpolating RIVM values towards jose measurements')
-        jose_index = df_jose['time'].unique()
-        jose_time = pd.DataFrame({'time': jose_index})
-        df_rivm = jose_time.merge(df_rivm, 'outer').set_index('time')
-        df_rivm = df_rivm.sort_index().interpolate().ffill().loc[jose_index]
-        df_rivm = df_rivm.reset_index()
+        jose_index = df_jose.loc[:, ['time', 'geohash']]
+        jose_index['is_jose'] = True
+        df_rivm = jose_index.merge(df_rivm, 'outer')
+        df_rivm = df_rivm.set_index(['geohash', 'time']).sort_index()
+        df_rivm = df_rivm.interpolate(limit=60*5,
+                                      limit_direction='both').reset_index()
+        df_rivm = df_rivm[df_rivm['is_jose'].notnull()]
+        df_rivm = df_rivm.drop('is_jose', axis=1)
 
         # Concatenate RIVM and Jose
-        df = pd.merge(df_rivm, df_jose, 'outer', ['time', 'geohash'])
+        df = pd.merge(df_jose, df_rivm, 'left', ['time', 'geohash'])
         del df.index.name
         log.info('RIVM and Jose are merged, new shape (%d, %d)' %  df.shape)
-
-        # Filling and dropping na
-        log.info('Filling and dropping missing values')
-        df = df.sort_values('time')
-        df = df.fillna(method='pad', limit=self.impute_duration*5) # 5 min
-        log.info("Missing values: %s" % pd.isnull(df).sum().to_dict())
-        df = df.dropna()
-        log.info('Missing values are removed, new shape (%d, %d).' % df.shape)
 
         # note: not converting to records, because that take a lot of memory.
         packet.data = {'merged': df}
@@ -191,6 +192,12 @@ class Calibrator(Filter):
         df = df.reset_index().drop('index', axis = 1) # remove possible index
         log.info('Created data frame with shape (%d, %d)' % df.shape)
 
+        # Dropping na
+        log.info('Filling and dropping missing values')
+        log.info("Missing values: %s" % pd.isnull(df).sum().to_dict())
+        df = df.dropna().reset_index(drop = True)
+        log.info('Missing values are removed, new shape (%d, %d).' % df.shape)
+
         # Pre-processing: filter data
         filter_col = ['s_coresistance', 's_no2resistance', 's_o3resistance']
         df = Calibrator.filter_data(df, filter_col, 1.0 /
@@ -267,9 +274,8 @@ class Calibrator(Filter):
         # longer gaps in the data)
         if type(cols) is not list:
             cols = [cols]
-        cols = [df_col for df_col in df.columns if df_col in cols]
         for col in cols:
-            # log.info('Filtering %s with alpha=%.3f' % (col, alpha))
+            # log.debug('Filtering %s with alpha=%.3f' % (col, alpha))
             df[col] = Calibrator.running_mean(df[col], alpha)
         return df
 
