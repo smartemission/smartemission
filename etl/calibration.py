@@ -448,6 +448,7 @@ class ModelVisualization(Visualization):
         for col in self.sample.columns.values:
             if col not in self.do_not_consider:
                 self.visualization_input_output_relation(col)
+        self.save_pickled_model()
 
     def visualization_input_output_relation(self, col, n_val=100, n_sim=100):
         log.info('Visualizing input/output relation %s' % col)
@@ -473,6 +474,12 @@ class ModelVisualization(Visualization):
 
         self.save_fig('effect_%s' % col)
         self.close_plot()
+
+    def save_pickled_model(self):
+        file_name = 'model.pkl'
+        file_path = self.file_path % (self.target, file_name)
+        pickle.dump(self.model, open(file_path, 'wb'))
+        log.info("Model saved to %s" % file_path)
 
 
 class DataVisualization(Visualization):
