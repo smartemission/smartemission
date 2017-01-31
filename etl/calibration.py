@@ -464,7 +464,12 @@ class ModelVisualization(Visualization):
         # index should start at 0 for tsplot.
         # see: https://github.com/mwaskom/seaborn/issues/957
         df = df.reset_index()
-        sns.tsplot(df, col, 'id', value='Prediction', err_style='unit_traces')
+        ts = sns.tsplot(df, col, 'id', value='Prediction',
+                     err_style='unit_traces')
+
+        target_max = self.sample[self.target].max()
+        axes = ts.axes
+        axes.set_ylim(-50, target_max * 1.1)
 
         self.save_fig('effect_%s' % col)
         self.close_plot()
