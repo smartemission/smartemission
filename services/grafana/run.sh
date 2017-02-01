@@ -13,7 +13,7 @@ LOG_DIR="/var/smartem/log/grafana"
 DATA_DIR="/var/smartem/data/grafana"
 CONFIG_DIR="/var/smartem/config/grafana"
 NAME="grafana"
-IMAGE="grafana/grafana:develop"
+IMAGE="grafana/grafana:4.1.1"
 INFLUX_HOST=influxdb
 
 # Volume maps for initial and full run
