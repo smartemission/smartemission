@@ -578,7 +578,6 @@ class ParameterOutput(PostgresInsertOutput):
         fixed_col = ['mean_test_score', 'std_test_score', 'rank_test_score',
                     'mean_train_score', 'std_train_score', 'mean_fit_time',
                     'std_fit_time']
-        print(df)
         df = df.loc[:, param_col + fixed_col]
         df = pd.melt(df, fixed_col, param_col, 'parameter', 'value')
         df['value'] = df['value'].astype(str)
