@@ -4,13 +4,13 @@ from datetime import datetime, tzinfo, timedelta
 
 import pandas as pd
 
-running_means = {'co': {'s_coresistance': None, 's_no2resistance': None,
-                        's_o3resistance': None},
-                 'no2': {'s_coresistance': None, 's_no2resistance': None,
-                         's_o3resistance': None},
-                 'o3': {'s_coresistance': None, 's_no2resistance': None,
-                        's_o3resistance': None}}
-running_mean_alpha = .05
+# running_means = {'co': {'s_coresistance': None, 's_no2resistance': None,
+#                         's_o3resistance': None},
+#                  'no2': {'s_coresistance': None, 's_no2resistance': None,
+#                          's_o3resistance': None},
+#                  'o3': {'s_coresistance': None, 's_no2resistance': None,
+#                         's_o3resistance': None}}
+# running_mean_alpha = .05
 
 # log = Util.get_log("SensorConverters")
 
@@ -74,7 +74,7 @@ def update_running_mean(running_means, alpha, obs):
 
 
 def ohm_to_ugm3(input, json_obj, sensor_def, gas):
-    global running_means
+    # global running_means
 
     if 'model' in sensor_def and sensor_def['model'] is not None:
         calibration_model = sensor_def['model']
@@ -88,13 +88,13 @@ def ohm_to_ugm3(input, json_obj, sensor_def, gas):
     # select inputs
     json_obj = {k: json_obj[k] for k in sensor_def['input']}
 
-    # filter gas componentet
-    filter_obs = {k: json_obj[k] for k in running_means[gas].keys()}
-    running_means[gas] = update_running_mean(running_means[gas],
-                                             running_mean_alpha, filter_obs)
-    # use gas components as obs
-    for filter_gas, filter_value in running_means[gas].iteritems():
-        json_obj[filter_gas] = filter_value
+    # # filter gas componentet
+    # filter_obs = {k: json_obj[k] for k in running_means[gas].keys()}
+    # running_means[gas] = update_running_mean(running_means[gas],
+    #                                          running_mean_alpha, filter_obs)
+    # # use gas components as obs
+    # for filter_gas, filter_value in running_means[gas].iteritems():
+    #     json_obj[filter_gas] = filter_value
 
     # Predict RIVM value if all values are available
     x = pd.DataFrame(json_obj, [0])

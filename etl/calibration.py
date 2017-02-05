@@ -189,7 +189,7 @@ class Calibrator(Filter):
         # Unpacking data
         df = packet.data['merged']
         df = self.drop_rows_and_records(df)
-        df = self.filter_gasses(df)
+        # df = self.filter_gasses(df)
         df = df.sample(frac=1.0 / float(self.inverse_sample_fraction))
         log.info('After dropping, filtering and sampling a data frame with '
                  'shape (%d, %d) is ready for calibration' % df.shape)
