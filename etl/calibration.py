@@ -1,23 +1,15 @@
-import json
-import os
 from stetl.component import Config
 from stetl.filter import Filter
-from stetl.inputs.dbinput import PostgresDbInput
-from stetl.output import Output
-from stetl.outputs.dboutput import PostgresInsertOutput
 from stetl.packet import FORMAT
 from stetl.util import Util
 
 import matplotlib
-import psycopg2
 from sklearn.metrics import make_scorer
 from sklearn.model_selection import cross_val_predict
 from sklearn.model_selection import cross_val_score
 
 matplotlib.use('Agg')
 import pandas as pd
-import seaborn as sns
-import pickle
 from numpy import nan
 from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import RandomizedSearchCV
@@ -31,7 +23,6 @@ log = Util.get_log('Calibration')
 
 
 class MergeRivmJose(Filter):
-
     @Config(ptype=int, default=5, required=True)
     def impute_duration(self):
         """
@@ -56,41 +47,47 @@ class MergeRivmJose(Filter):
         log.info('Received jose data with shape (%d, %d)' % df_jose.shape)
         log.info('Pre-processing geohash and time')
 
-        # Rename stations
-        df_jose['geohash'] = df_jose['geohash'].str.slice(0,7)
-        df_rivm['geohash'] = df_rivm['geohash'].str.slice(0,7)
-
-        # Set time as index
-        df_jose['time'] = pd.to_datetime(df_jose['time'])
-        df_rivm['time'] = pd.to_datetime(df_rivm['time'])
-
-        # Interpolating Jose
-        df_jose = df_jose.set_index(['geohash', 'time'])
-        df_jose = df_jose.interpolate(limit = self.impute_duration*5,
-                                      limit_direction='both')
-        df_jose = df_jose.reset_index()
-
-        # Interpolate RIVM to jose times
-        log.info('Interpolating RIVM values towards jose measurements')
-        jose_index = df_jose.loc[:, ['time', 'geohash']]
-        jose_index['is_jose'] = True
-        df_rivm = jose_index.merge(df_rivm, 'outer')
-        df_rivm = df_rivm.set_index(['geohash', 'time']).sort_index()
-        df_rivm = df_rivm.interpolate(limit=60*5,
-                                      limit_direction='both').reset_index()
-        df_rivm = df_rivm[df_rivm['is_jose'].notnull()]
-        df_rivm = df_rivm.drop('is_jose', axis=1)
+        # Preparing Jose and RIVM data
+        df_jose = MergeRivmJose.preproc_geohash_and_time(df_jose)
+        df_rivm = MergeRivmJose.preproc_geohash_and_time(df_rivm)
+        df_jose = MergeRivmJose.interpolate(df_jose, self.impute_duration * 5)
 
         # Concatenate RIVM and Jose
+        df_index = df_jose.loc[:, ['time', 'geohash']]
+        df_rivm = MergeRivmJose.interpolate_to_index(df_index, df_rivm, 60 * 5)
         df = pd.merge(df_jose, df_rivm, 'left', ['time', 'geohash'])
         del df.index.name
-        log.info('RIVM and Jose are merged, new shape (%d, %d)' %  df.shape)
+        log.info('RIVM and Jose are merged, new shape (%d, %d)' % df.shape)
 
+        # Returning data
         # note: not converting to records, because that take a lot of memory.
         packet.data = {'merged': df}
-        log.info('Returning dict with pandas DataFrame as only element')
 
         return packet
+
+    @staticmethod
+    def preproc_geohash_and_time(df):
+        df['geohash'] = df['geohash'].str.slice(0, 7)
+        df['time'] = pd.to_datetime(df['time'])
+        return (df)
+
+    @staticmethod
+    def interpolate(df, impute_duration, limit_direction='both'):
+        df = df.set_index(['geohash', 'time']).sort_index()
+        df = df.interpolate(limit=impute_duration * 5,
+                            limit_direction=limit_direction)
+        df = df.reset_index()
+        return df
+
+    @staticmethod
+    def interpolate_to_index(df_index, df_inter, impute_duration):
+        log.info('Interpolating RIVM values towards jose measurements')
+        df_index['is_index'] = True
+        df = df_index.merge(df_inter, 'outer')
+        df = MergeRivmJose.interpolate(df, impute_duration)
+        df = df[df['is_index'].notnull()]
+        df = df.drop('is_index', axis=1)
+        return df
 
 
 class Calibrator(Filter):
@@ -163,6 +160,10 @@ class Calibrator(Filter):
         self.current_target = None
         self.current_target_id = None
         self.other_targets = None
+        self._filter = ['s_coresistance', 's_no2resistance', 's_o3resistance']
+        self._return_gs_elem = ['cv_results_', 'best_estimator_',
+                                'best_score_', 'best_params_', 'best_index_',
+                                'scorer_', 'n_splits_']
 
     def init(self):
         ss = StandardScaler()
@@ -186,29 +187,50 @@ class Calibrator(Filter):
         packet.set_end_of_stream(False)
 
         # Unpacking data
-        log.info('Receiving packet of size %d' % len(packet.data))
         df = packet.data['merged']
-        df = df.drop(self.other_targets, axis=1)
-        df = df.reset_index().drop('index', axis = 1) # remove possible index
-        log.info('Created data frame with shape (%d, %d)' % df.shape)
-
-        # Dropping na
-        log.info('Filling and dropping missing values')
-        log.info("Missing values: %s" % pd.isnull(df).sum().to_dict())
-        df = df.dropna().reset_index(drop = True)
-        log.info('Missing values are removed, new shape (%d, %d).' % df.shape)
-
-        # Pre-processing: filter data
-        filter_col = ['s_coresistance', 's_no2resistance', 's_o3resistance']
-        df = Calibrator.filter_data(df, filter_col, 1.0 /
-                                    float(self.inverse_filter_alpha))
-
-        # Sample to prevent over fitting
+        df = self.drop_rows_and_records(df)
+        df = self.filter_gasses(df)
         df = df.sample(frac=1.0 / float(self.inverse_sample_fraction))
-        df_meta = df[['geohash', 'time']]
+        log.info('After dropping, filtering and sampling a data frame with '
+                 'shape (%d, %d) is ready for calibration' % df.shape)
+
+        # optimize
+        gs, x, y = self.optimize_meta_parameters(df)
+        best_estimator = gs.best_estimator_
+
+        # Cross validated performance and prediction
+        rmse = self.compute_cv_performance(best_estimator, x, y)
+        df = self.compute_cv_error(best_estimator, df, x, y)
+
+        # Save results
+        result_out = dict()
+        for gs_keys in self._return_gs_elem:
+            result_out[gs_keys] = getattr(gs, gs_keys)
+        result_out['target'] = self.current_target
+        result_out['sample'] = df
+        result_out['rmse'] = rmse
+        result_out['column_order'] = x.columns.tolist()
+
+        # Return results
+        packet.data = result_out
+        packet = self.stop_at_end_of_stream(packet)
+        log.info('Returning packet of size %d' % len(packet.data))
+
+        return packet
+
+    def drop_rows_and_records(self, df):
+        df = df.drop(self.other_targets, axis=1)
+        df = df.dropna()
+        df = df.reset_index(drop=True)
+        return df
+
+    def filter_gasses(self, df):
+        alpha = 1.0 / float(self.inverse_filter_alpha)
+        df = Calibrator.filter_data(df, self._filter, alpha)
+        return df
+
+    def optimize_meta_parameters(self, df):
         df = df.drop(['geohash', 'time'], axis=1)
-        log.info('Sample data frame, keeping 1 out of every %d rows. New '
-                 'shape %s' % (self.inverse_sample_fraction, df.shape))
 
         # Split into label and data
         x, y = Calibrator.split_data_label(df, self.current_target)
@@ -216,8 +238,8 @@ class Calibrator(Filter):
 
         # Do cross validation
         log.info('Starting randomized cross validated search to find best '
-                 'parameters. Running %d iterations with %d cross '
-                 'validations of %d cores. Finding relation from %s to %s.' % (
+                 'parameters. Running %d iterations with %d cross validations '
+                 'of %d cores. Finding relation from %s to %s.' % (
                      self.random_search_iterations, self.cv_k, self.n_jobs,
                      ', '.join(x.columns.tolist()), self.current_target))
         gs = RandomizedSearchCV(self.pipeline, param_grid,
@@ -225,41 +247,29 @@ class Calibrator(Filter):
                                 n_jobs=self.n_jobs, cv=self.cv_k,
                                 error_score=nan)
         gs.fit(x, y)
-        log.info('Best result (%.2f) obtained by using %s' %
-                 (gs.best_score_, gs.best_params_))
+        log.info('Best result (%.2f) obtained by using %s' % (
+            gs.best_score_, gs.best_params_))
 
-        # Compute performance and cross val predictions and add meta
-        pipe = gs.best_estimator_
+        return gs, x, y
+
+    def compute_cv_performance(self, best_estimator, x, y):
         scorer = make_scorer(mean_squared_error, False)
-        mses = cross_val_score(pipe, x, y, None, scorer, self.cv_k,
+        mses = cross_val_score(best_estimator, x, y, None, scorer, self.cv_k,
                                n_jobs=self.n_jobs)
         rmse = pd.np.mean(pd.np.sqrt(-mses))
+        return rmse
 
-        df = pd.concat([df, df_meta], axis=1)
-        df['pred'] = cross_val_predict(pipe, x, y, None, self.cv_k, -1)
+    def compute_cv_error(self, fit, df, x, y):
+        df['pred'] = cross_val_predict(fit, x, y, None, self.cv_k, -1)
         df['error'] = df[self.current_target] - df['pred']
+        return df
 
-        # Save results
-        result_out = dict()
-        for gs_keys in ['cv_results_', 'best_estimator_', 'best_score_',
-                        'best_params_', 'best_index_', 'scorer_', 'n_splits_']:
-            result_out[gs_keys] = getattr(gs, gs_keys)
-        result_out['target'] = self.current_target
-        # result_out['data'] = df
-        result_out['sample'] = df
-        result_out['rmse'] = rmse
-        result_out['column_order'] = x.columns.tolist()
-
-        packet.data = result_out
-        log.info('Returning result of %d length, with keys %s.' % (
-            len(packet.data), packet.data.keys()))
-
+    def stop_at_end_of_stream(self, packet):
         # Stop calibrating if not targets are left
         if self.has_next_target():
             self.next_target()
         else:
             packet.set_end_of_stream()
-
         return packet
 
     @staticmethod
@@ -288,354 +298,9 @@ class Calibrator(Filter):
         if start is not None:
             val = start
         else:
-            val = x[0]
+            val = x.reset_index(drop=True).loc[0]
         new_x = []
         for (i, elem) in enumerate(x):
             val = elem * alpha + val * (1.0 - alpha)
             new_x.append(val)
         return pd.Series(new_x)
-
-
-class Visualization(Output):
-    @Config(ptype=str, required=True)
-    def file_path(self):
-        """
-        The path where to save the visualization images. Should contain a %s that is replaced by the image name.
-
-        Required: True
-        """
-
-    @Config(ptype=bool, default=False, required=True)
-    def clear_output_folder(self):
-        """
-        If the results folder should be cleared before putting the new
-        results in.
-
-        Default: False
-
-        Required: False
-        """
-
-    def __init__(self, configdict, section):
-        Output.__init__(self, configdict, section, consumes=FORMAT.record)
-        self.model = None
-        # self.df = None
-        self.sample = None
-        self.cv_results_ = None
-        self.target = None
-        self.best_score = None
-        self.rmse = None
-
-    def write(self, packet):
-        record_in = packet.data
-
-        self.model = record_in['best_estimator_']
-        # self.df = record_in['data']
-        self.sample = record_in['sample']
-        self.cv_results_ = record_in['cv_results_']
-        self.target = record_in['target']
-        self.best_score = record_in['best_score_']
-        self.rmse = record_in['rmse']
-
-        if self.clear_output_folder:
-            folder = os.path.dirname(self.file_path) % self.target
-            Visualization.create_empty_folder(folder)
-        self.visualization()
-
-        return packet
-
-    def visualization(self):
-        pass
-
-    def save_fig(self, file_name, file_extension='png'):
-        file_name = "%s.%s" % (file_name, file_extension)
-        file_path = self.file_path % (self.target, file_name)
-        sns.plt.savefig(file_path)
-        log.info('Saved figure to %s' % file_path)
-
-    @staticmethod
-    def close_plot():
-        sns.plt.close()
-
-    @staticmethod
-    def create_empty_folder(folder):
-        # Create folder and delete content if exist
-        if not os.path.exists(folder):
-            log.info('Creating dir %s' % folder)
-            os.makedirs(folder)
-        for the_file in os.listdir(folder):
-            file_path = os.path.join(folder, the_file)
-            try:
-                if os.path.isfile(file_path):
-                    os.unlink(file_path)
-            except Exception as e:
-                log.info("Error while deleting file: %s" % str(e))
-
-
-class PerformanceVisualization(Visualization):
-    def __init__(self, configdict, section):
-        Visualization.__init__(self, configdict, section)
-
-    def visualization(self):
-        self.visualization_error_scatter()
-        self.visualization_error_histogram()
-        self.visualization_time_series('20170101', '20170201', 'u1hnvkb')
-
-    def visualization_error_scatter(self):
-        log.info('Visualizing error as scatterplot')
-        # Using relative and absolute performance measure
-        title = 'Actual vs. Predicted\nRMSE=%.1f ug/m3, Explained ' \
-                'var=%.0f%%' % (self.rmse, self.best_score*100)
-
-        g = sns.regplot('pred', self.target, self.sample,
-                        scatter_kws={'alpha': 0.3})
-        g.set_title(title)
-        g.set_aspect('equal', 'box')
-
-        self.save_fig('error_scatter')
-        Visualization.close_plot()
-
-    def visualization_error_histogram(self):
-        log.info('Visualizing error as histogram')
-        # Create title (use both explained variance and rmse to hava a scale
-        # relative and absolute measurement of performance)
-        title = 'Histogram of error\nRMSE=%.1f ug/m3, Explained var=%.0f%%' % (
-            self.rmse, self.best_score*100)
-
-        # Plot using seaborn
-        g = sns.distplot(self.sample['error'], 100)
-        g.set_title(title)
-
-        self.save_fig('error_histogram')
-        self.close_plot()
-
-    def visualization_time_series(self, start, end, geohash):
-        log.info("Visualizing time series from %s to %s" % (start, end))
-
-        start = pd.to_datetime(start)
-        end = pd.to_datetime(end)
-        title = 'Timeseries from %s to %s\nRMSE=%.1f ug/m3, Explained ' \
-                'var=%.0f%%' % (start, end, self.rmse, self.best_score*100)
-
-        time_series = self.sample.copy().sort_values('time')
-        time_series = time_series[(time_series['time'] >= start) &
-                                  (time_series['time'] <= end) &
-                                  (time_series['geohash'] == geohash)]
-
-        sns.set_style('darkgrid')
-        sns.plt.plot(time_series['time'], time_series[self.target])
-        sns.plt.plot(time_series['time'], time_series['pred'])
-        _, labels = sns.plt.xticks()
-        sns.plt.setp(labels, rotation=15)
-        sns.plt.xlabel('Time')
-        sns.plt.ylabel(self.target)
-        sns.plt.title(title)
-        sns.plt.legend(['Target', 'Prediction'])
-        sns.plt.show()
-
-        self.save_fig('time_series')
-        Visualization.close_plot()
-
-
-class ModelVisualization(Visualization):
-    def __init__(self, configdict, section):
-        Visualization.__init__(self, configdict, section)
-        self.do_not_consider = None
-
-    def visualization(self):
-        self.do_not_consider = ['time', 'geohash', self.target, 'error', 'pred']
-        # todo use packet.data['sample'] instead
-        for col in self.sample.columns.values:
-            if col not in self.do_not_consider:
-                self.visualization_input_output_relation(col)
-        self.save_pickled_model()
-
-    def visualization_input_output_relation(self, col, n_val=100, n_sim=100):
-        log.info('Visualizing input/output relation %s' % col)
-
-        df = self.sample.drop(self.do_not_consider, 1)
-        val = pd.np.linspace(df[col].min(), df[col].max(), n_val)
-        df = df.sample(n_sim)
-        df = pd.concat([df] * n_val)
-        df[col] = pd.np.repeat(val, n_sim)
-
-        df['Prediction'] = self.model.predict(df)
-        df['id'] = pd.np.tile(pd.np.arange(0, n_sim), n_val)
-
-        # index should start at 0 for tsplot.
-        # see: https://github.com/mwaskom/seaborn/issues/957
-        df = df.reset_index()
-        ts = sns.tsplot(df, col, 'id', value='Prediction',
-                     err_style='unit_traces')
-
-        target_max = self.sample[self.target].max()
-        axes = ts.axes
-        axes.set_ylim(-50, target_max * 1.1)
-
-        self.save_fig('effect_%s' % col)
-        self.close_plot()
-
-    def save_pickled_model(self):
-        file_name = 'model.pkl'
-        file_path = self.file_path % (self.target, file_name)
-        pickle.dump(self.model, open(file_path, 'wb'))
-        log.info("Model saved to %s" % file_path)
-
-
-class DataVisualization(Visualization):
-    def visualization(self):
-        for col in self.sample.columns.values:
-            self.visualization_occurrence(col)
-
-    def visualization_occurrence(self, col):
-        log.info('Visualizing occurrence of %s with type %s' % \
-                 (col, self.sample[col].dtype))
-        title = 'Occurrence of %s' % col
-
-        if pd.np.issubdtype(self.sample[col].dtype, pd.np.datetime64):
-            sns.set_style("darkgrid")
-            ax = sns.plt.subplot(111)
-            ax.hist(self.sample[col].tolist(), 100, normed = True)
-            ax.xaxis_date()
-            _, labels = sns.plt.xticks()
-            sns.plt.setp(labels, rotation=15)
-
-        elif self.sample[col].dtype == object:
-            self.sample[col].groupby(self.sample[col]).count().plot(
-                kind="bar", rot=0)
-
-        else:
-            # use seaborn for other types
-            kde = True
-            if self.sample[col].unique().shape[0] <= 1:
-                kde = False
-
-            g = sns.distplot(self.sample[col], 100, kde=kde)
-            g.set_title(title)
-
-        self.save_fig('histogram_%s' % col)
-        Visualization.close_plot()
-
-
-class SearchVisualization(Visualization):
-    def __init__(self, configdict, section):
-        Visualization.__init__(self, configdict, section)
-        self.cv_results = None
-
-    def visualization(self):
-        self.visualization_init()
-        for col in param_grid.keys():
-            self.visualize_search_parameter(col)
-
-    def visualization_init(self):
-        self.cv_results = pd.DataFrame(self.cv_results_)
-
-    def visualize_search_parameter(self, param):
-        log.info('Visualizing parameter performance of %s' % param)
-
-        title = "Explained variances for different levels of %s" % param
-        col = "param_%s" % param
-        col_score = "mean_test_score"
-        col_type = type(self.cv_results[col][0])
-
-        if col_type is str or col_type is bool:
-            g = sns.swarmplot(col, col_score, data=self.cv_results)
-        else:
-            g = self.cv_results.plot(col, col_score, 'scatter')
-
-        g.set(ylim=(0, 1))
-        g.set_title(title)
-
-        self.save_fig('parameter_%s' % param)
-        self.close_plot()
-
-
-class CalibrationModelOutput(PostgresInsertOutput):
-
-    def before_invoke(self, packet):
-        result_in = packet.data
-
-        result_out = dict()
-        dump = pickle.dumps(result_in['best_estimator_'])
-        result_out['model'] = psycopg2.Binary(dump)
-        result_out['predicts'] = result_in['target']
-        result_out['score'] = result_in['best_score_']
-        result_out['n'] = result_in['sample'].shape[0]
-        result_out['input_order'] = json.dumps(result_in['column_order'])
-
-        packet.data = result_out
-
-        return packet
-
-
-class ParameterOutput(PostgresInsertOutput):
-
-    def before_invoke(self, packet):
-        result_in = packet.data
-        df = pd.DataFrame(result_in['cv_results_'])
-
-        param_col = [col for col in list(df) if col.startswith('param_')]
-        fixed_col = ['mean_test_score', 'std_test_score', 'rank_test_score',
-                    'mean_train_score', 'std_train_score', 'mean_fit_time',
-                    'std_fit_time']
-        df = df.loc[:, param_col + fixed_col]
-        df = pd.melt(df, fixed_col, param_col, 'parameter', 'value')
-        df['value'] = df['value'].astype(str)
-        df['n'] = result_in['sample'].shape[0]
-        df['predicts'] = result_in['target']
-
-        result_out = df.to_dict('records')
-        packet.data = result_out
-
-        return packet
-
-
-class CalibrationModelInput(PostgresDbInput):
-    """
-    Get unpickled calibration model from the database
-    """
-
-    @Config(ptype=dict, default=dict(), required=False)
-    def sensor_model_names(self):
-        """
-        The name of the sensor models in the database. Needed for linking
-        the right model to the right gas.
-
-        Default: dict()
-
-        Required: False
-        """
-
-    def __init__(self, configdict, section):
-        PostgresDbInput.__init__(self, configdict, section)
-        self.models = None
-
-    def init(self):
-        PostgresDbInput.init(self)
-
-        def get_model(name):
-            query = self.query % name
-            log.info('Getting calibration model with query: %s' % query)
-            ret = self.raw_query(query)
-            if len(ret) > 0:
-                return pickle.loads(str(ret[0][0]))
-            else:
-                log.warn("No model found for %s" % name)
-                return None
-
-        if self.query is not None and len(
-                self.sensor_model_names) > 0:
-            log.info('Getting calibration models from database')
-            self.models = {k: get_model(v) for k, v in
-                           self.sensor_model_names.iteritems()}
-        else:
-            log.info(
-                'No query for fetching calibration models given or no '
-                'mapping for calibration models to gas components given.')
-
-    def invoke(self, packet):
-        packet.meta['models'] = self.models
-
-        return packet
-
-
