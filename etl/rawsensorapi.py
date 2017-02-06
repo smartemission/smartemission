@@ -298,12 +298,12 @@ class RawSensorLastInput(RawSensorAPIInput):
                 record['value_raw'] = value_raw
 
                 # set model if available and needed
-                if 'model' in sensor_def:
+                if 'converter_model' in sensor_def:
                     if sensor_name not in self.models:
                         log.warn('No calibration model given for %s' % sensor_name)
                         continue
                     else:
-                        sensor_def['model'] = self.models[sensor_name]
+                        sensor_def['converter_model'] = self.models[sensor_name]
 
                 value = sensor_def['converter'](value_raw, sensor_vals, sensor_def)
                 output_valid, reason = check_value(sensor_name, sensor_vals, value=value)

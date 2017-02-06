@@ -76,8 +76,9 @@ def update_running_mean(running_means, alpha, obs):
 def ohm_to_ugm3(input, json_obj, sensor_def, gas):
     # global running_means
 
-    if 'model' in sensor_def and sensor_def['model'] is not None:
-        calibration_model = sensor_def['model']
+    if 'converter_model' in sensor_def and \
+                    sensor_def['converter_model'] is not None:
+        calibration_model = sensor_def['converter_model']
     else:
         raise TypeError('No calibration model given in sensor definitions. '
                         'Calibration model is need to convert from ohm to '
