@@ -153,6 +153,10 @@ class Calibrator(Filter):
         Required: False
         """
 
+    TARGET2SENSORDEF = {'carbon_monoxide__air_': 'co',
+                           'nitrogen_dioxide__air_': 'no2',
+                           'ozone__air_': 'o3'}
+
     def __init__(self, configdict, section, consumes=FORMAT.record,
                  produces=FORMAT.record):
         Filter.__init__(self, configdict, section, consumes, produces)
@@ -234,7 +238,10 @@ class Calibrator(Filter):
 
         # Split into label and data
         x, y = Calibrator.split_data_label(df, self.current_target)
-        x = x.reindex_axis(sorted(x.columns), axis=1)
+
+        # Order following sensordefs
+        input_order = Calibrator.TARGET2SENSORDEF[self.current_target]['input']
+        x = x[input_order]
 
         # Do cross validation
         log.info('Starting randomized cross validated search to find best '
