@@ -1,8 +1,13 @@
 import math
 import re
+from collections import defaultdict
 from datetime import datetime, tzinfo, timedelta
 
 import pandas as pd
+
+from running_mean import RunningMean
+
+running_mean_state = defaultdict(lambda: {})
 
 # running_means = {'co': {'s_coresistance': None, 's_no2resistance': None,
 #                         's_o3resistance': None},
@@ -80,26 +85,27 @@ def ohm_to_ugm3(input, json_obj, sensor_def, gas):
                     sensor_def['converter_model'] is not None:
         calibration_model = sensor_def['converter_model']
     else:
-        raise TypeError('No calibration model given in sensor definitions. '
-                        'Calibration model is need to convert from ohm to '
-                        'ug/m3')
+        raise ValueError('No calibration model given in sensor definitions.')
+    if 'converter_running_mean_weight' in sensor_def and \
+        sensor_def['converter_running_mean_weight'] is not None:
+        running_mean_weights = sensor_def['converter_running_mean_weight']
+    else:
+        raise ValueError('No running mean weights given in sensor definitions.')
 
     val = None
 
-    # select inputs
-    json_obj = {k: json_obj[k] for k in sensor_def['input']}
+    # filter observations
+    state = running_mean_state[json_obj['device_id']]
+    for component, weight in running_mean_weights.iteritems():
+        if component not in state:
+            state[component] = RunningMean(weight)
+        json_obj[component] = state[component].observe(json_obj[component])
 
-    # # filter gas componentet
-    # filter_obs = {k: json_obj[k] for k in running_means[gas].keys()}
-    # running_means[gas] = update_running_mean(running_means[gas],
-    #                                          running_mean_alpha, filter_obs)
-    # # use gas components as obs
-    # for filter_gas, filter_value in running_means[gas].iteritems():
-    #     json_obj[filter_gas] = filter_value
+    # select inputs
+    inputs = [json_obj[k] for k in sensor_def['input']]
 
     # Predict RIVM value if all values are available
-    x = pd.DataFrame(json_obj, [0])
-    x = x.reindex_axis(sorted(x.columns), axis=1)
+    x = pd.DataFrame(inputs, [0])
     val = calibration_model.predict(x)[0]
 
     return val
