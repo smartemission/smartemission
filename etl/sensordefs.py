@@ -476,8 +476,8 @@ SENSOR_DEFS = {
             'label': 'CORaw',
             'unit': 'kOhm',
             'input': ['s_coresistance'],
-            'min': 100,
-            'max': 1500,
+            'min': 10,
+            'max': 15000,
             'converter': ohm_to_kohm
         },
     'co':
@@ -494,15 +494,15 @@ SENSOR_DEFS = {
             'converter_model': None,
             'type': int,
             'min': 0,
-            'max': 4000
+            'max': 10000
         },
     'no2raw':
         {
             'label': 'NO2Raw',
             'unit': 'kOhm',
             'input': ['s_no2resistance'],
-            'min': 8,
-            'max': 4000,
+            'min': .8,
+            'max': 15000,
             'converter': ohm_to_kohm
         },
     'no2':
@@ -519,15 +519,15 @@ SENSOR_DEFS = {
             'converter_model': None,
             'type': int,
             'min': 0,
-            'max': 400
+            'max': 2000
         },
     'o3raw':
         {
             'label': 'O3Raw',
             'unit': 'kOhm',
             'input': ['s_o3resistance'],
-            'min': 0,
-            'max': 20000,
+            'min': 3,
+            'max': 15000,
             'converter': ohm_to_kohm
         },
     'o3':
@@ -544,7 +544,7 @@ SENSOR_DEFS = {
             'converter_model': None,
             'type': int,
             'min': 0,
-            'max': 400
+            'max': 1000
         }
 }
 
