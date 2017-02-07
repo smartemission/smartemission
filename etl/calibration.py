@@ -8,6 +8,9 @@ from sklearn.metrics import make_scorer
 from sklearn.model_selection import cross_val_predict
 from sklearn.model_selection import cross_val_score
 
+from running_mean import RunningMean
+from sensordefs import SENSOR_DEFS
+
 matplotlib.use('Agg')
 import pandas as pd
 from numpy import nan
@@ -102,16 +105,6 @@ class Calibrator(Filter):
         Required: True
         """
 
-    @Config(ptype=int, default=1, required=False)
-    def inverse_filter_alpha(self):
-        """
-        Control for low-pass filter, higher alpha is more emphasis on new data
-
-        Default: 1
-
-        Required: False
-        """
-
     @Config(ptype=list, required=True)
     def targets(self):
         """
@@ -187,13 +180,16 @@ class Calibrator(Filter):
     def has_next_target(self):
         return self.current_target_id + 1 < len(self.targets)
 
+    def current_sensordef(self):
+        return SENSOR_DEFS[Calibrator.TARGET2SENSORDEF[self.current_target]]
+
     def invoke(self, packet):
         packet.set_end_of_stream(False)
 
         # Unpacking data
         df = packet.data['merged']
         df = self.drop_rows_and_records(df)
-        # df = self.filter_gasses(df)
+        df = self.filter_gasses(df)
         df = df.sample(frac=1.0 / float(self.inverse_sample_fraction))
         log.info('After dropping, filtering and sampling a data frame with '
                  'shape (%d, %d) is ready for calibration' % df.shape)
@@ -229,8 +225,13 @@ class Calibrator(Filter):
         return df
 
     def filter_gasses(self, df):
-        alpha = 1.0 / float(self.inverse_filter_alpha)
-        df = Calibrator.filter_data(df, self._filter, alpha)
+        running_mean_weights = self.current_sensordef()['converter_running_mean_weight']
+
+        df = df.sort_values('time')
+        for component, weight in running_mean_weights.iteritems():
+            f = lambda x: RunningMean.series_running_mean(x, weight)
+            df[component] = df.groupby('geohash')[component].transform(f)
+
         return df
 
     def optimize_meta_parameters(self, df):
@@ -240,7 +241,7 @@ class Calibrator(Filter):
         x, y = Calibrator.split_data_label(df, self.current_target)
 
         # Order following sensordefs
-        input_order = Calibrator.TARGET2SENSORDEF[self.current_target]['input']
+        input_order = self.current_sensordef()['input']
         x = x[input_order]
 
         # Do cross validation
@@ -284,30 +285,3 @@ class Calibrator(Filter):
         y = df[label]
         x = df.drop(label, axis=1)
         return x, y
-
-    @staticmethod
-    def filter_data(df, cols, alpha):
-        # todo use rolling mean for time series data (i.e. also account for
-        # longer gaps in the data)
-        if type(cols) is not list:
-            cols = [cols]
-        for col in cols:
-            # log.debug('Filtering %s with alpha=%.3f' % (col, alpha))
-            df[col] = Calibrator.running_mean(df[col], alpha)
-        return df
-
-    @staticmethod
-    def running_mean(x, alpha, start=None):
-        """
-        Filters a series of observations by a running mean
-        new mean = obs * alpha + `previous mean` * (1 - alpha)
-        """
-        if start is not None:
-            val = start
-        else:
-            val = x.reset_index(drop=True).loc[0]
-        new_x = []
-        for (i, elem) in enumerate(x):
-            val = elem * alpha + val * (1.0 - alpha)
-            new_x.append(val)
-        return pd.Series(new_x)

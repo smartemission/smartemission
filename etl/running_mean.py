@@ -57,7 +57,7 @@ class RunningMean(object):
         """
         state = init
         if state == "first":
-            state = series[0]
+            state = series.reset_index(drop=True).loc[0]
 
         states = []
         for i in series:
