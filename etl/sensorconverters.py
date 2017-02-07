@@ -7,17 +7,7 @@ import pandas as pd
 
 from running_mean import RunningMean
 
-running_mean_state = defaultdict(lambda: {})
-
-# running_means = {'co': {'s_coresistance': None, 's_no2resistance': None,
-#                         's_o3resistance': None},
-#                  'no2': {'s_coresistance': None, 's_no2resistance': None,
-#                          's_o3resistance': None},
-#                  'o3': {'s_coresistance': None, 's_no2resistance': None,
-#                         's_o3resistance': None}}
-# running_mean_alpha = .05
-
-# log = Util.get_log("SensorConverters")
+running_mean_state = defaultdict(lambda: defaultdict(lambda: {}))
 
 # Conversion functions for raw values from Josene sensors
 
@@ -95,7 +85,7 @@ def ohm_to_ugm3(input, json_obj, sensor_def, gas):
     val = None
 
     # filter observations
-    state = running_mean_state[json_obj['device_id']]
+    state = running_mean_state[json_obj['device_id']][gas]
     for component, weight in running_mean_weights.iteritems():
         if component not in state:
             state[component] = RunningMean(weight)

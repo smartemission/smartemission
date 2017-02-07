@@ -31,6 +31,10 @@ class RunningMean(object):
                                               self.new_obs_weight)
         return self.state
 
+    def __repr__(self):
+        return "RunningMean(new_obs_weight=%f,state=%f)" % \
+               (self.new_obs_weight, self.state)
+
     @staticmethod
     def running_mean(state, obs, weight):
         """
