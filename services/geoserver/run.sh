@@ -32,7 +32,7 @@ function restart_gs() {
   sudo docker rm ${NAME} > /dev/null 2>&1
   echo "restart ${NAME} with volumes: ${VOL_MAP}"
   # Finally run with all mappings
-  sudo docker run --name ${NAME} ${LINK_MAP} ${PORT_MAP} ${VOL_MAP} -d ${IMAGE}
+  sudo docker run --restart=always --name ${NAME} ${LINK_MAP} ${PORT_MAP} ${VOL_MAP} -d ${IMAGE}
 }
 
 # Some tricky stuff to get full GS data dir on host when non-existing on host

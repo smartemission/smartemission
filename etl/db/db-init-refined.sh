@@ -6,3 +6,5 @@
 . common.sh
 
 psql -h ${PGHOST} ${PGDB} -f db-schema-refined.sql
+
+echo "also may need to DROP SERIES FROM joserefined in InfluxDB"

@@ -18,7 +18,7 @@ sudo docker stop ${NAME} > /dev/null 2>&1
 sudo docker rm ${NAME} > /dev/null 2>&1
 
 # Finally run
-sudo docker run --name ${NAME} ${PORT_MAP} ${VOL_MAP} -d -t ${IMAGE}
+sudo docker run --restart=always --name ${NAME} ${PORT_MAP} ${VOL_MAP} -d -t ${IMAGE}
 
 # TIP to connect from host to postgis container
 # psql -h `sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' postgis` -U docker -W gis
