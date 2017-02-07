@@ -105,7 +105,7 @@ def ohm_to_ugm3(input, json_obj, sensor_def, gas):
     inputs = [json_obj[k] for k in sensor_def['input']]
 
     # Predict RIVM value if all values are available
-    x = pd.DataFrame(inputs, [0])
+    x = pd.DataFrame([inputs])
     val = calibration_model.predict(x)[0]
 
     return val

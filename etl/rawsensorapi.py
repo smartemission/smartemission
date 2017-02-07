@@ -305,6 +305,7 @@ class RawSensorLastInput(RawSensorAPIInput):
                     else:
                         sensor_def['converter_model'] = self.models[sensor_name]
 
+                sensor_vals['device_id'] = device_id
                 value = sensor_def['converter'](value_raw, sensor_vals, sensor_def)
                 output_valid, reason = check_value(sensor_name, sensor_vals, value=value)
                 if not output_valid:
