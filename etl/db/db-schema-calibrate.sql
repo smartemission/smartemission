@@ -7,6 +7,7 @@ CREATE SCHEMA smartem_calibrated;
 DROP TABLE IF EXISTS smartem_calibrated.calibration_models CASCADE;
 CREATE TABLE smartem_calibrated.calibration_models (
   id serial,
+  parameters json,
   model bytea not null,
   input_order json,
   predicts character varying (32) not null,
@@ -34,3 +35,13 @@ CREATE TABLE smartem_calibrated.calibration_parameters (
   timestamp TIMESTAMP WITH TIME ZONE DEFAULT current_timestamp,
   PRIMARY KEY (id)
 ) WITHOUT OIDS;
+
+ DROP TABLE IF EXISTS smartem_calibrated.calibration_state CASCADE;
+ CREATE TABLE smartem_calibrated.calibration_state (
+   id SERIAL,
+   process CHARACTER VARYING (32) NOT NULL,
+   model_id INT,
+   state JSON,
+   timestamp TIMESTAMP with time zone default current_timestamp,
+   PRIMARY KEY (id)
+ ) WITHOUT OIDS;

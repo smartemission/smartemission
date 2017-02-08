@@ -105,6 +105,19 @@ class Calibrator(Filter):
         Required: True
         """
 
+    @Config(ptype=dict, default={}, required=True)
+    def running_means(self):
+        """
+        Columns to apply running mean on and with what weight.
+
+        Example: {'s_coresistance': 0.05,
+                  's_oresistance': 0.05,
+                  's_no2resistance':  0.05}
+
+        Default: {}
+        Required: True
+        """
+
     @Config(ptype=list, required=True)
     def targets(self):
         """
@@ -206,6 +219,7 @@ class Calibrator(Filter):
         result_out = dict()
         for gs_keys in self._return_gs_elem:
             result_out[gs_keys] = getattr(gs, gs_keys)
+        result_out['running_means'] = self.running_means
         result_out['target'] = self.current_target
         result_out['sample'] = df
         result_out['rmse'] = rmse
@@ -225,10 +239,8 @@ class Calibrator(Filter):
         return df
 
     def filter_gasses(self, df):
-        running_mean_weights = self.current_sensordef()['converter_running_mean_weight']
-
         df = df.sort_values('time')
-        for component, weight in running_mean_weights.iteritems():
+        for component, weight in self.running_means.iteritems():
             f = lambda x: RunningMean.series_running_mean(x, weight)
             df[component] = df.groupby('geohash')[component].transform(f)
 

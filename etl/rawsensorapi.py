@@ -143,9 +143,6 @@ class RawSensorLastInput(RawSensorAPIInput):
         Called just before Component invoke.
         """
 
-        # Assume that there are calibration models in the meta
-        self.models = packet.meta['models']
-
         # The base method read() will fetch self.url until it is set to None
         self.device_id, self.device_ids_idx = self.next_entry(self.device_ids, self.device_ids_idx)
 
@@ -154,7 +151,10 @@ class RawSensorLastInput(RawSensorAPIInput):
             self.url = None
             log.info('Processing halted: all devices done')
             packet.set_end_of_stream()
-            return False
+            # needs to continue such that further in the stream final actions
+            # can be taken when stream is ending.
+            # i.e. save calibration state at end of stream
+            return True
 
         # ASSERT: still device(s) to be fetched
 
@@ -296,14 +296,6 @@ class RawSensorLastInput(RawSensorAPIInput):
 
                 # Calculate values
                 record['value_raw'] = value_raw
-
-                # set model if available and needed
-                if 'converter_model' in sensor_def:
-                    if sensor_name not in self.models:
-                        log.warn('No calibration model given for %s' % sensor_name)
-                        continue
-                    else:
-                        sensor_def['converter_model'] = self.models[sensor_name]
 
                 sensor_vals['device_id'] = device_id
                 value = sensor_def['converter'](value_raw, sensor_vals, sensor_def)

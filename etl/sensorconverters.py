@@ -1,13 +1,10 @@
 import math
 import re
-from collections import defaultdict
 from datetime import datetime, tzinfo, timedelta
 
 import pandas as pd
 
 from running_mean import RunningMean
-
-running_mean_state = defaultdict(lambda: defaultdict(lambda: {}))
 
 # Conversion functions for raw values from Josene sensors
 
@@ -68,24 +65,30 @@ def update_running_mean(running_means, alpha, obs):
     return running_means
 
 
-def ohm_to_ugm3(input, json_obj, sensor_def, gas):
-    # global running_means
+def ohm_to_ugm3(input, json_obj, sensor_def):
 
-    if 'converter_model' in sensor_def and \
-                    sensor_def['converter_model'] is not None:
-        calibration_model = sensor_def['converter_model']
-    else:
-        raise ValueError('No calibration model given in sensor definitions.')
-    if 'converter_running_mean_weight' in sensor_def and \
-        sensor_def['converter_running_mean_weight'] is not None:
-        running_mean_weights = sensor_def['converter_running_mean_weight']
-    else:
-        raise ValueError('No running mean weights given in sensor definitions.')
+    # check model specification
+    if not ('converter_model' in sensor_def
+            and sensor_def['converter_model'] is not None
+            and 'mlp_regressor' in sensor_def['converter_model']
+            and 'running_mean_weights' in sensor_def['converter_model']
+            and 'state' in sensor_def['converter_model']):
+        raise ValueError('Converter model not properly specified.')
+
+    # unpack model specification
+    converter_model = sensor_def['converter_model']
+    mlp_regressor = converter_model['mlp_regressor']
+    running_mean_weights = converter_model['running_mean_weights']
+    running_mean_state = converter_model['state']
+
+    json_obj['device_id'] = str(json_obj['device_id'])
+    if json_obj['device_id'] not in running_mean_state:
+        running_mean_state[json_obj['device_id']] = dict()
 
     val = None
 
     # filter observations
-    state = running_mean_state[json_obj['device_id']][gas]
+    state = running_mean_state[json_obj['device_id']]
     for component, weight in running_mean_weights.iteritems():
         if component not in state:
             state[component] = RunningMean(weight)
@@ -96,21 +99,21 @@ def ohm_to_ugm3(input, json_obj, sensor_def, gas):
 
     # Predict RIVM value if all values are available
     x = pd.DataFrame([inputs])
-    val = calibration_model.predict(x)[0]
+    val = mlp_regressor.predict(x)[0]
 
     return val
 
 
 def ohm_co_to_ugm3(input, json_obj, sensor_def):
-    return ohm_to_ugm3(input, json_obj, sensor_def, 'co')
+    return ohm_to_ugm3(input, json_obj, sensor_def)
 
 
 def ohm_no2_to_ugm3(input, json_obj, sensor_def):
-    return ohm_to_ugm3(input, json_obj, sensor_def, 'no2')
+    return ohm_to_ugm3(input, json_obj, sensor_def)
 
 
 def ohm_o3_to_ugm3(input, json_obj, sensor_def):
-    return ohm_to_ugm3(input, json_obj, sensor_def, 'o3')
+    return ohm_to_ugm3(input, json_obj, sensor_def)
 
 
 def ohm_to_kohm(input, json_obj=None, sensor_def=None):

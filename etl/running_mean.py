@@ -1,6 +1,6 @@
-class RunningMean(object):
+class RunningMean(dict):
 
-    def __init__(self, new_obs_weight, state_init="first"):
+    def __init__(self, new_obs_weight, state_init="first", **kwargs):
         """
         Apply running mean on streaming data. New running mean is computed
         like:
@@ -10,8 +10,9 @@ class RunningMean(object):
         :param state_init: way to initialize the state. Can be numeric or
             the string "first" in which case the first obs is used.
         """
-        self.new_obs_weight = new_obs_weight
-        self.state = state_init
+        super(RunningMean, self).__init__(**kwargs)
+        self['new_obs_weight'] = new_obs_weight
+        self['state'] = state_init
 
     def observe(self, obs):
         """
@@ -24,16 +25,24 @@ class RunningMean(object):
         # the same time
         obs = float(obs)
 
-        if self.state == "first":
-            self.state = obs
+        if self['state'] == "first":
+            self['state'] = obs
 
-        self.state = RunningMean.running_mean(self.state, obs,
-                                              self.new_obs_weight)
-        return self.state
+        self['state'] = RunningMean.running_mean(self['state'], obs,
+                                              self['new_obs_weight'])
+        return self['state']
 
     def __repr__(self):
-        return "RunningMean(new_obs_weight=%f,state=%f)" % \
-               (self.new_obs_weight, self.state)
+        return "RunningMean(new_obs_weight=%f,state=%s)" % \
+               (self['new_obs_weight'], str(self['state']))
+
+    @staticmethod
+    def from_dict(d):
+        if 'new_obs_weight' not in d:
+            raise ValueError('new_obs_weight not specified in dict')
+        if 'state' not in d:
+            raise ValueError('state not specified in dict')
+        return RunningMean(d['new_obs_weight'], d['state'])
 
     @staticmethod
     def running_mean(state, obs, weight):

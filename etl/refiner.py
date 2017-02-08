@@ -68,7 +68,6 @@ class RefineFilter(Filter):
 
         # ts_list (timeseries list) is an array of dict, each dict containing raw sensor values
         ts_list = record_in['data']['timeseries']
-        models = record_meta['models']
         gid_raw = record_in['gid']
         unique_id = record_in['unique_id']
         log.info('processing unique_id=%s gid_raw=%d ts_count=%d' % (unique_id, gid_raw, len(ts_list)))
@@ -189,20 +188,9 @@ class RefineFilter(Filter):
                         record['value_raw'] = value_raw
 
                     # Do the conversion/calibration in 3 steps
-                    # 0) set model if available
                     # 1) check inputs (available and valid)
                     # 2) convert
                     # 3) check output (available and valid)
-
-                    # 0) set model if available and needed
-                    if 'converter_model' in sensor_def:
-                        if sensor_name not in models:
-                            log.warn('No calibration model given for %s' %
-                                     sensor_name)
-                            validate_errs += 1
-                            continue
-                        else:
-                            sensor_def['converter_model'] = models[sensor_name]
 
                     # 1) check inputs
                     sensor_vals['device_id'] = device_id
