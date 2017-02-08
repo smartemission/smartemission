@@ -170,29 +170,29 @@ SENSOR_DEFS = {
         {
             'label': 'O3Raw',
             'unit': 'Ohm',
-            'min': 1000,
-            'max': 6000000
+            'min': 3000-2000,
+            'max': 8000000
         },
     's_no2resistance':
         {
             'label': 'NO2RawOhm',
             'unit': 'Ohm',
             'min': 800,
-            'max': 20000000
+            'max': 820000
         },
     's_coresistance':
         {
             'label': 'CORawOhm',
             'unit': 'Ohm',
-            'min': 100000,
-            'max': 1500000
+            'min': 10000,
+            'max': 3000000
         },
     's_co':
         {
             'label': 'CO Concentration',
             'unit': 'ppb',
-            'min': 0,
-            'max': 1000
+            'min': 1000, # 1 ppm
+            'max': 1000000 # 1000 ppm
         },
     's_no2':
         {
@@ -219,31 +219,30 @@ SENSOR_DEFS = {
     's_pm10':
         {
             'label': 'PM 10',
-
             'unit': 'ng/m3',
             'min': 0,
-            'max': 80000
+            'max': 1000000
         },
     's_pm2_5':
         {
             'label': 'PM 2.5',
             'unit': 'ng/m3',
             'min': 0,
-            'max': 80000
+            'max': 1000000
         },
     's_pm1':
         {
             'label': 'PM 1',
             'unit': 'ng/m3',
             'min': 0,
-            'max': 80000
+            'max': 1000000
         },
     's_tsp':
         {
             'label': 'Total Suspended Particles',
             'unit': 'ng/m3',
             'min': 0,
-            'max': 80000
+            'max': 1000000
         },
     # START Meteo Jose
     's_temperatureunit':
@@ -272,8 +271,8 @@ SENSOR_DEFS = {
         {
             'label': 'Relative Humidity',
             'unit': 'm%RH',
-            'min': 20000,
-            'max': 100000
+            'min': 20000-10000,
+            'max': 100000+20000
         },
     's_rain':
         {
@@ -286,7 +285,7 @@ SENSOR_DEFS = {
         {
             'label': 'External Temperature',
             'unit': 'milliKelvin',
-            'min': 233150,
+            'min': 218150,
             'max': 398150
         },
     's_windspeed':
