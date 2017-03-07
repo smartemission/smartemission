@@ -4,48 +4,13 @@
 Administration
 ==============
 
-This chapter describes the operation and maintenance aspects for the Smart Emission platform. For example:
+This chapter describes the daily operation and maintenance aspects for the Smart Emission platform. For example:
 
-* installing/setting up the entire platform
 * how to start stop servers
+* backup and restore
 * managing the ETL
 * where to find logfiles
 * troubleshooting
-
-Platform Overall
-================
-
-To install the entire platform on Ubuntu Linux on an empty Virtual Machine (VM)
-make all databases ready and run it as a system service.
-From the ``GIT_HOME/platform`` dir do:
-
-* ``sudo su -`` - become root
-* ``./bootstrap.sh`` - makes empty Ubuntu system ready for Docker and Platform
-* ``./build.sh``  - builds all Docker images (be patient)
-* ``init-databases.sh`` - creates and initializes all databases (**NB WILL DESTROY ANY EXISTING DATA!**)
-* ``./install.sh``  - installs system service "smartem" in ``/etc/init.d``
-
-For the ``init-databases.sh`` script you need to add a file ``<myhostname>.args`` under ``etl/options`` similar
-to ``example.args`` where ``<myhostname>`` is the result of the ``hostname`` command.
-
-Now use the standard Linux "service" commands:  ::
-
-	service smartem status
-	service smarted stop
-	service smartem start
-
-etc or even ``/etc/init.d/smartem start|stop|status`` will work.
-
-The link http://data.smartemission.nl/adm gives access to admin pages.
-
-Checking status: ::
-
-	$ service smartem status
-	 * Checking status of Smart Emission Data Platform smartem                                                                                                                             CONTAINER ID        IMAGE                      COMMAND                  CREATED             STATUS              PORTS                        NAMES
-	8e4e7610f81e        geonovum/apache2           "/usr/bin/supervisord"   10 minutes ago      Up 10 minutes       22/tcp, 0.0.0.0:80->80/tcp   web
-	12caa42044a8        geonovum/geoserver:2.9.0   "catalina.sh run"        10 minutes ago      Up 10 minutes       8080/tcp                     geoserver
-	af79831923a3        geonovum/postgis           "/bin/sh -c /start-po"   11 minutes ago      Up 10 minutes       5432/tcp                     postgis
-
 
 Backup
 ======

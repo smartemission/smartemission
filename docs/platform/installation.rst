@@ -4,47 +4,338 @@
 Installation
 ============
 
-This chapter describes the installation steps for the Smart Emission Data Platform within the
-`Fiware Lab NL <http://fiware-lab.nl/>`_ environment.
+This chapter describes the installation steps for the Smart Emission Data Platform.
 
-Background
+Principles
 ==========
 
-The `Fiware Lab NL <http://fiware-lab.nl/>`_ provides a cloud-based computing infrastructure in particular
-for "Smart City" applications. Based on the adopted "Docker-Strategy" for the
-Smart Emission Data Platform as described within the :ref:`architecture` chapter,
-this chapter will describe the actual "hands-on" installation steps.
+These are requirements and principles to understand and install an instance of the SE platform.
+It is required to have an understanding of `Docker <https://www.docker.com>`_, as that is the main environment
+in which the SE Platform is run.
 
-Bootstrap
-=========
+- Required OS: Ubuntu Linux 14.04 or later (tested on 14.04)
+- all components are Docker Images run as Docker Containers
+- all required code comes from GitHub: https://github.com/Geonovum/smartemission
+- all dynamic data: settings, databases, logfiles is maintained on the system (via Docker container *Volume-mapping*)
+- Docker images are connected via Docker Link (``--link``)  mapping
+- all access to application services containers (GeoServer, SOS, Grafana etc) runs via the Apache2 `web` Docker container
+- settings per-system, like for test and production are kept in per-host ``<yourhostname>.args``
+- dynamic data (databases, logs, backups) is maintained under ``/var/smartem``.
+- a single ``bootstrap.sh`` script will install ``Docker`` plus other required packages (see below)
+- all ETL/calibration processes run as scheduled ``cron`` jobs
+- all ETL Processes use a single Docker Image that embeds the `Stetl ETL Tool <http://stetl.org>`_
+- maintain ETL functionality in GitHub and just refresh/pull GitHub dir on server (no need for rebuilding Docker)
+- backups for all configuration and databases is scheduled each midnight
+- a test http://test.smartemission.nl and production http://data.smartemission.nl server exists
 
-In order to start installing Docker images and other tooling we need to "bootstrap" the system
-within the Fiware environment. For development purposes we also setup a "Local" system using Vagrant.
+Installation
+============
 
-Fiware Lab NL
--------------
+There are just a few commands to install and initialize the entire SE Platform.
+To install the entire platform on a bare Ubuntu Linux on an empty Virtual Machine (VM),
+make all databases ready and run/schedule (``cron``) all processes can be done within 15-30 minutes.
 
-Creating a (Ubuntu) VM in the Fiware Lab NL goes as follows.
+On an empty Ubuntu Linux system perform all the steps below in that order as user ``root``.
 
-* login at http://login.fiware-lab.nl/
-* create an SSL keypair via http://login.fiware-lab.nl/dashboard/project/access_and_security/
-* create a VM-instance via http://login.fiware-lab.nl/dashboard/project/instances/ `Launch Instance` button
+Get Bootstrap Script
+--------------------
 
-.. figure:: _static/installation/launch-instance.jpg
-   :align: center
+Get the SE Platform `bootstrap.sh <../../platform/bootstrap.sh>`_ script: ::
 
-   *Creating a Ubuntu VM instance in Fiware Lab NL*
+    # In e.g. home dir
+    $ apt-get install curl
+    $ curl -O https://raw.githubusercontent.com/Geonovum/smartemission/master/platform/bootstrap.sh
 
-See the popup image above, do the following selections in the various tabs:
+Install and Build
+-----------------
 
-* `Launch Instance` tab: select `boot from image`, select ``base_ubuntu_14.04``
-* `Access&Security` tab: select keypair just created and enable all `security groups`
-* `Networking` tab: assign both ``floating-IP`` and ``shared-net`` to `selected networks`
-* other tabs: leave as is
-* login via ``ssh -i <privkey_from_keypair>.pem ubuntu@<IP_address>``
+Within this dir do the following steps to install packages and
+SE-code (from GitHub) and build Docker images: ::
 
-Local - Vagrant
----------------
+    # become root if not already
+    $ sudo su  -
+
+    # Install Docker and required packages
+    # plus checkout (Git) all SE code from GitHub
+    # Confirm interactive choices: postfix "Local".
+    $ ./bootstrap.sh
+
+    # go platform home dir:
+    $ cd /opt/geonovum/smartem/git/platform
+
+    # Tip: make dynamic link to quickly access GitHub code dir from ~/git
+    cd
+    ln -s /opt/geonovum/smartem/git git
+
+    # build all Docker images (be patient)
+    $ ./build.sh
+
+Configure
+---------
+
+Next configure and install databases and ETL-options. First make your own host-dependent
+configuration file: ::
+
+    # Go to config options dir
+    $ cd /opt/geonovum/smartem/git/etl/options
+
+    # Note your machine's hostname, symbolically "yourhostname"
+    $ hostname
+    yourhostname
+
+    # Make copy of the example config file
+    # NB never put this file in GitHub or public dir!!
+    $ cp example.args  yourhostname.args
+
+    # Change the config values for your local situation
+    $ vi yourhostname.args
+
+    # Create a HTTP admin password file named 'htpasswd' See README.TXT there.
+    cd /opt/geonovum/smartem/git/services/web/config/admin
+    htpasswd htpasswd <username>
+
+Create Databases
+----------------
+
+Now create and initialize all databases (PostGIS and InfluxDb): ::
+
+    # Creates and initializes all databases
+    # NB WILL DESTROY ANY EXISTING DATA!!
+    ./init-databases.sh
+
+Install System Service
+----------------------
+
+The entire platform (all Docker Images and `cron jobs <../../platform/cronfile.txt>`_) can be started/stopped with single
+system service command `smartem <../../platform/smartem.initd.sh>`_ : ::
+
+    # Installs Linux system service "smartem" in /etc/init.d
+    ./install.sh
+
+    # Test (see Running below)
+    service smartem status
+
+    # in browser: go to http://<yourdomain>/geoserver and
+    # change GeoServer default password (admin, geoserver)
+
+Running
+=======
+
+The entire SE-platform (all Docker Images and cron jobs) can be
+started/stopped/inspected via Linux "service smartem" commands:  ::
+
+	service smartem status
+	service smarted stop
+	service smartem start
+
+etc or even ``/etc/init.d/smartem start|stop|status`` will work.
+
+The link http://data.smartemission.nl/adm gives access to admin pages.
+
+Checking status: ::
+
+    $ service smartem status
+    * Checking status of Smart Emission Data Platform smartem                                                                                                                         CONTAINER ID        IMAGE                      COMMAND                  CREATED             STATUS              PORTS                                            NAMES
+    938924fff0a3        geonovum/stetl:latest      "/usr/local/bin/st..."   20 seconds ago      Up 19 seconds                                                        stetl_sospublish
+    dd598dbd1e0f        geonovum/apache2           "/usr/bin/supervisord"   3 weeks ago         Up 3 weeks          22/tcp, 0.0.0.0:80->80/tcp                       web
+    2dcd2b91a7a1        grafana/grafana:4.1.1      "/run.sh"                3 weeks ago         Up 3 weeks          0.0.0.0:3000->3000/tcp                           grafana
+    573c839c7bab        geonovum/sos52n:4.3.7      "catalina.sh run"        3 weeks ago         Up 3 weeks          8080/tcp                                         sos52n
+    aa16f2e456f6        geonovum/geoserver:2.9.0   "catalina.sh run"        3 weeks ago         Up 3 weeks          8080/tcp                                         geoserver
+    f915fc5d1d2b        influxdb:1.1.1             "/entrypoint.sh -c..."   3 weeks ago         Up 2 weeks          0.0.0.0:8083->8083/tcp, 0.0.0.0:8086->8086/tcp   influxdb
+    08b5decd0123        geonovum/postgis:9.4-2.1   "/bin/sh -c /start..."   3 weeks ago         Up 3 weeks          5432/tcp                                         postgis
+
+    # List cronjobs
+    $ crontab -l
+
+Handy Commands
+--------------
+
+Some handy Docker commands: ::
+
+    # cleanup non-running images
+    $ sudo docker rm -v $(sudo docker ps -a -q -f status=exited)
+    $ sudo docker rmi $(sudo docker images -f "dangling=true" -q)
+
+    # go into docker image named apache2 to bash prompt
+    sudo docker exec -it apache2 bash
+
+    # Find local Docker Bridge address of running container
+    docker inspect --format '{{ .NetworkSettings.IPAddress }}' postgis
+    # Example: psql to local postgis container
+    psql -h `docker inspect --format '{{ .NetworkSettings.IPAddress }}' postgis` -U docker -W gis
+
+
+Docker Containers
+=================
+
+Below the Docker Containers:
+how their generic Docker Images are built/acquired and how they are run using local mappings, data and configs.
+
+Each Docker image build is found under ``/docker`` in GitHub. Docker Containers
+are run via subdirs under ``services``.
+
+postgis - PostGIS Database
+--------------------------
+
+Uses PostGIS Docker image from Kartoza (Tim Sutton, QGIS lead),
+see https://hub.docker.com/r/kartoza/postgis/ and https://github.com/kartoza/docker-postgis  ::
+
+This shorthand script `run.sh <../../services/postgis/run.sh>`_ will (re)run the ``postgis`` container.
+
+.. literalinclude:: ../../services/postgis/run.sh
+    :language: bash
+
+To connect with ``psql`` from host using PG client package on host: ::
+
+    # sudo apt-get install postgresql-client-9.3
+    psql -h `docker inspect --format '{{ .NetworkSettings.IPAddress }}' postgis` -U docker -W -l
+
+    Password for user docker:
+                                     List of databases
+           Name       |  Owner   | Encoding  | Collate | Ctype |   Access privileges
+    ------------------+----------+-----------+---------+-------+-----------------------
+     gis              | docker   | UTF8      | C       | C     |
+     postgres         | postgres | SQL_ASCII | C       | C     |
+     template0        | postgres | SQL_ASCII | C       | C     | =c/postgres          +
+                      |          |           |         |       | postgres=CTc/postgres
+     template1        | postgres | SQL_ASCII | C       | C     | =c/postgres          +
+                      |          |           |         |       | postgres=CTc/postgres
+     template_postgis | postgres | UTF8      | C       | C     |
+    (5 rows)
+
+stetl - ETL for Measurements
+----------------------------
+
+Uses the ``geonovum/stetl`` image with Stetl config from GitHub for all ETL processes.  ::
+
+   # build stetl image
+   cd ~/git/docker/stetl
+   sudo docker build -t geonovum/stetl .
+
+   # run last measurements ETL, linking to postgis image
+   cd ~/git/etl
+   ./last.sh
+
+   # before first run do ./db-init.sh to create DB schema and tables
+
+The ``last.sh`` script is a wrapper to run the generic Docker ``geonovum/stetl`` with our
+local ETL-config and PostGIS:
+
+.. literalinclude:: ../../etl/last.sh
+    :language: bash
+
+
+web - Web Container
+-------------------
+
+Uses the generic ``geonovum/apache2`` Docker Image from GitHub. It contains the standard Apache2 server with various
+modules enabled to be able to run Python and act as a proxy to backend services. To build: ::
+
+   # build apache2 image
+   cd ~/git/docker/apache2
+   sudo docker build -t geonovum/apache2 .
+
+The Bash-script at ``~/git/services/web/run.sh``  will re(run) the generic
+Apache2 Docker image with mappings to local directories of the host for the  Apache2 config, webcontent and logfiles.
+It will also link to the PostGIS Container (for the Flask Python app):
+
+.. literalinclude:: ../../services/web/run.sh
+    :language: bash
+
+To run locally, e.g. with Vagrant, hardcode the DNS mapping in ``/etc/hosts`` : ::
+
+   127.0.0.1	local.smartemission.nl
+   127.0.0.1	local.data.smartemission.nl
+
+Inspect logfiles within the host ``/var/smartem/log/apache2`` : ::
+
+   tail -f   /var/smartem/log/apache2/data.smartem-error.log
+
+Debugging, start/stop Apache quickly within container: ::
+
+   # go into docker image named apache2 to bash prompt
+   sudo docker exec -it apache2 bash
+
+   # Kill running Apache parent process instance
+   root@ed393501ed58:/# ps -al
+   F S   UID   PID  PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+   4 S     0     8     1  0  80   0 - 15344 poll_s ?        00:00:00 sshd
+   4 S     0     9     1  0  80   0 - 23706 poll_s ?        00:00:00 apache2
+   5 S    33    10     9  0  80   0 - 23641 skb_re ?        00:00:00 apache2
+   5 S    33    11     9  0  80   0 - 96540 pipe_w ?        00:00:01 apache2
+   5 S    33    12     9  0  80   0 - 112940 pipe_w ?       00:00:01 apache2
+   0 R     0    94    81  0  80   0 -  1783 -      ?        00:00:00 ps
+   root@ed393501ed58:/# kill 9
+
+   # Start Apache from commandline
+   /bin/bash -c "source /etc/apache2/envvars && exec /usr/sbin/apache2 -DFOREGROUND"
+
+geoserver - GeoServer
+---------------------
+
+GeoServer is run from a Docker image based on Kartoza's GeoServer Dockerfile:
+https://github.com/kartoza/docker-geoserver/blob/master/Dockerfile.
+This Dockerfile is very versatile, as it allows to tune Tomcat parameters
+and add GeoServer plugins.
+
+Some local modifications were required, thus a customized Docker image ``geonovum/geoserver``
+has been developed. See https://github.com/Geonovum/smartemission/tree/master/docker/geoserver.
+
+GeoServer can then be run with the bash-script:
+https://github.com/Geonovum/smartemission/blob/master/services/geoserver/run.sh
+
+This script maps the local directory ``/var/smartem/data/geoserver`` as the GeoServer data-dir, thus
+keeping it outside the Docker container. Also the mapping is provided to the PostGIS Docker container
+``postgis``, thus PostGIS Stores within the GeoServer config can be accessed using the CNAME Host ``postgis``.
+
+GeoServer is accessed via the ``web`` container via the AJP Apache2 proxy (port 8009).
+
+sos - 52North SOS
+-----------------
+
+Similar to GeoServer: Tomcat with .war file and keeping config outside Docker container
+and mapping DB to ``postgis`` container.
+See https://github.com/Geonovum/smartemission/tree/master/docker/sos52n.
+
+influxdb - InfluxDB
+-------------------
+
+This runs the InfluxDB service as a Docker container. See https://www.influxdata.com:
+
+> InfluxDB is an open source database written in Go specifically to handle time
+> series data with high availability and high performance requirements.
+> InfluxDB installs in minutes without external dependencies, yet is
+> flexible and scalable enough for complex deployments.
+
+The Docker image comes from https://hub.docker.com/_/influxdb/
+
+See https://github.com/Geonovum/smartemission/tree/master/services/influxdb.
+
+To be supplied further.
+
+grafana - Grafana
+-----------------
+
+From http://grafana.org
+
+> Grafana is an open source metric analytics and visualization suite.
+> It is most commonly used for visualizing time series data for infrastructure and
+> application analytics but many use it in other domains including industrial sensors,
+> home automation, weather, and process control."
+
+Watch the demo and be amazed: http://play.grafana.org
+Documentation: http://docs.grafana.org
+
+See https://github.com/Geonovum/smartemission/tree/master/services/grafana.
+
+To be supplied further.
+
+Local Install
+=============
+
+You can also install the SE platform on your local system, preferably using VirtualBox and
+`Vagrant <https://www.vagrantup.com/>`_.
+This is very handy for development and testing.
 
 Docker can be run in various ways. On Linux it can be installed directly (see next). On Mac and Windows
 Docker needs to be run within a VM itself. On these
@@ -63,7 +354,7 @@ with the local environment. A further plus is that within the Ubuntu Box, the in
 will (mostly) be identical to those on the Fiware platform.
 
 Docker with Vagrant
-~~~~~~~~~~~~~~~~~~~
+-------------------
 
 The following steps are performed after having `VirtualBox <https://www.virtualbox.org>`_
 and `Vagrant <https://www.vagrantup.com/>`_ installed. ::
@@ -258,221 +549,11 @@ Same for Stetl, build and test: ::
    2016-04-22 19:09:30,024 util INFO Timer end: total ETL time=0.0 sec
    2016-04-22 19:09:30,026 ETL INFO ALL DONE
 
-Install Docker
---------------
-
-This installation is for both the local Vagrant environment or on Fiware Ubuntu VM or in fact any bare Ubuntu system.
-The whole stack can be up and running within 15 minutes!
-
-See https://docs.docker.com/engine/installation/linux/ubuntulinux/.
-
-Steps are all done by executing the script https://github.com/Geonovum/smartemission/blob/master/platform/bootstrap.sh :
-
-.. literalinclude:: ../../platform/bootstrap.sh
-    :language: bash
-
-Confirm interactive choices: postfix "Local".
-
-Includes also the install for Docker-compose, for later combining Docker-images, see https://docs.docker.com/compose/install.
-
-See also CLI utils for ``docker-compose``: https://docs.docker.com/v1.5/compose/cli/
-Now our system is ready to roll out Docker images!
-
 Running within 15 mins
-~~~~~~~~~~~~~~~~~~~~~~
+----------------------
 
-Below the steps to get the complete SE platform stack and ETL running within 15 minutes on a bare Ubuntu system.
-You can run as root or a privileged sudo-user like "ubuntu" or "vagrant".
+Same steps as Installation above.
 
-* ``curl -O https://raw.githubusercontent.com/Geonovum/smartemission/master/platform/bootstrap.sh`` to any dir
-* ``./bootstrap.sh``
-* go git home dir: ``cd /opt/geonovum/smartem/git/platform``
-* build system (Docker images mainly): ``./build.sh``
-* install system ``./install.sh`` (installs system service smartem)
-* start the system: ``service smartem start``
-* create the database schema's: (first time only, destroys DB!!): ``cd /opt/geonovum/smartem/git/etl`` and call ``./db-init.sh``
-* create a HTTP admin password file in: ``/opt/geonovum/smartem/git/services/web/config/admin/htpasswd`` (see README.TXT there)
-* go to domain admin site ``/adm`` and change GeoServer default password
-
-Check log files under ``/var/smartem/log``.
-
-Handy Commands
-~~~~~~~~~~~~~~
-
-Some handly Docker commands: ::
-
-    # cleanup non-running images
-    $ sudo docker rm -v $(sudo docker ps -a -q -f status=exited)
-    $ sudo docker rmi $(sudo docker images -f "dangling=true" -q)
-
-    # go into docker image named apache2 to bash prompt
-    sudo docker exec -it apache2 bash
-
-    # Find local Docker Bridge address of running container
-    docker inspect --format '{{ .NetworkSettings.IPAddress }}' postgis
-    # Example: psql to local postgis container
-    psql -h `docker inspect --format '{{ .NetworkSettings.IPAddress }}' postgis` -U docker -W gis
-
-Docker Containers
------------------
-
-Below the Docker Containers: how their generic Docker Images are built/acquired and how they are run using local mappings, data and configs.
-
-postgis - PostGIS Database
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Uses PostGIS Docker image from Kartoza (Tim Sutton, QGIS lead),
-see https://hub.docker.com/r/kartoza/postgis/ and https://github.com/kartoza/docker-postgis  ::
-
-This shorthand script ``~/git/services/postgis/run.sh`` will (re)run the ``postgis`` container.
-
-.. literalinclude:: ../../services/postgis/run.sh
-    :language: bash
-
-To connect with ``psql`` from host using PG client package on host: ::
-
-    # sudo apt-get install postgresql-client-9.3
-    psql -h `docker inspect --format '{{ .NetworkSettings.IPAddress }}' postgis` -U docker -W -l
-
-    Password for user docker:
-                                     List of databases
-           Name       |  Owner   | Encoding  | Collate | Ctype |   Access privileges
-    ------------------+----------+-----------+---------+-------+-----------------------
-     gis              | docker   | UTF8      | C       | C     |
-     postgres         | postgres | SQL_ASCII | C       | C     |
-     template0        | postgres | SQL_ASCII | C       | C     | =c/postgres          +
-                      |          |           |         |       | postgres=CTc/postgres
-     template1        | postgres | SQL_ASCII | C       | C     | =c/postgres          +
-                      |          |           |         |       | postgres=CTc/postgres
-     template_postgis | postgres | UTF8      | C       | C     |
-    (5 rows)
-
-stetl - ETL for Measurements
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Uses the ``geonovum/stetl`` image with Stetl config from GitHub.  ::
-
-   # build stetl image
-   cd ~/git/docker/stetl
-   sudo docker build -t geonovum/stetl .
-
-   # run last measurements ETL, linking to postgis image
-   cd ~/git/etl
-   ./last.sh
-
-   # before first run do ./db-init.sh to create DB schema and tables
-
-The ``last.sh`` script is a wrapper to run the generic Docker ``geonovum/stetl`` with our
-local ETL-config and PostGIS:
-
-.. literalinclude:: ../../etl/last.sh
-    :language: bash
-
-
-web - Web Container
-~~~~~~~~~~~~~~~~~~~
-
-Uses the generic ``geonovum/apache2`` Docker Image from GitHub. It contains the standard Apache2 server with various
-modules enabled to be able to run Python and act as a proxy to backend services. To build: ::
-
-   # build apache2 image
-   cd ~/git/docker/apache2
-   sudo docker build -t geonovum/apache2 .
-
-The Bash-script at ``~/git/services/web/run.sh``  will re(run) the generic
-Apache2 Docker image with mappings to local directories of the host for the  Apache2 config, webcontent and logfiles.
-It will also link to the PostGIS Container (for the Flask Python app):
-
-.. literalinclude:: ../../services/web/run.sh
-    :language: bash
-
-To run locally, e.g. with Vagrant, hardcode the DNS mapping in ``/etc/hosts`` : ::
-
-   127.0.0.1	local.smartemission.nl
-   127.0.0.1	local.data.smartemission.nl
-
-Inspect logfiles within the host ``/var/smartem/log/apache2`` : ::
-
-   tail -f   /var/smartem/log/apache2/data.smartem-error.log
-
-Debugging, start/stop Apache quickly within container: ::
-
-   # go into docker image named apache2 to bash prompt
-   sudo docker exec -it apache2 bash
-
-   # Kill running Apache parent process instance
-   root@ed393501ed58:/# ps -al
-   F S   UID   PID  PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
-   4 S     0     8     1  0  80   0 - 15344 poll_s ?        00:00:00 sshd
-   4 S     0     9     1  0  80   0 - 23706 poll_s ?        00:00:00 apache2
-   5 S    33    10     9  0  80   0 - 23641 skb_re ?        00:00:00 apache2
-   5 S    33    11     9  0  80   0 - 96540 pipe_w ?        00:00:01 apache2
-   5 S    33    12     9  0  80   0 - 112940 pipe_w ?       00:00:01 apache2
-   0 R     0    94    81  0  80   0 -  1783 -      ?        00:00:00 ps
-   root@ed393501ed58:/# kill 9
-
-   # Start Apache from commandline
-   /bin/bash -c "source /etc/apache2/envvars && exec /usr/sbin/apache2 -DFOREGROUND"
-
-geoserver - GeoServer
-~~~~~~~~~~~~~~~~~~~~~
-
-GeoServer is run from a Docker image based on Kartoza's GeoServer Dockerfile:
-https://github.com/kartoza/docker-geoserver/blob/master/Dockerfile.
-This Dockerfile is very versatile, as it allows to tune Tomcat parameters
-and add GeoServer plugins.
-
-Some local modifications were required, thus a customized Docker image ``geonovum/geoserver``
-has been developed. See https://github.com/Geonovum/smartemission/tree/master/docker/geoserver.
-
-GeoServer can then be run with the bash-script:
-https://github.com/Geonovum/smartemission/blob/master/services/geoserver/run.sh
-
-This script maps the local directory ``/var/smartem/data/geoserver`` as the GeoServer data-dir, thus
-keeping it outside the Docker container. Also the mapping is provided to the PostGIS Docker container
-``postgis``, thus PostGIS Stores within the GeoServer config can be accessed using the CNAME Host ``postgis``.
-
-GeoServer is accessed via the ``web`` container via the AJP Apache2 proxy (port 8009).
-
-sos - 52North  SOS
-~~~~~~~~~~~~~~~~~~
-
-Similar to GeoServer: Tomcat with .war file and keeping config outside Docker container
-and mapping DB to ``postgis`` container.
-See https://github.com/Geonovum/smartemission/tree/master/docker/sos52n.
-
-influxdb - InfluxDB
-~~~~~~~~~~~~~~~~~~~
-
-This runs the InfluxDB service as a Docker container. See https://www.influxdata.com:
-
-> InfluxDB is an open source database written in Go specifically to handle time
-> series data with high availability and high performance requirements.
-> InfluxDB installs in minutes without external dependencies, yet is
-> flexible and scalable enough for complex deployments.
-
-The Docker image comes from https://hub.docker.com/_/influxdb/
-
-See https://github.com/Geonovum/smartemission/tree/master/services/influxdb.
-
-To be supplied further.
-
-grafana - Grafana
-~~~~~~~~~~~~~~~~~
-
-From http://grafana.org
-
-> Grafana is an open source metric analytics and visualization suite.
-> It is most commonly used for visualizing time series data for infrastructure and
-> application analytics but many use it in other domains including industrial sensors,
-> home automation, weather, and process control."
-
-Watch the demo and be amazed: http://play.grafana.org
-Documentation: http://docs.grafana.org
-
-See https://github.com/Geonovum/smartemission/tree/master/services/grafana.
-
-To be supplied further.
 
 
 

@@ -100,6 +100,43 @@ Restart and test: ::
     # REST
     http://api.smartemission.nl/istsos/wa/istsos/services/sound
 
+Fiware
+======
+
+Initially it was planned to run the SE platform on Fiware, but due to technical problems
+this was postponed and is still on hold.  Below some notes on installation.
+
+The `Fiware Lab NL <http://fiware-lab.nl/>`_ provides a cloud-based computing infrastructure in particular
+for "Smart City" applications. Based on the adopted "Docker-Strategy" for the
+Smart Emission Data Platform as described within the :ref:`architecture` chapter,
+this chapter will describe the actual "hands-on" installation steps.
+
+In order to start installing Docker images and other tooling we need to "bootstrap" the system
+within the Fiware environment.
+
+Fiware Lab NL
+-------------
+
+Creating a (Ubuntu) VM in the Fiware Lab NL goes as follows.
+
+* login at http://login.fiware-lab.nl/
+* create an SSL keypair via http://login.fiware-lab.nl/dashboard/project/access_and_security/
+* create a VM-instance via http://login.fiware-lab.nl/dashboard/project/instances/ `Launch Instance` button
+
+.. figure:: _static/installation/launch-instance.jpg
+   :align: center
+
+   *Creating a Ubuntu VM instance in Fiware Lab NL*
+
+See the popup image above, do the following selections in the various tabs:
+
+* `Launch Instance` tab: select `boot from image`, select ``base_ubuntu_14.04``
+* `Access&Security` tab: select keypair just created and enable all `security groups`
+* `Networking` tab: assign both ``floating-IP`` and ``shared-net`` to `selected networks`
+* other tabs: leave as is
+* login via ``ssh -i <privkey_from_keypair>.pem ubuntu@<IP_address>``
+
+
 
 
 

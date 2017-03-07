@@ -42,5 +42,5 @@ Test Databases once in order to test ETL (NB the `postgis` Docker container need
 All dynamic data (config, databases, logfiles) is kept outside the Docker images. Most under `/var/smartem`.
 
 An admin web-interface (see `services/web/site/adm`) is present at `/adm`.
-Create the file `htpaswd` once under `/opt/geonovum/smartem/git/services/web/config/admin` 
-using the command `htpasswd`. You may need to install the package `apache2-utils` first.
+Create the file `htpasswd` once under `/opt/geonovum/smartem/git/services/web/config/admin` 
+using the command `htpasswd`. 
