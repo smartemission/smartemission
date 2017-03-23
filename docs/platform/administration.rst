@@ -98,8 +98,108 @@ Services are restored as follows: ::
 
 	# TODO Grafana
 
-Data Management
-===============
+ETL and Data Management
+=======================
+
+Republish Data to SOS and STA
+-----------------------------
+
+In cases where for example calibration has changed, we need to republish all (refined)
+data to the SOS and STA. This is not required for data in GeoServer since it directly
+uses the Refined DB tables. SOS and STA keep their own (PostGIS) databases, hence these must be refilled.
+
+Below the steps to republish to SOS and STA, many are common. This should be performed on SE TEST Server: ::
+
+	# stop entire platform: services and cronjobs
+    service smartem stop
+
+    # Start PostGIS
+    cd ~/git/services/postgis
+    ./run.sh
+
+Next do STA and/or SOS specific initializations.
+
+SensorUp STA Specific
+~~~~~~~~~~~~~~~~~~~~~
+
+This is specific to STA server from SensorUp. ::
+
+	# use screen as processes may take long
+	screen -S sta
+
+    # STA clear data
+    cd ~/git/etl/db
+    ./staclear.sh
+    
+    # if this does not work re-init on server
+    login at sta.smartemission.nl
+    service tomcat8 stop
+    su - postgres
+    cat db-sensorthings-init.sql | psql sensorthings
+    service tomcat8 start
+    logout
+
+	# STA Publisher: restart
+	./sta-publisher-init.sh
+
+	# STA Test if publishing works again
+	cd ~/git/etl
+	./stapublisher.sh
+
+	# If ok, reconfigure stapublisher such that it runs forever
+	# until no more refined data avail
+	# edit stapublisher.cfg such that 'read_once' is False
+	# [input_refined_ts_db]
+	# class = smartemdb.RefinedDbInput
+	# .
+	# .
+	# read_once = False
+
+	# Now run stapublisher again (will take many hours...)
+	./stapublisher.sh
+
+	# Detach screen
+	control-A D
+
+52North SOS Specific
+~~~~~~~~~~~~~~~~~~~~
+
+This is specific to SOS server from 52North. ::
+
+    # Start SOS
+    cd ~/git/services/sos52n
+    ./run.sh
+    
+    # SOS clear DB and other data
+    cd ~/git/services/sos52n/config
+    ./sos-clear.sh
+
+	# SOS Publisher: restart
+    cd ~/git/etl/db
+	./sos-publisher-init.sh
+
+	# SOS Test if publishing works again
+	cd ~/git/etl
+	./sospublisher.sh
+
+	# If ok, reconfigure sospublisher such that it runs forever
+	# until no more refined data avail
+	# edit sospublisher.cfg such that 'read_once' is False
+	# [input_refined_ts_db]
+	# class = smartemdb.RefinedDbInput
+	# .
+	# .
+	# read_once = False
+
+	# use screen as processes may take long
+	screen -S sos
+
+	# Now run sospublisher again (will take many hours...)
+	./sospublisher.sh
+
+	# Detach screen
+	control-A D
+
 
 All dynamic data can be found under ``/var/smartem/data``.
 

@@ -40,7 +40,7 @@ On an empty Ubuntu Linux system perform all the steps below in that order as use
 Get Bootstrap Script
 --------------------
 
-Get the SE Platform `bootstrap.sh <../../platform/bootstrap.sh>`_ script: ::
+Get the SE Platform `bootstrap.sh <https://github.com/Geonovum/smartemission/platform/bootstrap.sh>`_ script: ::
 
     # In e.g. home dir
     $ apt-get install curl
@@ -74,7 +74,8 @@ Configure
 ---------
 
 Next configure and install databases and ETL-options. First make your own host-dependent
-configuration file: ::
+configuration file as a copy
+from `example.args <https://github.com/Geonovum/smartemission/etl/options/example.args>`_: ::
 
     # Go to config options dir
     $ cd /opt/geonovum/smartem/git/etl/options
@@ -106,8 +107,8 @@ Now create and initialize all databases (PostGIS and InfluxDb): ::
 Install System Service
 ----------------------
 
-The entire platform (all Docker Images and `cron jobs <../../platform/cronfile.txt>`_) can be started/stopped with single
-system service command `smartem <../../platform/smartem.initd.sh>`_ : ::
+The entire platform (all Docker Images and `cron jobs <https://github.com/Geonovum/smartemission/platform/cronfile.txt>`_) can be started/stopped with single
+system service command `smartem <https://github.com/Geonovum/smartemission/platform/smartem.initd.sh>`_ : ::
 
     # Installs Linux system service "smartem" in /etc/init.d
     ./install.sh
@@ -180,7 +181,7 @@ postgis - PostGIS Database
 Uses PostGIS Docker image from Kartoza (Tim Sutton, QGIS lead),
 see https://hub.docker.com/r/kartoza/postgis/ and https://github.com/kartoza/docker-postgis  ::
 
-This shorthand script `run.sh <../../services/postgis/run.sh>`_ will (re)run the ``postgis`` container.
+This shorthand script `run.sh <https://github.com/Geonovum/smartemission/services/postgis/run.sh>`_ will (re)run the ``postgis`` container.
 
 .. literalinclude:: ../../services/postgis/run.sh
     :language: bash

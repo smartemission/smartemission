@@ -155,7 +155,7 @@ class RefinedDbInput(PostgresDbInput):
 
     def read(self, packet):
 
-        # Get last processed id of measurementss table
+        # Get last processed id of measurements table
         rowcount = self.db.execute(self.progress_query)
         progress_rec = self.db.cursor.fetchone()
         self.last_id = progress_rec[3]
@@ -176,7 +176,8 @@ class RefinedDbInput(PostgresDbInput):
 
         packet.data = measurements_recs
 
-        # Always stop after batch, otherwise we would continue forever
-        packet.set_end_of_stream()
+        # Stop if read_once is set, otherwise read until len(measurements_recs) is 0
+        if self.read_once:
+            packet.set_end_of_stream()
 
         return packet
