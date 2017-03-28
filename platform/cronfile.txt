@@ -18,10 +18,10 @@ SMARTEM=/opt/geonovum/smartem/git
 # 30,35,40,45,50,55 * * * * cd $SMARTEM/etl; ./refiner.sh > /var/smartem/log/etl/refiner.log 2>&1
 
 # Run SOS Publisher Smartemission
-# */6 * * * * cd $SMARTEM/etl; ./sospublisher.sh > /var/smartem/log/etl/sospublisher.log 2>&1
+*/6 * * * * cd $SMARTEM/etl; ./sospublisher.sh > /var/smartem/log/etl/sospublisher.log 2>&1
 
 # Run SensorThings API Publisher Smartemission
-# */10 * * * * cd $SMARTEM/etl; ./stapublisher.sh > /var/smartem/log/etl/stapublisher.log 2>&1
+*/10 * * * * cd $SMARTEM/etl; ./stapublisher.sh > /var/smartem/log/etl/stapublisher.log 2>&1
 
 # Run Jose Extractor (from PG Raw timerseries to InfluxDB)
 */20 * * * * cd $SMARTEM/etl; ./extractor.sh > /var/smartem/log/etl/extractor.log 2>&1
