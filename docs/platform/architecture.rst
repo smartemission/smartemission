@@ -109,11 +109,8 @@ if not the best, introductory books on Docker is `The Docker Book <https://www.d
 Docker Strategy
 ---------------
 
-The architecture described above will be deployed on the FIWARE Platform provided by the FIWARE
-Lab NL organization (http://fiware-lab.nl ). The FIWARE Lab NL offers a PAAS-based computing and
-storage cloud where instances for common (VM-)images like Ubuntu can be created, provisioned
-(e.g. Storage, Networking, CPU), and deployed. Components from the Smart Emission Data Platform as
-described in the architecture above will be deployed on the FIWARE Platform using Docker. Docker is a
+Components from the Smart Emission Data Platform as
+described in the architecture above are deployed using Docker. Docker is a
 common computing container technology also used extensively within FIWARE. By using Docker we can create
 reusable high-level components, “Containers”, that can be built and run within multiple contexts.
 Figure 4 sketches the Docker deployment. The entities denote Docker Containers, the arrows linking.
@@ -138,11 +135,13 @@ Docker Containers will be created/used for:
 * ``Web``  front-end (Apache2) webserving (viewers/apps)  and proxy to backend web-APIs
 * ``GeoServer``  : container with Tomcat running GeoServer
 * ``52North_SOS`` : container with Tomcat running 52North SOS
-* ``SensorThings`` : container running SensorUp SensorThings server (or API?)
+* ``SensorThings`` : container running GOST SensorThings API Server
 * ``Stetl`` : container for the Python-based ETL framework used
 * ``PostGIS`` : container running PostgreSQL with PostGIS extension
-* ``SensorUp STA``: container running Sensor Things API (STA) server from SensorUp (see below)
 * ``InfluxDB``: container running InfluxDB server from `InfluxData <https://www.influxdata.com>`_
+* ``Grafana``: container running Grafana Dashboard
+* ``MQTT``: container running Mosquitto MQTT
+* ``NodeRed``: container running NodeRed Dashboard
 
 The *Networking and Linking* capabilities of Docker will be applied to link Docker Containers,
 for example to link GeoServer  and the other application servers to PostGIS.
@@ -155,11 +154,6 @@ An *Administrative Docker Component* is also present. Code, content and configur
 is maintained/synced in/with GitHub (see below).  Custom(ized) Docker Containers will
 be published to the Docker Hub, to facilitate immediate reuse.
 
-Thus in first instance FIWARE will be used as a cloud-based computing platform (PAAS).
-At a later phase in the project standard FIWARE components for IoT like Orion may be
-integrated. Also, several Smart Emission Docker Containers will be generalized for
-potential addition to the FIWARE Platform as Generic Enablers (GEs) and to be included within
-the FIWARE Catalog as components for FIWARE Blueprints. **NB FIWARE has been postponed**.
 
 The list of Docker Containers, each with their related Docker Image:
 
@@ -169,6 +163,10 @@ The list of Docker Containers, each with their related Docker Image:
 * ``geoserver`` - GeoServer web app - image: ``geonovum/geoserver`` based on ``kartoza/geoserver``
 * ``sos52n`` - 52North SOS web app -  - image: ``geonovum/sos52n``
 * ``influxdb`` - InfluxDB Timeseries DB - image: ``influxdb:1.1.1`` (from `DockerHub <https://hub.docker.com/_/influxdb/>`_)
+* ``grafana`` - InfluxDB Timeseries DB - image: ``grafana/grafana:4.1.1`` (from http://docs.grafana.org/installation/docker/)
+* ``sta_gost`` - GOST from Geodan - image: https://hub.docker.com/r/geodan/gost/
+* ``mqtt``: container running Mosquitto MQTT - image: ``toke/mosquitto``
+* ``nodered``: container running NodeRed Dashboard - image ``nodered/node-red-docker``
 
 See https://github.com/Geonovum/smartemission/blob/master/docker for the generic images
 and https://github.com/Geonovum/smartemission/blob/master/etl
@@ -179,11 +177,11 @@ Test and Production
 -------------------
 
 In order to provide a continuous/uninterrupted service both a
-Test and Production deployment will be
-setup within the FIWARE Lab environment. For local development on PC/Mac/Linux
+Test and Production deployment has been
+setup. For local development on PC/Mac/Linux
 a Vagrant environment with Docker can be setup.
 
-NB since FIWARE is not yet available we run on standard VPS systems.
+NB since FIWARE is not yet available we run on standard VPS systems (Ubuntu VMs).
 
 The Test and Production environments have separate IP-adresses and domains:
 `test.smartemission.nl <http://test.smartemission.nl>`_
