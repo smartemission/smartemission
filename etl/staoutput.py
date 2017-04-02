@@ -202,9 +202,11 @@ class STAOutput(HttpOutput):
         format_args['station_lon'] = record['lon']
         format_args['station_lat'] = record['lat']
         format_args['location_id'] = location['@iot.id']
+        # format_args['historical_locations_link'] = location['HistoricalLocations@iot.navigationLink']
 
         # Create POST payload from template
         payload = self.entity_templates['thing'].format(**format_args)
+        log.info('POST Thing - Payload: %s' % str(payload))
 
         # HttpOutput needs self.path, this changes per REST call
         self.path = self.base_path + '/Things'
@@ -223,6 +225,7 @@ class STAOutput(HttpOutput):
 
         # Create POST payload from template
         payload = self.entity_templates['location'].format(**format_args)
+        log.info('POST Location - Payload: %s' % str(payload))
 
         # HttpOutput needs self.path, this changes per REST call
         self.path = self.base_path + '/Locations'
@@ -307,7 +310,7 @@ class STAOutput(HttpOutput):
         thing = self.things.get(device_id)
         if not thing:
             # Not in local collection: try fetch from server
-            params = {"$filter" : 'name eq %s' % device_id, "$expand" : 'Locations'}
+            params = {"$filter" : 'name eq "%s"' % device_id, "$expand" : 'Locations'}
             th_resp = self.read_from_url(self.base_url + '/Things', params)
             th_list = th_resp['value']
             for th in th_list:
@@ -354,7 +357,7 @@ class STAOutput(HttpOutput):
         # Time format: "yyyy-MM-dd'T'HH:mm+0N00"  e.g. 2013-09-29T18:46:19+0100
         t = record['time']
         t_offset = t.tzinfo._offset.seconds / 3600
-        format_args['sample_time'] = t.strftime('%Y-%m-%dT%H:%M:%S' + '+0%d00' % t_offset)
+        format_args['sample_time'] = t.strftime('%Y-%m-%dT%H:%M:%S' + '+0%d:00' % t_offset)
         format_args['sample_value'] = record['value']
         format_args['datastream_id'] = datastream['@iot.id']
         format_args['parameters'] = '"gid": %d, "raw_gid": %d, "station": %d, "name": "%s"' % (record['gid'], record['gid_raw'], record['device_id'], record['name'])

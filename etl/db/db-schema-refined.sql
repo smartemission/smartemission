@@ -43,7 +43,7 @@ CREATE TABLE smartem_refined.refiner_progress (
 
 -- TRIGGER to update checkpointing by storing last day/hour for each device
 -- Thus the Harvester always knows where to start from when running
-CREATE OR REPLACE FUNCTION refiner_progress_update() RETURNS TRIGGER AS $refiner_progress_update$
+CREATE OR REPLACE FUNCTION smartem_refined.progress_update() RETURNS TRIGGER AS $refiner_progress_update$
   BEGIN
         --
         -- Set the progress for the device id to the last day+hour harvested
@@ -69,7 +69,7 @@ DROP TRIGGER IF EXISTS refiner_progress_update ON smartem_refined.timeseries;
 
 --exec
 CREATE TRIGGER refiner_progress_update AFTER INSERT ON smartem_refined.timeseries
-    FOR EACH ROW EXECUTE PROCEDURE refiner_progress_update();
+    FOR EACH ROW EXECUTE PROCEDURE smartem_refined.progress_update();
 
 -- ETL progress table, tracks Publisher ETL processing ("worker") 
 -- For each worker tracks last processed record id (gid).

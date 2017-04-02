@@ -19,8 +19,14 @@ SE_DATA_DIR=/var/smartem/data
 pushd ${SE_DATA_DIR}
   tar -cvzf ${BACKUP_DIR}/geoserver_data.tar.gz geoserver
   tar -cvzf ${BACKUP_DIR}/sos52n_data.tar.gz sos52n
-  tar -cvzf ${BACKUP_DIR}/grafana_data.tar.gz grafana
+  cp grafana/grafana.db ${BACKUP_DIR}
   tar -cvzf ${BACKUP_DIR}/influxdb_data.tar.gz influxdb
+popd
+
+# Config data
+SE_CONFIG_DIR=/var/smartem/config
+pushd ${SE_CONFIG_DIR}
+  tar -cvzf ${BACKUP_DIR}/grafana_config.tar.gz grafana
 popd
 
 # Databases

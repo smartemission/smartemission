@@ -39,7 +39,7 @@ In particular the above steps are driven from the [sensordefs.py](sensordefs.py)
 ANN calibration is implemented under [calibration](calibration).
 
 As a result of this step, sensor-data timeseries (hour-values) are
-stored in PostGIS [db-schema-refined.sql](db/db-schema-refined.sql). 
+stored in PostGIS [db-schema-refined.sql](db/db-schema-refined.sql) AND in InfluxDB. 
 
 ## Step 3: Publisher
 
@@ -47,10 +47,10 @@ In this step all refined/aggregated timeseries data is published to various IoT/
 The following publishers are present:
 
 - SOSPublisher - publish to a remote SOS via SOS-T(ransactional) protocol [sospublisher.cfg](sospublisher.cfg)
-- STAPublisher - publish to a remote SensorThings API via REST [stapublisher.cfg](stapublisher.cfg) (31.10.16: work in progress)
+- STAPublisher - publish to a remote SensorThings API via REST [stapublisher.cfg](stapublisher.cfg) 
 
-All publication/output ETL uses Jinja2 templates with parameter substitution, e.g. [sostemplates](sostemplates) for SOS
-and [statemplates](statemplates) for STA. 
+All publication/output ETL uses plain Python string templates (no need for Jinja2 yet) with parameter 
+substitution, e.g. [sostemplates](sostemplates) for SOS and [statemplates](statemplates) for STA. 
 
 NB publication to WFS and WMS is not explicitly required: these services directly
 use the timeseries refined tables and Postgres VIEWs from Step 2.
@@ -73,5 +73,9 @@ three additional ETL processes have been added later in the project (dec 2016):
 
 - [Extractor](extractor.cfg): to extract raw (Jose) Sensor Values from the Harvested (Step 1) RawDBInput into InfluxDB
 - [Harvester_RIVM](harvester_rivm.cfg): to extract calibrated gas samples (hour averages) from RIVM LML SOS into InfluxDB
+
+The above two datasets in InfluxDB are used to generate the ANN Calibration Estimator object by running the Calibrator
+ETL process:
+
 - [Calibrator](calibrator.cfg): to read/merge RIVM and Jose values from InfluxDB to create the ANN Estimator object (pickled)
  

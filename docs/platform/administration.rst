@@ -49,7 +49,8 @@ To restore, when e.g. the /var/smartem dir is inadvertently deleted (as has happ
 entire data and services can be restored in minutes. Only all logging info cannot be restored.
 Also handy when moving data to another server.
 
-Latest nightly backups should be under ``/var/smartem/backup``, in worser cases under the ``vps backup`` (see above).
+Latest nightly backups should be under ``/var/smartem/backup``, in worser cases under the ``vps backup``
+(see above).
 
 Stop the Platform
 -----------------
@@ -69,17 +70,23 @@ PostGIS and InfluxDB can be restored as follows. ::
 	# Restart PostGIS: this recreates  /var/smartem/data/postgresql
 	~/git/services/postgis/run.sh
 
+	# creeer database schema's globale vars etc
+	cd ~/git/platform
+	./init-databases.sh
+
 	# Restore PostGIS data for each PG DB schema
     ~/git/platform/restore-db.sh /var/smartem/backup/gis-smartem_rt.dmp
     ~/git/platform/restore-db.sh /var/smartem/backup/gis-smartem_refined.dmp
+    ~/git/platform/restore-db.sh /var/smartem/backup/gis-smartem_calibrated.dmp
     ~/git/platform/restore-db.sh /var/smartem/backup/gis-smartem_extract.dmp
     ~/git/platform/restore-db.sh /var/smartem/backup/gis-smartem_harvest-rivm.dmp
-    ~/git/platform/restore-db.sh /var/smartem/backup/gis-smartem_raw.dmp    # big one
     ~/git/platform/restore-db.sh /var/smartem/backup/gis-sos52n1.dmp
+    ~/git/platform/restore-db.sh /var/smartem/backup/gis-smartem_raw.dmp    # big one
 
 	# Restore InfluxDB data
     cd /var/smartem/data
     tar xzvf ../backup/influxdb_data.tar.gz
+
 
 Restore Services
 ----------------
@@ -94,9 +101,28 @@ Services are restored as follows: ::
     cd /var/smartem/data
     tar xzvf ../backup/sos52n_data.tar.gz
 
-    # Check restores via the viewers: smartApp, Heron and SOS Viewer
+    # Restore Grafana  NOT REQUIRED (config from GitHub)
+    # cd /var/smartem/config
+    # tar xzvf ../backup/grafana_config.tar.gz
 
-	# TODO Grafana
+	# Grafana restore (tricky)
+	rm -rf /var/smartem/config/grafana
+	rm -rf /var/smartem/data/grafana
+	rm -rf /var/smartem/log/grafana
+
+	# run once
+	cd ~/git/service/grafana
+	./run.sh
+
+	# creates all grafana dirs
+
+	# Stop and copy Grafana db (users, dashboards etc.)
+	docker stop grafana
+	docker rm grafana
+	cp /var/smartem/backup/grafana.db  /var/smartem/data/grafana
+	./run.sh
+
+	# Check restores via the viewers: smartApp, Heron and SOS Viewer
 
 ETL and Data Management
 =======================

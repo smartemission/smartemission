@@ -15,7 +15,7 @@ CREATE TABLE smartem_harvest_rivm.progress (
 
 -- TRIGGER to update checkpointing by storing last day/hour for each device
 -- Thus the Harvester always knows where to start from when running
-CREATE OR REPLACE FUNCTION harvest_rivm_progress_update(new_timestamp BIGINT,
+CREATE OR REPLACE FUNCTION smartem_harvest_rivm.progress_update(new_timestamp BIGINT,
   new_name character)
   RETURNS BOOLEAN AS $result$
 BEGIN

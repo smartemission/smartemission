@@ -34,7 +34,7 @@ CREATE TABLE smartem_raw.harvester_progress (
 
 -- TRIGGER to update checkpointing by storing last day/hour for each device
 -- Thus the Harvester always knows where to start from when running
-CREATE OR REPLACE FUNCTION harvester_progress_update() RETURNS TRIGGER AS $harvester_progress_update$
+CREATE OR REPLACE FUNCTION smartem_raw.harvester_progress_update() RETURNS TRIGGER AS $harvester_progress_update$
   BEGIN
         --
         -- Set the progress for the device id to the last day+hour harvested
@@ -60,4 +60,4 @@ DROP TRIGGER IF EXISTS harvester_progress_update ON smartem_raw.timeseries;
 
 --exec
 CREATE TRIGGER harvester_progress_update AFTER INSERT ON smartem_raw.timeseries
-    FOR EACH ROW EXECUTE PROCEDURE harvester_progress_update();
+    FOR EACH ROW EXECUTE PROCEDURE smartem_raw.harvester_progress_update();
