@@ -124,6 +124,15 @@ Services are restored as follows: ::
 
 	# Check restores via the viewers: smartApp, Heron and SOS Viewer
 
+Restore Calibration Images
+--------------------------
+
+Calibration Images can be restored as follows. ::
+
+    cd /opt/geonovum/smartem/git/etl
+    tar xzvf /var/smartem/backup/calibration_images.tar.gz
+
+
 ETL and Data Management
 =======================
 
@@ -228,6 +237,18 @@ This is specific to SOS server from 52North. ::
 
 
 All dynamic data can be found under ``/var/smartem/data``.
+
+Calibration Model
+-----------------
+
+This needs to be intalled from time to time on the production server.
+Two parts are incolved: database schema (the model) and images (the results/stats).
+
+All can be restored as follows, assuming we have the data in some backup. ::
+
+	~/git/platform/restore-db.sh gis-smartem_calibrated.dmp
+    cd /opt/geonovum/smartem/git/etl
+    tar xzvf calibration_images.tar.gz
 
 Web Services
 ============

@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Refresh from original Repo
 # WARNING will remove all local changes!!!
 # except for files not in Git

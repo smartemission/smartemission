@@ -29,6 +29,12 @@ pushd ${SE_CONFIG_DIR}
   tar -cvzf ${BACKUP_DIR}/grafana_config.tar.gz grafana
 popd
 
+# Calibration images
+SE_ETL_DIR=/opt/geonovum/smartem/git/etl
+pushd ${SE_ETL_DIR}
+  tar -cvzf ${BACKUP_DIR}/calibration_images.tar.gz calibration
+popd
+
 # Databases
 export PGUSER=docker
 export PGPASSWORD=docker

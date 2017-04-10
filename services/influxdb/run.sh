@@ -6,7 +6,7 @@
 LOG_DIR="/var/smartem/log/influxdb"
 DATA_DIR="/var/smartem/data/influxdb"
 NAME="influxdb"
-IMAGE="influxdb:1.1.1"
+IMAGE="influxdb:1.2.2"
 
 sudo mkdir -p ${DATA_DIR}
 sudo mkdir -p ${LOG_DIR}

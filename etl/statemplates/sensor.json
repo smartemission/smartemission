@@ -1,6 +1,6 @@
 {{
   "name": "{name}",
   "description": "Sensor for {name} in {label}",
-  "encodingType": "python",
+  "encodingType": "application/vnd.geo+json",
   "metadata": "{name}"
 }}

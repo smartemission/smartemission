@@ -3,7 +3,7 @@
 # Stop all services (Docker Containers)
 
 # CONTAINERS="web geoserver sos52n postgis"
-CONTAINERS="postgis geoserver sos52n web influxdb grafana"
+CONTAINERS="web geoserver sos52n sta_gost postgis grafana influxdb"
 for CONTAINER in ${CONTAINERS}
 do
   echo "stopping ${CONTAINER}"

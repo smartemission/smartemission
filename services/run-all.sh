@@ -4,7 +4,7 @@
 #
 script_dir=${0%/*}
 
-CONTAINERS="postgis influxdb grafana geoserver sos52n web"
+CONTAINERS="postgis influxdb grafana geoserver sos52n sta_gost web"
 for CONTAINER in ${CONTAINERS}
 do
   echo "starting ${CONTAINER}"
