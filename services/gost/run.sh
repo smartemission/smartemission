@@ -16,7 +16,7 @@ IMAGE="geodan/gost:0.4"
 PG_HOST="postgis"
 
 # Define Volume mappings, map local config file
-VOL_MAP="-v ${GIT}/services/sta_gost/config/config.yaml:/go/bin/gost/config.yaml -v ${GIT}/services/sta_gost/config/app.js:/go/bin/gost/client/js/app.js"
+VOL_MAP="-v ${GIT}/services/gost/config/config.yaml:/go/bin/gost/config.yaml -v ${GIT}/services/gost/config/app.js:/go/bin/gost/client/js/app.js"
 
 # If we need to expose 8080 from host
 PORT_MAP="-p 8080:8080"

@@ -96,9 +96,8 @@ Implementation
 SensorThings API
 ================
 
-For the SensorThings API the SensorUp STA implementation is used.
-The SensorThings API server is installed and maintained externally by SensorUp
-at http://sta.smartemission.nl:8080/OGCSensorThings/v1.0.
+For the SensorThings API the Geodan GOST STA implementation is used.
+The GOST server is installed at http://data.smartemission.nl/gost/v1.0
 
 InfluxDB
 ========
