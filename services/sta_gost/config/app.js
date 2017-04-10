@@ -38,7 +38,7 @@ var iconObservedProperty = "fa-list";
 function getUrl() {
     // Need pathname minus /Dashboard/
     var path = window.location.pathname;
-    path = path.substring(0, path.lastIndexOf('Dashboard'));
+    path = path.substring(0, path.lastIndexOf('/Dashboard'));
     return window.location.origin + path;
 }
 

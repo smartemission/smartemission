@@ -2,6 +2,7 @@
 -- version 23.mrt.2017
 
 -- CREATE EXTENSION postgis;
+DROP SCHEMA IF EXISTS v1 CASCADE;
 CREATE SCHEMA v1;
 SET search_path = v1, public;
 

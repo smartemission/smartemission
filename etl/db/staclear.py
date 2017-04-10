@@ -34,10 +34,11 @@ def delete_entities(url, entity_name, user, password):
 if __name__ == '__main__':
   host = sys.argv[1]
   port = sys.argv[2]
-  user = sys.argv[3]
-  password = sys.argv[4]
+  path = sys.argv[3]
+  user = sys.argv[4]
+  password = sys.argv[5]
 
-  url = "http://%s:%s/OGCSensorThings/v1.0/" % (host, port)
+  url = "http://%s:%s/%s/" % (host, port, path)
 
   # Delete all entities
   delete_entities(url, 'Things', user, password) # also deletes Datastreams and Observations

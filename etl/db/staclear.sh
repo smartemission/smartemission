@@ -4,4 +4,4 @@
 #
 . common.sh
 
-python staclear.py $sta_host $sta_port $sta_user $sta_password
+python staclear.py $sta_host $sta_port  $sta_path $sta_user $sta_password
