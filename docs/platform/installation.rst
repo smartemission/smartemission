@@ -271,6 +271,9 @@ Debugging, start/stop Apache quickly within container: ::
    # Start Apache from commandline
    /bin/bash -c "source /etc/apache2/envvars && exec /usr/sbin/apache2 -DFOREGROUND"
 
+Securing access: create the file `htpasswd` under `config/admin` (see README there) with
+users for general site admin and SensorThings publication.
+
 geoserver - GeoServer
 ---------------------
 
@@ -297,6 +300,15 @@ sos - 52North SOS
 Similar to GeoServer: Tomcat with .war file and keeping config outside Docker container
 and mapping DB to ``postgis`` container.
 See https://github.com/Geonovum/smartemission/tree/master/docker/sos52n.
+
+gost - Geodan STA
+-----------------
+
+This runs the Geodan GOST SensorThings API server.
+See the README there. Be sure to first create the PostGIS DB schema for GOST.
+
+See the bash-script how to run (no Docker-compose used!):
+https://github.com/Geonovum/smartemission/blob/master/services/gost/run.sh .
 
 influxdb - InfluxDB
 -------------------

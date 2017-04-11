@@ -97,7 +97,17 @@ SensorThings API
 ================
 
 For the SensorThings API the Geodan GOST STA implementation is used.
-The GOST server is installed at http://data.smartemission.nl/gost/v1.0
+The GOST server is available at http://data.smartemission.nl/gost/v1.0.
+The GOST Dashboard is available at http://data.smartemission.nl/gost/Dashboard/.
+
+NB all modifying HTTP methods (POST, PUT, DELETE, PATCH) and the GOST Dashboard
+are password-protected.
+
+Implementation
+--------------
+
+* Docker image: https://hub.docker.com/r/geodan/gost/
+* Running: https://github.com/Geonovum/smartemission/tree/master/services/gost
 
 InfluxDB
 ========

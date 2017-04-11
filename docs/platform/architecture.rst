@@ -135,7 +135,7 @@ Docker Containers will be created/used for:
 * ``Web``  front-end (Apache2) webserving (viewers/apps)  and proxy to backend web-APIs
 * ``GeoServer``  : container with Tomcat running GeoServer
 * ``52North_SOS`` : container with Tomcat running 52North SOS
-* ``SensorThings`` : container running GOST SensorThings API Server
+* ``SensorThings API`` : container running Geodan GOST SensorThings API Server
 * ``Stetl`` : container for the Python-based ETL framework used
 * ``PostGIS`` : container running PostgreSQL with PostGIS extension
 * ``InfluxDB``: container running InfluxDB server from `InfluxData <https://www.influxdata.com>`_
@@ -164,7 +164,7 @@ The list of Docker Containers, each with their related Docker Image:
 * ``sos52n`` - 52North SOS web app -  - image: ``geonovum/sos52n``
 * ``influxdb`` - InfluxDB Timeseries DB - image: ``influxdb:1.1.1`` (from `DockerHub <https://hub.docker.com/_/influxdb/>`_)
 * ``grafana`` - InfluxDB Timeseries DB - image: ``grafana/grafana:4.1.1`` (from http://docs.grafana.org/installation/docker/)
-* ``sta_gost`` - GOST from Geodan - image: https://hub.docker.com/r/geodan/gost/
+* ``gost`` - GOST from Geodan - image: https://hub.docker.com/r/geodan/gost/
 * ``mqtt``: container running Mosquitto MQTT - image: ``toke/mosquitto``
 * ``nodered``: container running NodeRed Dashboard - image ``nodered/node-red-docker``
 

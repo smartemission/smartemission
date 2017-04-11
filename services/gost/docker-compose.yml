@@ -2,7 +2,7 @@
 # https://github.com/Geodan/gost/blob/master/src/docker-compose.yml
 # to work with our postgis Docker container.
 
-# NB currently NOT used!!
+# NB currently NOT used, only for reference how to setup individual containers!!
 
 version: '2'
 
