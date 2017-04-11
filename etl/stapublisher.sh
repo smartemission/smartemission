@@ -6,7 +6,8 @@
 STETL_ARGS="-c stapublisher.cfg -a options/`hostname`.args"
 WORK_DIR="`pwd`"
 PG_HOST="postgis"
-LINK_MAP="--link ${PG_HOST}:${PG_HOST}"
+STA_HOST="gost"
+LINK_MAP="--link ${PG_HOST}:${PG_HOST} --link ${STA_HOST}:${STA_HOST}"
 VOL_MAP="-v ${WORK_DIR}:${WORK_DIR}"
 
 IMAGE=geonovum/stetl:latest

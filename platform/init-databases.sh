@@ -23,6 +23,7 @@ pushd ../etl/db
   ./db-init-influxdb.sh
   ./db-init-harvest-rivm.sh
   ./db-init-calibrate.sh
+  ./db-init-gost.sh
 popd
 
 echo "READY: now run ./install.sh install SE Data Platform system daemon"

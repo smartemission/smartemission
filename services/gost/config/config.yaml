@@ -17,8 +17,8 @@ database:
     database: gis
     schema: v1
     ssl: false
-    maxIdleConns: 30
-    maxOpenConns: 100
+    maxIdleConns: 10
+    maxOpenConns: 20
 mqtt:
     enabled: false
     host: localhost

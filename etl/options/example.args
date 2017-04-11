@@ -70,12 +70,19 @@ sospublisher_max_input_records=50
 #
 # SensorThings API settings and Server credentials
 #
-sta_host=sta.smartemission.nl
+#sta_host=sta.smartemission.nl
+#sta_port=8080
+#sta_path=/OGCSensorThings/v1.0
+#sta_user=nijmegen
+#sta_password=yourpw
+#stapublisher_max_input_records=100
+
+sta_host=gost
 sta_port=8080
-sta_path=/OGCSensorThings/v1.0
-sta_user=nijmegen
-sta_password=yourpw
-stapublisher_max_input_records=100
+sta_path=/v1.0
+sta_user=
+sta_password=
+stapublisher_max_input_records=5000
 
 #
 # InfluxDB: settings and Server credentials
