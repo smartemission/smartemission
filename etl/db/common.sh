@@ -18,5 +18,5 @@ export PGHOST=${pg_host}
 
 # Use local connection, we do not expose PG to outside world
 export PGHOST=`sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' postgis`
-export STAHOST=`sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' gost`
+# export STAHOST=`sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' gost`
 # export INFLUXHOST=`sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' influxdb`
