@@ -5,17 +5,19 @@
 #
 # Author: Just van den Broecke
 #
-from os import sys, path
+
 from stetl.outputs.httpoutput import HttpOutput
-from urllib2 import Request, urlopen, URLError, HTTPError
-import urllib
+import requests
 import json
+import base64
 from sensordefs import *
 
 from stetl.util import Util
 from stetl.packet import FORMAT
 from stetl.component import Config
+
 log = Util.get_log('staoutput')
+
 
 class STAOutput(HttpOutput):
     """
@@ -71,36 +73,76 @@ class STAOutput(HttpOutput):
         :param parameters: optional dict of query parameters
         :return:
         """
-        # log.info('Fetch data from URL: %s ...' % url)
-        # Urlencode optional parameters
-        if parameters:
-            url = url + '?' + urllib.urlencode(parameters)
+        log.info('Fetch data from URL: %s ...' % url)
 
-        req = Request(url)
-        req.add_header('Content-Type', self.content_type)
-        req.add_header('Accept', self.content_type)
+        headers = {
+            "Content-Type": self.content_type,
+            "Accept": self.content_type,
+            "Connection": 'close'
+        }
         json_response = None
+
         try:
-            response = urlopen(req)
-            response_str = response.read()
-            json_response = json.loads(response_str)
-        except HTTPError as e:
-            log.error('HTTPError fetching from URL %s: code=%d e=%s' % (url, e.code, e))
-        except URLError as e:
-            log.error('URLError fetching from URL %s: reason=%s e=%s' % (url, e.reason, e))
+            r = requests.get(url, params=parameters, headers=headers)
+            json_response = r.json()
+        except Exception as e:
+            log.error('Error fetching from URL %s: e=%s' % (url, str(e)))
 
         # everything is fine
         return json_response
 
+    def post_to_url(self, payload):
+        self.req_nr += 1
+
+        headers = {
+            "Host": self.host,
+            "User-Agent": "Stetl Python http",
+            "Content-Type": self.content_type,
+            # "Accept", self.accept_type,
+            "Content-Length": "%d" % len(payload),
+            "Connection":'close'
+        }
+
+        # basic auth: http://mozgovipc.blogspot.nl/2012/06/python-http-basic-authentication-with.html
+        # base64 encode the username and password
+        # write the Authorization header like: 'Basic base64encode(username + ':' + password)
+        # TODO use Requests Session
+        status_code = 0
+        status_msg = ''
+        response_text = ''
+        url = self.base_url + self.path
+        if self.user is not None:
+            auth = base64.encodestring('%s:%s' % (self.user, self.password)).replace('\n', '')
+            headers["Authorization"] = "Basic %s" % auth
+
+        try:
+            r = requests.post(url, data=payload, headers=headers)
+            response_text = r.text
+            status_code = r.status_code
+            status_msg = r.content
+            headers = r.headers
+        except Exception as e:
+            log.error('Error posting to URL %s: e=%s' % (self.base_url, str(e)))
+
+        log.info("Req nr %d - response status: code=%d msg=%s" % (self.req_nr, status_code, status_msg))
+
+        if status_code == 200:
+            pass
+        elif status_code == 204:
+            response_text = ''
+        else:
+            # log.info("Response Headers: %s" % str(headers))
+            log.info('Content: %s' % response_text)
+
+        return status_code, status_msg, response_text
 
     def patch(self, entity_type, entity_id, json_struct):
-        import requests
         url = self.base_url + "/" + entity_type + "(%d)" % entity_id
-        headers ={"Content-Type": "application/json", "Accept": "application/json"}
+        headers = {"Content-Type": "application/json", "Accept": "application/json"}
 
         status_code = -1
         try:
-            response = requests.patch(url, data=json.dumps(json_struct), headers = headers)
+            response = requests.patch(url, data=json.dumps(json_struct), headers=headers)
             status_code = response.status_code
         except:
             pass
@@ -172,7 +214,7 @@ class STAOutput(HttpOutput):
         self.path = self.base_path + '/Sensors'
 
         # Do the STA POST and return JSON object
-        statuscode, statusmessage, res = HttpOutput.post(self, None, payload)
+        statuscode, statusmessage, res = self.post_to_url(payload)
         entity = json.loads(res)
         return entity
 
@@ -189,7 +231,7 @@ class STAOutput(HttpOutput):
         self.path = self.base_path + '/ObservedProperties'
 
         # Do the STA POST and return JSON object
-        statuscode, statusmessage, res = HttpOutput.post(self, None, payload)
+        statuscode, statusmessage, res = self.post_to_url(payload)
         entity = json.loads(res)
         return entity
 
@@ -212,7 +254,7 @@ class STAOutput(HttpOutput):
         self.path = self.base_path + '/Things'
 
         # Do the STA POST and return JSON object
-        statuscode, statusmessage, res = HttpOutput.post(self, None, payload)
+        statuscode, statusmessage, res = self.post_to_url(payload)
         thing = json.loads(res)
         return thing
 
@@ -231,7 +273,7 @@ class STAOutput(HttpOutput):
         self.path = self.base_path + '/Locations'
 
         # Do the STA POST and return JSON object
-        statuscode, statusmessage, res = HttpOutput.post(self, None, payload)
+        statuscode, statusmessage, res = self.post_to_url(payload)
         entity = json.loads(res)
         return entity
 
@@ -271,37 +313,11 @@ class STAOutput(HttpOutput):
         self.path = self.base_path + '/Datastreams'
 
         # Do the STA POST and return JSON object
-        statuscode, statusmessage, res = HttpOutput.post(self, None, payload)
+        statuscode, statusmessage, res = self.post_to_url(payload)
         datastream = json.loads(res)
         return datastream
 
-    # Called by HttpOutput base class after create_payload(), overloaded
-    def post(self, packet, payload):
-        # Typical data record:
-        # {'device_id': 1, 'name': 'temperature', 'value': 19, 'unit': 'Celsius', 'gid': 50,
-        # 'time': datetime.datetime(2016, 4, 27, 5, 0, tzinfo=psycopg2.tz.FixedOffsetTimezone(offset=120, name=None)),
-        # 'lat': 51.472585, , 'lon': 5.671208, , 'altitude': 210, }
-        record = packet.data
-        component = record['name']
-        device_id = str(record['device_id'])
-        gid = record['gid']
-        id = '%s-%s-%s' % (device_id, component, gid)
-
-        log.info('====START POST Observation id=%s' % id)
-
-        statuscode, statusmessage, res = HttpOutput.post(self, packet, payload)
-
-        # Check result
-        if statuscode in [200, 201]:
-            log.info('YES added Observation! id=%s status=%s' % (id, statusmessage))
-        else:
-            log.warn('FAIL POST Observation status=%d payload=%s res=%s' % (statuscode, payload, res))
-
-        log.info('====END POST Observation id=%s' % id)
-
-        return statuscode, statusmessage, res
-
-    # Called by HttpOutput base class beofre post(), overloaded
+    # Called by HttpOutput base class before post(), overridden
     def create_payload(self, packet):
         record = packet.data
         device_id = str(record['device_id'])
@@ -310,7 +326,7 @@ class STAOutput(HttpOutput):
         thing = self.things.get(device_id)
         if not thing:
             # Not in local collection: try fetch from server
-            params = {"$filter" : 'name eq "%s"' % device_id, "$expand" : 'Locations'}
+            params = {"$filter": 'name eq "%s"' % device_id, "$expand": 'Locations'}
             th_resp = self.read_from_url(self.base_url + '/Things', params)
             th_list = th_resp['value']
             for th in th_list:
@@ -341,7 +357,8 @@ class STAOutput(HttpOutput):
         datastream = thing['datastreams'].get(ds_name)
         if not datastream:
             # Try to get DS for Obs Prop for this Thing
-            ds_resp = self.read_from_url(self.base_url + '/Things(%d)/Datastreams?$expand=ObservedProperty' % thing['@iot.id'])
+            ds_resp = self.read_from_url(
+                self.base_url + '/Things(%d)/Datastreams?$expand=ObservedProperty' % thing['@iot.id'])
             ds_list = ds_resp['value']
             for ds in ds_list:
                 ds_name_n = ds['ObservedProperty']['name']
@@ -360,7 +377,8 @@ class STAOutput(HttpOutput):
         format_args['sample_time'] = t.strftime('%Y-%m-%dT%H:%M:%S' + '+0%d:00' % t_offset)
         format_args['sample_value'] = record['value']
         format_args['datastream_id'] = datastream['@iot.id']
-        format_args['parameters'] = '"gid": %d, "raw_gid": %d, "station": %d, "name": "%s"' % (record['gid'], record['gid_raw'], record['device_id'], record['name'])
+        format_args['parameters'] = '"gid": %d, "raw_gid": %d, "station": %d, "name": "%s"' % (
+        record['gid'], record['gid_raw'], record['device_id'], record['name'])
 
         # Create POST payload from template
         payload = self.entity_templates['observation'].format(**format_args)
@@ -369,3 +387,29 @@ class STAOutput(HttpOutput):
         self.path = self.base_path + '/Observations'
 
         return payload
+
+    # Called by HttpOutput base class after create_payload(), overridden
+    def post(self, packet, payload):
+        # Typical data record:
+        # {'device_id': 1, 'name': 'temperature', 'value': 19, 'unit': 'Celsius', 'gid': 50,
+        # 'time': datetime.datetime(2016, 4, 27, 5, 0, tzinfo=psycopg2.tz.FixedOffsetTimezone(offset=120, name=None)),
+        # 'lat': 51.472585, , 'lon': 5.671208, , 'altitude': 210, }
+        record = packet.data
+        component = record['name']
+        device_id = str(record['device_id'])
+        gid = record['gid']
+        id = '%s-%s-%s' % (device_id, component, gid)
+
+        log.info('====START POST Observation id=%s' % id)
+
+        statuscode, statusmessage, res = self.post_to_url(payload)
+
+        # Check result
+        if statuscode in [200, 201]:
+            log.info('YES added Observation! id=%s status=%s' % (id, statusmessage))
+        else:
+            log.warn('FAIL POST Observation status=%d payload=%s res=%s' % (statuscode, payload, res))
+
+        log.info('====END POST Observation id=%s' % id)
+
+        return statuscode, statusmessage, res
