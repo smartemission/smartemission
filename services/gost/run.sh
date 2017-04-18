@@ -12,7 +12,7 @@ ENV_MAP="-e gost_server_external_uri=${gost_server_external_uri}"
 
 LOG="/var/smartem/log"
 NAME="gost"
-IMAGE="geodan/gost:0.4"
+IMAGE="geodan/gost:latest"
 PG_HOST="postgis"
 
 # Define Volume mappings, map local config file

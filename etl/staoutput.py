@@ -42,11 +42,11 @@ class STAOutput(HttpOutput):
     @Config(ptype=str, default='statemplates', required=False)
     def template_file_root(self):
         """
-        SOS template file root: where SOS request and procedure template-files are stored.
+        STA template file root: where STA request template-files are stored.
 
         Required: False
 
-        Default: sostemplates
+        Default: statemplates
         """
         pass
 
@@ -77,8 +77,7 @@ class STAOutput(HttpOutput):
 
         headers = {
             "Content-Type": self.content_type,
-            "Accept": self.content_type,
-            "Connection": 'close'
+            "Accept": self.content_type
         }
         json_response = None
 
@@ -99,8 +98,7 @@ class STAOutput(HttpOutput):
             "User-Agent": "Stetl Python http",
             "Content-Type": self.content_type,
             # "Accept", self.accept_type,
-            "Content-Length": "%d" % len(payload),
-            "Connection":'close'
+            "Content-Length": "%d" % len(payload)
         }
 
         # basic auth: http://mozgovipc.blogspot.nl/2012/06/python-http-basic-authentication-with.html
@@ -119,10 +117,10 @@ class STAOutput(HttpOutput):
             r = requests.post(url, data=payload, headers=headers)
             response_text = r.text
             status_code = r.status_code
-            status_msg = r.content
+            status_msg = str(r.status_code)
             headers = r.headers
         except Exception as e:
-            log.error('Error posting to URL %s: e=%s' % (self.base_url, str(e)))
+            log.error('Error posting to URL %s: e=%s' % (url, str(e)))
 
         log.info("Req nr %d - response status: code=%d msg=%s" % (self.req_nr, status_code, status_msg))
 
@@ -131,12 +129,13 @@ class STAOutput(HttpOutput):
         elif status_code == 204:
             response_text = ''
         else:
-            # log.info("Response Headers: %s" % str(headers))
-            log.info('Content: %s' % response_text)
+            log.info("Response Headers: %s" % str(headers))
+            # log.info('Content: %s' % response_text)
 
         return status_code, status_msg, response_text
 
     def patch(self, entity_type, entity_id, json_struct):
+        log.info('PATCH: entity type=%s id=%s' % (entity_type, entity_id))
         url = self.base_url + "/" + entity_type + "(%d)" % entity_id
         headers = {"Content-Type": "application/json", "Accept": "application/json"}
 
@@ -144,7 +143,9 @@ class STAOutput(HttpOutput):
         try:
             response = requests.patch(url, data=json.dumps(json_struct), headers=headers)
             status_code = response.status_code
-        except:
+            log.info('PATCH: status=%s' % response.content)
+        except Exception as e:
+            log.error('Error PATCHing to URL %s: e=%s' % (url, str(e)))
             pass
 
         return status_code
