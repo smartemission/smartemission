@@ -165,7 +165,7 @@ The list of Docker Containers, each with their related Docker Image:
 * ``influxdb`` - InfluxDB Timeseries DB - image: ``influxdb:1.1.1`` (from `DockerHub <https://hub.docker.com/_/influxdb/>`_)
 * ``grafana`` - InfluxDB Timeseries DB - image: ``grafana/grafana:4.1.1`` (from http://docs.grafana.org/installation/docker/)
 * ``gost`` - GOST from Geodan - image: https://hub.docker.com/r/geodan/gost/
-* ``mqtt``: container running Mosquitto MQTT - image: ``toke/mosquitto``
+* ``mosquitto``: container running Mosquitto MQTT - image: ``toke/mosquitto``
 * ``nodered``: container running NodeRed Dashboard - image ``nodered/node-red-docker``
 
 See https://github.com/Geonovum/smartemission/blob/master/docker for the generic images

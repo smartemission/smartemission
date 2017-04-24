@@ -109,6 +109,23 @@ Implementation
 * Docker image: https://hub.docker.com/r/geodan/gost/
 * Running: https://github.com/Geonovum/smartemission/tree/master/services/gost
 
+MQTT - Mosquitto
+================
+
+For the SensorThings API (GOST) MQTT is used. MQTT is a generic IoT protocol
+that can be used in other contexts besides STA.
+
+The MQTT server is available at http://data.smartemission.nl:1883
+and http://data.smartemission.nl:9001
+
+See also the GOST Dashboard at http://data.smartemission.nl/gost/Dashboard/.
+
+Implementation
+--------------
+
+* Docker image: https://hub.docker.com/r/toke/mosquitto/
+* Running: https://github.com/Geonovum/smartemission/tree/master/services/mosquitto
+
 InfluxDB
 ========
 
