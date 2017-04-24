@@ -20,6 +20,6 @@ database:
     maxIdleConns: 10
     maxOpenConns: 20
 mqtt:
-    enabled: false
-    host: localhost
+    enabled: true
+    host: mosquitto
     port: 1883
