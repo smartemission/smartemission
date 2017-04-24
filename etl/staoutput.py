@@ -65,6 +65,8 @@ class STAOutput(HttpOutput):
         self.base_path = self.path
         self.base_url = 'http://%s:%d%s' % (self.host, self.port, self.path)
 
+        self.http_session = requests.Session()
+
     # general util to read/GET from STA
     def read_from_url(self, url, parameters=None):
         """
@@ -82,7 +84,7 @@ class STAOutput(HttpOutput):
         json_response = None
 
         try:
-            r = requests.get(url, params=parameters, headers=headers)
+            r = self.http_session.get(url, params=parameters, headers=headers)
             json_response = r.json()
         except Exception as e:
             log.error('Error fetching from URL %s: e=%s' % (url, str(e)))
@@ -113,8 +115,10 @@ class STAOutput(HttpOutput):
             auth = base64.encodestring('%s:%s' % (self.user, self.password)).replace('\n', '')
             headers["Authorization"] = "Basic %s" % auth
 
+        log.info('POST to URL: %s ...' % url)
+
         try:
-            r = requests.post(url, data=payload, headers=headers)
+            r = self.http_session.post(url, data=payload, headers=headers)
             response_text = r.text
             status_code = r.status_code
             status_msg = str(r.status_code)
@@ -141,7 +145,7 @@ class STAOutput(HttpOutput):
 
         status_code = -1
         try:
-            response = requests.patch(url, data=json.dumps(json_struct), headers=headers)
+            response = self.http_session.patch(url, data=json.dumps(json_struct), headers=headers)
             status_code = response.status_code
             log.info('PATCH: status=%s' % response.content)
         except Exception as e:
@@ -212,7 +216,7 @@ class STAOutput(HttpOutput):
         payload = self.entity_templates['sensor'].format(**format_args)
 
         # HttpOutput needs self.path, this changes per REST call
-        self.path = self.base_path + '/Sensors'
+        self.path = '/Sensors'
 
         # Do the STA POST and return JSON object
         statuscode, statusmessage, res = self.post_to_url(payload)
@@ -229,7 +233,7 @@ class STAOutput(HttpOutput):
         payload = self.entity_templates['observedproperty'].format(**format_args)
 
         # HttpOutput needs self.path, this changes per REST call
-        self.path = self.base_path + '/ObservedProperties'
+        self.path = '/ObservedProperties'
 
         # Do the STA POST and return JSON object
         statuscode, statusmessage, res = self.post_to_url(payload)
@@ -252,7 +256,7 @@ class STAOutput(HttpOutput):
         log.info('POST Thing - Payload: %s' % str(payload))
 
         # HttpOutput needs self.path, this changes per REST call
-        self.path = self.base_path + '/Things'
+        self.path = '/Things'
 
         # Do the STA POST and return JSON object
         statuscode, statusmessage, res = self.post_to_url(payload)
@@ -271,7 +275,7 @@ class STAOutput(HttpOutput):
         log.info('POST Location - Payload: %s' % str(payload))
 
         # HttpOutput needs self.path, this changes per REST call
-        self.path = self.base_path + '/Locations'
+        self.path = '/Locations'
 
         # Do the STA POST and return JSON object
         statuscode, statusmessage, res = self.post_to_url(payload)
@@ -311,7 +315,7 @@ class STAOutput(HttpOutput):
         payload = self.entity_templates['datastream'].format(**format_args)
 
         # HttpOutput needs self.path, this changes per REST call
-        self.path = self.base_path + '/Datastreams'
+        self.path = '/Datastreams'
 
         # Do the STA POST and return JSON object
         statuscode, statusmessage, res = self.post_to_url(payload)
@@ -385,7 +389,7 @@ class STAOutput(HttpOutput):
         payload = self.entity_templates['observation'].format(**format_args)
 
         # REST: post to remote collection
-        self.path = self.base_path + '/Observations'
+        self.path = '/Observations'
 
         return payload
 
