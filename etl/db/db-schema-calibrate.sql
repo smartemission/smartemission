@@ -21,6 +21,8 @@ CREATE TABLE smartem_calibrated.calibration_models (
 DROP TABLE IF EXISTS smartem_calibrated.calibration_parameters CASCADE;
 CREATE TABLE smartem_calibrated.calibration_parameters (
   id        SERIAL,
+  search_id BIGINT,
+  setting_id INT,
   predicts  CHARACTER VARYING (32) NOT NULL,
   parameter CHARACTER VARYING (32) NOT NULL,
   value     CHARACTER VARYING (32) NOT NULL,
