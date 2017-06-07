@@ -56,8 +56,9 @@ extractor_raw_read_once=True
 # Calibration-settings
 #
 calibration_components=carbon_monoxide__air_,nitrogen_dioxide__air_,ozone__air_
-calibration_location_geohash=(geohash='u1hnvkb' or geohash='u1hnvkc' or geohash='u1hnvm3' or geohash='u178hw8' or geohash = 'u178kt7')
-calibrator_max_input_records=1000000
+calibration_location_jose=(station='12' OR station='14' OR station='45' OR station='55' OR station='76' OR station='78')
+calibration_location_rivm=(station='nijmegen_graafseweg' OR station='nijmegen_ruyterstraat' OR station='utrecht_de_jongweg' OR station='utrecht_erzeijstraat')
+calibrator_max_input_records=10000
 
 #
 # SOS Publication and API Server credentials

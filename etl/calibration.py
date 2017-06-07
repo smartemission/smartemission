@@ -26,15 +26,6 @@ log = Util.get_log('Calibration')
 
 
 class MergeRivmJose(Filter):
-    @Config(ptype=int, default=5, required=True)
-    def impute_duration(self):
-        """
-        Number of minutes to impute data
-
-        Default: 5
-
-        Required: True
-        """
 
     def __init__(self, configdict, section, consumes=FORMAT.record,
                  produces=FORMAT.record):
@@ -53,13 +44,10 @@ class MergeRivmJose(Filter):
         # Preparing Jose and RIVM data
         df_jose = MergeRivmJose.preproc_geohash_and_time(df_jose)
         df_rivm = MergeRivmJose.preproc_geohash_and_time(df_rivm)
-        df_jose = MergeRivmJose.interpolate(df_jose, self.impute_duration * 5)
 
         # Concatenate RIVM and Jose
-        df_index = df_jose.loc[:, ['time', 'geohash']]
-        df_rivm = MergeRivmJose.interpolate_to_index(df_index, df_rivm, 60 * 5)
-        df = pd.merge(df_jose, df_rivm, 'left', ['time', 'geohash'])
-        del df.index.name
+        df = df_rivm.merge(df_jose, 'outer', ['time', 'geohash'])
+        df = df.interpolate(limit=1, limit_direction='both')
         log.info('RIVM and Jose are merged, new shape (%d, %d)' % df.shape)
 
         # Returning data
@@ -74,24 +62,6 @@ class MergeRivmJose(Filter):
         df['time'] = pd.to_datetime(df['time'])
         return (df)
 
-    @staticmethod
-    def interpolate(df, impute_duration, limit_direction='both'):
-        df = df.set_index(['geohash', 'time']).sort_index()
-        df = df.interpolate(limit=impute_duration * 5,
-                            limit_direction=limit_direction)
-        df = df.reset_index()
-        return df
-
-    @staticmethod
-    def interpolate_to_index(df_index, df_inter, impute_duration):
-        log.info('Interpolating RIVM values towards jose measurements')
-        df_index['is_index'] = True
-        df = df_index.merge(df_inter, 'outer')
-        df = MergeRivmJose.interpolate(df, impute_duration)
-        df = df[df['is_index'].notnull()]
-        df = df.drop('is_index', axis=1)
-        return df
-
 
 class Calibrator(Filter):
     @Config(ptype=int, default=1, required=False)
@@ -102,19 +72,6 @@ class Calibrator(Filter):
 
         Default: 1
 
-        Required: True
-        """
-
-    @Config(ptype=dict, default={}, required=True)
-    def running_means(self):
-        """
-        Columns to apply running mean on and with what weight.
-
-        Example: {'s_coresistance': 0.05,
-                  's_oresistance': 0.05,
-                  's_no2resistance':  0.05}
-
-        Default: {}
         Required: True
         """
 
@@ -160,8 +117,8 @@ class Calibrator(Filter):
         """
 
     TARGET2SENSORDEF = {'carbon_monoxide__air_': 'co',
-                           'nitrogen_dioxide__air_': 'no2',
-                           'ozone__air_': 'o3'}
+                       'nitrogen_dioxide__air_': 'no2',
+                       'ozone__air_': 'o3'}
 
     def __init__(self, configdict, section, consumes=FORMAT.record,
                  produces=FORMAT.record):
@@ -202,8 +159,8 @@ class Calibrator(Filter):
         # Unpacking data
         df = packet.data['merged']
         df = self.drop_rows_and_records(df)
-        df = self.filter_gasses(df)
-        df = df.sample(frac=1.0 / float(self.inverse_sample_fraction))
+        if self.inverse_sample_fraction > 1:
+            df = df.sample(frac=1.0 / float(self.inverse_sample_fraction))
         log.info('After dropping, filtering and sampling a data frame with '
                  'shape (%d, %d) is ready for calibration' % df.shape)
 
@@ -219,7 +176,6 @@ class Calibrator(Filter):
         result_out = dict()
         for gs_keys in self._return_gs_elem:
             result_out[gs_keys] = getattr(gs, gs_keys)
-        result_out['running_means'] = self.running_means
         result_out['target'] = self.current_target
         result_out['sample'] = df
         result_out['rmse'] = rmse
@@ -236,14 +192,6 @@ class Calibrator(Filter):
         df = df.drop(self.other_targets, axis=1)
         df = df.dropna()
         df = df.reset_index(drop=True)
-        return df
-
-    def filter_gasses(self, df):
-        df = df.sort_values('time')
-        for component, weight in self.running_means.iteritems():
-            f = lambda x: RunningMean.series_running_mean(x, weight)
-            df[component] = df.groupby('geohash')[component].transform(f)
-
         return df
 
     def optimize_meta_parameters(self, df):

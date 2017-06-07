@@ -68,6 +68,17 @@ class InfluxDbInput(DbInput):
         self.client = InfluxDBClient(self.host, self.port, self.user,
                                      self.password, self.database)
 
+    @staticmethod
+    def normalize_aggreagete_result(result):
+        result_out = []
+        for key, values in result.items():
+            grouping = key[1]
+            for value in values:
+                for group, group_value in grouping.items():
+                    value[group] = group_value
+                result_out.append(value)
+        return result_out
+
     def query_db(self, query):
         log.info("Querying database: %s", query)
         result = self.client.query(query)
@@ -77,7 +88,10 @@ class InfluxDbInput(DbInput):
             result_out = list()
 
         else:
-            result_out = list(result.get_points())
+            if 'group by' not in self.query.lower():
+                result_out = list(result.get_points())
+            else:
+                result_out = InfluxDbInput.normalize_aggreagete_result(result)
 
         log.info("Received %s results" % len(result_out))
 
@@ -109,13 +123,23 @@ class CalibrationInfluxDbInput(InfluxDbInput):
         Required: True
         """
 
+    @Config(ptype=str, default='1900-01-01', required=False)
+    def lower_time_limit(self):
+        """
+        The lower time limit for the query.
+        
+        Default: '1900-01-01'
+        
+        Required: False
+        """
+
     def __init__(self, configdict, section):
         InfluxDbInput.__init__(self, configdict, section)
         self.last_timestamp = None
         self.df = None
 
     def before_invoke(self, packet):
-        self.last_timestamp = '1900-01-01T00:00:00Z'
+        self.last_timestamp = self.lower_time_limit
 
     def read(self, packet):
         results = packet.data

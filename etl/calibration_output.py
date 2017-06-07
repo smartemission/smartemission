@@ -38,7 +38,6 @@ class CalibrationModelOutput(PostgresInsertOutput):
 
         result_out = dict()
         dump = pickle.dumps(result_in['best_estimator_'])
-        result_out['parameters'] = json.dumps(result_in['running_means'])
         result_out['model'] = psycopg2.Binary(dump)
         result_out['predicts'] = result_in['target']
         result_out['score'] = result_in['best_score_']
