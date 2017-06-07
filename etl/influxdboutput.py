@@ -153,12 +153,12 @@ class InfluxDbOutput(HttpOutput):
 
         self.geohash_template = None
         if self.geohash_map or self.geohash_wkt_attr:
-            self.geohash_template = ',geohash=%s'
+            self.geohash_template = ',geohash="%s" '
 
         self.fields = self.fields_map.keys()
         self.fields_template = ' '
         for field in self.fields:
-            self.fields_template += field + '=%s '
+            self.fields_template += field + '=%s'
 
         # will expand to e.g. joseraw,station=19,component=no2raw value=12345 1434055562000000000
         # tags, fields and timestamp will be filled when creating payload
@@ -200,6 +200,7 @@ class InfluxDbOutput(HttpOutput):
                 tags = self.tags_template % tag_values
 
             # Optional geohash, see https://github.com/vinsci/geohash/
+            geohash_tag = ''
             if self.geohash_template:
                 lat = None
                 lon = None
@@ -221,7 +222,6 @@ class InfluxDbOutput(HttpOutput):
                 if lat and lon:
                     geohash = Geohash.encode(lat, lon, self.geohash_precision)
                     geohash_tag = self.geohash_template % geohash
-                    tags += geohash_tag
 
             # Create required fields substring
             field_values = []
@@ -229,6 +229,7 @@ class InfluxDbOutput(HttpOutput):
                 field_values.append(str(record[self.fields_map[field]]))
             field_values = tuple(field_values)
             fields = self.fields_template % field_values
+            fields = fields + geohash_tag
 
             # Assemble InfluxDB line protocol string, each measurement on a new line
             payload += self.template_data_line % (tags, fields, tstamp_nanos)
