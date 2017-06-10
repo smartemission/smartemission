@@ -161,6 +161,9 @@ class Calibrator(Filter):
         df = self.drop_rows_and_records(df)
         if self.inverse_sample_fraction > 1:
             df = df.sample(frac=1.0 / float(self.inverse_sample_fraction))
+        else:
+            # shuffle data points such that there is no ordering effect
+            df = df.sample(frac=1.0)
         log.info('After dropping, filtering and sampling a data frame with '
                  'shape (%d, %d) is ready for calibration' % df.shape)
 
