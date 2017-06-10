@@ -20,6 +20,7 @@ class CalibrationDataInput(FileInput):
     def read_file(self, file_path):
         log.debug("Reading data from file")
         df = pd.DataFrame.from_csv(file_path)
+        df['time'] = pd.to_datetime(df['time'])
         return {'merged': df}
 
 

@@ -60,7 +60,7 @@ class MergeRivmJose(Filter):
     def preproc_geohash_and_time(df):
         df['geohash'] = df['geohash'].str.slice(0, 7)
         df['time'] = pd.to_datetime(df['time'])
-        return (df)
+        return df
 
 
 class Calibrator(Filter):
@@ -134,7 +134,7 @@ class Calibrator(Filter):
 
     def init(self):
         ss = StandardScaler()
-        mlp = MLPRegressor(solver='lbfgs')
+        mlp = MLPRegressor()
         steps = [('scale', ss), ('mlp', mlp)]
         self.pipeline = Pipeline(steps)
         self.current_target_id = -1

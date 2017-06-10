@@ -191,3 +191,5 @@ vignettes/*.pdf
 *.knit.md
 .vagrant
 
+# Ignore DS_Store
+.DS_Store

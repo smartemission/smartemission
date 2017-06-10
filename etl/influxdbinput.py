@@ -66,7 +66,7 @@ class InfluxDbInput(DbInput):
         log.info("Setting up connection to influxdb %s:%s, database=%s" %
                  (self.host, self.port, self.database))
         self.client = InfluxDBClient(self.host, self.port, self.user,
-                                     self.password, self.database)
+                                     self.password, self.database, timeout=300, retries=10)
 
     @staticmethod
     def normalize_aggreagete_result(result):
