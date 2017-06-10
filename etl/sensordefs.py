@@ -185,7 +185,7 @@ SENSOR_DEFS = {
             'label': 'CORawOhm',
             'unit': 'Ohm',
             'min': 10000,
-            'max': 3000000
+            'max': 1000000
         },
     's_co':
         {
