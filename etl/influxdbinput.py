@@ -133,6 +133,16 @@ class CalibrationInfluxDbInput(InfluxDbInput):
         Required: False
         """
 
+    @Config(ptype=int, default=0, required=False)
+    def min_n(self):
+        """
+        Minimum number of samples. Compares with the `n` field in the result. If 0 nothing is done. 
+        
+        Default: 0 (do nothing)
+        
+        Required: False
+        """
+
     def __init__(self, configdict, section):
         InfluxDbInput.__init__(self, configdict, section)
         self.last_timestamp = None
@@ -154,6 +164,10 @@ class CalibrationInfluxDbInput(InfluxDbInput):
                     self.last_timestamp = db_ret[-1]['time']
                     log.info('Last timestamp from influxdb is %s' % self.last_timestamp)
                     df = pd.DataFrame.from_records(db_ret)
+
+                    if self.min_n > 0:
+                        df = df[df['n'] > self.min_n]
+
                     df = df.pivot_table('value', ['geohash', 'time'],
                                         'component').reset_index()
                     dfs.append(df)
