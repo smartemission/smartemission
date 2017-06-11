@@ -258,7 +258,7 @@ class SearchVisualization(Visualization):
         col_score = "mean_test_score"
         col_type = type(self.cv_results[col][0])
 
-        if col_type is str or col_type is bool:
+        if col_type is str or col_type is bool or col_type is tuple:
             g = sns.swarmplot(col, col_score, data=self.cv_results)
         else:
             g = self.cv_results.plot(col, col_score, 'scatter')
