@@ -132,10 +132,9 @@ class Calibrator(Filter):
                                 'scorer_', 'n_splits_']
 
     def init(self):
-        ss = StandardScaler()
-        mlp = MLPRegressor()
-        steps = [('scale', ss), ('mlp', mlp)]
+        steps = [('scale', StandardScaler()), ('mlp', MLPRegressor())]
         self.pipeline = Pipeline(steps)
+
         self.current_target_id = -1
         if self.has_next_target():
             self.next_target()
@@ -158,11 +157,10 @@ class Calibrator(Filter):
         # Unpacking data
         df = packet.data['merged']
         df = self.drop_rows_and_records(df)
-        if self.inverse_sample_fraction > 1:
-            df = df.sample(frac=1.0 / float(self.inverse_sample_fraction))
-        else:
-            # shuffle data points such that there is no ordering effect
-            df = df.sample(frac=1.0)
+
+        # Shuffle data to remove any ordering effectd
+        df = df.sample(frac=1.0)
+
         log.info('After dropping, filtering and sampling a data frame with '
                  'shape (%d, %d) is ready for calibration' % df.shape)
 

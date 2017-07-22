@@ -483,9 +483,7 @@ SENSOR_DEFS = {
         {
             'label': 'CO',
             'unit': 'ug/m3',
-            'input': ['s_barometer', 's_coresistance', 's_humidity',
-                      's_lightsensortop', 's_no2resistance', 's_o3resistance',
-                      's_temperatureambient', 's_temperatureunit'],
+            'input': ['temperature', 'humidity','pressure','noiseavg','noiselevelavg','co2','o3raw','coraw','no2raw'],
             'converter': ohm_co_to_ugm3,
             'converter_model': {'model_id': None,
                                 'mlp_regressor': None,
@@ -508,9 +506,7 @@ SENSOR_DEFS = {
         {
             'label': 'NO2',
             'unit': 'ug/m3',
-            'input': ['s_barometer', 's_coresistance', 's_humidity',
-                      's_lightsensortop', 's_no2resistance', 's_o3resistance',
-                      's_temperatureambient', 's_temperatureunit'],
+            'input': ['temperature', 'humidity','pressure','noiseavg','noiselevelavg','co2','o3raw','coraw','no2raw'],
             'converter': ohm_no2_to_ugm3,
             'converter_model': {'model_id': None,
                                 'mlp_regressor': None,
@@ -533,9 +529,7 @@ SENSOR_DEFS = {
         {
             'label': 'O3',
             'unit': 'ug/m3',
-            'input': ['s_barometer', 's_coresistance', 's_humidity',
-                      's_lightsensortop', 's_no2resistance', 's_o3resistance',
-                      's_temperatureambient', 's_temperatureunit'],
+            'input': ['temperature', 'humidity','pressure','noiseavg','noiselevelavg','co2','o3raw','coraw','no2raw'],
             'converter': ohm_o3_to_ugm3,
             'converter_model': {'model_id': None,
                                 'mlp_regressor': None,

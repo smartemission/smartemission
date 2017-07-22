@@ -48,8 +48,13 @@ class CalibrationDbInput(PostgresDbInput):
                 record['geohash'] = Geohash.encode(record['lat'], record['lon'], self.geohash_precision)
             else:
                 record["geohash"] = None
+            del record['lat']
+            del record['lon']
 
-        packet.data = {'jose': pd.DataFrame(record_array)}
+        df = pd.DataFrame(record_array)
+        df = df.pivot_table('value', ['geohash', 'time'], 'name').reset_index()
+
+        packet.data = {'jose': df}
         return packet
 
 
