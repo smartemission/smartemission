@@ -19,7 +19,7 @@ The main ETL is multi-step as follows.
 
 The following ETL configs/processes:
 
-- Harvester: get all raw timeseries sensor-values from the [Whale API](../docs/specs/rawsensor-api/rawsensor-api.txt) for all devices [harvester.cfg](harvester.cfg)
+- Harvester: get all raw timeseries sensor-values from the [Whale API](../docs/specs/rawsensor-api/rawsensor-api.txt) for all devices [harvester_jose.cfg](harvester_jose.cfg)
 
 As a result this raw sensor-data is stored in PostGIS [db-schema-raw.sql](db/db-schema-raw.sql). 
 The Raw Data fetched via the Harvester is 

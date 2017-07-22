@@ -3,11 +3,11 @@
 # ETL for reading last values from Smart Emission CityGIS Raw Sensor API
 #
 
-STETL_ARGS="-c harvester.cfg -a options/`hostname`.args"
+STETL_ARGS="-c harvester_jose.cfg -a options/`hostname`.args"
 WORK_DIR="`pwd`"
 PG_HOST=postgis
 IMAGE=geonovum/stetl:latest
-NAME="stetl_harvest"
+NAME="stetl_harvest_jose"
 
 # Stop and remove possibly old containers
 sudo docker stop ${NAME} > /dev/null 2>&1
