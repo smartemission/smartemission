@@ -24,6 +24,14 @@ class CalibrationDataInput(FileInput):
         return {'merged': df}
 
 
+class CalibrationDbInput(PostgresDbInput):
+
+    def after_invoke(self, packet):
+        packet.data = {'jose': pd.DataFrame(packet.data)}
+        return packet
+
+
+
 class CalibrationModelInput(PostgresDbInput):
     """
     Get unpickled calibration model from the database
