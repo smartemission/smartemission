@@ -157,23 +157,16 @@ class CalibrationInfluxDbInput(InfluxDbInput):
             results = dict()
 
         if self.df is None or not self.cache_result:
-            dfs = []
-            while True:
-                db_ret = self.query_db(self.query % self.last_timestamp)
-                if len(db_ret) > 0:
-                    self.last_timestamp = db_ret[-1]['time']
-                    log.info('Last timestamp from influxdb is %s' % self.last_timestamp)
-                    df = pd.DataFrame.from_records(db_ret)
+            db_ret = self.query_db(self.query % self.last_timestamp)
+            self.last_timestamp = db_ret[-1]['time']
+            log.info('Last timestamp from influxdb is %s' % self.last_timestamp)
+            df = pd.DataFrame.from_records(db_ret)
 
-                    if self.min_n > 0:
-                        df = df[df['n'] > self.min_n]
+            if self.min_n > 0:
+                df = df[df['n'] > self.min_n]
 
-                    df = df.pivot_table('value', ['geohash', 'time'],
-                                        'component').reset_index()
-                    dfs.append(df)
-                else:
-                    break
-            self.df = pd.concat(dfs)
+            self.df = df.pivot_table('value', ['geohash', 'time'],
+                                'component').reset_index()
 
         results[self.key] = self.df
 

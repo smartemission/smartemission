@@ -1,4 +1,6 @@
 import pickle
+
+import Geohash
 from stetl.component import Config
 from stetl.inputs.dbinput import PostgresDbInput
 from stetl.inputs.fileinput import FileInput
@@ -26,10 +28,29 @@ class CalibrationDataInput(FileInput):
 
 class CalibrationDbInput(PostgresDbInput):
 
-    def after_invoke(self, packet):
-        packet.data = {'jose': pd.DataFrame(packet.data)}
-        return packet
+    @Config(ptype=int, default=12, required=False)
+    def geohash_precision(self):
+        """
+        Precision for the geohash. Number of characters to use in the
+        geohash. When no precision is specified the precision of the
+        coordinates are used.
 
+        Default: 12 (the default of Geoahash.encode())
+
+        Required: False
+        """
+
+    def after_invoke(self, packet):
+        record_array = packet.data
+        log.debug(record_array)
+        for record in record_array:
+            log.debug(record)
+            if "lat" in record and "lon" in record:
+                record['geohash'] = Geohash.encode(record['lat'], record['lon'], self.geohash_precision)
+            else:
+                record["geohash"] = None
+        packet.data = {'jose': pd.DataFrame(record_array)}
+        return packet
 
 
 class CalibrationModelInput(PostgresDbInput):
