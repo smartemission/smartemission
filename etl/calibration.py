@@ -47,7 +47,6 @@ class MergeRivmJose(Filter):
 
         # Concatenate RIVM and Jose
         df = df_rivm.merge(df_jose, 'outer', ['time', 'geohash'])
-        df = df.interpolate(limit=1, limit_direction='both')
         log.info('RIVM and Jose are merged, new shape (%d, %d)' % df.shape)
 
         # Returning data
@@ -59,7 +58,7 @@ class MergeRivmJose(Filter):
     @staticmethod
     def preproc_geohash_and_time(df):
         df['geohash'] = df['geohash'].str.slice(0, 7)
-        df['time'] = pd.to_datetime(df['time'])
+        df['time'] = pd.to_datetime(df['time'], utc=True)
         return df
 
 

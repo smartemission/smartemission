@@ -42,13 +42,13 @@ class CalibrationDbInput(PostgresDbInput):
 
     def after_invoke(self, packet):
         record_array = packet.data
-        log.debug(record_array)
         for record in record_array:
-            log.debug(record)
+            # convert point to geohash
             if "lat" in record and "lon" in record:
                 record['geohash'] = Geohash.encode(record['lat'], record['lon'], self.geohash_precision)
             else:
                 record["geohash"] = None
+
         packet.data = {'jose': pd.DataFrame(record_array)}
         return packet
 
