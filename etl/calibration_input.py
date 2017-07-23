@@ -58,6 +58,55 @@ class CalibrationDbInput(PostgresDbInput):
         return packet
 
 
+class PredictDbInput(PostgresDbInput):
+    """
+    Get all the refined records that aren't yet used to predict RIVM values
+    """
+
+    @Config(ptype=str, required=True, default=None)
+    def last_gid_query(self):
+        """
+        The query (string) to fetch last gid that was processed.
+        """
+        pass
+
+    @Config(ptype=list, required=True)
+    def targets(self):
+        """
+        The columns to predict. For each prediction all the columns that are
+        not in this list will be used for prediction.
+
+        Required: True
+        """
+
+    def before_invoke(self, packet):
+        """
+        Find maximum gid that that is already predicted. Format the query with the maximum gid. 
+        """
+
+        # Find maximum gid
+        result = self.do_query(self.last_gid_query)
+        max_gid = 0
+        if len(result) > 0:
+            max_gid = result[0]['gid']
+
+        # Format query with maximum gid
+        self.query = self.query % str(max_gid)
+
+        return packet
+
+    def after_invoke(self, packet):
+        record_array = packet.data
+
+        df = pd.DataFrame(record_array)
+        df = df.pivot_table('value', ['device_id', 'time'], 'name').reset_index()
+
+        packet.data = df
+        packet.set_end_of_stream()
+
+        return packet
+
+
 class CalibrationModelInput(PostgresDbInput):
     """
     Get unpickled calibration model from the database
