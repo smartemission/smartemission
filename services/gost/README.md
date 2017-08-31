@@ -10,7 +10,7 @@ Setup once using [config/gost-init-db.sh](config/gost-init-db.sh).
 
 ## Configuration
 
-See [gost_configuration.md](https://github.com/Geodan/gost/blob/master/docs/gost_configuration.md).
+See [gost_configuration.md](https://github.com/gost/docs/blob/master/gost_configuration.md).
 
 The following configuration parameters can be 
 overruled from the following environment variables:
@@ -25,5 +25,5 @@ Use the command ./run.sh
 
 ## Links
 
-* GOST - https://github.com/Geodan/gost
-* GOST DB - https://github.com/Geodan/gost-db
+* GOST - https://github.com/gost/server
+* GOST DB - https://github.com/gost/gost-db
