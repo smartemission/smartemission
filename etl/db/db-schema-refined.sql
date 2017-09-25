@@ -29,6 +29,10 @@ CREATE TABLE smartem_refined.timeseries (
 DROP INDEX IF EXISTS timeseries_geom_idx;
 CREATE INDEX timeseries_geom_idx ON smartem_refined.timeseries USING gist (point);
 
+-- See https://stackoverflow.com/questions/32042152/add-an-index-to-a-timestamp-with-time-zone
+DROP INDEX IF EXISTS timeseries_time_idx;
+CREATE INDEX timeseries_time_idx ON smartem_refined.timeseries(time);
+
 -- ETL progress tabel, tracks last inserted timeseries (from raw sensor db) per device.
 DROP TABLE IF EXISTS smartem_refined.refiner_progress CASCADE;
 CREATE TABLE smartem_refined.refiner_progress (

@@ -61,9 +61,10 @@ Heron.options.map.settings = {
 
 //	resolutions: [860.160, 430.080, 215.040, 107.520, 53.760, 26.880, 13.440, 6.720, 3.360, 1.680, 0.840, 0.420, 0.210, 0.105, 0.0525],
 //	maxExtent: '-65200.96,242799.04,375200.96,683200.96',
-    center: '187041,427900',
+    // center: '187041,427900',    Nijmegen
+    center: '150000,490000',
     xy_precision: 3,
-    zoom: 8,
+    zoom: 3,
     allOverlays: false,
     theme: null,
     fractionalZoom: false,
