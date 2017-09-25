@@ -93,7 +93,7 @@ Heron.options.map.settings = {
 
         /*,				new OpenLayers.Control.OverviewMap() */
 //        new OpenLayers.Control.PanZoomBar(),
-        new OpenLayers.Control.ScaleLine({bottomOutUnits: '', geodesic: true, maxWidth: 200})
+        new OpenLayers.Control.ScaleLine({bottomOutUnits: 'm', geodesic: false, maxWidth: 200})
     ]
     /** You can always control which controls are to be added to the map. */
     /* controls : [
