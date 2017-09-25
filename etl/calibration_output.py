@@ -1,5 +1,8 @@
 import json
 import pickle
+import random
+import sys
+
 from stetl.component import Config
 from stetl.outputs.dboutput import PostgresInsertOutput
 from stetl.outputs.fileoutput import FileOutput
@@ -53,10 +56,14 @@ class ParameterOutput(PostgresInsertOutput):
         result_in = packet.data
         df = pd.DataFrame(result_in['cv_results_'])
 
+        # add id's to keep track of which parameters belong together
+        df['search_id'] = random.randint(-sys.maxint, sys.maxint)
+        df['setting_id'] = range(df.shape[0])
+
         param_col = [col for col in list(df) if col.startswith('param_')]
         fixed_col = ['mean_test_score', 'std_test_score', 'rank_test_score',
                     'mean_train_score', 'std_train_score', 'mean_fit_time',
-                    'std_fit_time']
+                    'std_fit_time', 'search_id', 'setting_id']
         df = df.loc[:, param_col + fixed_col]
         df = pd.melt(df, fixed_col, param_col, 'parameter', 'value')
         df['value'] = df['value'].astype(str)
