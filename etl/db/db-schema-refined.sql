@@ -9,7 +9,7 @@ CREATE TABLE smartem_refined.timeseries (
   gid serial,
   gid_raw integer, -- gid of the harvested raw data record
   insert_time timestamp with time zone default current_timestamp,
-  device_id integer,
+  device_id numeric,
   name character varying,
   label character varying,
   unit  character varying,
@@ -39,7 +39,7 @@ CREATE TABLE smartem_refined.refiner_progress (
   gid serial,
   insert_time timestamp with time zone default current_timestamp,
   gid_raw integer not null,
-  device_id integer not null,
+  device_id numeric not null,
   day integer not null,
   hour integer not null,
   PRIMARY KEY (gid)
