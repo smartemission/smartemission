@@ -217,8 +217,11 @@ class RawSensorLastInput(RawSensorAPIInput):
         
         # Parse JSON from data string fetched by base method read()
         sensor_vals = self.parse_json_str(data)
-        if 'p_unitserialnumber' not in sensor_vals:
+        if 'id' not in sensor_vals:
             return []
+
+        if 'p_unitserialnumber' not in sensor_vals:
+            sensor_vals['p_unitserialnumber'] = sensor_vals['id']
 
         sensor_name = 'none'
         device_id = int(sensor_vals['p_unitserialnumber'])
