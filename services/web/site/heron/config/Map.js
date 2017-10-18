@@ -420,7 +420,7 @@ Heron.options.map.layers = [
     new OpenLayers.Layer.WMS(
         "Smart Emission - Active Stations",
         Heron.scratch.urls.SMARTEM_OWS,
-        {layers: "smartem:stations", format: "image/png", transparent: true},
+        {layers: "smartem:stations", format: "image/png", transparent: true, styles: "stations-active"},
         {
             isBaseLayer: false, singleTile: true, visibility: true, alpha: true,
             featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
@@ -443,7 +443,7 @@ Heron.options.map.layers = [
     new OpenLayers.Layer.WMS(
         "Smart Emission - Inactive Stations",
         Heron.scratch.urls.SMARTEM_OWS,
-        {layers: "smartem:stations", format: "image/png", transparent: true},
+        {layers: "smartem:stations", format: "image/png", transparent: true, styles: "stations-inactive"},
         {
             isBaseLayer: false, singleTile: true, visibility: true, alpha: true,
             featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
