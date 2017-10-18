@@ -414,6 +414,51 @@ Heron.options.map.layers = [
         }
     ),
 
+    /*
+     * SMARTEM: Active Stations
+     */
+    new OpenLayers.Layer.WMS(
+        "Smart Emission - Active Stations",
+        Heron.scratch.urls.SMARTEM_OWS,
+        {layers: "smartem:stations", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: true, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
+            metadata: {
+                wfs: {
+                    protocol: 'fromWMSLayer',
+                    outputFormat: 'GML2',
+                    featurePrefix: 'sensors',
+                    featureNS: 'http://smartem.geonovum.nl',
+                    downloadFormats: Heron.options.wfs.downloadFormats
+                }
+            }
+        }
+    ),
+
+
+    /*
+     * SMARTEM: Inactive Stations
+     */
+    new OpenLayers.Layer.WMS(
+        "Smart Emission - Inactive Stations",
+        Heron.scratch.urls.SMARTEM_OWS,
+        {layers: "smartem:stations", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: true, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
+            metadata: {
+                wfs: {
+                    protocol: 'fromWMSLayer',
+                    outputFormat: 'GML2',
+                    featurePrefix: 'sensors',
+                    featureNS: 'http://smartem.geonovum.nl',
+                    downloadFormats: Heron.options.wfs.downloadFormats
+                }
+            }
+        }
+    ),
+
     /* START SMARTEM - GASSES */
     /*
      * Smart Emission: Current CO2
@@ -1559,8 +1604,10 @@ Heron.options.layertree.tree = [
 
     {
         text: 'Stations', expanded: true, children: [
-        {nodeType: "gx_layer", layer: "RIVM - All Stations", text: "RIVM Stations (WMS)"},
-        {nodeType: "gx_layer", layer: "Smart Emission - Stations", text: "Smart Emission Stations (WMS)"}
+        {nodeType: "gx_layer", layer: "RIVM - All Stations", text: "RIVM Stations"},
+        // {nodeType: "gx_layer", layer: "Smart Emission - Stations", text: "Smart Emission Stations (WMS)"}
+        {nodeType: "gx_layer", layer: "Smart Emission - Active Stations", text: "Smart Emission Stations (Active)"},
+        {nodeType: "gx_layer", layer: "Smart Emission - Inactive Stations", text: "Smart Emission Stations (Inactive)"}
     ]
     },
     {
