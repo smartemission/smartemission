@@ -400,7 +400,7 @@ Heron.options.map.layers = [
         Heron.scratch.urls.SMARTEM_OWS,
         {layers: "smartem:stations", format: "image/png", transparent: true},
         {
-            isBaseLayer: false, singleTile: true, visibility: true, alpha: true,
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
             featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
             metadata: {
                 wfs: {
@@ -445,7 +445,7 @@ Heron.options.map.layers = [
         Heron.scratch.urls.SMARTEM_OWS,
         {layers: "smartem:stations", format: "image/png", transparent: true, styles: "stations-inactive"},
         {
-            isBaseLayer: false, singleTile: true, visibility: true, alpha: true,
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
             featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
             metadata: {
                 wfs: {
