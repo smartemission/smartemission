@@ -9,7 +9,7 @@ CREATE TABLE smartem_raw.timeseries (
   gid serial,
   unique_id character varying (64) not null,
   insert_time timestamp with time zone default current_timestamp,
-  device_id numeric not null,
+  device_id integer not null,
   day integer not null,
   hour integer not null,
   data json,
@@ -26,7 +26,7 @@ CREATE TABLE smartem_raw.harvester_progress (
   gid serial,
   insert_time timestamp with time zone default current_timestamp,
   unique_id character varying (64) not null,
-  device_id numeric not null,
+  device_id integer not null,
   day integer not null,
   hour integer not null,
   PRIMARY KEY (gid)

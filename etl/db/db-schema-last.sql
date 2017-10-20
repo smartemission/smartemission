@@ -11,7 +11,7 @@ CREATE TABLE smartem_rt.last_device_output (
   gid serial,
   unique_id character varying,
   insert_time timestamp with time zone default current_timestamp,
-  device_id numeric,
+  device_id integer,
   device_name character varying (64),
   name character varying,
   label character varying,
