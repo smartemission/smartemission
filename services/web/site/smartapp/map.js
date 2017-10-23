@@ -1,7 +1,12 @@
 $(document).ready(function () {
 
+    var init_zoom=8;
+    var init_center = new L.latLng([52.0, 5.5]);
+    var cur_zoom=init_zoom;
+    var cur_center = init_center;
+
     // Create Map with layers
-    var map = new L.Map('map', {zoom: 12, center: new L.latLng([51.8348, 5.85])});
+    var map = new L.Map('map', {zoom: init_zoom, center: init_center});
     var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
     var osmAttrib = 'Map data <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
     var osmTiles = new L.TileLayer(osmUrl, {attribution: osmAttrib});
@@ -116,6 +121,8 @@ $(document).ready(function () {
             }
 
             // Coordinaten geometrie (lon,lat) en LatLon object (lat, lon) moeten omgedraaid
+            cur_zoom = map.getZoom();
+            cur_center = map.getCenter();
             var zoomTo = feature.geometry.coordinates;
             map.setView(new L.latLng([zoomTo[1], zoomTo[0]]), 17);
         });
@@ -161,7 +168,8 @@ $(document).ready(function () {
 
     map.on('click', function () {
         sidebar.hide();
-        map.setView([51.8348, 5.85], 12);
+        map.setView(cur_center, cur_zoom);
+        // map.setView([51.8348, 5.85], 12);
     });
 
     sidebar.on('show', function () {
