@@ -1,9 +1,11 @@
-L.Control.Sidebar = L.Evented.extend({
+L.Control.Sidebar = L.Control.extend({
+
+    includes: (L.Evented.prototype || L.Mixin.Events),
 
     options: {
         closeButton: true,
         position: 'left',
-        autoPan: true
+        autoPan: true,
     },
 
     initialize: function (placeholder, options) {
@@ -75,11 +77,12 @@ L.Control.Sidebar = L.Evented.extend({
         //if the control is visible, hide it before removing it.
         this.hide();
 
+        var container = this._container;
         var content = this._contentContainer;
 
         // Remove sidebar container from controls container
         var controlContainer = map._controlContainer;
-        controlContainer.removeChild(this._container);
+        controlContainer.removeChild(container);
 
         //disassociate the map object
         this._map = null;
@@ -137,11 +140,14 @@ L.Control.Sidebar = L.Evented.extend({
             }
             this.fire('hide');
         }
+        if(e) {
+            L.DomEvent.stopPropagation(e);
+        }
     },
 
     toggle: function () {
         if (this.isVisible()) {
-            this.show();
+            this.hide();
         } else {
             this.show();
         }
@@ -156,7 +162,19 @@ L.Control.Sidebar = L.Evented.extend({
     },
 
     setContent: function (content) {
-        this.getContainer().innerHTML = content;
+        var container = this.getContainer();
+
+        if (typeof content === 'string') {
+            container.innerHTML = content;
+        } else {
+            // clean current content
+            while (container.firstChild) {
+                container.removeChild(container.firstChild);
+            }
+
+            container.appendChild(content);
+        }
+
         return this;
     },
 

@@ -17,8 +17,8 @@ $(document).ready(function () {
     var template = Handlebars.compile(source);
 
     // URL of the Smart Emission SOS REST API
-    // var apiUrl = 'http://api.smartemission.nl/sosemu/api/v1';
-    var apiUrl = '/sosemu/api/v1';
+     var apiUrl = 'http://api.smartemission.nl/sosemu/api/v1';
+    //var apiUrl = '/sosemu/api/v1';
 
     // See http://stackoverflow.com/questions/11916780/changing-getjson-to-jsonp
     // Notice the callback=? . This triggers a JSONP call
@@ -36,10 +36,10 @@ $(document).ready(function () {
     // Create icon based on feature props and selected state
     function getMarkerIcon(feature, selected) {
         // Default
-        var iconUrl = feature.properties['value_stale'] == '0' ? 'locatie-icon.png' : 'locatie-icon-stale.png';
+        var iconUrl = feature.properties['value_stale'] == '0' ? 'media/locatie-icon.png' : 'media/locatie-icon-stale.png';
 
         return new L.icon({
-            iconUrl: selected ? 'locatie-icon-click.png' : iconUrl,
+            iconUrl: selected ? 'media/locatie-icon-click.png' : iconUrl,
             iconSize: [24, 41],
             iconAnchor: [10, 40]
         });
@@ -137,6 +137,8 @@ $(document).ready(function () {
 
     // First get stations JSON object via REST
     $.getJSON(stationsUrl, function (data) {
+        var markerCluster = L.markerClusterGroup();
+
         // Callback when getting stations
         var geojson = L.geoJson(data, {
             pointToLayer: function (feature, latlng) {
@@ -146,12 +148,14 @@ $(document).ready(function () {
                 markers[feature.properties.id] = marker;
                 return marker;
             }
-        }).addTo(map)
+        }).addTo(markerCluster)
             // When station-marker clicked get Timeseries with last value for that Station
             .on('click', function (e) {
                 var feature = e.layer.feature;
                 show_station_popup(feature);
             });
+
+        map.addLayer(markerCluster);
 
         // Check query parameter to directly show station values
         if (query_params.station && markers[query_params.station]) {

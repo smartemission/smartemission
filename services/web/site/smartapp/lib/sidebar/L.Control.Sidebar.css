@@ -26,7 +26,7 @@
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    padding: 0px 0px;
+    padding: 0 0;
     font-size: 1.1em;
     background: white;
     box-shadow: 0 1px 7px rgba(0, 0, 0, 0.65);
@@ -94,7 +94,7 @@
     border-radius: 16px;
 	border-color: black 1px;
     cursor: pointer;
-    z-index: 8; }
+    z-index: 800; }
 
 .leaflet-left {
   transition: left 0.5s; }
