@@ -1,6 +1,4 @@
-L.Control.Sidebar = L.Control.extend({
-
-    includes: L.Mixin.Events,
+L.Control.Sidebar = L.Evented.extend({
 
     options: {
         closeButton: true,
