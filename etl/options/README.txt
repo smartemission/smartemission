@@ -9,5 +9,6 @@ How to make your own host-dependent config file:
 - type hostname on command line and note your machine's hostname, symbolically "myhostname"
 - copy the file example.args to myhostname.args
 - change the values for your local situation
+- add your filename to the .gitignore file
 
 On servers like hosted via Docker the host-dependent files need to be maintained manually.
