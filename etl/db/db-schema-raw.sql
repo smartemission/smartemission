@@ -7,7 +7,7 @@ CREATE SCHEMA smartem_raw;
 DROP TABLE IF EXISTS smartem_raw.timeseries CASCADE;
 CREATE TABLE smartem_raw.timeseries (
   gid serial,
-  unique_id character varying (64) not null,
+  unique_id character varying not null,
   insert_time timestamp with time zone default current_timestamp,
   device_id integer not null,
   day integer not null,
@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS smartem_raw.harvester_progress CASCADE;
 CREATE TABLE smartem_raw.harvester_progress (
   gid serial,
   insert_time timestamp with time zone default current_timestamp,
-  unique_id character varying (64) not null,
+  unique_id character varying not null,
   device_id integer not null,
   day integer not null,
   hour integer not null,

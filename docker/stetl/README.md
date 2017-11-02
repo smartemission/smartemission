@@ -6,7 +6,7 @@ Docker image to run ETL tool Stetl. See www.stetl.org.
 
 Use ./build.sh or
 
-docker build -t geonovum/stetl:latest .
+docker build -t smartemission/stetl:latest .
 
 ARGs: optional --build-arg IMAGE_TIMEZONE="Europe/Amsterdam"
 

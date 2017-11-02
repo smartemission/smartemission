@@ -3,14 +3,14 @@
 # ETL for publishing Smart Emission Refined DB data to a remote Sensor Things API (STA).
 #
 
-STETL_ARGS="-c stapublisher.cfg -a options/`hostname`.args"
+STETL_ARGS="stetl -c stapublisher.cfg -a options/`hostname`.args"
 WORK_DIR="`pwd`"
 PG_HOST="postgis"
 STA_HOST="gost"
 LINK_MAP="--link ${PG_HOST}:${PG_HOST} --link ${STA_HOST}:${STA_HOST}"
 VOL_MAP="-v ${WORK_DIR}:${WORK_DIR}"
 
-IMAGE=geonovum/stetl:latest
+IMAGE=smartemission/stetl:latest
 NAME="stetl_stapublish"
 
 # Stop and remove possibly old containers

@@ -114,6 +114,16 @@
                             <swe:uom code="kOhm"/>
                         </swe:Quantity>
                     </sml:output>
+                    <sml:output name="pm10">
+                        <swe:Quantity definition="pm10">
+                            <swe:uom code="ug/m3"/>
+                        </swe:Quantity>
+                    </sml:output>
+                    <sml:output name="pm2_5">
+                        <swe:Quantity definition="pm2_5">
+                            <swe:uom code="ug/m3"/>
+                        </swe:Quantity>
+                    </sml:output>
                     <sml:output name="noiseavg">
                         <swe:Quantity definition="noiseavg">
                             <swe:uom code="dB(A)"/>

@@ -19,6 +19,12 @@
                 <Rule>
                      <Name>SmartEm Stations (Inactief)</Name>
                      <Title>SmartEm Stations (Inactief)</Title>
+                    <ogc:Filter>
+                        <ogc:PropertyIsEqualTo>
+                            <ogc:PropertyName>value_stale</ogc:PropertyName>
+                            <ogc:Literal>1</ogc:Literal>
+                        </ogc:PropertyIsEqualTo>
+                    </ogc:Filter>
                      <PointSymbolizer>
                          <Graphic>
                              <Mark>

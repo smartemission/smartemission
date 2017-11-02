@@ -170,7 +170,7 @@ SENSOR_DEFS = {
         {
             'label': 'O3Raw',
             'unit': 'Ohm',
-            'min': 3000-2000,
+            'min': 3000 - 2000,
             'max': 8000000
         },
     's_no2resistance':
@@ -191,8 +191,8 @@ SENSOR_DEFS = {
         {
             'label': 'CO Concentration',
             'unit': 'ppb',
-            'min': 1000, # 1 ppm
-            'max': 1000000 # 1000 ppm
+            'min': 1000,  # 1 ppm
+            'max': 1000000  # 1000 ppm
         },
     's_no2':
         {
@@ -271,8 +271,8 @@ SENSOR_DEFS = {
         {
             'label': 'Relative Humidity',
             'unit': 'm%RH',
-            'min': 20000-10000,
-            'max': 100000+20000
+            'min': 20000 - 10000,
+            'max': 100000 + 20000
         },
     's_rain':
         {
@@ -544,7 +544,26 @@ SENSOR_DEFS = {
             'type': int,
             'min': 0,
             'max': 1000
-        }
+        },
+    'pm10': {
+        'label': 'PM 10',
+        'unit': 'ug/m3',
+        'input': ['s_pm10'],
+        'converter': nanogram_to_microgram,
+        'type': int,
+        'min': 0,
+        'max': 150000,
+    },
+
+    'pm2_5': {
+        'label': 'PM 2.5',
+        'unit': 'ug/m3',
+        'input': ['s_pm2_5'],
+        'converter': nanogram_to_microgram,
+        'type': int,
+        'min': 0,
+        'max': 150000
+    }
 }
 
 

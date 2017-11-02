@@ -4,11 +4,11 @@
 # RIVM 'ground truth' data.
 #
 
-STETL_ARGS="-c calibrator.cfg -a options/`hostname`.args"
+STETL_ARGS="stetl -c calibrator.cfg -a options/`hostname`.args"
 WORK_DIR="`pwd`"
 INFLUX_HOST=influxdb
 PG_HOST=postgis
-IMAGE=geonovum/stetl:latest
+IMAGE=smartemission/stetl:latest
 NAME="stetl_calibrate"
 
 # Stop and remove possibly old containers

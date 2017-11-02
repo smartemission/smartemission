@@ -12,7 +12,7 @@ CREATE TABLE smartem_rt.last_device_output (
   unique_id character varying,
   insert_time timestamp with time zone default current_timestamp,
   device_id integer,
-  device_name character varying (64),
+  device_name character varying,
   name character varying,
   label character varying,
   unit  character varying,
@@ -87,6 +87,18 @@ CREATE VIEW smartem_rt.v_last_measurements_O3_raw AS
   SELECT device_id, device_name, label, unit,
     name, value_raw, value_stale, time AS sample_time, value, point, gid, unique_id
   FROM smartem_rt.last_device_output WHERE value_stale = 0 AND name = 'o3raw' ORDER BY device_id, gid DESC;
+
+DROP VIEW IF EXISTS smartem_rt.v_last_measurements_PM10;
+CREATE VIEW smartem_rt.v_last_measurements_PM10 AS
+  SELECT device_id, device_name, label, unit,
+    name, value_raw, value_stale, time AS sample_time, value, point, gid, unique_id
+  FROM smartem_rt.last_device_output WHERE value_stale = 0 AND name = 'pm10' ORDER BY device_id, gid DESC;
+
+DROP VIEW IF EXISTS smartem_rt.v_last_measurements_PM2_5;
+CREATE VIEW smartem_rt.v_last_measurements_PM2_5 AS
+  SELECT device_id, device_name, label, unit,
+    name, value_raw, value_stale, time AS sample_time, value, point, gid, unique_id
+  FROM smartem_rt.last_device_output WHERE value_stale = 0 AND name = 'pm2_5' ORDER BY device_id, gid DESC;
 
 DROP VIEW IF EXISTS smartem_rt.v_last_measurements_temperature;
 CREATE VIEW smartem_rt.v_last_measurements_temperature AS

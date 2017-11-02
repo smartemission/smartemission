@@ -124,6 +124,10 @@ def ohm_no2_to_kohm(input, json_obj=None, sensor_def=None):
     val = ohm_to_kohm(input, json_obj, sensor_def)
     return val
 
+# e.g. for PM10 and PM2_5
+def nanogram_to_microgram(input, json_obj=None, sensor_def=None):
+    return float(input) / 1000.0
+
 
 def convert_temperature(input, json_obj=None, sensor_def=None):
     if input == 0:

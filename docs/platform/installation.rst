@@ -211,7 +211,7 @@ Uses the ``geonovum/stetl`` image with Stetl config from GitHub for all ETL proc
 
    # build stetl image
    cd ~/git/docker/stetl
-   sudo docker build -t geonovum/stetl .
+   sudo docker build -t smartemission/stetl .
 
    # run last measurements ETL, linking to postgis image
    cd ~/git/etl
@@ -518,7 +518,7 @@ Then access Apache from local system via ``localhost:8081``.
 Same for Stetl, build and test: ::
 
    $ cd ~/git/docker/stetl
-   $ sudo docker build -t geonovum/stetl .
+   $ sudo docker build -t smartemission/stetl .
    $ cd test/1_copystd
    $ sudo docker run -v `pwd`:`pwd` -w `pwd`  -t -i geonovum/stetl -c etl.cfg
 

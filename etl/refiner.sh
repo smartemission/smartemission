@@ -3,11 +3,11 @@
 # ETL for refining raw timeseries values from Smart Emission Raw DB data.
 #
 
-STETL_ARGS="-c refiner.cfg -a options/`hostname`.args"
+STETL_ARGS="stetl -c refiner.cfg -a options/`hostname`.args"
 WORK_DIR="`pwd`"
 PG_HOST=postgis
 INFLUX_HOST=influxdb
-IMAGE=geonovum/stetl:latest
+IMAGE=smartemission/stetl:latest
 NAME="stetl_refine"
 
 # Stop and remove possibly old containers

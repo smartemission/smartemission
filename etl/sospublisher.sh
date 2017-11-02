@@ -3,14 +3,14 @@
 # ETL for publishing Smart Emission Refined DB data to a SOS.
 #
 
-STETL_ARGS="-c sospublisher.cfg -a options/`hostname`.args"
+STETL_ARGS="stetl -c sospublisher.cfg -a options/`hostname`.args"
 WORK_DIR="`pwd`"
 PG_HOST="postgis"
 SOS52N_HOST="sos52n"
 LINK_MAP="--link ${PG_HOST}:${PG_HOST} --link ${SOS52N_HOST}:${SOS52N_HOST}"
 VOL_MAP="-v ${WORK_DIR}:${WORK_DIR}"
 
-IMAGE=geonovum/stetl:latest
+IMAGE=smartemission/stetl:latest
 NAME="stetl_sospublish"
 
 # Stop and remove possibly old containers

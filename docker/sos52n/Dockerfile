@@ -29,7 +29,8 @@ RUN echo "$IMAGE_TIMEZONE" > /etc/timezone && \
 #  .zip file: http://52north.org/downloads/send/3-sos/484-52n-sensorweb-sos-bundle-4-3-7
 ENV SOS_VERSION 4.3.7
 # ENV SOS_DL_URL http://52north.org/downloads/send/3-sos/484-52n-sensorweb-sos-bundle-4-3-7
-ENV SOS_DL_URL http://52north.org/downloads/send/3-sos/491-52n-sensorweb-sos-bundle-4-3-7
+ENV SOS_DL_URL_OLD http://52north.org/downloads/send/3-sos/491-52n-sensorweb-sos-bundle-4-3-7
+ENV SOS_DL_URL https://github.com/52North/SOS/releases/download/${SOS_VERSION}/52n-sensorweb-sos-bundle-${SOS_VERSION}.zip
 ENV TC_DEPLOY_DIR $CATALINA_HOME/webapps
 ENV SOS_CONFIG_DIR  /opt/sosconfig
 ENV SOS_DEPLOY_DIR  $TC_DEPLOY_DIR/sos52n
@@ -80,7 +81,7 @@ RUN if ls /var/cache/oracle-jdk7-installer/*jdk-*-linux-x64.tar.gz > /dev/null 2
 # A little logic that will fetch the sos52n war zip file if it
 # is not available locally in the resources dir
 RUN if [ ! -f /tmp/resources/sos52n.zip ]; then \
-      wget -c $SOS_DL_URL -O /tmp/resources/sos52n.zip; \
+      wget -c ${SOS_DL_URL} -O /tmp/resources/sos52n.zip; \
     fi;
 
 # unzips in sos52n/52n-sensorweb-sos-bundle-$SOS_VERSION/bin/target/52n-sos-webapp##4.3.7.war

@@ -98,6 +98,7 @@ class CalibrationModelInput(PostgresDbInput):
 
                 model_state = self.query_state(id)
                 self.state[k] = model_state
+
         else:
             log.info('No query for fetching calibration models given or no '
                      'mapping for calibration models to gas components given.')
@@ -114,5 +115,5 @@ class CalibrationModelInput(PostgresDbInput):
                 for gas, state in device_state.iteritems():
                     v[device_id][gas] = RunningMean.from_dict(state)
             SENSOR_DEFS[k]['converter_model']['state'] = v
-
+        packet.set_end_of_stream()
         return packet
