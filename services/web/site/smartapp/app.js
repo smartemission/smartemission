@@ -29,7 +29,7 @@ $(document).ready(function () {
     // Split into categories for ease of templating: gasses, meteo and audio
     // See https://github.com/Geonovum/smartemission/blob/master/etl/sensordefs.py for
     // sensor-component names
-    var gasIds = 'co2,o3,no2,co,o3raw,coraw,no2raw';
+    var gasIds = 'co2,o3,no2,co,o3raw,coraw,no2raw,pm10,pm2_5';
     var meteoIds = 'temperature,pressure,humidity';
     var audioIds = 'noiseavg,noiselevelavg';
 
