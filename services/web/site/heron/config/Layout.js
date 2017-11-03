@@ -351,7 +351,10 @@ Heron.layout = {
                                 "Smart Emission - Timeseries NO2",
                                 "Smart Emission - Timeseries NO2 Raw",
                                 "Smart Emission - Timeseries O3",
-                                "Smart Emission - Timeseries O3 Raw"
+                                "Smart Emission - Timeseries O3 Raw",
+                                "Smart Emission - Timeseries PM10",
+                                "Smart Emission - Timeseries PM25"
+
                             ]
                         }
                     ]

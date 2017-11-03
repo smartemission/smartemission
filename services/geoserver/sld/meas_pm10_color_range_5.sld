@@ -38,10 +38,10 @@
                                 </Fill>
                                 <Stroke>
                                      <CssParameter name="stroke">#EEEEEE</CssParameter>
-                                     <CssParameter name="stroke-width">2</CssParameter>
+                                     <CssParameter name="stroke-width">1</CssParameter>
                                  </Stroke>
                             </Mark>
-                            <Size>30</Size>
+                            <Size>20</Size>
                         </Graphic>
                     </PointSymbolizer>
                 </Rule>
@@ -69,10 +69,10 @@
                                 </Fill>
                                 <Stroke>
                                      <CssParameter name="stroke">#EEEEEE</CssParameter>
-                                     <CssParameter name="stroke-width">2</CssParameter>
+                                     <CssParameter name="stroke-width">1</CssParameter>
                                  </Stroke>
                             </Mark>
-                            <Size>30</Size>
+                            <Size>20</Size>
                         </Graphic>
                     </PointSymbolizer>
                 </Rule>
@@ -100,10 +100,10 @@
                                 </Fill>
                                 <Stroke>
                                      <CssParameter name="stroke">#EEEEEE</CssParameter>
-                                     <CssParameter name="stroke-width">2</CssParameter>
+                                     <CssParameter name="stroke-width">1</CssParameter>
                                  </Stroke>
                             </Mark>
-                            <Size>30</Size>
+                            <Size>20</Size>
                         </Graphic>
                     </PointSymbolizer>
                 </Rule>
@@ -131,10 +131,10 @@
                                 </Fill>
                                 <Stroke>
                                      <CssParameter name="stroke">#EEEEEE</CssParameter>
-                                     <CssParameter name="stroke-width">2</CssParameter>
+                                     <CssParameter name="stroke-width">1</CssParameter>
                                  </Stroke>
                             </Mark>
-                            <Size>30</Size>
+                            <Size>20</Size>
                         </Graphic>
                     </PointSymbolizer>
                 </Rule>
@@ -156,10 +156,10 @@
                                 </Fill>
                                 <Stroke>
                                      <CssParameter name="stroke">#EEEEEE</CssParameter>
-                                     <CssParameter name="stroke-width">2</CssParameter>
+                                     <CssParameter name="stroke-width">1</CssParameter>
                                  </Stroke>
                             </Mark>
-                            <Size>30</Size>
+                            <Size>20</Size>
                         </Graphic>
                     </PointSymbolizer>
                 </Rule>
