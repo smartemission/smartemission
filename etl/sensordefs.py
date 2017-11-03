@@ -220,21 +220,21 @@ SENSOR_DEFS = {
         {
             'label': 'PM 10',
             'unit': 'ng/m3',
-            'min': 0,
+            'min': 1,
             'max': 1000000
         },
     's_pm2_5':
         {
             'label': 'PM 2.5',
             'unit': 'ng/m3',
-            'min': 0,
+            'min': 1,
             'max': 1000000
         },
     's_pm1':
         {
             'label': 'PM 1',
             'unit': 'ng/m3',
-            'min': 0,
+            'min': 1,
             'max': 1000000
         },
     's_tsp':
@@ -551,8 +551,8 @@ SENSOR_DEFS = {
         'input': ['s_pm10'],
         'converter': nanogram_to_microgram,
         'type': int,
-        'min': 0,
-        'max': 150000,
+        'min': 1,
+        'max': 999,
     },
 
     'pm2_5': {
@@ -561,9 +561,20 @@ SENSOR_DEFS = {
         'input': ['s_pm2_5'],
         'converter': nanogram_to_microgram,
         'type': int,
-        'min': 0,
-        'max': 150000
+        'min': 1,
+        'max': 999
+    },
+
+    'pm1': {
+        'label': 'PM 1',
+        'unit': 'ug/m3',
+        'input': ['s_pm1'],
+        'converter': nanogram_to_microgram,
+        'type': int,
+        'min': 1,
+        'max': 999
     }
+
 }
 
 
