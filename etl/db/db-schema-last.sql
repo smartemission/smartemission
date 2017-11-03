@@ -100,6 +100,12 @@ CREATE VIEW smartem_rt.v_last_measurements_PM2_5 AS
     name, value_raw, value_stale, time AS sample_time, value, point, gid, unique_id
   FROM smartem_rt.last_device_output WHERE value_stale = 0 AND name = 'pm2_5' ORDER BY device_id, gid DESC;
 
+DROP VIEW IF EXISTS smartem_rt.v_last_measurements_PM1;
+CREATE VIEW smartem_rt.v_last_measurements_PM1 AS
+  SELECT device_id, device_name, label, unit,
+    name, value_raw, value_stale, time AS sample_time, value, point, gid, unique_id
+  FROM smartem_rt.last_device_output WHERE value_stale = 0 AND name = 'pm1' ORDER BY device_id, gid DESC;
+
 DROP VIEW IF EXISTS smartem_rt.v_last_measurements_temperature;
 CREATE VIEW smartem_rt.v_last_measurements_temperature AS
   SELECT device_id, device_name, label, unit,

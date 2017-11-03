@@ -114,6 +114,11 @@
                             <swe:uom code="kOhm"/>
                         </swe:Quantity>
                     </sml:output>
+                    <sml:output name="pm1">
+                        <swe:Quantity definition="pm1">
+                            <swe:uom code="ug/m3"/>
+                        </swe:Quantity>
+                    </sml:output>
                     <sml:output name="pm10">
                         <swe:Quantity definition="pm10">
                             <swe:uom code="ug/m3"/>
