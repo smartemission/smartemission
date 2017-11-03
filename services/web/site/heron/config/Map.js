@@ -770,6 +770,99 @@ Heron.options.map.layers = [
 
     /* END SMARTEM - GASSES */
 
+    /* START SMARTEM - PM */
+
+    /*
+     * Smart Emission: Current PM10
+     */
+    new OpenLayers.Layer.WMS(
+        "Smart Emission - Current PM10",
+        Heron.scratch.urls.SMARTEM_OWS,
+        {layers: "smartem:last_measurements_pm10", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
+            metadata: {
+                wfs: {
+                    protocol: 'fromWMSLayer',
+                    outputFormat: 'GML2',
+                    featurePrefix: 'sensors',
+                    featureNS: 'http://smartem.geonovum.nl',
+                    downloadFormats: Heron.options.wfs.downloadFormats
+                }
+            }
+        }
+    ),
+
+    /*
+     * Smart Emission: Timeseries PM10
+     */
+    new OpenLayers.Layer.WMS(
+        "Smart Emission - Timeseries PM10",
+        Heron.scratch.urls.SMARTEM_OWS,
+        {layers: "smartem:timeseries_pm10", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
+            metadata: {
+                wfs: {
+                    protocol: 'fromWMSLayer',
+                    outputFormat: 'GML2',
+                    featurePrefix: 'sensors',
+                    featureNS: 'http://smartem.geonovum.nl',
+                    downloadFormats: Heron.options.wfs.downloadFormats
+                }
+            }
+        }
+    ),
+    
+    /*
+     * Smart Emission: Current PM25
+     */
+    new OpenLayers.Layer.WMS(
+        "Smart Emission - Current PM25",
+        Heron.scratch.urls.SMARTEM_OWS,
+        {layers: "smartem:last_measurements_pm25", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
+            metadata: {
+                wfs: {
+                    protocol: 'fromWMSLayer',
+                    outputFormat: 'GML2',
+                    featurePrefix: 'sensors',
+                    featureNS: 'http://smartem.geonovum.nl',
+                    downloadFormats: Heron.options.wfs.downloadFormats
+                }
+            }
+        }
+    ),
+
+    /*
+     * Smart Emission: Timeseries PM25
+     */
+    new OpenLayers.Layer.WMS(
+        "Smart Emission - Timeseries PM25",
+        Heron.scratch.urls.SMARTEM_OWS,
+        {layers: "smartem:timeseries_pm25", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize',
+            metadata: {
+                wfs: {
+                    protocol: 'fromWMSLayer',
+                    outputFormat: 'GML2',
+                    featurePrefix: 'sensors',
+                    featureNS: 'http://smartem.geonovum.nl',
+                    downloadFormats: Heron.options.wfs.downloadFormats
+                }
+            }
+        }
+    ),
+    
+
+    /* END SMARTEM - PM */
+    
     /*
      * Smart Emission: Meteo: Current Temperature
      */
@@ -1702,6 +1795,14 @@ Heron.options.layertree.tree = [
             {nodeType: "gx_layer", layer: "Smart Emission - Timeseries O3 Raw", text: "O3 Raw - History - kOhm"}
         ]
         }
+    ]
+    },
+    {
+        text: 'Smart Emission - Particle Matter (PM)', expanded: true, children: [
+        {nodeType: "gx_layer", layer: "Smart Emission - Current PM10", text: "PM10 - Current - ug/m3"},
+        {nodeType: "gx_layer", layer: "Smart Emission - Timeseries PM10", text: "PM10 - History - ug/m3"},
+        {nodeType: "gx_layer", layer: "Smart Emission - Current PM25", text: "PM25 - Current - ug/m3"},
+        {nodeType: "gx_layer", layer: "Smart Emission - Timeseries PM25", text: "PM25 - History - ug/m3"}
     ]
     },
     {
