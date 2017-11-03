@@ -163,10 +163,17 @@ Heron.layout = {
                     sources: {
                         rivm_wms: {
                             ptype: "gxp_wmssource",
-                            url: 'http://geodata.rivm.nl/geoserver/ows?',
+                            url: Heron.scratch.urls.RIVM_OWS,
                             version: "1.1.1",
                             title: 'RIVM WMS',
                             owsPreviewStrategies: ['getlegendgraphic']  // or 'no preview available' if empty array
+                        },
+                        rivm_wfs: {
+                            ptype: "gxp_wfssource",
+                            url: Heron.scratch.urls.RIVM_OWS,
+                            version: "1.1.0",
+                            title: 'PDOK BAG WFS',
+                            owsPreviewStrategies: ['randomcolor']  // or 'no preview available' if empty array
                         },
                         rivm_inspire_wms: {
                             ptype: "gxp_wmssource",
@@ -219,7 +226,7 @@ Heron.layout = {
                         },
                         pdok_tms: {
                             ptype: "gxp_tmssource",
-                            url: Heron.options.urls.PDOK + '/tms/',
+                            url: Heron.options.urls.PDOK + '/tiles/service/tms/',
                             isBaseLayer: true,  // default is true
                             group: 'background' // 'background' or 'default', default value is 'background'
                         }

@@ -124,7 +124,7 @@ Heron.scratch.urls = {
     MAP5_WMS: 'http://s.map5.nl/map/gast/service?',
     OPENBASISKAART_TMS: 'http://openbasiskaart.nl/mapcache/tms/',
     RO_WMS: 'http://afnemers.ruimtelijkeplannen.nl/afnemers/services?',
-    RIVM_WMS: 'http://geodata.rivm.nl/geoserver/ows?',
+    RIVM_OWS: 'http://geodata.rivm.nl/geoserver/ows?',
     // KNMI_ACT_10MIN: 'https://data.knmi.nl/wms/cgi-bin/wms.cgi?%26source%3D%2FActuele10mindataKNMIstations%2F1%2Fnoversion%2F2014%2F11%2F04%2FKMDS__OPER_P___10M_OBS_L2%2Enc%26'
     KNMI_INSPIRE_WMS: 'http://geoservices.knmi.nl/cgi-bin/inspireviewservice.cgi?DATASET=urn:xkdc:ds:nl.knmi::Actuele10mindataKNMIstations/1/'
 };
@@ -1101,7 +1101,68 @@ Heron.options.map.layers = [
      */
 
     /*
-     * RIVM: All Stations
+     * START: RIVM
+     */
+    new OpenLayers.Layer.WMS(
+        "RIVM - NO2 Actueel",
+        Heron.scratch.urls.RIVM_OWS,
+        {layers: "lucht:actueel_no2", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize', opacity: 0.8
+        }
+    ),
+
+    new OpenLayers.Layer.WMS(
+        "RIVM - O3 Actueel",
+        Heron.scratch.urls.RIVM_OWS,
+        {layers: "lucht:actueel_o3", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize', opacity: 0.8
+        }
+    ),
+
+    new OpenLayers.Layer.WMS(
+        "RIVM - PM10 Actueel",
+        Heron.scratch.urls.RIVM_OWS,
+        {layers: "lucht:actueel_pm10", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize', opacity: 0.8
+        }
+    ),
+
+    new OpenLayers.Layer.WMS(
+        "RIVM - PM2.5 Actueel",
+        Heron.scratch.urls.RIVM_OWS,
+        {layers: "lucht:actueel_pm25", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize', opacity: 0.8
+        }
+    ),
+
+    new OpenLayers.Layer.WMS(
+        "RIVM - LKI Actueel",
+        Heron.scratch.urls.RIVM_OWS,
+        {layers: "lucht:actueel_lki", format: "image/png", transparent: true},
+        {
+            isBaseLayer: false, singleTile: true, visibility: false, alpha: true,
+            featureInfoFormat: "application/vnd.ogc.gml", transitionEffect: 'resize', opacity: 0.8
+        }
+    ),
+
+    /*
+     * END: RIVM
+     */
+
+    /*
+     * START: SOSPilot RIVM Data
+     */
+
+    /*
+     * SOSPilot RIVM Data: All Stations
      */
     new OpenLayers.Layer.WMS(
         "RIVM - All Stations",
@@ -1123,7 +1184,7 @@ Heron.options.map.layers = [
     ),
 
     /*
-     * RIVM: Stations
+     * SOSPilot RIVM Data: Stations
      */
     new OpenLayers.Layer.WMS(
         "RIVM - Active Stations",
@@ -1145,7 +1206,7 @@ Heron.options.map.layers = [
     ),
 
     /*
-     * RIVM: Active Stations WFS
+     * SOSPilot RIVM Data: Active Stations WFS
      */
     new OpenLayers.Layer.Vector("RIVM - Active Stations (WFS)", {
         strategies: [new OpenLayers.Strategy.BBOX()],
@@ -1171,7 +1232,7 @@ Heron.options.map.layers = [
     }),
 
     /*
-     * RIVM: Zones en Agglomeraties
+     * SOSPilot RIVM Data: Zones en Agglomeraties
      */
     new OpenLayers.Layer.WMS(
         "Zones and Agglomerations",
@@ -1193,7 +1254,7 @@ Heron.options.map.layers = [
     ),
 
     /*
-     * RIVM: Measurements CO
+     * SOSPilot RIVM Data: Measurements CO
      */
     new OpenLayers.Layer.WMS(
         "RIVM - History CO",
@@ -1215,7 +1276,7 @@ Heron.options.map.layers = [
     ),
 
     /*
-     * RIVM: Current CO
+     * SOSPilot RIVM Data: Current CO
      */
     new OpenLayers.Layer.WMS(
         "RIVM - Current CO",
@@ -1237,7 +1298,7 @@ Heron.options.map.layers = [
     ),
 
     /*
-     * RIVM: Measurements NH3
+     * SOSPilot RIVM Data: Measurements NH3
      */
     new OpenLayers.Layer.WMS(
         "RIVM - History NH3",
@@ -1259,7 +1320,7 @@ Heron.options.map.layers = [
     ),
 
     /*
-     * RIVM: Current NH3
+     * SOSPilot RIVM Data: Current NH3
      */
     new OpenLayers.Layer.WMS(
         "RIVM - Current NH3",
@@ -1281,7 +1342,7 @@ Heron.options.map.layers = [
     ),
 
     /*
-     * RIVM: Measurements NO
+     * SOSPilot RIVM Data: Measurements NO
      */
     new OpenLayers.Layer.WMS(
         "RIVM - History NO",
@@ -1303,7 +1364,7 @@ Heron.options.map.layers = [
     ),
 
     /*
-     * RIVM: Measurements NO
+     * SOSPilot RIVM Data: Measurements NO
      */
     new OpenLayers.Layer.WMS(
         "RIVM - Current NO",
@@ -1325,7 +1386,7 @@ Heron.options.map.layers = [
     ),
 
     /*
-     * RIVM: Measurements NO2
+     * SOSPilot RIVM Data: Measurements NO2
      */
     new OpenLayers.Layer.WMS(
         "RIVM - History NO2",
@@ -1347,7 +1408,7 @@ Heron.options.map.layers = [
     ),
 
     /*
-     * RIVM: Current NO2
+     * SOSPilot RIVM Data: Current NO2
      */
     new OpenLayers.Layer.WMS(
         "RIVM - Current NO2",
@@ -1369,7 +1430,7 @@ Heron.options.map.layers = [
     ),
 
     /*
-     * RIVM: Measurements O3
+     * SOSPilot RIVM Data: Measurements O3
      */
     new OpenLayers.Layer.WMS(
         "RIVM - Current O3",
@@ -1391,7 +1452,7 @@ Heron.options.map.layers = [
     ),
 
     /*
-     * RIVM: Measurements O3
+     * SOSPilot RIVM Data: Measurements O3
      */
     new OpenLayers.Layer.WMS(
         "RIVM - History O3",
@@ -1413,7 +1474,7 @@ Heron.options.map.layers = [
     ),
 
     /*
-     * RIVM: Measurements PM10
+     * SOSPilot RIVM Data: Measurements PM10
      */
     new OpenLayers.Layer.WMS(
         "RIVM - History PM10",
@@ -1435,7 +1496,7 @@ Heron.options.map.layers = [
     ),
 
     /*
-     * RIVM: Measurements PM10
+     * SOSPilot RIVM Data: Measurements PM10
      */
     new OpenLayers.Layer.WMS(
         "RIVM - Current PM10",
@@ -1457,7 +1518,7 @@ Heron.options.map.layers = [
     ),
 
     /*
-     * RIVM: Measurements SO2
+     * SOSPilot RIVM Data: Measurements SO2
      */
     new OpenLayers.Layer.WMS(
         "RIVM - History SO2",
@@ -1479,7 +1540,7 @@ Heron.options.map.layers = [
     ),
 
     /*
-     * RIVM: Current SO2
+     * SOSPilot RIVM Data: Current SO2
      */
     new OpenLayers.Layer.WMS(
         "RIVM - Current SO2",
@@ -1500,7 +1561,7 @@ Heron.options.map.layers = [
         }
     ),
 
-    /* END RIVM */
+    /* END SOSPilot RIVM Data */
 
     /* START GEONOVUM WEATHER */
 
@@ -1589,7 +1650,7 @@ Heron.options.layertree.tree = [
         text: 'Toegevoegde Lagen', nodeType: 'hr_userlayercontainer', expanded: true, children: []
     },
     {
-        text: 'Basis Kaarten', expanded: false, children: [
+        text: 'Base Maps', expanded: false, children: [
         {nodeType: "gx_layer", layer: "BRT Achtergrondkaart", text: "BRT (PDOK)"},
         {nodeType: "gx_layer", layer: "OpenBasisKaart OSM"},
         {nodeType: "gx_layer", layer: "OpenTopo TMS", text: "OpenTopo (Map5.nl)"},
@@ -1603,11 +1664,10 @@ Heron.options.layertree.tree = [
     },
 
     {
-        text: 'Stations', expanded: true, children: [
-        {nodeType: "gx_layer", layer: "RIVM - All Stations", text: "RIVM Stations"},
-        // {nodeType: "gx_layer", layer: "Smart Emission - Stations", text: "Smart Emission Stations (WMS)"}
+        text: 'Smart Emission - Stations', expanded: true, children: [
         {nodeType: "gx_layer", layer: "Smart Emission - Active Stations", text: "Smart Emission Stations (Active)"},
-        {nodeType: "gx_layer", layer: "Smart Emission - Inactive Stations", text: "Smart Emission Stations (Inactive)"}
+        {nodeType: "gx_layer", layer: "Smart Emission - Inactive Stations", text: "Smart Emission Stations (Inactive)"},
+        {nodeType: "gx_layer", layer: "RIVM - All Stations", text: "RIVM Stations"}
     ]
     },
     {
@@ -1669,31 +1729,37 @@ Heron.options.layertree.tree = [
     ]
     },
     {
-        text: 'Atlas Leefomgeving', expanded: true, children: [
+        text: 'Luchtmeetnet.nl oa RIVM', expanded: true, children: [
         {
             nodeType: "gx_layer",
-            layer: "Atlas Leefomgeving - NO2 Actueel",
+            layer: "RIVM - NO2 Actueel",
             text: "NO2 - Current"
         },
         {
             nodeType: "gx_layer",
-            layer: "Atlas Leefomgeving - O3 Actueel",
+            layer: "RIVM - O3 Actueel",
             text: "O3 - Current"
         },
         {
             nodeType: "gx_layer",
-            layer: "Atlas Leefomgeving - PM10 Actueel",
+            layer: "RIVM - PM10 Actueel",
             text: "PM10 - Current"
         },
         {
             nodeType: "gx_layer",
-            layer: "Atlas Leefomgeving - LKI Actueel",
+            layer: "RIVM - PM2.5 Actueel",
+            text: "PM2.5 - Current"
+        },
+        {
+            nodeType: "gx_layer",
+            layer: "RIVM - LKI Actueel",
             text: "Air Quality Index - Current"
         }
     ]
     },
     {
-        text: 'RIVM', expanded: false, children: [
+        text: 'Geonovum SOSPilot', expanded: false, children: [
+        {nodeType: "gx_layer", layer: "RIVM - All Stations", text: "RIVM Stations"},
         {
             text: 'Carbon monoxide (CO)', expanded: false, children: [
             {nodeType: "gx_layer", layer: "RIVM - Current CO", text: "RIVM - ug/m3"},
