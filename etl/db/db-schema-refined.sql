@@ -164,11 +164,11 @@ CREATE VIEW smartem_refined.v_timeseries_PM2_5 AS
     unit, value, value_raw, value_min, value_max, time, day, hour, sample_count, point, gid, gid_raw
   FROM smartem_refined.timeseries WHERE name = 'pm2_5' ORDER BY device_id, gid DESC;
 
-DROP VIEW IF EXISTS smartem_refined.v_timeseries_PM1;
-CREATE VIEW smartem_refined.v_timeseries_PM1 AS
-  SELECT device_id, name, label,
-    unit, value, value_raw, value_min, value_max, time, day, hour, sample_count, point, gid, gid_raw
-  FROM smartem_refined.timeseries WHERE name = 'pm1' ORDER BY device_id, gid DESC;
+-- DROP VIEW IF EXISTS smartem_refined.v_timeseries_PM1;
+-- CREATE VIEW smartem_refined.v_timeseries_PM1 AS
+--   SELECT device_id, name, label,
+--     unit, value, value_raw, value_min, value_max, time, day, hour, sample_count, point, gid, gid_raw
+--   FROM smartem_refined.timeseries WHERE name = 'pm1' ORDER BY device_id, gid DESC;
 
 DROP VIEW IF EXISTS smartem_refined.v_timeseries_temperature;
 CREATE VIEW smartem_refined.v_timeseries_temperature AS
