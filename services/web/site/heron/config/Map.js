@@ -1798,7 +1798,7 @@ Heron.options.layertree.tree = [
     ]
     },
     {
-        text: 'Smart Emission - Particle Matter (PM)', expanded: true, children: [
+        text: 'Smart Emission - Particulate Matter (PM)', expanded: true, children: [
         {nodeType: "gx_layer", layer: "Smart Emission - Current PM10", text: "PM10 - Current - ug/m3"},
         {nodeType: "gx_layer", layer: "Smart Emission - Timeseries PM10", text: "PM10 - History - ug/m3"},
         {nodeType: "gx_layer", layer: "Smart Emission - Current PM25", text: "PM25 - Current - ug/m3"},
