@@ -35,7 +35,7 @@ CREATE INDEX last_device_output_geom_idx ON smartem_rt.last_device_output USING 
 -- Stations
 DROP VIEW IF EXISTS smartem_rt.stations CASCADE;
 CREATE VIEW smartem_rt.stations AS
-  SELECT DISTINCT on (d.device_id) d.gid, d.device_id, d.device_name, d.point, d.altitude, d.value_stale, d.time as last_update, ST_X(point) as lon, ST_Y(point) as lat  FROM smartem_rt.last_device_output as d order by d.device_id;
+  SELECT DISTINCT on (d.device_id) d.gid, d.device_id as full_device_id, d.device_id%10000 as device_id, d.device_id/10000 as project_id, d.device_name, d.point, d.altitude, d.value_stale, d.time as last_update, ST_X(point) as lon, ST_Y(point) as lat  FROM smartem_rt.last_device_output as d order by d.device_id;
 
 -- Alle Laatste Metingen
 DROP VIEW IF EXISTS smartem_rt.v_last_measurements;

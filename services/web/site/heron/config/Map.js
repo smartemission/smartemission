@@ -464,7 +464,7 @@ Heron.options.map.layers = [
      * Smart Emission: Current CO2
      */
     new OpenLayers.Layer.WMS(
-        "Smart Emission - Current CO2",
+        "Smart Emission - Current CO2 ppm",
         Heron.scratch.urls.SMARTEM_OWS,
         {layers: "smartem:last_measurements_co2", format: "image/png", transparent: true},
         {
@@ -486,7 +486,7 @@ Heron.options.map.layers = [
      * Smart Emission: Timeseries CO2
      */
     new OpenLayers.Layer.WMS(
-        "Smart Emission - History CO2",
+        "Smart Emission - History CO2 ppm",
         Heron.scratch.urls.SMARTEM_OWS,
         {layers: "smartem:timeseries_co2", format: "image/png", transparent: true},
         {
@@ -508,7 +508,7 @@ Heron.options.map.layers = [
      * Smart Emission: Current CO
      */
     new OpenLayers.Layer.WMS(
-        "Smart Emission - Current CO",
+        "Smart Emission - Current CO ug/m3",
         Heron.scratch.urls.SMARTEM_OWS,
         {layers: "smartem:last_measurements_co", format: "image/png", transparent: true},
         {
@@ -530,7 +530,7 @@ Heron.options.map.layers = [
      * Smart Emission: Timeseries CO
      */
     new OpenLayers.Layer.WMS(
-        "Smart Emission - History CO",
+        "Smart Emission - History CO ug/m3",
         Heron.scratch.urls.SMARTEM_OWS,
         {layers: "smartem:timeseries_co", format: "image/png", transparent: true},
         {
@@ -549,10 +549,10 @@ Heron.options.map.layers = [
     ),
 
     /*
-     * Smart Emission: Current CO Raw
+     * Smart Emission: Current CO kOhm Raw
      */
     new OpenLayers.Layer.WMS(
-        "Smart Emission - Current CO Raw",
+        "Smart Emission - Current CO kOhm Raw",
         Heron.scratch.urls.SMARTEM_OWS,
         {layers: "smartem:last_measurements_co_raw", format: "image/png", transparent: true},
         {
@@ -571,10 +571,10 @@ Heron.options.map.layers = [
     ),
 
     /*
-     * Smart Emission: Timeseries CO Raw
+     * Smart Emission: Timeseries CO kOhm Raw
      */
     new OpenLayers.Layer.WMS(
-        "Smart Emission - History CO Raw",
+        "Smart Emission - History CO kOhm Raw",
         Heron.scratch.urls.SMARTEM_OWS,
         {layers: "smartem:timeseries_co_raw", format: "image/png", transparent: true},
         {
@@ -1767,32 +1767,34 @@ Heron.options.layertree.tree = [
         text: 'Smart Emission - Gasses', expanded: true, children: [
         {
             text: 'Carbon Monoxide (CO)', expanded: true, children: [
-            {nodeType: "gx_layer", layer: "Smart Emission - Current CO", text: "CO - Current - ug/m3"},
-            {nodeType: "gx_layer", layer: "Smart Emission - History CO", text: "CO - History - ug/m3"},
-            {nodeType: "gx_layer", layer: "Smart Emission - Current CO Raw", text: "CO Raw - Current - kOhm"},
-            {nodeType: "gx_layer", layer: "Smart Emission - History CO Raw", text: "CO Raw - History - kOhm"}
+            {nodeType: "gx_layer", layer: "Smart Emission - Current CO ug/m3", text: "CO - Current - ug/m3"},
+            {nodeType: "gx_layer", layer: "Smart Emission - History CO ug/m3", text: "CO - History - ug/m3"}
+            /*,
+            {nodeType: "gx_layer", layer: "Smart Emission - Current CO kOhm Raw", text: "CO Raw - Current - kOhm"},
+            {nodeType: "gx_layer", layer: "Smart Emission - History CO kOhm Raw", text: "CO Raw - History - kOhm"}  */
         ]
         },
         {
             text: 'Carbon Dioxide (CO2)', expanded: true, children: [
-            {nodeType: "gx_layer", layer: "Smart Emission - Current CO2", text: "CO2 - Current - ppm"},
-            {nodeType: "gx_layer", layer: "Smart Emission - History CO2", text: "CO2 - History - ppm"}
+            {nodeType: "gx_layer", layer: "Smart Emission - Current CO2 ppm", text: "CO2 - Current - ppm"},
+            {nodeType: "gx_layer", layer: "Smart Emission - History CO2 ppm", text: "CO2 - History - ppm"}
         ]
         },
         {
             text: 'Nitrogen Dioxide (NO2) - WMS', expanded: true, children: [
             {nodeType: "gx_layer", layer: "Smart Emission - Current NO2 ug/m3", text: "NO2 - Current - ug/m3"},
-            {nodeType: "gx_layer", layer: "Smart Emission - History NO2 ug/m3", text: "NO2 - History - ug/m3"},
+            {nodeType: "gx_layer", layer: "Smart Emission - History NO2 ug/m3", text: "NO2 - History - ug/m3"}
+            /* ,
             {nodeType: "gx_layer", layer: "Smart Emission - Current NO2 kOhm Raw", text: "NO2 Raw - Current - kOhm"},
-            {nodeType: "gx_layer", layer: "Smart Emission - History NO2 kOhm Raw", text: "NO2 Raw - History - kOhm"}
+            {nodeType: "gx_layer", layer: "Smart Emission - History NO2 kOhm Raw", text: "NO2 Raw - History - kOhm"} */
         ]
         },
         {
             text: 'Ozone (O3) - WMS', expanded: true, children: [
             {nodeType: "gx_layer", layer: "Smart Emission - Current O3 ug/m3", text: "O3 - Current - ug/m3"},
-            {nodeType: "gx_layer", layer: "Smart Emission - History O3 ug/m3", text: "O3 - History - ug/m3"},
-            {nodeType: "gx_layer", layer: "Smart Emission - Current O3 kOhm Raw", text: "O3 Raw - Current - kOhm"},
-            {nodeType: "gx_layer", layer: "Smart Emission - History O3 kOhm Raw", text: "O3 Raw - History - kOhm"}
+            {nodeType: "gx_layer", layer: "Smart Emission - History O3 ug/m3", text: "O3 - History - ug/m3"}
+            /* {nodeType: "gx_layer", layer: "Smart Emission - Current O3 kOhm Raw", text: "O3 Raw - Current - kOhm"},
+            {nodeType: "gx_layer", layer: "Smart Emission - History O3 kOhm Raw", text: "O3 Raw - History - kOhm"} */
         ]
         }
     ]

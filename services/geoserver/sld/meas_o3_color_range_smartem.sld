@@ -56,7 +56,7 @@
                                 </Fill>
                                 <Stroke>
                                      <CssParameter name="stroke">#EEEEEE</CssParameter>
-                                     <CssParameter name="stroke-width">0</CssParameter>
+                                     <CssParameter name="stroke-width">2</CssParameter>
                                  </Stroke>
                             </Mark>
                             <Size>30</Size>
@@ -70,7 +70,7 @@
                         <ogc:And>
                             <ogc:PropertyIsGreaterThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
-                                <ogc:Literal>8</ogc:Literal>
+                                <ogc:Literal>7.5</ogc:Literal>
                             </ogc:PropertyIsGreaterThan>
                             <ogc:PropertyIsLessThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
@@ -88,7 +88,7 @@
                                 </Fill>
                                 <Stroke>
                                      <CssParameter name="stroke">#EEEEEE</CssParameter>
-                                     <CssParameter name="stroke-width">0</CssParameter>
+                                     <CssParameter name="stroke-width">2</CssParameter>
                                  </Stroke>
                             </Mark>
                             <Size>30</Size>
@@ -102,7 +102,7 @@
                         <ogc:And>
                             <ogc:PropertyIsGreaterThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
-                                <ogc:Literal>15</ogc:Literal>
+                                <ogc:Literal>14.5</ogc:Literal>
                             </ogc:PropertyIsGreaterThan>
                             <ogc:PropertyIsLessThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
@@ -119,7 +119,7 @@
                                 </Fill>
                                 <Stroke>
                                      <CssParameter name="stroke">#EEEEEE</CssParameter>
-                                     <CssParameter name="stroke-width">0</CssParameter>
+                                     <CssParameter name="stroke-width">2</CssParameter>
                                  </Stroke>
                             </Mark>
                             <Size>30</Size>
@@ -133,7 +133,7 @@
                         <ogc:And>
                             <ogc:PropertyIsGreaterThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
-                                <ogc:Literal>23</ogc:Literal>
+                                <ogc:Literal>22.5</ogc:Literal>
                             </ogc:PropertyIsGreaterThan>
                             <ogc:PropertyIsLessThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
@@ -150,7 +150,7 @@
                                 </Fill>
                                 <Stroke>
                                      <CssParameter name="stroke">#EEEEEE</CssParameter>
-                                     <CssParameter name="stroke-width">0</CssParameter>
+                                     <CssParameter name="stroke-width">2</CssParameter>
                                  </Stroke>
                             </Mark>
                             <Size>30</Size>
@@ -164,7 +164,7 @@
                         <ogc:And>
                             <ogc:PropertyIsGreaterThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
-                                <ogc:Literal>30</ogc:Literal>
+                                <ogc:Literal>29.5</ogc:Literal>
                             </ogc:PropertyIsGreaterThan>
                             <ogc:PropertyIsLessThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
@@ -181,7 +181,7 @@
                                 </Fill>
                                 <Stroke>
                                      <CssParameter name="stroke">#EEEEEE</CssParameter>
-                                     <CssParameter name="stroke-width">0</CssParameter>
+                                     <CssParameter name="stroke-width">2</CssParameter>
                                  </Stroke>
                             </Mark>
                             <Size>30</Size>
@@ -195,7 +195,7 @@
                         <ogc:And>
                             <ogc:PropertyIsGreaterThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
-                                <ogc:Literal>35</ogc:Literal>
+                                <ogc:Literal>34.5</ogc:Literal>
                             </ogc:PropertyIsGreaterThan>
                             <ogc:PropertyIsLessThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
@@ -212,7 +212,7 @@
                                 </Fill>
                                 <Stroke>
                                      <CssParameter name="stroke">#EEEEEE</CssParameter>
-                                     <CssParameter name="stroke-width">0</CssParameter>
+                                     <CssParameter name="stroke-width">2</CssParameter>
                                  </Stroke>
                             </Mark>
                             <Size>30</Size>
@@ -226,7 +226,7 @@
                         <ogc:And>
                             <ogc:PropertyIsGreaterThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
-                                <ogc:Literal>40</ogc:Literal>
+                                <ogc:Literal>39.5</ogc:Literal>
                             </ogc:PropertyIsGreaterThan>
                             <ogc:PropertyIsLessThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
@@ -243,7 +243,7 @@
                                 </Fill>
                                 <Stroke>
                                      <CssParameter name="stroke">#EEEEEE</CssParameter>
-                                     <CssParameter name="stroke-width">0</CssParameter>
+                                     <CssParameter name="stroke-width">2</CssParameter>
                                  </Stroke>
                             </Mark>
                             <Size>30</Size>
@@ -257,7 +257,7 @@
                         <ogc:And>
                             <ogc:PropertyIsGreaterThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
-                                <ogc:Literal>52</ogc:Literal>
+                                <ogc:Literal>51.5</ogc:Literal>
                             </ogc:PropertyIsGreaterThan>
                             <ogc:PropertyIsLessThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
@@ -274,7 +274,7 @@
                                 </Fill>
                                 <Stroke>
                                     <CssParameter name="stroke">#EEEEEE</CssParameter>
-                                    <CssParameter name="stroke-width">0</CssParameter>
+                                    <CssParameter name="stroke-width">2</CssParameter>
                                 </Stroke>
                             </Mark>
                             <Size>30</Size>
@@ -288,7 +288,7 @@
                         <ogc:And>
                             <ogc:PropertyIsGreaterThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
-                                <ogc:Literal>64</ogc:Literal>
+                                <ogc:Literal>63.5</ogc:Literal>
                             </ogc:PropertyIsGreaterThan>
                             <ogc:PropertyIsLessThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
@@ -305,7 +305,7 @@
                                 </Fill>
                                 <Stroke>
                                      <CssParameter name="stroke">#EEEEEE</CssParameter>
-                                     <CssParameter name="stroke-width">0</CssParameter>
+                                     <CssParameter name="stroke-width">2</CssParameter>
                                  </Stroke>
                             </Mark>
                             <Size>30</Size>
@@ -319,7 +319,7 @@
                         <ogc:And>
                             <ogc:PropertyIsGreaterThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
-                                <ogc:Literal>76</ogc:Literal>
+                                <ogc:Literal>75.5</ogc:Literal>
                             </ogc:PropertyIsGreaterThan>
                             <ogc:PropertyIsLessThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
@@ -336,7 +336,7 @@
                                 </Fill>
                                 <Stroke>
                                      <CssParameter name="stroke">#EEEEEE</CssParameter>
-                                     <CssParameter name="stroke-width">0</CssParameter>
+                                     <CssParameter name="stroke-width">2</CssParameter>
                                  </Stroke>
                             </Mark>
                             <Size>30</Size>
@@ -350,7 +350,7 @@
                         <ogc:And>
                             <ogc:PropertyIsGreaterThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
-                                <ogc:Literal>88</ogc:Literal>
+                                <ogc:Literal>87.5</ogc:Literal>
                             </ogc:PropertyIsGreaterThan>
                             <ogc:PropertyIsLessThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
@@ -367,7 +367,7 @@
                                 </Fill>
                                 <Stroke>
                                      <CssParameter name="stroke">#EEEEEE</CssParameter>
-                                     <CssParameter name="stroke-width">0</CssParameter>
+                                     <CssParameter name="stroke-width">2</CssParameter>
                                  </Stroke>
                             </Mark>
                             <Size>30</Size>
@@ -381,7 +381,7 @@
                         <ogc:And>
                             <ogc:PropertyIsGreaterThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
-                                <ogc:Literal>100</ogc:Literal>
+                                <ogc:Literal>99.5</ogc:Literal>
                             </ogc:PropertyIsGreaterThan>
                             <ogc:PropertyIsLessThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
@@ -398,7 +398,7 @@
                                 </Fill>
                                 <Stroke>
                                      <CssParameter name="stroke">#EEEEEE</CssParameter>
-                                     <CssParameter name="stroke-width">0</CssParameter>
+                                     <CssParameter name="stroke-width">2</CssParameter>
                                  </Stroke>
                             </Mark>
                             <Size>30</Size>
@@ -412,7 +412,7 @@
                         <ogc:And>
                             <ogc:PropertyIsGreaterThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
-                                <ogc:Literal>128</ogc:Literal>
+                                <ogc:Literal>127.5</ogc:Literal>
                             </ogc:PropertyIsGreaterThan>
                             <ogc:PropertyIsLessThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
@@ -429,7 +429,7 @@
                                 </Fill>
                                 <Stroke>
                                      <CssParameter name="stroke">#EEEEEE</CssParameter>
-                                     <CssParameter name="stroke-width">0</CssParameter>
+                                     <CssParameter name="stroke-width">2</CssParameter>
                                  </Stroke>
                             </Mark>
                             <Size>30</Size>
@@ -443,7 +443,7 @@
                         <ogc:And>
                             <ogc:PropertyIsGreaterThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
-                                <ogc:Literal>110</ogc:Literal>
+                                <ogc:Literal>109.5</ogc:Literal>
                             </ogc:PropertyIsGreaterThan>
                             <ogc:PropertyIsLessThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
@@ -460,7 +460,7 @@
                                 </Fill>
                                 <Stroke>
                                      <CssParameter name="stroke">#EEEEEE</CssParameter>
-                                     <CssParameter name="stroke-width">0</CssParameter>
+                                     <CssParameter name="stroke-width">2</CssParameter>
                                  </Stroke>
                             </Mark>
                             <Size>30</Size>
@@ -474,7 +474,7 @@
                         <ogc:And>
                             <ogc:PropertyIsGreaterThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
-                                <ogc:Literal>156</ogc:Literal>
+                                <ogc:Literal>155.5</ogc:Literal>
                             </ogc:PropertyIsGreaterThan>
                             <ogc:PropertyIsLessThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
@@ -491,7 +491,7 @@
                                 </Fill>
                                 <Stroke>
                                      <CssParameter name="stroke">#EEEEEE</CssParameter>
-                                     <CssParameter name="stroke-width">0</CssParameter>
+                                     <CssParameter name="stroke-width">2</CssParameter>
                                  </Stroke>
                             </Mark>
                             <Size>30</Size>
@@ -505,7 +505,7 @@
                         <ogc:And>
                             <ogc:PropertyIsGreaterThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
-                                <ogc:Literal>180</ogc:Literal>
+                                <ogc:Literal>179.5</ogc:Literal>
                             </ogc:PropertyIsGreaterThan>
                             <ogc:PropertyIsLessThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
@@ -522,7 +522,7 @@
                                 </Fill>
                                 <Stroke>
                                      <CssParameter name="stroke">#EEEEEE</CssParameter>
-                                     <CssParameter name="stroke-width">0</CssParameter>
+                                     <CssParameter name="stroke-width">2</CssParameter>
                                  </Stroke>
                             </Mark>
                             <Size>30</Size>
@@ -536,7 +536,7 @@
                         <ogc:And>
                             <ogc:PropertyIsGreaterThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
-                                <ogc:Literal>200</ogc:Literal>
+                                <ogc:Literal>199.5</ogc:Literal>
                             </ogc:PropertyIsGreaterThan>
                             <ogc:PropertyIsLessThan>
                                 <ogc:PropertyName>value</ogc:PropertyName>
@@ -553,7 +553,7 @@
                                 </Fill>
                                 <Stroke>
                                      <CssParameter name="stroke">#EEEEEE</CssParameter>
-                                     <CssParameter name="stroke-width">0</CssParameter>
+                                     <CssParameter name="stroke-width">2</CssParameter>
                                  </Stroke>
                             </Mark>
                             <Size>30</Size>
@@ -561,12 +561,12 @@
                     </PointSymbolizer>
                 </Rule>
                 <Rule>
-                    <Name>240 - MAX ug/m3</Name>
+                    <Name>401 - MAX ug/m3</Name>
                     <Title>  &gt; 240 Zeer slecht</Title>
                     <ogc:Filter>
                         <ogc:PropertyIsGreaterThan>
                             <ogc:PropertyName>value</ogc:PropertyName>
-                            <ogc:Literal>240</ogc:Literal>
+                            <ogc:Literal>239.5</ogc:Literal>
                         </ogc:PropertyIsGreaterThan>
                     </ogc:Filter>
                     <PointSymbolizer>
@@ -578,7 +578,7 @@
                                 </Fill>
                                 <Stroke>
                                      <CssParameter name="stroke">#EEEEEE</CssParameter>
-                                     <CssParameter name="stroke-width">0</CssParameter>
+                                     <CssParameter name="stroke-width">2</CssParameter>
                                  </Stroke>
                             </Mark>
                             <Size>30</Size>
@@ -619,7 +619,7 @@
                         </LabelPlacement>
 
                         <Fill>
-                            <CssParameter name="fill">#FFCCFF</CssParameter>
+                            <CssParameter name="fill">#666666</CssParameter>
                         </Fill>
 
                     </TextSymbolizer>
