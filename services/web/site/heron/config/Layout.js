@@ -341,20 +341,19 @@ Heron.layout = {
                                 "RIVM - History O3",
                                 "RIVM - History SO2",
                                 "Weather Observations",
-                                "Smart Emission - Timeseries Temperature",
-                                "Smart Emission - Timeseries Barometer",
-                                "Smart Emission - Timeseries Humidity",
-                                "Smart Emission - Timeseries Noise Level Average",
-                                "Smart Emission - Timeseries CO2",
-                                "Smart Emission - Timeseries CO",
-                                "Smart Emission - Timeseries CO Raw",
-                                "Smart Emission - Timeseries NO2",
-                                "Smart Emission - Timeseries NO2 Raw",
-                                "Smart Emission - Timeseries O3",
-                                "Smart Emission - Timeseries O3 Raw",
-                                "Smart Emission - Timeseries PM10",
-                                "Smart Emission - Timeseries PM25"
-
+                                "Smart Emission - History Temperature",
+                                "Smart Emission - History Barometer",
+                                "Smart Emission - History Humidity",
+                                "Smart Emission - History Noise Level Average",
+                                "Smart Emission - History CO2",
+                                "Smart Emission - History CO",
+                                "Smart Emission - History CO kOhm Raw",
+                                "Smart Emission - History NO2 ug/m3",
+                                "Smart Emission - History NO2 kOhm Raw",
+                                "Smart Emission - History O3 ug/m3",
+                                "Smart Emission - History O3 kOhm Raw",
+                                "Smart Emission - History PM10 ug/m3",
+                                "Smart Emission - History PM25 ug/m3"
                             ]
                         }
                     ]

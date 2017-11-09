@@ -486,7 +486,7 @@ Heron.options.map.layers = [
      * Smart Emission: Timeseries CO2
      */
     new OpenLayers.Layer.WMS(
-        "Smart Emission - Timeseries CO2",
+        "Smart Emission - History CO2",
         Heron.scratch.urls.SMARTEM_OWS,
         {layers: "smartem:timeseries_co2", format: "image/png", transparent: true},
         {
@@ -530,7 +530,7 @@ Heron.options.map.layers = [
      * Smart Emission: Timeseries CO
      */
     new OpenLayers.Layer.WMS(
-        "Smart Emission - Timeseries CO",
+        "Smart Emission - History CO",
         Heron.scratch.urls.SMARTEM_OWS,
         {layers: "smartem:timeseries_co", format: "image/png", transparent: true},
         {
@@ -574,7 +574,7 @@ Heron.options.map.layers = [
      * Smart Emission: Timeseries CO Raw
      */
     new OpenLayers.Layer.WMS(
-        "Smart Emission - Timeseries CO Raw",
+        "Smart Emission - History CO Raw",
         Heron.scratch.urls.SMARTEM_OWS,
         {layers: "smartem:timeseries_co_raw", format: "image/png", transparent: true},
         {
@@ -640,7 +640,7 @@ Heron.options.map.layers = [
      * Smart Emission: Current NO2 Raw
      */
     new OpenLayers.Layer.WMS(
-        "Smart Emission - Current NO2 ug/m3 Raw",
+        "Smart Emission - Current NO2 kOhm Raw",
         Heron.scratch.urls.SMARTEM_OWS,
         {layers: "smartem:last_measurements_no2_raw", format: "image/png", transparent: true},
         {
@@ -662,7 +662,7 @@ Heron.options.map.layers = [
      * Smart Emission: Timeseries NO2 Raw
      */
     new OpenLayers.Layer.WMS(
-        "Smart Emission - History NO2 ug/m3 Raw",
+        "Smart Emission - History NO2 kOhm Raw",
         Heron.scratch.urls.SMARTEM_OWS,
         {layers: "smartem:timeseries_no2_raw", format: "image/png", transparent: true},
         {
@@ -728,7 +728,7 @@ Heron.options.map.layers = [
      * Smart Emission: Current O3 Raw
      */
     new OpenLayers.Layer.WMS(
-        "Smart Emission - Current O3 ug/m3 Raw",
+        "Smart Emission - Current O3 kOhm Raw",
         Heron.scratch.urls.SMARTEM_OWS,
         {layers: "smartem:last_measurements_o3_raw", format: "image/png", transparent: true},
         {
@@ -750,7 +750,7 @@ Heron.options.map.layers = [
      * Smart Emission: Timeseries O3 Raw
      */
     new OpenLayers.Layer.WMS(
-        "Smart Emission - History O3 ug/m3 Raw",
+        "Smart Emission - History O3 kOhm Raw",
         Heron.scratch.urls.SMARTEM_OWS,
         {layers: "smartem:timeseries_o3_raw", format: "image/png", transparent: true},
         {
@@ -890,7 +890,7 @@ Heron.options.map.layers = [
      * Smart Emission: Meteo: Timeseries Temperature
      */
     new OpenLayers.Layer.WMS(
-        "Smart Emission - Timeseries Temperature",
+        "Smart Emission - History Temperature",
         Heron.scratch.urls.SMARTEM_OWS,
         {layers: "smartem:timeseries_temperature", format: "image/png", transparent: true},
         {
@@ -934,7 +934,7 @@ Heron.options.map.layers = [
      * Smart Emission: Meteo: Timeseries Barometer
      */
     new OpenLayers.Layer.WMS(
-        "Smart Emission - Timeseries Barometer",
+        "Smart Emission - History Barometer",
         Heron.scratch.urls.SMARTEM_OWS,
         {layers: "smartem:timeseries_barometer", format: "image/png", transparent: true},
         {
@@ -978,7 +978,7 @@ Heron.options.map.layers = [
      * Smart Emission: Meteo: Timeseries Humidity
      */
     new OpenLayers.Layer.WMS(
-        "Smart Emission - Timeseries Humidity",
+        "Smart Emission - History Humidity",
         Heron.scratch.urls.SMARTEM_OWS,
         {layers: "smartem:timeseries_humidity", format: "image/png", transparent: true},
         {
@@ -1022,7 +1022,7 @@ Heron.options.map.layers = [
      * Smart Emission: Audio: Timeseries Audio/Noise Level
      */
     new OpenLayers.Layer.WMS(
-        "Smart Emission - Timeseries Noise Level Average",
+        "Smart Emission - History Noise Level Average",
         Heron.scratch.urls.SMARTEM_OWS,
         {layers: "smartem:timeseries_noise_level_avg", format: "image/png", transparent: true},
         {
@@ -1768,31 +1768,31 @@ Heron.options.layertree.tree = [
         {
             text: 'Carbon Monoxide (CO)', expanded: true, children: [
             {nodeType: "gx_layer", layer: "Smart Emission - Current CO", text: "CO - Current - ug/m3"},
-            {nodeType: "gx_layer", layer: "Smart Emission - Timeseries CO", text: "CO - History - ug/m3"},
+            {nodeType: "gx_layer", layer: "Smart Emission - History CO", text: "CO - History - ug/m3"},
             {nodeType: "gx_layer", layer: "Smart Emission - Current CO Raw", text: "CO Raw - Current - kOhm"},
-            {nodeType: "gx_layer", layer: "Smart Emission - Timeseries CO Raw", text: "CO Raw - History - kOhm"}
+            {nodeType: "gx_layer", layer: "Smart Emission - History CO Raw", text: "CO Raw - History - kOhm"}
         ]
         },
         {
             text: 'Carbon Dioxide (CO2)', expanded: true, children: [
             {nodeType: "gx_layer", layer: "Smart Emission - Current CO2", text: "CO2 - Current - ppm"},
-            {nodeType: "gx_layer", layer: "Smart Emission - Timeseries CO2", text: "CO2 - History - ppm"}
+            {nodeType: "gx_layer", layer: "Smart Emission - History CO2", text: "CO2 - History - ppm"}
         ]
         },
         {
             text: 'Nitrogen Dioxide (NO2) - WMS', expanded: true, children: [
             {nodeType: "gx_layer", layer: "Smart Emission - Current NO2 ug/m3", text: "NO2 - Current - ug/m3"},
             {nodeType: "gx_layer", layer: "Smart Emission - History NO2 ug/m3", text: "NO2 - History - ug/m3"},
-            {nodeType: "gx_layer", layer: "Smart Emission - Current NO2 ug/m3 Raw", text: "NO2 Raw - Current - kOhm"},
-            {nodeType: "gx_layer", layer: "Smart Emission - History NO2 ug/m3 Raw", text: "NO2 Raw - History - kOhm"}
+            {nodeType: "gx_layer", layer: "Smart Emission - Current NO2 kOhm Raw", text: "NO2 Raw - Current - kOhm"},
+            {nodeType: "gx_layer", layer: "Smart Emission - History NO2 kOhm Raw", text: "NO2 Raw - History - kOhm"}
         ]
         },
         {
             text: 'Ozone (O3) - WMS', expanded: true, children: [
             {nodeType: "gx_layer", layer: "Smart Emission - Current O3 ug/m3", text: "O3 - Current - ug/m3"},
             {nodeType: "gx_layer", layer: "Smart Emission - History O3 ug/m3", text: "O3 - History - ug/m3"},
-            {nodeType: "gx_layer", layer: "Smart Emission - Current O3 ug/m3 Raw", text: "O3 Raw - Current - kOhm"},
-            {nodeType: "gx_layer", layer: "Smart Emission - History O3 ug/m3 Raw", text: "O3 Raw - History - kOhm"}
+            {nodeType: "gx_layer", layer: "Smart Emission - Current O3 kOhm Raw", text: "O3 Raw - Current - kOhm"},
+            {nodeType: "gx_layer", layer: "Smart Emission - History O3 kOhm Raw", text: "O3 Raw - History - kOhm"}
         ]
         }
     ]
@@ -1814,7 +1814,7 @@ Heron.options.layertree.tree = [
         },
         {
             nodeType: "gx_layer",
-            layer: "Smart Emission - Timeseries Noise Level Average",
+            layer: "Smart Emission - History Noise Level Average",
             text: "Noise Level Average - History"
         }
     ]
@@ -1822,11 +1822,11 @@ Heron.options.layertree.tree = [
     {
         text: 'Smart Emission - Meteo', expanded: true, children: [
         {nodeType: "gx_layer", layer: "Smart Emission - Current Temperature", text: "Temperature - Current"},
-        {nodeType: "gx_layer", layer: "Smart Emission - Timeseries Temperature", text: "Temperature - History"},
+        {nodeType: "gx_layer", layer: "Smart Emission - History Temperature", text: "Temperature - History"},
         {nodeType: "gx_layer", layer: "Smart Emission - Current Barometer", text: "Air Pressure - Current"},
-        {nodeType: "gx_layer", layer: "Smart Emission - Timeseries Barometer", text: "Air Pressure - History"},
+        {nodeType: "gx_layer", layer: "Smart Emission - History Barometer", text: "Air Pressure - History"},
         {nodeType: "gx_layer", layer: "Smart Emission - Current Humidity", text: "Humidity - Current"},
-        {nodeType: "gx_layer", layer: "Smart Emission - Timeseries Humidity", text: "Humidity - History"}
+        {nodeType: "gx_layer", layer: "Smart Emission - History Humidity", text: "Humidity - History"}
     ]
     },
     {
