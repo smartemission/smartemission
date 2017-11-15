@@ -46,7 +46,7 @@
 
                             <ogc:Function name="numberFormat">
                                 <ogc:Literal>##</ogc:Literal>
-                                <ogc:PropertyName>device_id</ogc:PropertyName>
+                                <ogc:PropertyName>device_subid</ogc:PropertyName>
                             </ogc:Function>
                         </Label>
 
@@ -108,7 +108,7 @@
 
                             <ogc:Function name="numberFormat">
                                 <ogc:Literal>##</ogc:Literal>
-                                <ogc:PropertyName>device_id</ogc:PropertyName>
+                                <ogc:PropertyName>device_subid</ogc:PropertyName>
                             </ogc:Function>
                         </Label>
 
