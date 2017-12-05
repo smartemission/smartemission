@@ -218,7 +218,7 @@ class RefineFilter(Filter):
                         record['value_min'] = value
                         record['value_max'] = value
 
-                except Exception, e:
+                except Exception as e:
                     log.error('Exception refining %s gid_raw=%d dev=%d day-hour=%d-%d, err=%s' % (
                         sensor_name, gid_raw, device_id, day, hour, str(e)))
                     traceback.print_exc(file=sys.stdout)

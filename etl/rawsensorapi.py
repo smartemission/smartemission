@@ -334,7 +334,23 @@ class RawSensorLastInput(RawSensorAPIInput):
 
 class RawSensorTimeseriesInput(RawSensorAPIInput):
     """
-    Raw Sensor REST API (CityGIS) to fetch (harvest) all timeseries for all devices.
+    Raw Sensor REST API (CityGIS and Intemo servers) TimeSeries (History) fetcher/formatter.
+
+    Fetching all timeseries data via the Raw Sensor API (RSA) from CityGIS server and putting
+    these unaltered into Postgres DB. This is a continuus process.
+    Strategy is to use checkpointing: keep track of each sensor/timeseries how far we are
+    in harvesting.
+
+    Algoritm:
+    - fetch all (sensor) devices from RSA
+    - for each device:
+    - if device is not in progress-table insert and set day,hour to 0
+    - if in progress-table fetch entry (day, hour)
+    - get timeseries (hours) available for that day
+    - fetch and store each, starting with the last hour perviously stored
+    - ignore timeseries for current day/hour, as the hour will not be yet filled (and Refiner may else already process)
+    - stored entry: device_id, day, hour, last_flag, json blob
+    - finish: when all done or when max_proc_time_secs passed
     """
 
     @Config(ptype=int, default=None, required=True)
@@ -358,26 +374,6 @@ class RawSensorTimeseriesInput(RawSensorAPIInput):
         Default: None
         """
         pass
-
-    """
-    Raw Sensor REST API (CityGIS) TimeSeries (History) fetcher/formatter.
-    
-    Fetching all timeseries data via the Raw Sensor API (RSA) from CityGIS server and putting 
-    these unaltered into Postgres DB. This is a continuus process.
-    Strategy is to use checkpointing: keep track of each sensor/timeseries how far we are
-    in harvesting.
-    
-    Algoritm:
-    - fetch all (sensor) devices from RSA
-    - for each device:
-    - if device is not in progress-table insert and set day,hour to 0
-    - if in progress-table fetch entry (day, hour)
-    - get timeseries (hours) available for that day
-    - fetch and store each, starting with the last hour perviously stored
-    - ignore timeseries for current day/hour, as the hour will not be yet filled (and Refiner may else already process)
-    - stored entry: device_id, day, hour, last_flag, json blob
-    - finish: when all done or when max_proc_time_secs passed 
-    """
 
     def __init__(self, configdict, section, produces=FORMAT.record_array):
         RawSensorAPIInput.__init__(self, configdict, section, produces)

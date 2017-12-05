@@ -7,7 +7,7 @@ STETL_ARGS="stetl -c harvester.cfg -a options/`hostname`.args"
 WORK_DIR="`pwd`"
 PG_HOST=postgis
 IMAGE=smartemission/stetl:latest
-NAME="stetl_harvest"
+NAME="whale_harvest"
 
 # Stop and remove possibly old containers
 sudo docker stop ${NAME} > /dev/null 2>&1
