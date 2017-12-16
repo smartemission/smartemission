@@ -18,6 +18,9 @@ INFLUXDB_HOST="influxdb"
 GRAFANA_HOST="grafana"
 STA_GOST_HOST="gost"
 
+# In order to have proxy access node_exporter metrics for Prometheus
+PARENT_HOST=`ip route show | grep docker0 | awk '{print \$9}'`
+
 # Somehow needed for mounts
 sudo chmod 777 ${LOG} ${BACKUP} ${GIT}/etl/calibration
 
@@ -31,4 +34,4 @@ sudo docker stop ${NAME} > /dev/null 2>&1
 sudo docker rm ${NAME} > /dev/null 2>&1
 
 # Finally run
-sudo docker run -d --restart=always --name ${NAME} ${LINK_MAP} ${PORT_MAP} ${VOL_MAP} -t -i ${IMAGE}
+sudo docker run -d --restart=always --add-host=parent-host:${PARENT_HOST} --name ${NAME} ${LINK_MAP} ${PORT_MAP} ${VOL_MAP} -t -i ${IMAGE}
