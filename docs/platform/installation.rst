@@ -343,6 +343,100 @@ See https://github.com/Geonovum/smartemission/tree/master/services/grafana.
 
 To be supplied further.
 
+prometheus - Prometheus
+-----------------------
+
+From https://prometheus.io
+
+> Prometheus is an open-source systems monitoring and alerting toolkit originally built at SoundCloud.
+> Since its inception in 2012, many companies and organizations have adopted Prometheus, and the project
+> has a very active developer and user community. It is now a standalone open source project and maintained
+> independently of any company. To emphasize this, and to clarify the project's governance structure,
+> Prometheus joined the Cloud Native Computing Foundation in 2016 as the second hosted project, after Kubernetes.
+
+Documentation: https://prometheus.io/docs/
+
+See https://github.com/Geonovum/smartemission/tree/master/services/prometheus.
+
+Prometheus
+~~~~~~~~~~
+
+Using Prometheus 2.0+ via Docker.
+
+Configuration in  `run.sh` :
+
+.. literalinclude:: ../../services/prometheus/run.sh
+    :language: bash
+
+Configuration in  `prometheus.yml` :
+
+.. literalinclude:: ../../services/prometheus/config/prometheus.yml
+    :language: guess
+
+Secure and pass via Apache proxy: ::
+
+    <Location /adm/prometheus>
+        ProxyPreserveHost On
+        ProxyPass http://prometheus:9090/adm/prometheus
+        ProxyPassReverse http://prometheus:9090/adm/prometheus
+    </Location>
+
+Node Exporter
+~~~~~~~~~~~~~
+
+Node Exporter will be installed on the host to gather Linux/Ubuntu metrics.
+
+Steps to install in `/usr/bin/node_exporter`: ::
+
+	mkdir -p /var/smartem/prometheus/archive
+	cd /var/smartem/prometheus/archive
+	wget https://github.com/prometheus/node_exporter/releases/download/v0.15.2/node_exporter-0.15.2.linux-amd64.tar.gz
+	cd /var/smartem/prometheus
+	tar -xvzf archive/node_exporter-0.15.2.linux-amd64.tar.gz
+	ln -s /var/smartem/prometheus/node_exporter-0.15.2.linux-amd64/node_exporter /usr/bin
+
+Run as service via `/etc/init/node_exporter.conf` and listen on IP-address `docker0` (so metrics not exposed to world): ::
+
+    # Run node_exporter  - place in /etc/init/node_exporter.conf
+
+    start on startup
+
+    script
+      /usr/bin/node_exporter --web.listen-address="`ip route show | grep docker0 | awk '{print \$9}'`:9100"
+    end script
+
+Start/stop etc ::
+
+	service node_exporter start
+	service node_exporter status
+
+Challenge is to access Node Exporter on host from within Prometheus Docker container.
+See http://phillbarber.blogspot.nl/2015/02/connect-docker-to-service-on-parent-host.html
+In `run.sh` for Apache2:  ::
+
+    PARENT_HOST=`ip route show | grep docker0 | awk '{print \$9}'`
+    $ docker run -d --restart=always --add-host=parent-host:${PARENT_HOST} .... etc
+
+Extend Apache2 config:  ::
+
+	<Location /prom-node-metrics>
+		ProxyPass http://parent-host:9100/metrics
+		ProxyPassReverse http://parent-host:9100/metrics
+	</Location>
+
+Add node config in `prometheus.yml`: ::
+
+	- job_name: 'node'
+    scrape_interval: 15s
+    honor_labels: true
+    metrics_path: '/prom-node-metrics'
+    scheme: http
+    static_configs:
+      - targets: ['test.smartemission.nl', 'data.smartemission.nl']
+
+In Grafana import Dashboard `1860`: https://grafana.com/dashboards/1860 to view Node Exporter stats.
+
+
 Local Install
 =============
 

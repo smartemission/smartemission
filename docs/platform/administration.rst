@@ -11,6 +11,7 @@ This chapter describes the daily operation and maintenance aspects for the Smart
 * managing the ETL
 * where to find logfiles
 * troubleshooting
+* monitoring
 
 Backup
 ======
@@ -254,6 +255,46 @@ Web Services
 ============
 
 TBS
+
+Monitoring
+==========
+
+Services Uptime
+---------------
+
+All SE API services (WMS, WFS, SOS, STA etc)
+and external APIs (Whale Server, Intemo Harvester) are monitored via UptimeRobot.com.
+
+Systems Monitoring
+------------------
+
+All systems (Ubuntu OS, Docker etc) are monitored using `Prometheus <https://prometheus.io>`_
+with `Exporters <https://prometheus.io/docs/instrumenting/exporters/>`_
+and `Grafana <https://grafana.com/>`_.
+
+Prometheus collects and stores data as timeseries by pulling metrics from Exporters. An Exporter collects local
+metric data and exposes these via a uniform HTTP API through which Prometheus pulls.
+Each Exporter is resource-specific: e.g. a `Node Exporter <https://github.com/prometheus/node_exporter>`_
+collects metrics from a Linux OS. Google `cAdvisor <https://github.com/google/cadvisor>`_  will be used
+to collect and expose Docker metrics.
+
+Grafana uses Prometheus as a Data source, providing various standard Dashboards for visualization. Also Alerting
+can be configured via Prometheus, using the `AlertManager <https://prometheus.io/docs/alerting/alertmanager/>`_
+to send to various alerting destinations (email, SMS, webhook etc).
+
+A complete setup for the above can be found at https://github.com/vegasbrianc/prometheus.
+
+Links
+~~~~~
+
+Tutorials
+
+* https://www.digitalocean.com/community/tutorials/how-to-install-prometheus-using-docker-on-ubuntu-14-04
+* https://www.digitalocean.com/community/tutorials/how-to-use-prometheus-to-monitor-your-ubuntu-14-04-server
+
+* http://phillbarber.blogspot.nl/2015/02/connect-docker-to-service-on-parent-host.html
+* https://grafana.com/dashboards/1860
+* https://github.com/google/cadvisor
 
 Troubleshooting
 ===============

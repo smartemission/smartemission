@@ -15,13 +15,14 @@ CONFIG_DIR="/var/smartem/config/grafana"
 NAME="grafana"
 IMAGE="grafana/grafana:4.1.1"
 INFLUX_HOST=influxdb
+PROMETHEUS_HOST=prometheus
 
 # Volume maps for initial and full run
 VOL_MAP_PART=" "
 VOL_MAP_FULL="-v ${DATA_DIR}:/var/lib/grafana -v ${LOG_DIR}:/var/log/grafana -v ${CONFIG_DIR}:/etc/grafana"
 
 PORT_MAP="-p 3000:3000"
-LINK_MAP="--link ${INFLUX_HOST}:${INFLUX_HOST}"
+LINK_MAP="--link ${INFLUX_HOST}:${INFLUX_HOST} --link ${PROMETHEUS_HOST}:${PROMETHEUS_HOST}"
 
 # Get Admin Pwd from local options file
 source ${SCRIPT_DIR}/../../etl/options/`hostname`.args
