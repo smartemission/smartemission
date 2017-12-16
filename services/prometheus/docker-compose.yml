@@ -1,0 +1,42 @@
+# Runs prometheus  stack - example - not used in SE - maybe later
+version: "3"
+
+volumes:
+  prometheus_data:
+  grafana_data:
+  
+services:
+
+  # Example: https://github.com/vegasbrianc/prometheus/blob/version-2/docker-compose.yml
+  prometheus:
+    image: prom/prometheus:master
+
+    volumes:
+      - ./config/:/etc/prometheus/
+      - prometheus_data:/prometheus
+
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--web.external-url=http://data.smartemission.nl/prometheus'
+
+    ports:
+      - 9090:9090
+
+    expose:
+      - 9090
+
+    restart: always
+
+  grafana:
+    image: grafana/grafana
+    depends_on:
+      - prometheus
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana_data:/var/lib/grafana
+    env_file:
+      - ../grafana/grafana.env

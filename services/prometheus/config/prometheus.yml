@@ -1,0 +1,22 @@
+# A scrape configuration scraping a Node Exporter and the Prometheus server
+# itself.
+# See complete example:
+# https://github.com/prometheus/prometheus/blob/master/config/testdata/conf.good.yml
+
+scrape_configs:
+  # Scrape Prometheus itself every 5 seconds.
+  - job_name: 'prometheus'
+    scrape_interval: 5s
+    honor_labels: true
+    metrics_path: '/prometheus/metrics'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Scrape the Node Exporter every 5 seconds.
+  - job_name: 'node'
+    scrape_interval: 15s
+    honor_labels: true
+    metrics_path: '/prom-node-metrics'
+    scheme: http
+    static_configs:
+      - targets: ['data.smartemission.nl', 'test.smartemission.nl']
