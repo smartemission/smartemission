@@ -402,6 +402,10 @@ Secure and pass via Apache proxy: ::
 In Grafana import Dashboard `1860`: https://grafana.com/dashboards/1860 to view Node Exporter stats.
 and `179`: https://grafana.com/dashboards/179 to view Docker stats.
 
+Alternative: https://github.com/stefanprodan/dockprom
+
+NB to add Prometheus Datasource, use: http://prometheus:9090/adm/prometheus.
+
 cAdvisor
 ~~~~~~~~
 

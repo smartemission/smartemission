@@ -193,6 +193,14 @@ http://sta.smartemission.nl:8080/OGCSensorThings/v1.0.
 Monitoring
 ----------
 
+The `challenge <https://dzone.com/refcardz/intro-to-docker-monitoring>`_ is to monitor services contained in Docker.
+
 Monitoring is based around `Prometheus <https://prometheus.io>`_  and a dedicated (for monitoring) Grafana
 instance. A complete monitoring stack is deployed via `docker-compose` based on the
 `Docker Monitoring Project <https://github.com/vegasbrianc/prometheus/tree/version-2>`_.
+In the future `this approach by Stefan Prodan <https://github.com/stefanprodan/dockprom>`_ is worthwhile.
+
+.. figure:: _static/screenshots/grafana-prometheus2.jpg
+   :align: center
+
+   *Figure 5 - Docker Monitoring in SE*

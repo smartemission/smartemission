@@ -251,10 +251,11 @@ All can be restored as follows, assuming we have the data in some backup. ::
     cd /opt/geonovum/smartem/git/etl
     tar xzvf calibration_images.tar.gz
 
-Web Services
-============
+Admin UI
+========
 
-TBS
+There is a simple admin UI for several tasks and inpections. The URL can be found
+via the SE Platform website (<data|test>.smartemission.nl).
 
 Monitoring
 ==========
@@ -263,7 +264,8 @@ Services Uptime
 ---------------
 
 All SE API services (WMS, WFS, SOS, STA etc)
-and external APIs (Whale Server, Intemo Harvester) are monitored via UptimeRobot.com.
+and external APIs (Whale Server, Intemo Harvester) are monitored via UptimeRobot.com. Notification of downtime os
+via email or SMS.
 
 Systems Monitoring
 ------------------
@@ -282,7 +284,13 @@ Grafana uses Prometheus as a Data source, providing various standard Dashboards 
 can be configured via Prometheus, using the `AlertManager <https://prometheus.io/docs/alerting/alertmanager/>`_
 to send to various alerting destinations (email, SMS, webhook etc).
 
-A complete setup for the above can be found at https://github.com/vegasbrianc/prometheus.
+A complete setup for the above can be found at https://github.com/vegasbrianc/prometheus. This is used as a base for
+SE monitoring. Grafana monitoring Dashboards can be accessed via the SE Admin UI.
+
+.. figure:: _static/screenshots/grafana-prometheus2.jpg
+   :align: center
+
+   *Figure  - Docker Monitoring in SE*
 
 Links
 ~~~~~
@@ -292,10 +300,12 @@ Tutorials
 * https://www.digitalocean.com/community/tutorials/how-to-install-prometheus-using-docker-on-ubuntu-14-04
 * https://www.digitalocean.com/community/tutorials/how-to-use-prometheus-to-monitor-your-ubuntu-14-04-server
 
+Specifics
+
 * http://phillbarber.blogspot.nl/2015/02/connect-docker-to-service-on-parent-host.html
 * https://grafana.com/dashboards/1860
 * https://github.com/google/cadvisor
-
+*
 Troubleshooting
 ===============
 

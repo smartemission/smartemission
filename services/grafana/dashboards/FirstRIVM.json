@@ -1,4 +1,34 @@
 {
+  "__inputs": [
+    {
+      "name": "DS_SMARTEMISSION-INFLUX",
+      "label": "SmartEmission-Influx",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "influxdb",
+      "pluginName": "InfluxDB"
+    }
+  ],
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "4.1.1"
+    },
+    {
+      "type": "panel",
+      "id": "graph",
+      "name": "Graph",
+      "version": ""
+    },
+    {
+      "type": "datasource",
+      "id": "influxdb",
+      "name": "InfluxDB",
+      "version": "1.0.0"
+    }
+  ],
   "annotations": {
     "list": []
   },
@@ -6,7 +36,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "hideControls": false,
-  "id": 1,
+  "id": null,
   "links": [
     {
       "icon": "external link",
@@ -36,7 +66,7 @@
             "rivm {station: nijmegen_graafseweg}": "#6ED0E0"
           },
           "bars": false,
-          "datasource": "SmartEmission-Influx",
+          "datasource": "${DS_SMARTEMISSION-INFLUX}",
           "editable": true,
           "error": false,
           "fill": 0,
@@ -218,7 +248,7 @@
             "rivm {station: nijmegen_graafseweg}": "#6ED0E0"
           },
           "bars": false,
-          "datasource": "SmartEmission-Influx",
+          "datasource": "${DS_SMARTEMISSION-INFLUX}",
           "editable": true,
           "error": false,
           "fill": 0,
@@ -400,7 +430,7 @@
             "joserefined {station: 45}": "#F2C96D"
           },
           "bars": false,
-          "datasource": "SmartEmission-Influx",
+          "datasource": "${DS_SMARTEMISSION-INFLUX}",
           "editable": true,
           "error": false,
           "fill": 0,
@@ -613,5 +643,5 @@
   },
   "timezone": "browser",
   "title": "FirstRIVM",
-  "version": 129
+  "version": 131
 }

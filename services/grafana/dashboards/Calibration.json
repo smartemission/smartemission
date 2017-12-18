@@ -1,4 +1,34 @@
 {
+  "__inputs": [
+    {
+      "name": "DS_SMARTEMISSION-INFLUX",
+      "label": "SmartEmission-Influx",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "influxdb",
+      "pluginName": "InfluxDB"
+    }
+  ],
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "4.1.1"
+    },
+    {
+      "type": "panel",
+      "id": "graph",
+      "name": "Graph",
+      "version": ""
+    },
+    {
+      "type": "datasource",
+      "id": "influxdb",
+      "name": "InfluxDB",
+      "version": "1.0.0"
+    }
+  ],
   "annotations": {
     "list": []
   },
@@ -6,7 +36,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "hideControls": false,
-  "id": 3,
+  "id": null,
   "links": [
     {
       "icon": "external link",
@@ -14,15 +44,16 @@
       "type": "dashboards"
     }
   ],
+  "refresh": false,
   "rows": [
     {
-      "collapse": false,
+      "collapse": true,
       "height": "250px",
       "panels": [
         {
           "aliasColors": {},
           "bars": false,
-          "datasource": "SmartEmission-Influx",
+          "datasource": "${DS_SMARTEMISSION-INFLUX}",
           "description": "",
           "editable": true,
           "error": false,
@@ -125,8 +156,8 @@
               ],
               "measurement": "joserefined",
               "policy": "default",
-              "query": "SELECT mean(\"value\") FROM \"joserefined\" WHERE \"component\" = 'co' AND (\"station\" = '45' OR \"station\" = '55' OR \"station\" = \"76\" OR station = \"78\") AND $timeFilter GROUP BY time(1h), \"station\" fill(none)",
-              "rawQuery": false,
+              "query": "SELECT mean(\"value\") FROM \"joserefined\" WHERE \"component\" = 'co' AND (\"station\" = '55' OR \"station\" = '14') AND $timeFilter GROUP BY time(1h), \"station\"",
+              "rawQuery": true,
               "refId": "B",
               "resultFormat": "time_series",
               "select": [
@@ -154,6 +185,12 @@
                   "key": "station",
                   "operator": "=",
                   "value": "55"
+                },
+                {
+                  "condition": "OR",
+                  "key": "station",
+                  "operator": "=",
+                  "value": "14"
                 }
               ]
             }
@@ -194,7 +231,7 @@
         {
           "aliasColors": {},
           "bars": false,
-          "datasource": "SmartEmission-Influx",
+          "datasource": "${DS_SMARTEMISSION-INFLUX}",
           "description": "",
           "editable": true,
           "error": false,
@@ -295,8 +332,8 @@
               ],
               "measurement": "joserefined",
               "policy": "default",
-              "query": "SELECT mean(\"value\") FROM \"joserefined\" WHERE \"component\" = 'co' AND (\"station\" = '45' OR \"station\" = '55' OR \"station\" = \"76\" OR station = \"78\") AND $timeFilter GROUP BY time(1h), \"station\" fill(none)",
-              "rawQuery": false,
+              "query": "SELECT mean(\"value\") FROM \"joserefined\" WHERE \"component\" = 'co' AND (\"station\" = '45' OR \"station\" = '12') AND $timeFilter GROUP BY time(1h), \"station\"",
+              "rawQuery": true,
               "refId": "B",
               "resultFormat": "time_series",
               "select": [
@@ -370,13 +407,13 @@
       "titleSize": "h6"
     },
     {
-      "collapse": false,
+      "collapse": true,
       "height": "250px",
       "panels": [
         {
           "aliasColors": {},
           "bars": false,
-          "datasource": "SmartEmission-Influx",
+          "datasource": "${DS_SMARTEMISSION-INFLUX}",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -468,6 +505,8 @@
               ],
               "measurement": "joserefined",
               "policy": "default",
+              "query": "SELECT mean(\"value\") FROM \"joserefined\" WHERE \"component\" = 'no2' AND (\"station\" = '55' OR \"station\" = '14') AND $timeFilter GROUP BY time($interval)",
+              "rawQuery": true,
               "refId": "B",
               "resultFormat": "time_series",
               "select": [
@@ -535,7 +574,7 @@
         {
           "aliasColors": {},
           "bars": false,
-          "datasource": "SmartEmission-Influx",
+          "datasource": "${DS_SMARTEMISSION-INFLUX}",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -627,6 +666,8 @@
               ],
               "measurement": "joserefined",
               "policy": "default",
+              "query": "SELECT mean(\"value\") FROM \"joserefined\" WHERE \"component\" = 'no2' AND (\"station\" = '45' OR \"station\" = '12') AND $timeFilter GROUP BY time($interval)",
+              "rawQuery": true,
               "refId": "B",
               "resultFormat": "time_series",
               "select": [
@@ -694,7 +735,7 @@
         {
           "aliasColors": {},
           "bars": false,
-          "datasource": "SmartEmission-Influx",
+          "datasource": "${DS_SMARTEMISSION-INFLUX}",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -853,7 +894,7 @@
         {
           "aliasColors": {},
           "bars": false,
-          "datasource": "SmartEmission-Influx",
+          "datasource": "${DS_SMARTEMISSION-INFLUX}",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -1018,13 +1059,13 @@
       "titleSize": "h6"
     },
     {
-      "collapse": false,
+      "collapse": true,
       "height": "250px",
       "panels": [
         {
           "aliasColors": {},
           "bars": false,
-          "datasource": "SmartEmission-Influx",
+          "datasource": "${DS_SMARTEMISSION-INFLUX}",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -1116,6 +1157,8 @@
               ],
               "measurement": "joserefined",
               "policy": "default",
+              "query": "SELECT mean(\"value\") FROM \"joserefined\" WHERE \"component\" = 'o3' AND (\"station\" = '45' OR \"station\" = '12') AND $timeFilter GROUP BY time($interval)",
+              "rawQuery": true,
               "refId": "B",
               "resultFormat": "time_series",
               "select": [
@@ -1183,7 +1226,7 @@
         {
           "aliasColors": {},
           "bars": false,
-          "datasource": "SmartEmission-Influx",
+          "datasource": "${DS_SMARTEMISSION-INFLUX}",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -1355,8 +1398,8 @@
     "list": []
   },
   "time": {
-    "from": "now-30d",
-    "to": "now"
+    "from": "2016-01-06T17:43:02.201Z",
+    "to": "2017-01-24T16:43:03.641Z"
   },
   "timepicker": {
     "now": true,
@@ -1385,6 +1428,6 @@
     ]
   },
   "timezone": "utc",
-  "title": "calibration.json",
-  "version": 0
+  "title": "Calibration",
+  "version": 17
 }
