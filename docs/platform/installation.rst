@@ -343,10 +343,12 @@ See https://github.com/Geonovum/smartemission/tree/master/services/grafana.
 
 To be supplied further.
 
-prometheus - Prometheus
+monitoring - Monitoring
 -----------------------
 
-From https://prometheus.io
+Monitoring is based around `Prometheus <https://prometheus.io>`_  and a dedicated (for monitoring) Grafana
+instance. A complete monitoring stack is deployed via `docker-compose` based on the
+`Docker Monitoring Project <https://github.com/vegasbrianc/prometheus/tree/version-2>`_.
 
 > Prometheus is an open-source systems monitoring and alerting toolkit originally built at SoundCloud.
 > Since its inception in 2012, many companies and organizations have adopted Prometheus, and the project
@@ -356,86 +358,77 @@ From https://prometheus.io
 
 Documentation: https://prometheus.io/docs/
 
-See https://github.com/Geonovum/smartemission/tree/master/services/prometheus.
+See https://github.com/Geonovum/smartemission/tree/master/services/monitoring.
+
+The compose file is as follows:
+
+.. literalinclude:: ../../services/monitoring/docker-compose.yml
+    :language: yaml
+
+This compose file is attached to the default Docker `bridge` network.
+The following Docker images are deployed via the compose file:
 
 Prometheus
 ~~~~~~~~~~
 
-Using Prometheus 2.0+ via Docker.
+Using Prometheus 2.0+. Configuration in  `prometheus.yml` :
 
-Configuration in  `run.sh` :
-
-.. literalinclude:: ../../services/prometheus/run.sh
-    :language: bash
-
-Configuration in  `prometheus.yml` :
-
-.. literalinclude:: ../../services/prometheus/config/prometheus.yml
+.. literalinclude:: ../../services/monitoring/prometheus/prometheus.yml
     :language: guess
 
 Secure and pass via Apache proxy: ::
 
     <Location /adm/prometheus>
-        ProxyPreserveHost On
-        ProxyPass http://prometheus:9090/adm/prometheus
-        ProxyPassReverse http://prometheus:9090/adm/prometheus
+      ProxyPreserveHost On
+      ProxyPass http://monitoring_prometheus_1:9090/adm/prometheus
+      ProxyPassReverse http://monitoring_prometheus_1:9090/adm/prometheus
+      RequestHeader unset Authorization
     </Location>
+
+Grafana
+~~~~~~~
+
+Installed via `docker-compose`.
+
+Secure and pass via Apache proxy: ::
+
+    <Location /adm/grafanamon>
+        ProxyPreserveHost On
+        ProxyPass http://monitoring_grafana_1:3000
+        ProxyPassReverse http://monitoring_grafana_1:3000
+        RequestHeader unset Authorization
+    </Location>
+
+In Grafana import Dashboard `1860`: https://grafana.com/dashboards/1860 to view Node Exporter stats.
+and `179`: https://grafana.com/dashboards/179 to view Docker stats.
+
+cAdvisor
+~~~~~~~~
+
+Used for getting metrics in Prometheus from Docker components. See https://github.com/google/cadvisor.
+
+> cAdvisor (Container Advisor) provides container users an understanding of the resource usage and performance characteristics
+> of their running containers. It is a running daemon that collects, aggregates, processes, and exports information
+> about running containers. Specifically, for each container it keeps resource isolation parameters, historical resource usage,
+> histograms of complete historical resource usage and network statistics. This data is exported by container and machine-wide.
+
+NB for now cAdvisor needs to be built because of `this bug <https://github.com/google/cadvisor/issues/1802>`_.
+Once that is resolved we can use official Docker Image. The Dockerfile :
+
+.. literalinclude:: ../../docker/cadvisor/Dockerfile
+    :language: guess
+
 
 Node Exporter
 ~~~~~~~~~~~~~
 
-Node Exporter will be installed on the host to gather Linux/Ubuntu metrics.
-
-Steps to install in `/usr/bin/node_exporter`: ::
-
-	mkdir -p /var/smartem/prometheus/archive
-	cd /var/smartem/prometheus/archive
-	wget https://github.com/prometheus/node_exporter/releases/download/v0.15.2/node_exporter-0.15.2.linux-amd64.tar.gz
-	cd /var/smartem/prometheus
-	tar -xvzf archive/node_exporter-0.15.2.linux-amd64.tar.gz
-	ln -s /var/smartem/prometheus/node_exporter-0.15.2.linux-amd64/node_exporter /usr/bin
-
-Run as service via `/etc/init/node_exporter.conf` and listen on IP-address `docker0` (so metrics not exposed to world): ::
-
-    # Run node_exporter  - place in /etc/init/node_exporter.conf
-
-    start on startup
-
-    script
-      /usr/bin/node_exporter --web.listen-address="`ip route show | grep docker0 | awk '{print \$9}'`:9100"
-    end script
-
-Start/stop etc ::
-
-	service node_exporter start
-	service node_exporter status
-
-Challenge is to access Node Exporter on host from within Prometheus Docker container.
-See http://phillbarber.blogspot.nl/2015/02/connect-docker-to-service-on-parent-host.html
-In `run.sh` for Apache2:  ::
-
-    PARENT_HOST=`ip route show | grep docker0 | awk '{print \$9}'`
-    $ docker run -d --restart=always --add-host=parent-host:${PARENT_HOST} .... etc
-
-Extend Apache2 config:  ::
-
-	<Location /prom-node-metrics>
-		ProxyPass http://parent-host:9100/metrics
-		ProxyPassReverse http://parent-host:9100/metrics
-	</Location>
-
-Add node config in `prometheus.yml`: ::
-
-	- job_name: 'node'
-    scrape_interval: 15s
-    honor_labels: true
-    metrics_path: '/prom-node-metrics'
-    scheme: http
-    static_configs:
-      - targets: ['test.smartemission.nl', 'data.smartemission.nl']
-
+Node Exporter via Docker is used to gather Linux/Ubuntu metrics from the local host.
 In Grafana import Dashboard `1860`: https://grafana.com/dashboards/1860 to view Node Exporter stats.
 
+AlertManager
+~~~~~~~~~~~~
+
+For emitting Prometheus alerts (TBS).
 
 Local Install
 =============

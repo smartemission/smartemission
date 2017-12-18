@@ -1,11 +1,14 @@
 #!/bin/bash
 #
-# Stop all services (Docker Containers)
+# Stop all Docker-based services.
+#
+script_dir=${0%/*}
 
-# CONTAINERS="web geoserver sos52n postgis"
-CONTAINERS="web prometheus geoserver sos52n gost mosquitto postgis grafana influxdb"
-for CONTAINER in ${CONTAINERS}
+SERVICES="web monitoring geoserver sos52n gost mosquitto postgis grafana influxdb "
+for SERVICE in ${SERVICES}
 do
-  echo "stopping ${CONTAINER}"
-  sudo docker stop ${CONTAINER}
+  echo "stopping ${SERVICE}"
+  pushd ${script_dir}/${SERVICE}
+    ./stop.sh
+  popd
 done

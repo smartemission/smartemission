@@ -190,4 +190,9 @@ and  `data.smartemission.nl  <http://data.smartemission.nl>`_ respectively.
 NB the SensorThings API server is hosted and maintained externally by SensorUp at
 http://sta.smartemission.nl:8080/OGCSensorThings/v1.0.
 
+Monitoring
+----------
 
+Monitoring is based around `Prometheus <https://prometheus.io>`_  and a dedicated (for monitoring) Grafana
+instance. A complete monitoring stack is deployed via `docker-compose` based on the
+`Docker Monitoring Project <https://github.com/vegasbrianc/prometheus/tree/version-2>`_.

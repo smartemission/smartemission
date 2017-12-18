@@ -1,14 +1,14 @@
 #!/bin/bash
 #
-# Start/run all services  (Docker Containers)
+# Start/run all Docker-based services.
 #
 script_dir=${0%/*}
 
-CONTAINERS="postgis influxdb grafana geoserver sos52n mosquitto gost prometheus web"
-for CONTAINER in ${CONTAINERS}
+SERVICES="postgis influxdb grafana geoserver sos52n mosquitto gost monitoring web"
+for SERVICE in ${SERVICES}
 do
-  echo "starting ${CONTAINER}"
-  pushd ${script_dir}/${CONTAINER}
+  echo "starting ${SERVICE}"
+  pushd ${script_dir}/${SERVICE}
     ./run.sh
   popd
 done

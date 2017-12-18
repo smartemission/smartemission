@@ -131,3 +131,8 @@ grafana_admin_password=grafana_admin_pw
 # * mqtt: gost_mqtt_host, gost_mqtt_port
 #  server: gost_server_host, gost_server_port, gost_server_external_uri, gost_client_content
 gost_server_external_uri=http://data.smartemission.nl/gost/
+
+# general host domain name
+se_host=test.smartemission.nl
+se_port=
+
