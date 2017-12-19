@@ -305,7 +305,7 @@ Specifics
 * http://phillbarber.blogspot.nl/2015/02/connect-docker-to-service-on-parent-host.html
 * https://grafana.com/dashboards/1860
 * https://github.com/google/cadvisor
-*
+
 Troubleshooting
 ===============
 

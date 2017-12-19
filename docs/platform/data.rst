@@ -750,7 +750,7 @@ Deleting SOS Entities
 Also re-init of the 52North SOS DB is possible via the
 `sos-clear.py script <https://github.com/Geonovum/smartemission/blob/master/services/sos52n/config/sos-clear.py>`_
 (use with care!). This needs to go hand-in-hand with
-a `restart of the STA Publisher <https://github.com/Geonovum/smartemission/blob/master/etl/db/sos-publisher-init.sh>`_ .
+a `restart of the SOS Publisher <https://github.com/Geonovum/smartemission/blob/master/etl/db/sos-publisher-init.sh>`_ .
 
 Implementation
 ~~~~~~~~~~~~~~

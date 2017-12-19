@@ -5,6 +5,12 @@ Links
 
 Below links relevant to the project.
 
+Smart Emission
+--------------
+
+* `Smart Emission Platform (PDF) <_static/dissemination/rivm-17jan2017/SmartEmission-RIVM-170117.pdf>`_
+* `Smart Emission - Building a Spatial Data Infrastructure for an Environmental Citizen Sensor Network <_static/dissemination/sensorweb-munster-30aug2016/paper-munster-conf.pdf>`_
+
 Education
 ---------
 

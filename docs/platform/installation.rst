@@ -18,7 +18,7 @@ in which the SE Platform is run.
 - all required code comes from GitHub: https://github.com/Geonovum/smartemission
 - all dynamic data: settings, databases, logfiles is maintained on the system (via Docker container *Volume-mapping*)
 - Docker images are connected via Docker Link (``--link``)  mapping
-- all access to application services containers (GeoServer, SOS, Grafana etc) runs via the Apache2 `web` Docker container
+- all access to application services containers (GeoServer, SOS, Grafana etc) is proxied via the Apache2 `web` Docker container
 - settings per-system, like for test and production are kept in per-host ``<yourhostname>.args``
 - dynamic data (databases, logs, backups) is maintained under ``/var/smartem``.
 - a single ``bootstrap.sh`` script will install ``Docker`` plus other required packages (see below)
@@ -179,7 +179,7 @@ postgis - PostGIS Database
 --------------------------
 
 Uses PostGIS Docker image from Kartoza (Tim Sutton, QGIS lead),
-see https://hub.docker.com/r/kartoza/postgis/ and https://github.com/kartoza/docker-postgis  ::
+see https://hub.docker.com/r/kartoza/postgis/ and https://github.com/kartoza/docker-postgis .
 
 This shorthand script `run.sh <https://github.com/Geonovum/smartemission/services/postgis/run.sh>`_ will (re)run the ``postgis`` container.
 
@@ -350,11 +350,11 @@ Monitoring is based around `Prometheus <https://prometheus.io>`_  and a dedicate
 instance. A complete monitoring stack is deployed via `docker-compose` based on the
 `Docker Monitoring Project <https://github.com/vegasbrianc/prometheus/tree/version-2>`_.
 
-> Prometheus is an open-source systems monitoring and alerting toolkit originally built at SoundCloud.
-> Since its inception in 2012, many companies and organizations have adopted Prometheus, and the project
-> has a very active developer and user community. It is now a standalone open source project and maintained
-> independently of any company. To emphasize this, and to clarify the project's governance structure,
-> Prometheus joined the Cloud Native Computing Foundation in 2016 as the second hosted project, after Kubernetes.
+    Prometheus is an open-source systems monitoring and alerting toolkit originally built at SoundCloud.
+    Since its inception in 2012, many companies and organizations have adopted Prometheus, and the project
+    has a very active developer and user community. It is now a standalone open source project and maintained
+    independently of any company. To emphasize this, and to clarify the project's governance structure,
+    Prometheus joined the Cloud Native Computing Foundation in 2016 as the second hosted project, after Kubernetes.
 
 Documentation: https://prometheus.io/docs/
 
@@ -374,7 +374,7 @@ Prometheus
 Using Prometheus 2.0+. Configuration in  `prometheus.yml` :
 
 .. literalinclude:: ../../services/monitoring/prometheus/prometheus.yml
-    :language: guess
+    :language: yaml
 
 Secure and pass via Apache proxy: ::
 
@@ -411,10 +411,10 @@ cAdvisor
 
 Used for getting metrics in Prometheus from Docker components. See https://github.com/google/cadvisor.
 
-> cAdvisor (Container Advisor) provides container users an understanding of the resource usage and performance characteristics
-> of their running containers. It is a running daemon that collects, aggregates, processes, and exports information
-> about running containers. Specifically, for each container it keeps resource isolation parameters, historical resource usage,
-> histograms of complete historical resource usage and network statistics. This data is exported by container and machine-wide.
+    cAdvisor (Container Advisor) provides container users an understanding of the resource usage and performance characteristics
+    of their running containers. It is a running daemon that collects, aggregates, processes, and exports information
+    about running containers. Specifically, for each container it keeps resource isolation parameters, historical resource usage,
+    histograms of complete historical resource usage and network statistics. This data is exported by container and machine-wide.
 
 NB for now cAdvisor needs to be built because of `this bug <https://github.com/google/cadvisor/issues/1802>`_.
 Once that is resolved we can use official Docker Image. The Dockerfile :
@@ -432,7 +432,19 @@ In Grafana import Dashboard `1860`: https://grafana.com/dashboards/1860 to view 
 AlertManager
 ~~~~~~~~~~~~
 
-For emitting Prometheus alerts (TBS).
+For emitting Prometheus alerts. Two configs required:
+
+Alert rules in Prometheus `alert.rules` config:
+
+.. literalinclude:: ../../services/monitoring/prometheus/alert.rules
+    :language: guess
+
+And notification routing in AlertManager `config.yml`:
+
+.. literalinclude:: ../../services/monitoring/alertmanager/config.yml
+    :language: yaml
+
+See also: https://www.robustperception.io/sending-email-with-the-alertmanager-via-gmail/
 
 Local Install
 =============

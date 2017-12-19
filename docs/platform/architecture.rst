@@ -5,6 +5,9 @@ Architecture
 ============
 
 This chapter describes the (software) architecture of the Smart Emission Data (Distribution) Platform.
+A recent `presentation (PDF) <_static/dissemination/rivm-17jan2017/SmartEmission-RIVM-170117.pdf>`_ and
+`this paper <_static/dissemination/sensorweb-munster-30aug2016/paper-munster-conf.pdf>`_
+also may give more insight.
 
 Global Architecture
 ===================
@@ -21,7 +24,7 @@ streams into a MongoDB database using JSON. This MongoDB database is the source 
 where all raw sensor data streams of the Jose Sensor installation are stored. A dedicated
 REST API – the Raw Sensor API - is developed by CityGIS and Geonovum for
 further distribution of the SE data to other platforms, like the SE Data Distribution platform
-hosted at the FIWARE Lab NL (**NB FIWARE Postponed**) and the main subject of this chapter.
+hosted at the FIWARE Lab NL (**NB FIWARE has been Postponed**) and the main subject of this chapter.
 
 .. figure:: _static/arch/praatplaat.jpg
    :align: center
@@ -64,7 +67,7 @@ web services by RIVM (LML) was gathered and offered via OGC SOS and W*S services
 Harvesting, Preprocessing and Publishing, the latter e.g. via SOS-T(ransactional).
 The main difference/extension to RIVM LML ETL processing is that the Smart Emission raw O&M data is not
 yet validated (e.g. has outliers), calibrated and aggregated (e.g. no hourly averages). Also we need to cater
-for publication to the Sensor Things Server from SensorUp.
+for publication to the Sensor Things Server from SensorUp (NB now replaced by `Geodan GOST STA server <https://www.gostserver.xyz/>`_).
 
 
 .. figure:: _static/arch/etl-detail.jpg

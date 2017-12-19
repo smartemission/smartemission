@@ -23,7 +23,7 @@ Slides
 
 The agenda and presentation slides, all in PDF, can be found here:
 
-* `Agenda <_static/dissemination/workshop-17dec2015/Agenda.pdf>`_
+* `Workshop Agenda <_static/dissemination/workshop-17dec2015/Agenda.pdf>`_
 * `OGC Standards+INSPIRE - Thijs Brentjens <_static/dissemination/workshop-17dec2015/ThijsBrentjens-OGC-services.pdf>`_
 * `OGC SWE/SOS - Just van den Broecke <_static/dissemination/workshop-17dec2015/Just_OGC_School_SWE_SOS.pdf>`_
 * `Visualisation in ArcGIS of LML data - Graduation Presentation - Freek Thuis <_static/dissemination/workshop-17dec2015/FreekThuis_Minor_Visualisatie.pdf>`_
@@ -153,3 +153,18 @@ from the Smart Emission Data workshop (Verdonk, Nouwens, van den Broecke, Geurts
 
 * `Smart Emission Workshop on Data (PDF) <_static/dissemination/symposium-samen-meten-rivm-7dec2016/SmartEmission_Nijmegen_RIVM_samenmeten.pdf>`_
 * `Smart Emission Workshop on Data (Powerpoint) <_static/dissemination/symposium-samen-meten-rivm-7dec2016/SmartEmission_Nijmegen_RIVM_samenmeten.pptx>`_
+
+Presentatie bij RIVM - 17 jan 2017
+==================================
+
+Presentatie door Just van den Broecke in kader mogelijke overdracht/samenwerking met RIVM
+voor het SE Platform.
+
+Slides
+------
+
+The presentation slides (PDF) are here:
+
+* `Smart Emission Platform (PDF) <_static/dissemination/rivm-17jan2017/SmartEmission-RIVM-170117.pdf>`_
+
+

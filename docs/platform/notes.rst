@@ -25,7 +25,7 @@ https://github.com/pietermarsman/smartemission_calibration .
 By using the R-language, reports in PDF are generated.
 
 O3 Calibration
-~~~~~~~~~~~~~~
+--------------
 
 O3 seemed to be the most linear. See the resulting `O3 PDF report <_static/calibration/O3.pdf>`_.
 
