@@ -315,10 +315,10 @@ influxdb - InfluxDB
 
 This runs the InfluxDB service as a Docker container. See https://www.influxdata.com:
 
-> InfluxDB is an open source database written in Go specifically to handle time
-> series data with high availability and high performance requirements.
-> InfluxDB installs in minutes without external dependencies, yet is
-> flexible and scalable enough for complex deployments.
+    InfluxDB is an open source database written in Go specifically to handle time
+    series data with high availability and high performance requirements.
+    InfluxDB installs in minutes without external dependencies, yet is
+    flexible and scalable enough for complex deployments.
 
 The Docker image comes from https://hub.docker.com/_/influxdb/
 
@@ -331,10 +331,10 @@ grafana - Grafana
 
 From http://grafana.org
 
-> Grafana is an open source metric analytics and visualization suite.
-> It is most commonly used for visualizing time series data for infrastructure and
-> application analytics but many use it in other domains including industrial sensors,
-> home automation, weather, and process control."
+    "Grafana is an open source metric analytics and visualization suite.
+    It is most commonly used for visualizing time series data for infrastructure and
+    application analytics but many use it in other domains including industrial sensors,
+    home automation, weather, and process control."
 
 Watch the demo and be amazed: http://play.grafana.org
 Documentation: http://docs.grafana.org
@@ -350,11 +350,11 @@ Monitoring is based around `Prometheus <https://prometheus.io>`_  and a dedicate
 instance. A complete monitoring stack is deployed via `docker-compose` based on the
 `Docker Monitoring Project <https://github.com/vegasbrianc/prometheus/tree/version-2>`_.
 
-    Prometheus is an open-source systems monitoring and alerting toolkit originally built at SoundCloud.
+    "Prometheus is an open-source systems monitoring and alerting toolkit originally built at SoundCloud.
     Since its inception in 2012, many companies and organizations have adopted Prometheus, and the project
     has a very active developer and user community. It is now a standalone open source project and maintained
     independently of any company. To emphasize this, and to clarify the project's governance structure,
-    Prometheus joined the Cloud Native Computing Foundation in 2016 as the second hosted project, after Kubernetes.
+    Prometheus joined the Cloud Native Computing Foundation in 2016 as the second hosted project, after Kubernetes."
 
 Documentation: https://prometheus.io/docs/
 
@@ -410,12 +410,12 @@ Alternative: https://github.com/stefanprodan/dockprom
 cAdvisor
 ~~~~~~~~
 
-Used for getting metrics in Prometheus from Docker components. See https://github.com/google/cadvisor.
+Used for getting metrics in Prometheus from Docker components. See https://github.com/google/cadvisor :
 
-    cAdvisor (Container Advisor) provides container users an understanding of the resource usage and performance characteristics
+    "cAdvisor (Container Advisor) provides container users an understanding of the resource usage and performance characteristics
     of their running containers. It is a running daemon that collects, aggregates, processes, and exports information
     about running containers. Specifically, for each container it keeps resource isolation parameters, historical resource usage,
-    histograms of complete historical resource usage and network statistics. This data is exported by container and machine-wide.
+    histograms of complete historical resource usage and network statistics. This data is exported by container and machine-wide."
 
 NB for now cAdvisor needs to be built because of `this bug <https://github.com/google/cadvisor/issues/1802>`_.
 Once that is resolved we can use official Docker Image. The Dockerfile :

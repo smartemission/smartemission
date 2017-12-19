@@ -24,14 +24,14 @@ streams into a MongoDB database using JSON. This MongoDB database is the source 
 where all raw sensor data streams of the Jose Sensor installation are stored. A dedicated
 REST API – the Raw Sensor API - is developed by CityGIS and Geonovum for
 further distribution of the SE data to other platforms, like the SE Data Distribution platform
-hosted at the FIWARE Lab NL (**NB FIWARE has been Postponed**) and the main subject of this chapter.
+hosted at the FIWARE Lab NL (**NB FIWARE has been skipped**) and the main subject of this chapter.
 
 .. figure:: _static/arch/praatplaat.jpg
    :align: center
 
    *Figure 1 - Smart Emission Global Data Architecture*
 
-The global data infrastructure at the FIWARE LAB NL consists of:
+The global data infrastructure consists of:
 
 * ETL-based pre- and post-processing algorithms;
 * data storage in Postgres/PostGIS;
@@ -47,7 +47,7 @@ from the air quality sensors. Based on a calibration activity in de SE project, 
 quality sensors is transformed to ‘better interpretable’ values. Post-processing is the activity to transform
 the pre-processed values into new types of data using statistics (aggregations), spatial interpolations, etc..
 
-The design of the Smart Emission Data Platform hosted by the FIWARE Lab NL is further expanded below.
+The design of the Smart Emission Data Platform is further expanded below.
 
 Data Platform Architecture
 ==========================
@@ -67,7 +67,7 @@ web services by RIVM (LML) was gathered and offered via OGC SOS and W*S services
 Harvesting, Preprocessing and Publishing, the latter e.g. via SOS-T(ransactional).
 The main difference/extension to RIVM LML ETL processing is that the Smart Emission raw O&M data is not
 yet validated (e.g. has outliers), calibrated and aggregated (e.g. no hourly averages). Also we need to cater
-for publication to the Sensor Things Server from SensorUp (NB now replaced by `Geodan GOST STA server <https://www.gostserver.xyz/>`_).
+for publication to the  `Sensor Things API Server (STA GOST) <https://www.gostserver.xyz/>`_).
 
 
 .. figure:: _static/arch/etl-detail.jpg
@@ -84,7 +84,7 @@ The ETL design comprises these main processing steps:
 The services to be published to are:
 
 * *SOS ETL*: transform and publish to the 52N SOS DB via SOS-Transactional (SOS-T)
-* *Things ETL*:  transform and publish to the SensorUp SensorThings API (STA, via REST)
+* *Things ETL*:  transform and publish to the Geodan GOST SensorThings API (STA, via REST)
 * Publication via *GeoServer* WMS (needs SLDs) and WFS directly
 * *XYZ*: any other ETL, e.g. providing bulk download as CSV
 
@@ -93,7 +93,7 @@ Some more notes for the above dataflows:
 * The central DB will be Postgres with PostGIS enabled
 * Refined O&M data can be directly used for OWS (WMS/WFS) services via GeoServer (using SLDs and a PostGIS datastore with selection VIEWs, e.g. last values of component X)
 * The SOS ETL process transforms refined O&M data to SOS Observations and publishes these via the SOS-T InsertObservation service. Stations are published once via the InsertSensor service.
-* Publication to the SensorUp SensorThings Server will most probably go via a REST service (t.b.d.)
+* Publication to the GOST SensorThings Server goes via the STA REST service
 * These three ETL steps run continuously (via Linux cronjobs)
 * Each ETL-process applies “progress-tracking” by maintaining persistent  checkpoint data. Consequently a process always knows where to resume, even after its (cron)job has been stopped or canceled. All processes can even be replayed from *time zero*.
 
@@ -114,7 +114,7 @@ Docker Strategy
 
 Components from the Smart Emission Data Platform as
 described in the architecture above are deployed using Docker. Docker is a
-common computing container technology also used extensively within FIWARE. By using Docker we can create
+common computing container technology also used extensively within Dutch Kadaster. By using Docker we can create
 reusable high-level components, “Containers”, that can be built and run within multiple contexts.
 Figure 4 sketches the Docker deployment. The entities denote Docker Containers, the arrows linking.
 Like in Object Oriented Design there are still various strategies and patterns to follow with Docker.
@@ -184,14 +184,9 @@ Test and Production deployment has been
 setup. For local development on PC/Mac/Linux
 a Vagrant environment with Docker can be setup.
 
-NB since FIWARE is not yet available we run on standard VPS systems (Ubuntu VMs).
-
 The Test and Production environments have separate IP-adresses and domains:
 `test.smartemission.nl <http://test.smartemission.nl>`_
 and  `data.smartemission.nl  <http://data.smartemission.nl>`_ respectively.
-
-NB the SensorThings API server is hosted and maintained externally by SensorUp at
-http://sta.smartemission.nl:8080/OGCSensorThings/v1.0.
 
 Monitoring
 ----------

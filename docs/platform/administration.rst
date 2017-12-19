@@ -236,7 +236,6 @@ This is specific to SOS server from 52North. ::
 	# Detach screen
 	control-A D
 
-
 All dynamic data can be found under ``/var/smartem/data``.
 
 Calibration Model
@@ -254,8 +253,8 @@ All can be restored as follows, assuming we have the data in some backup. ::
 Admin UI
 ========
 
-There is a simple admin UI for several tasks and inpections. The URL can be found
-via the SE Platform website (<data|test>.smartemission.nl).
+There is a simple admin UI for several tasks and inpections. The Admin URL can be found
+via the "Links" entry SE Platform website (<data|test>.smartemission.nl).
 
 Monitoring
 ==========
