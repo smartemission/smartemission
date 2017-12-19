@@ -81,7 +81,7 @@ services:
 #      - back-tier
     restart: always
     command:
-      - '-config.file=/etc/alertmanager/config.yml'
+      - '-config.file=/etc/alertmanager/config-gen.yml'
       - '-storage.path=/alertmanager'
 #    deploy:
 #      placement:
