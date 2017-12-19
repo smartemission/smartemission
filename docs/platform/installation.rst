@@ -399,12 +399,13 @@ Secure and pass via Apache proxy: ::
         RequestHeader unset Authorization
     </Location>
 
-In Grafana import Dashboard `1860`: https://grafana.com/dashboards/1860 to view Node Exporter stats.
-and `179`: https://grafana.com/dashboards/179 to view Docker stats.
+Add `Prometheus` with url http://prometheus:9090/adm/prometheus as DataSource.
+
+Import Dashboard `1860`: https://grafana.com/dashboards/1860 to view Node Exporter stats.
+and `179`: https://grafana.com/dashboards/179 to view Docker stats. Locally adapted versions of these are available
+under the `/dashboards` dir. Use the `<name>-SE.json` versions.
 
 Alternative: https://github.com/stefanprodan/dockprom
-
-NB to add Prometheus Datasource, use: http://prometheus:9090/adm/prometheus.
 
 cAdvisor
 ~~~~~~~~
