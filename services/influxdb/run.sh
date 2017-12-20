@@ -5,18 +5,20 @@
 
 LOG_DIR="/var/smartem/log/influxdb"
 DATA_DIR="/var/smartem/data/influxdb"
+BACKUP_DIR="/var/smartem/backup/influxdb"
 NAME="influxdb"
 IMAGE="influxdb:1.1.1"
 
 sudo mkdir -p ${DATA_DIR}
 sudo mkdir -p ${LOG_DIR}
+sudo mkdir -p ${BACKUP_DIR}
 
-script_dir=${0%/*}
-pushd ${script_dir}
-script_dir=$PWD
+SCRIPT_DIR=${0%/*}
+pushd ${SCRIPT_DIR}
+SCRIPT_DIR=$PWD
 popd
 
-VOL_MAP="-v ${DATA_DIR}:/var/lib/influxdb -v ${LOG_DIR}:/var/log/influxdb -v ${script_dir}/config/influxdb.conf:/etc/influxdb/influxdb.conf:ro"
+VOL_MAP="-v ${DATA_DIR}:/var/lib/influxdb -v ${LOG_DIR}:/var/log/influxdb -v ${SCRIPT_DIR}/config/influxdb.conf:/etc/influxdb/influxdb.conf:ro -v ${BACKUP_DIR}:/backup"
 
 # 8083 is admin, 8086 API
 PORT_MAP="-p 8083:8083 -p 8086:8086"

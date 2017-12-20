@@ -42,6 +42,7 @@ each year-month. Backups can be accessed via ``sftp`` : ::
 	-rw-r--r--    0 1120     1122          308 Jun  2 16:39 SETEST-2016-06/backup_db.log
 	-rw-r--r--    0 1120     1122        13570 Jun  2 16:39 SETEST-2016-06/gis.sql.bz2
 
+Show quota with command: `ssh vps68271@backup quota`.
 
 Restoring
 =========
