@@ -401,7 +401,7 @@
     "list": []
   },
   "time": {
-    "from": "now-2y",
+    "from": "now-7d",
     "to": "now"
   },
   "timepicker": {
@@ -431,5 +431,5 @@
   },
   "timezone": "browser",
   "title": "Jose",
-  "version": 10
+  "version": 11
 }

@@ -20,8 +20,8 @@ popd
 
 VOL_MAP="-v ${DATA_DIR}:/var/lib/influxdb -v ${LOG_DIR}:/var/log/influxdb -v ${SCRIPT_DIR}/config/influxdb.conf:/etc/influxdb/influxdb.conf:ro -v ${BACKUP_DIR}:/backup"
 
-# 8083 is admin, 8086 API
-PORT_MAP="-p 8083:8083 -p 8086:8086"
+# 8083 is admin, 8086 API NB: admin 8083 was removed in InfluxDB 1.3
+PORT_MAP="-p 8086:8086"
 
 # Stop and remove possibly old containers
 sudo docker stop ${NAME} > /dev/null 2>&1

@@ -13,7 +13,7 @@ LOG_DIR="/var/smartem/log/grafana"
 DATA_DIR="/var/smartem/data/grafana"
 CONFIG_DIR="/var/smartem/config/grafana"
 NAME="grafana"
-IMAGE="grafana/grafana:4.1.1"
+IMAGE="grafana/grafana:4.6.3"
 INFLUX_HOST=influxdb
 # PROMETHEUS_HOST=prometheus
 
