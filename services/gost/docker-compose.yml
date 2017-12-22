@@ -1,55 +1,56 @@
-# Adapted by Just from original
-# https://github.com/Geodan/gost/blob/master/src/docker-compose.yml
+# Adapted by Just from original  for Gost v0.5
+# https://raw.githubusercontent.com/gost/docker-compose/master/docker-compose-0.5.yml
 # to work with our postgis Docker container.
 
-# NB currently NOT used, only for reference how to setup individual containers!!
-
-version: '2'
+version: '3.1'
 
 services:
-    node-red:
-        image: nodered/node-red-docker
+    gost:
+        image: geodan/gost:0.5
+#        depends_on:
+#            - mosquitto
+#            - postgis
         volumes:
-            - nodered:/data
+          - ./config/config.yaml:/go/bin/gost/config.yaml:ro
+        environment:
+            gost_server_external_uri: ${gost_server_external_uri}
+#            gost_db_host: postgis
+#            gost_mqtt_host: mosquitto
+        network_mode: bridge
+
+    dashboard:
+        image: geodan/gost-dashboard:0.5
         ports:
-            - "1880:1880"
-    mosquitto:
-        image: toke/mosquitto
-        volumes:
-            - mosquitto_data:/mqtt/data
-            - mosquitto_conf:/mqtt/config:ro
-        ports:
-            - "1883:1883"
-            - "9001:9001"
+          - "8083:8080"
+        depends_on:
+            - gost
+        network_mode: bridge
+
+#    node-red:
+#        image: nodered/node-red-docker
+#        volumes:
+#            - nodered:/data
+#        ports:
+#            - "1880:1880"
+#    mosquitto:
+#        image: toke/mosquitto
+#        volumes:
+#            - mosquitto_data:/mqtt/data
+#            - mosquitto_conf:/mqtt/config:ro
+#        ports:
+#            - "1883:1883"
+#            - "9001:9001"
 #    gost-db:
-#        image: geodan/gost-db:0.3
+#        image: geodan/gost-db:0.5
 #        volumes:
 #            - postgis:/var/lib/postgresql/data
-#        ports:
-#            - "5432:5432"
 #        environment:
 #            POSTGRES_DB: gost
 #            POSTGRES_USER: postgres
 #            POSTGRES_PASSWORD: postgres
-    gost:
-        image: geodan/gost:0.3
-        
-        external_links:
-          - postgis
 
-        ports:
-            - "8080:8080"
-        depends_on:
-            - mosquitto
-#            - gost-db
-#            - postgis
-        environment:
-#            gost_db_host: gost-db
-            gost_db_host: postgis
-            gost_mqtt_host: mosquitto
-
-volumes:
+#volumes:
 #    postgis: {}
-    nodered: {}
-    mosquitto_data: {}
-    mosquitto_conf: {}
+#    nodered: {}
+#    mosquitto_data: {}
+#    mosquitto_conf: {}

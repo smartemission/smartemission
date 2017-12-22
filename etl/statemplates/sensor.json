@@ -1,6 +1,6 @@
 {{
   "name": "{name}",
   "description": "Sensor for {name} in {label}",
-  "encodingType": "application/vnd.geo+json",
-  "metadata": "{name}"
+  "encodingType": "application/pdf",
+  "metadata": "https://media.readthedocs.org/pdf/smartplatform/latest/smartplatform.pdf"
 }}

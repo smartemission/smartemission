@@ -1,6 +1,6 @@
 -- adapted by Just from https://github.com/Geodan/gost-db/blob/master/gost_init_db.sql
--- version 23.mrt.2017
-
+-- version 21.dec.2017
+-- observation.id becomes bigserial and primkey i.s.i. bigint + sequence
 -- CREATE EXTENSION postgis;
 DROP SCHEMA IF EXISTS v1 CASCADE;
 CREATE SCHEMA v1;
@@ -191,19 +191,13 @@ CREATE INDEX fki_thing
   USING btree
   (thing_id);
 
-CREATE SEQUENCE observations_id_seq
-	START WITH 1
-	INCREMENT BY 1
-	NO MINVALUE
-	NO MAXVALUE
-	CACHE 1;
-
 CREATE TABLE observation
 (
-  id bigint NOT NULL DEFAULT nextval('observations_id_seq'::regclass),
+  id bigserial NOT NULL,
   data jsonb,
   stream_id bigint,
   featureofinterest_id bigint,
+  CONSTRAINT observation_pkey PRIMARY KEY (id),
   CONSTRAINT fk_datastream FOREIGN KEY (stream_id)
       REFERENCES datastream (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE CASCADE,

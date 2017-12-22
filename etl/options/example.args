@@ -136,3 +136,6 @@ gost_server_external_uri=http://data.smartemission.nl/gost/
 se_host=test.smartemission.nl
 se_port=
 
+# gmail for notification
+GMAIL_ACCOUNT=smart.emission.srv@gmail.com
+GMAIL_AUTH_TOKEN=XXXX

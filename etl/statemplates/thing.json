@@ -3,7 +3,8 @@
     "name": "{station_id}",
     "description": "Smart Emission station {station_id}",
     "properties": {{
-      "id": "{station_id}"
+      "id": "{station_id}",
+      "project_id": "{project_id}"
     }},
     "Locations": [
         {{

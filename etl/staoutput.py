@@ -245,6 +245,7 @@ class STAOutput(HttpOutput):
         format_args = dict()
 
         format_args['station_id'] = record['device_id']
+        format_args['project_id'] = record['device_id']/10000
         # format_args['station_altitude'] = record['altitude']
         format_args['station_lon'] = record['lon']
         format_args['station_lat'] = record['lat']
@@ -331,8 +332,12 @@ class STAOutput(HttpOutput):
         thing = self.things.get(device_id)
         if not thing:
             # Not in local collection: try fetch from server
-            params = {"$filter": 'name eq "%s"' % device_id, "$expand": 'Locations'}
+            params = {"$filter": "name eq '%s'" % device_id, "$expand": 'Locations'}
             th_resp = self.read_from_url(self.base_url + '/Things', params)
+            if 'error' in th_resp or 'value' not in th_resp:
+                log.error('Error response fetching Thing for device id %s: rsp=%s' % (device_id, str(th_resp)))
+                return None
+            
             th_list = th_resp['value']
             for th in th_list:
                 th_name_n = th['name']
@@ -364,12 +369,14 @@ class STAOutput(HttpOutput):
             # Try to get DS for Obs Prop for this Thing
             ds_resp = self.read_from_url(
                 self.base_url + '/Things(%d)/Datastreams?$expand=ObservedProperty' % thing['@iot.id'])
-            ds_list = ds_resp['value']
-            for ds in ds_list:
-                ds_name_n = ds['ObservedProperty']['name']
-                thing['datastreams'][ds_name_n] = ds
 
-            datastream = thing['datastreams'].get(ds_name)
+            if 'error' not in ds_resp:
+                ds_list = ds_resp['value']
+                for ds in ds_list:
+                    ds_name_n = ds['ObservedProperty']['name']
+                    thing['datastreams'][ds_name_n] = ds
+
+                datastream = thing['datastreams'].get(ds_name)
             if not datastream:
                 datastream = self.post_datastream(thing, record)
                 thing['datastreams'][ds_name] = datastream
