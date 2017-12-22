@@ -4,7 +4,7 @@
 #
 script_dir=${0%/*}
 
-SERVICES="postgis influxdb grafana geoserver sos52n mosquitto gost monitoring web"
+SERVICES="postgis influxdb grafana geoserver sos52n mosquitto gost gostdashboard monitoring web"
 for SERVICE in ${SERVICES}
 do
   echo "starting ${SERVICE}"
