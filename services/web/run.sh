@@ -30,7 +30,7 @@ MON_GRAFANA_HOST="monitoring_grafana_1"
 
 # In order to have proxy access node_exporter metrics for Prometheus
 # See http://phillbarber.blogspot.nl/2015/02/connect-docker-to-service-on-parent-host.html
-# PARENT_HOST=`ip route show | grep docker0 | awk '{print \$9}'`
+PARENT_HOST=`ip route show | grep docker0 | awk '{print \$9}'`
 
 # Somehow needed for mounts
 sudo chmod 777 ${LOG} ${BACKUP} ${SCRIPT_DIR}/../../etl/calibration
@@ -43,10 +43,11 @@ LINK_MAP="--link ${PG_HOST}:${PG_HOST} --link ${GS_HOST}:${GS_HOST} --link ${SOS
 # LINK_MAP="--link ${PG_HOST}:${PG_HOST} --link ${STA_GOST_HOST}:${STA_GOST_HOST}"
 # NETWORKS="--network=monitoring_front-tier"
 
+HOSTS_MAP="--add-host=parent-host:${PARENT_HOST}"
 # Stop and remove possibly old containers
 sudo docker stop ${NAME} > /dev/null 2>&1
 sudo docker rm ${NAME} > /dev/null 2>&1
 
 # Finally run
 # --add-host=parent-host:${PARENT_HOST} 
-sudo docker run -d --restart=always  --name ${NAME} ${LINK_MAP} ${PORT_MAP} ${VOL_MAP} -t -i ${IMAGE}
+sudo docker run -d --restart=always  --name ${NAME} ${LINK_MAP} ${PORT_MAP} ${HOSTS_MAP} ${VOL_MAP} -t -i ${IMAGE}

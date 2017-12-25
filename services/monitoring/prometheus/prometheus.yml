@@ -43,4 +43,4 @@ scrape_configs:
     # scheme defaults to 'http'.
 
     static_configs:
-         - targets: ['cadvisor:8080','node-exporter:9100']
+         - targets: ['cadvisor:8080','$PARENT_HOST:9100']
