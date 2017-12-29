@@ -356,7 +356,8 @@ instance. A complete monitoring stack is deployed via `docker-compose` based on 
     independently of any company. To emphasize this, and to clarify the project's governance structure,
     Prometheus joined the Cloud Native Computing Foundation in 2016 as the second hosted project, after Kubernetes."
 
-Documentation: https://prometheus.io/docs/
+Documentation: https://prometheus.io/docs/ . Howto:
+https://medium.com/@soumyadipde/monitoring-in-docker-stacks-its-that-easy-with-prometheus-5d71c1042443
 
 See https://github.com/Geonovum/smartemission/tree/master/services/monitoring.
 
@@ -423,6 +424,70 @@ Once that is resolved we can use official Docker Image. The Dockerfile :
 .. literalinclude:: ../../docker/cadvisor/Dockerfile
     :language: guess
 
+NB cAdvisor via Docker on Ubuntu 14.04 has a `serious issue (like Node_exporter) <https://github.com/Geonovum/smartemission/issues/73>`_
+and `this issue <https://github.com/google/cadvisor/issues/771>`_,
+so needs to be installed on host.
+
+On Ubuntu 16.04 we can use cAdvisor in Docker again. Steps: ::
+
+    # Step 1: Install latest go-lang (go-lang package version on 14.04 too old!)
+    # See https://github.com/golang/go/wiki/Ubuntu
+    $ add-apt-repository ppa:gophers/archive
+    $ apt update
+    $ apt-get install golang-1.9-go
+    $ ls  /usr/lib/go-1.9/bin
+    $ go  gofmt
+    $ export GOROOT=/usr/lib/go-1.9
+    $ export PATH=$GOROOT/bin:$PATH
+
+    # Step 2 cAdvisor build
+    # See https://github.com/google/cadvisor/blob/master/docs/development/build.md
+    $ mkdir /opt/cadvisor
+    $ cd /opt/cadvisor
+    $ export GOPATH=/opt/cadvisor
+    $ go get -d github.com/google/cadvisor
+    $ cd /opt/cadvisor/src/github.com/google/cadvisor
+    $ make build
+    $ make test  (fails somehow)
+    $ ./cadvisor -version
+       cAdvisor version v0.28.3.2+9ffa37396f19cb (9ffa373)
+    $ ./cadvisor
+    # surf to host:8080
+
+    # Step 3: install supervisord
+    $ apt-get install supervisor
+    $ service supervisor status
+       is running
+
+    # Step 4: cAdvisor as supervisrod process (conf)
+    # See https://github.com/google/cadvisor/issues/771#issuecomment-322725681
+
+    # Put in /etc/supervisor/conf.d/cadvisor.conf
+    [program:cadvisor]
+    directory=/opt/geonovum/smartem/git/services/monitoring/cadvisor
+    command=/opt/geonovum/smartem/git/services/monitoring/cadvisor/run.sh
+    autostart=true
+    autorestart=unexpected
+    redirect_stderr=true
+
+    # with /opt/geonovum/smartem/git/services/monitoring/cadvisor/run.sh
+    # NB ENV setting via supervisord did not work on this version, need supervisor 3.2
+    #!/bin/bash
+    #
+    export PARENT_HOST=`ip route show | grep docker0 | awk '{print \$9}'`
+    export GOROOT="/usr/lib/go-1.9"
+    export GOPATH="/opt/cadvisor/src/github.com/google/cadvisor"
+    export PATH="${GOPATH}:${GOROOT}/bin:${PATH}"
+
+    cd ${GOPATH}
+    ./cadvisor -listen_ip ${PARENT_HOST} -port 8080
+
+    # run
+    $ service supervisor stop
+    $ service supervisor start
+    # Check via host port 8080 and:
+    $ ps -elf | grep cadvisor
+       4 S.... 00:00:01 /opt/cadvisor/src/github.com/google/cadvisor/cadvisor -port 8080
 
 Node Exporter
 ~~~~~~~~~~~~~

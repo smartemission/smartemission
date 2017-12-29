@@ -57,8 +57,8 @@ services:
       # - cadvisor:cadvisor
       # - node-exporter:node-exporter
       - alertmanager:alertmanager
-    depends_on:
-      - cadvisor
+    # depends_on:
+      # - cadvisor
       # - node-exporter
       
     network_mode: bridge
@@ -108,20 +108,20 @@ services:
 #    deploy:
 #      mode: global
 
-  cadvisor:
+  # cadvisor:
     # image: google/cadvisor
-    image: geonovum/cadvisor:v0.28.3
-    volumes:
+    # image: geonovum/cadvisor:v0.28.3
+    # volumes:
       # - /:/rootfs:ro
-      - /var/run:/var/run:rw
-      - /sys:/sys:ro
+      # - /var/run:/var/run:rw
+      # - /sys:/sys:ro
       # - /var/lib/docker/:/var/lib/docker:ro
 #    ports:
 #      - 8080:8080
-    network_mode: bridge
+    # network_mode: bridge
 #    networks:
 #      - back-tier
-    restart: always
+    # restart: always
 #    deploy:
 #      mode: global
 

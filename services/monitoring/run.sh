@@ -13,5 +13,6 @@ envsubst < alertmanager/config.yml > alertmanager/config-gen.yml
 envsubst < prometheus/prometheus.yml > prometheus/prometheus-gen.yml
 
 echo "External URL is http://${se_host}${se_port}"
-service node_exporter start
+node_exporter/start.sh
+cadvisor/start.sh
 docker-compose up -d

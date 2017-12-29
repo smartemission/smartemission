@@ -4,4 +4,5 @@
 
 docker-compose stop
 docker-compose rm -f
-service node_exporter stop
+node_exporter/stop.sh
+cadvisor/stop.sh
