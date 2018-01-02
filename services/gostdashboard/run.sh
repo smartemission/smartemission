@@ -9,7 +9,7 @@ source ../../etl/options/`hostname`.args
 
 LOG="/var/smartem/log"
 NAME="gostdashboard"
-IMAGE="geodan/gost-dashboard:0.5"
+IMAGE="geodan/gost-dashboard-v2:latest"
 GOST_HOST=gost
 
 # Define Volume mappings, map local config file
