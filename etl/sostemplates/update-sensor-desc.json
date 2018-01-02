@@ -1,0 +1,8 @@
+{{
+  "request": "UpdateSensorDescription",
+  "service": "SOS",
+  "version": "2.0.0",
+  "procedure": "station-{station_id}",
+  "procedureDescriptionFormat": "http://www.opengis.net/sensorML/1.0.1",
+  "procedureDescription": "{procedure-desc.xml}"
+}}

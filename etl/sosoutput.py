@@ -46,9 +46,11 @@ class SOSTOutput(HttpOutput):
 
         # Template file, to be used as POST body with substituted values
         self.insert_sensor_templ_path = '%s/insert-sensor.json' % self.template_file_root
+        self.update_sensor_desc_templ_path = '%s/update-sensor-desc.json' % self.template_file_root
         self.insert_obs_templ_path ='%s/insert-observation.json' % self.template_file_root
         self.proc_desc_templ_path = '%s/procedure-desc.xml' % self.template_file_root
         self.insert_sensor_templ_str = None
+        self.update_sensor_desc_templ_str = None
         self.insert_obs_templ_str = None
 
     def init(self):
@@ -57,8 +59,8 @@ class SOSTOutput(HttpOutput):
         with open(self.insert_obs_templ_path, 'r') as f:
             self.insert_obs_templ_str = f.read()
 
-        # For insert-sensor we need the Procedure SML (XML) and escape/insert this into
-        # the JSON insert-sensor string.
+        # For insert-sensor and update-sensor-desc we need the Procedure SML (XML)
+        # and escape/insert this into the JSON insert-sensor string.
         log.info('Init: read template file: %s' % self.proc_desc_templ_path)
         with open(self.proc_desc_templ_path, 'r') as f:
             proc_desc = f.read()
@@ -69,12 +71,23 @@ class SOSTOutput(HttpOutput):
                 insert_sensor_str = f.read()
                 self.insert_sensor_templ_str = insert_sensor_str.replace('{procedure-desc.xml}', proc_desc)
 
+            log.info('Init: read template file: %s' % self.update_sensor_desc_templ_path)
+            with open(self.update_sensor_desc_templ_path, 'r') as f:
+                update_sensor_desc_str = f.read()
+                self.update_sensor_desc_templ_str = update_sensor_desc_str.replace('{procedure-desc.xml}', proc_desc)
+
     def post(self, packet, payload):
         record = packet.data
         device_id = record['device_id']
         component = record['name']
         gid = record['gid']
         id = '%s-%s-%s' % (device_id, component, gid)
+
+        # insert_sensor_payload = self.create_insert_sensor_payload(packet)
+        # log.info('POSTing InsertSensor! - payload=%s' % insert_sensor_payload)
+        # statuscode, statusmessage, res = HttpOutput.post(self, packet, insert_sensor_payload)
+        # return statuscode, statusmessage, res
+
         log.info('====START InsertObservation id=%s' % id)
         log.info('POSTing InsertObservation! try 1 - payload=%s' % payload)
         statuscode, statusmessage, res = HttpOutput.post(self, packet, payload)
@@ -98,6 +111,13 @@ class SOSTOutput(HttpOutput):
         elif statuscode == 200:
             log.info('YES inserted Observation! try 1 id=%s' % id)
 
+        # update_sensor_desc_payload = self.create_update_sensor_desc_payload(packet)
+        # log.info('POSTing UpdateSensorDescription! - payload=%s' % update_sensor_desc_payload)
+        # statuscode, statusmessage, res = HttpOutput.post(self, packet, update_sensor_desc_payload)
+        # if statuscode == 200:
+        #     log.info('OK UpdateSensorDescription for station: rec=%s res=%s' % (str(packet.data), res))
+        # else:
+        #     log.warn('FAIL UpdateSensorDescription for station: rec=%s res=%s' % (str(packet.data), res))
         log.info('====END InsertObservation id=%s' % id)
 
         return statuscode, statusmessage, res
@@ -129,7 +149,25 @@ class SOSTOutput(HttpOutput):
         payload = self.insert_sensor_templ_str.format(**format_args)
         return payload
 
+    def create_update_sensor_desc_payload(self, packet):
+        # NOT (YET) USED, HOPED TO UPDATE featureofinterest location but did not work.
+        # String substitution based on Python String.format()
+        # See also https://github.com/ioos/i52n-sos/blob/master/webapp-ioos/src/main/webapp/static/examples/sos_v20/requests_xml/Transactional/UpdateSensorDescription.xml
+        record = packet.data
+        format_args = dict()
+        format_args['station_id'] = record['device_id']
+        format_args['station_name'] = record['device_id']
+        format_args['station_altitude'] = record['altitude']
+        format_args['station_lon'] = record['lon']
+        format_args['station_lat'] = record['lat']
+
+        payload = self.update_sensor_desc_templ_str.format(**format_args)
+        return payload
+
     def create_payload(self, packet):
+        # InsertObservation
+        # See also
+        # https://github.com/52North/SOS/blob/develop/coding/json/src/main/resources/examples/measurement-geometry-inline.json
         record = packet.data
         format_args = dict()
         # need station_id, unique_id (sample_id?),
@@ -152,38 +190,5 @@ class SOSTOutput(HttpOutput):
 
         # TODO use Jinja2 formatting
         payload = self.insert_obs_templ_str.format(**format_args)
-
-        # if self.sos_request == 'insert-sensor':
-        #
-        #     # String substitution based on Python String.format()
-        #     # <local_id>STA-NL00807</local_id>
-        #     # <natl_station_code>807</natl_station_code>
-        #     # <eu_station_code>NL00807</eu_station_code>
-        #     # <name>Hellendoorn-Luttenbergerweg</name>
-        #     # <municipality>Hellendoorn</municipality>
-        #     # <altitude>7</altitude>
-        #     # <altitude_unit>m</altitude_unit>
-        #     # <area_classification>http://dd.eionet.europa.eu/vocabulary/aq/areaclassification/rural</area_classification>
-        #     # <activity_begin>1976-04-02T00:00:00+01:00</activity_begin>
-        #     # <activity_end></activity_end>
-        #     # <version></version>
-        #     # <belongs_to></belongs_to>
-        #     # <lon></lon>
-        #     # <lat></lat>
-        #     format_args = dict()
-        #     format_args['station_id'] = record['natl_station_code']
-        #     format_args['station_name'] = record['name']
-        #     # if record['municipality'] is not None and len(record['municipality']) > 0:
-        #     #     format_args['name'] += ' - ' + record['municipality']
-        #     format_args['station_altitude'] = record['altitude']
-        #     format_args['station_lon'] = record['lon']
-        #     format_args['station_lat'] = record['lat']
-        #
-        #     payload = self.insert_sensor_templ_str.format(**format_args)
-        #     # print payload
-        # else:
-        #     if self.sos_request == 'insert-observation':
-        #         # with open('/etc/hosts') as f:
-        #         #     print f.read()
 
         return payload
