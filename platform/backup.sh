@@ -5,6 +5,7 @@
 # Just van den Broecke - 2016
 #
 
+
 DATE=`date +%Y-%m-%d`
 YEAR=`date +%Y`
 WEEK_DAY=`date +%w`
@@ -109,11 +110,15 @@ echo "END backup databases op `date`" >> ${LOG_FILE}
 RSYNC="rsync -e ssh -alzvx --delete "
 BACKUP_HOST="vps68271@backup"
 
-# We will have last 7 days always
-${RSYNC} ${BACKUP_DIR}/ ${BACKUP_HOST}:`hostname`-weekday-${WEEK_DAY}/  >> ${LOG_FILE}
+# Temporarily disable backup on SETEST to save space
+if [ `hostname` == "SEPROD" ]
+then
+	# We will have last 7 days always
+	${RSYNC} ${BACKUP_DIR}/ ${BACKUP_HOST}:`hostname`-weekday-${WEEK_DAY}/  >> ${LOG_FILE}
 
-# At the start of each month we save the backup of the last day of previous month
-${RSYNC} ${BACKUP_DIR}/ ${BACKUP_HOST}:`hostname`-${YEAR}-${MONTH}/  >> ${LOG_FILE}
+	# At the start of each month we save the backup of the last day of previous month
+	${RSYNC} ${BACKUP_DIR}/ ${BACKUP_HOST}:`hostname`-${YEAR}-${MONTH}/  >> ${LOG_FILE}
+fi
 
 # To inspect from admin
 cp ${LOG_FILE} /var/smartem/log
