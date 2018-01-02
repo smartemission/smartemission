@@ -13,8 +13,7 @@ IMAGE="geodan/gost-dashboard-v2:latest"
 GOST_HOST=gost
 
 # Define Volume mappings, map local config file
-# VOL_MAP="-v ${PWD}/index.html:/var/www/html/index.html"
-VOL_MAP=""
+VOL_MAP="-v ${PWD}/config/client_config.json:/var/www/html/client_config.json"
 
 # If we need to expose 8080 from host
 PORT_MAP="-p 8083:8080"
