@@ -26,6 +26,9 @@ log = Util.get_log('Calibration')
 
 
 class MergeRivmJose(Filter):
+    """
+    Merges Rivm and Jose timeseries records.
+    """
     @Config(ptype=int, default=5, required=True)
     def impute_duration(self):
         """
@@ -94,6 +97,10 @@ class MergeRivmJose(Filter):
 
 
 class Calibrator(Filter):
+    """
+    Builds the Calibration model.
+    """
+
     @Config(ptype=int, default=1, required=False)
     def inverse_sample_fraction(self):
         """

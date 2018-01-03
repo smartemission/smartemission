@@ -16,6 +16,11 @@ log = Util.get_log("InfluxDbInput")
 
 
 class InfluxDbInput(DbInput):
+    """
+    InfluxDB TimeSeries (History) Input base class. Uses the
+    `influxdb.InfluxDBClient`.
+    """
+
     # Start attribute config meta
     @Config(ptype=str, required=False, default='localhost')
     def host(self):
@@ -97,6 +102,10 @@ class InfluxDbInput(DbInput):
 
 
 class CalibrationInfluxDbInput(InfluxDbInput):
+    """
+    InfluxDB TimeSeries (History) Input, specific
+    for reading calibration input data.
+    """
 
     @Config(ptype=str, required=True)
     def key(self):
@@ -159,20 +168,20 @@ class HarvesterInfluxDbInput(InfluxDbInput):
     InfluxDB TimeSeries (History) fetcher/formatter.
 
     Fetching all timeseries data from InfluxDB and putting
-    these unaltered into Postgres DB. This is a continuus process.
+    these unaltered into recods e.g. for storing later in Postgres DB. This is a continuous process.
     Strategy is to use checkpointing: keep track of each sensor/timeseries how far we are
     in harvesting.
 
-    Algoritm:
-    - fetch all Measurements (table names)
-    - for each Measurement:
-    - if Measurement (name) is not in progress-table insert and set day,hour to 0
-    - if in progress-table fetch entry (day, hour)
-    - get timeseries (hours) available for that day
-    - fetch and store each, starting with the last hour previously stored
-    - ignore timeseries for current day/hour, as the hour will not be yet filled (and Refiner may else already process)
-    - stored entry: measurement, day, hour, json blob
-    - finish: when all done or when max_proc_time_secs passed
+    Algoritm: 
+        * fetch all Measurements (table names)
+        * for each Measurement:
+        * if Measurement (name) is not in progress-table insert and set day,hour to 0
+        * if in progress-table fetch entry (day, hour)
+        * get timeseries (hours) available for that day
+        * fetch and store each, starting with the last hour previously stored
+        * ignore timeseries for current day/hour, as the hour will not be yet filled (and Refiner may else already process)
+        * stored entry: measurement, day, hour, json blob
+        * finish: when all done or when max_proc_time_secs passed
     """
 
     @Config(ptype=int, default=None, required=True)

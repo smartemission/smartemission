@@ -18,28 +18,39 @@ RIVM measurements.
 
 `Data <calibration.html#data>`_ from Jose and RIVM is `pre-processed
 <calibration.html#pre-processing>`_ before using it to `train
-<calibration.html#training-a-neural-network>`_ a `Artificial Neural Network
+<calibration.html#training-a-neural-network>`_ an `Artificial Neural Network (ANN)
 <calibration.html#neural-networks>`_. The `performance
 <calibration.html#performance-evaluation>`_ is `optimized <calibration
 .html#parameter-optimization>`_ and the `best model is chosen <calibration
 .html#choosing-the-best-model>`_ for `online predictions <calibration
 .html#online-predictions>`_.
 
+These processes were initially executed manually. At a later stage, and thus currently,
+the entire ANN Calibration process is automated.
+
 Data
 ====
 
-The used data comes from two pairs of Jose and RIVM sensors that are located
-close to each other. They are located at the Graafseweg and Ruyterstraat in
+Data used for calibration (training the ANN) originates from Jose (raw data) and RIVM (reference data)
+stations that are located pairwise in close proximity. They are located at the Graafseweg and Ruyterstraat in
 Nijmegen.
 
 Data was gathered for a period of february 2016 to *now*.
 
-Data from RIVM is delivered by Jan Vonk from the RIVM. Data from the Jose
-sensors is delivered by Robert Kieboom.
+Data was initially manually delivered:
 
-The RIVM data has a record for every minute. Data from the Jose sensors have
-more irregularities due to lost wifi connection or power issues. The figure
-below shows the valid gas measurements that were taken by Jose sensors.
+* RIVM reference data by Jan Vonk (RIVM).
+* Raw data from the Jose sensors by Robert Kieboom (CityGIS).
+
+At a later stage, and thus currently, this data delivery is
+automated and continuous:
+
+* RIVM data is harvested from the public RIVM LML SOS via the ETL `harvester_rivm`
+* Jose data is harvested from the Whale Server(s) via the ETL `harvester`
+
+The harvested RIVM SOS data provides aggregated hour-records. Data from the Jose sensors have
+irregularities due to lost wifi connection or power issues. The figure
+below shows the periods of valid gas measurements taken by Jose sensors.
 
 .. figure:: _static/calibration/jose_measurements.png
    :align: center
@@ -65,22 +76,21 @@ Before using the data form Jose and RIVM it needs to be pre-processed:
 * A random subset of 10% of the data is chosen to prevent redundant
   measurements. Actually this step is done during the parameter optimization.
 
-The pre-processing is done in R. See
-https://github.com/Geonovum/smartemission/tree/master/etl/calibration/src/r
+The pre-processing was initially done in R, later in Python (see below).
 
-Neural networks
+Neural Networks
 ===============
 
 There are several options to model the relationship between the Jose
-measurements and RIVM measurements. In this project a feed-forward neural
-network is used.  Its advantage is that it can model complex non-linear
+measurements and RIVM measurements. In this project a *Feed-forward Neural Network*
+is used.  Its advantage is that it can model complex non-linear
 relations. The disadvantage is that understanding the model is hard.
 
-A neural network can be though of as a graph (see Figure 2). A graph
+A neural network in general can be thought of as a graph (see Figure 2). A graph
 contains nodes and edges. The neural network specifies the relation between
 the input nodes and output nodes by several edges and hidden layers. The
 values for the input nodes are clamped to the independent variables in the
-data set, i.e. the Jose measurements. The neural network shoudl adapt the
+data set, i.e. the Jose measurements. The neural network should adapt the
 weights of each of the edges such that the value of the output  node is as
 close as possible to the dependent variable, i.e. the RIVM measurement.
 
@@ -93,12 +103,12 @@ variable.
 .. figure:: _static/calibration/neural_network.png
    :align: center
 
-   *Figure 2 - The structure of a feed-forward neural network can be
+   *Figure 2 - The structure of a Feed-forward Neural Network can be
    visualized as a graph*
 
 .. alternatives
 
-Training a neural network
+Training a Neural Network
 =========================
 
 .. input output specification
@@ -119,8 +129,8 @@ specific record lower. However, it might increase the error on other
 records. Therefore, only a tiny alteration is made for each error in
 each record.
 
-As an addition the used `L-BFGS method <https://en.wikipedia
-.org/wiki/Limited-memory_BFGS>`_ also uses the first and second derivatives
+As an addition the used `L-BFGS method <https://en.wikipedia.org/wiki/Limited-memory_BFGS>`_
+also uses the first and second derivatives
 of the error function to converge faster to a solution.
 
 Performance evaluation
@@ -129,7 +139,7 @@ Performance evaluation
 To evaluate the performance of the model the `Root Mean Squared Error
 <https://en.wikipedia.org/wiki/Root-mean-square_deviation>`_ (RMSE) is used.
 The RMSE is the average error (prediction - actual value) of
-the model. Lower RMSE are better.
+the model. Lower RMSE values are better.
 
 Testing the model on the same data as it is trained on could lead to
 over-fitting. This means that the model learn relations that are not there
@@ -219,7 +229,7 @@ component are listed below: ::
 Online predictions
 ==================
 
-The sensorconverters.py converter has routines to refine the Jose data. Here
+The `sensorconverters.py` converter has routines to refine the Jose data. Here
 the raw Jose measurements for meteo and gas components are used to predict
 the hypothetical RIVM measurements of the gas components.
 
@@ -254,3 +264,52 @@ RIVM measurements.
 
     return val
 
+Implementation
+==============
+
+The implementation of the above processes is realized in Python. Like other ETL
+within the Smart Emission Platform, the implementation is
+completely done using the `Stetl ETL Framework <http://stetl.org>`_.
+The complete implementation `can be found in GitHub <https://github.com/Geonovum/smartemission/tree/master/etl>`_.
+
+Four Stetl ETL processes realize the three phases of ANN Calibration:
+
+* Data Harvesting - obtaining raw (Jose) and reference (RIVM) data (2 processes)
+* Calibrator - the ANN learning process, providing/storing the ANN Model (in PostGIS)
+* Refiner - actual calibration using the ANN Model (from PostGIS)
+
+Data Harvesting and Refiner are scheduled (via cron) continously. The Calibrator runs
+"once in a while".
+
+Data Harvesting
+---------------
+
+The `Harvester_rivm` ETL process obtains LML measurements records from the RIVM SOS.
+Data is stored in InfluxDB.
+
+The standard SE `Harvester` already obtains raw data from the Whale servers
+and stores this data in the PostGIS DB.
+To make this data better accessible
+the `Extractor` selects (not all data goes through ANN)
+and obtains raw measurements (gases and others like meteo) records from the
+PostGIS DB and puts this data in InfluxDB.
+
+The result of Data Harvesting are two `InfluxDB` Measurements collections (tables) with
+timeseries representing the raw (Jose) and reference (RIVM) data.
+
+Calibrator
+----------
+
+The Calibrator takes as input the two InfluxDB Measurements (tables): `rivm` (reference data)
+`joseraw` (Raw Jose data). Here "the magic" is performed in the following steps:
+
+* merging the two datastreams in time
+* performing the learning process
+* storing the result ANN model in PostGIS
+
+Refiner
+-------
+
+This process takes raw data from the harvested timeseries data. By updating the `sensordefs`
+object with references to the ANN model the raw data is calibrated via the `sensorconverters`
+and stored in PostGIS.

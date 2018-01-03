@@ -11,4 +11,4 @@ All development is done via GitHub: see https://github.com/Geonovum/smartemissio
 
 Developers for the SE Data Platform are `Just van den Broecke <http://justobjects.nl>`_ (lead, document editor), Pieter Marsman (calibration), Thijs Brentjens
 
-Contact Michel Grothe at Geonovum via email at michel AT geonovum.nl
+Contact Just van den Broecke at email at just AT justobjects.nl

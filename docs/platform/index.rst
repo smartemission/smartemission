@@ -17,6 +17,7 @@ Contents:
    installation.rst
    administration.rst
    dissemination.rst
+   code.rst
    contact.rst
    links.rst
    notes.rst

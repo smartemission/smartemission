@@ -194,3 +194,4 @@ vignettes/*.pdf
 .DS_Store
 
 services/sos52n/configbackup
+docs/platform/_build/

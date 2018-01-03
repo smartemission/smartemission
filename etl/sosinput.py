@@ -20,13 +20,14 @@ class SosInput(HttpInput):
     Interacts with JSON SOS API
 
     Algorithm:
-    - Get feature info (first timestamp)
-    - While features left
-        - timestamp = first timestamp feature
-        - While timestamp < now
-            - Get data from timestamp and feature
-            - Increase timestamp (local and db)
-    - Switch to next feature
+        * Get feature info (first timestamp)
+        * While features left
+            - timestamp = first timestamp feature
+            - While timestamp < now
+                - Get data from timestamp and feature
+                - Increase timestamp (local and db)
+        * Switch to next feature
+        
     """
 
     @Config(ptype=list, required=True)

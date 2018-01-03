@@ -12,6 +12,7 @@ from stetl.packet import FORMAT
 from stetl.component import Config
 log = Util.get_log('sosoutput')
 
+
 class SOSTOutput(HttpOutput):
     """
     Output via SOS-T protocol over plain HTTP.
@@ -54,7 +55,10 @@ class SOSTOutput(HttpOutput):
         self.insert_obs_templ_str = None
 
     def init(self):
-        # read the insert_observation template once
+        """
+        Read all template files once.
+        """
+
         log.info('Init: read template file: %s' % self.insert_obs_templ_path)
         with open(self.insert_obs_templ_path, 'r') as f:
             self.insert_obs_templ_str = f.read()
@@ -123,21 +127,6 @@ class SOSTOutput(HttpOutput):
         return statuscode, statusmessage, res
 
     def create_insert_sensor_payload(self, packet):
-        # String substitution based on Python String.format()
-        # <local_id>STA-NL00807</local_id>
-        # <natl_station_code>807</natl_station_code>
-        # <eu_station_code>NL00807</eu_station_code>
-        # <name>Hellendoorn-Luttenbergerweg</name>
-        # <municipality>Hellendoorn</municipality>
-        # <altitude>7</altitude>
-        # <altitude_unit>m</altitude_unit>
-        # <area_classification>http://dd.eionet.europa.eu/vocabulary/aq/areaclassification/rural</area_classification>
-        # <activity_begin>1976-04-02T00:00:00+01:00</activity_begin>
-        # <activity_end></activity_end>
-        # <version></version>
-        # <belongs_to></belongs_to>
-        # <lon></lon>
-        # <lat></lat>
         record = packet.data
         format_args = dict()
         format_args['station_id'] = record['device_id']
@@ -150,7 +139,9 @@ class SOSTOutput(HttpOutput):
         return payload
 
     def create_update_sensor_desc_payload(self, packet):
-        # NOT (YET) USED, HOPED TO UPDATE featureofinterest location but did not work.
+        """
+        NOT (YET) USED, HOPED TO UPDATE featureofinterest location but did not work.
+        """
         # String substitution based on Python String.format()
         # See also https://github.com/ioos/i52n-sos/blob/master/webapp-ioos/src/main/webapp/static/examples/sos_v20/requests_xml/Transactional/UpdateSensorDescription.xml
         record = packet.data
@@ -165,6 +156,11 @@ class SOSTOutput(HttpOutput):
         return payload
 
     def create_payload(self, packet):
+        """
+        Create `InsertObservation` JSON Payload from template and parms in Stetl `record`.
+        :param packet:
+        :return payload:
+        """
         # InsertObservation
         # See also
         # https://github.com/52North/SOS/blob/develop/coding/json/src/main/resources/examples/measurement-geometry-inline.json

@@ -107,7 +107,7 @@ Now create and initialize all databases (PostGIS and InfluxDb): ::
 Install System Service
 ----------------------
 
-The entire platform (all Docker Images and `cron jobs <https://github.com/Geonovum/smartemission/platform/cronfile.txt>`_) can be started/stopped with single
+The entire platform (all Docker Images and `cron jobs <../../platform/cronfile.txt>`_) can be started/stopped with single
 system service command `smartem <https://github.com/Geonovum/smartemission/platform/smartem.initd.sh>`_ : ::
 
     # Installs Linux system service "smartem" in /etc/init.d
