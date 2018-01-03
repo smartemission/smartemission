@@ -67,7 +67,13 @@ class STAOutput(HttpOutput):
 
         self.http_session = requests.Session()
 
-    # general util to read/GET from STA
+    # generic util to format Python datetime object to STA format date
+    # Time format: "yyyy-MM-dd'T'HH:mm+0N00"  e.g. 2013-09-29T18:46:19+0100
+    def format_datetime(self, dt):
+        t_offset = dt.tzinfo._offset.seconds / 3600
+        return dt.strftime('%Y-%m-%dT%H:%M:%S' + '+0%d:00' % t_offset)
+
+    # generic util to read/GET from STA
     def read_from_url(self, url, parameters=None):
         """
         Read the data from the URL.
@@ -143,16 +149,24 @@ class STAOutput(HttpOutput):
         url = self.base_url + "/" + entity_type + "(%d)" % entity_id
         headers = {"Content-Type": "application/json", "Accept": "application/json"}
 
+        if self.user is not None:
+            auth = base64.encodestring('%s:%s' % (self.user, self.password)).replace('\n', '')
+            headers["Authorization"] = "Basic %s" % auth
+
         status_code = -1
+        status_msg = ''
+        response_text = ''
         try:
             response = self.http_session.patch(url, data=json.dumps(json_struct), headers=headers)
             status_code = response.status_code
-            log.info('PATCH: status=%s' % response.content)
+            status_msg = str(response.status_code)
+            response_text = response.content
+            log.info('PATCH: status=%s' % response_text)
         except Exception as e:
             log.error('Error PATCHing to URL %s: e=%s' % (url, str(e)))
             pass
 
-        return status_code
+        return status_code, status_msg, response_text
 
     def init_templates(self):
         # read all POST payload templates once
@@ -206,6 +220,30 @@ class STAOutput(HttpOutput):
         self.init_observedproperties()
         self.init_sensors()
 
+    # called by baseclass, overloaded
+    def exit(self):
+        """
+        Mainly patch all Things with their last update time.
+        """
+        for device_id in self.things:
+            thing = self.things[device_id]
+            # update (patch) Thing last update time once per session
+            thing_patch = {
+                "properties": {
+                    "id": device_id,
+                    "project_id": int(device_id)/10000,
+                    "last_update": thing['properties']['last_update']
+                }
+            }
+            status_code, status_msg, response_text = self.patch('Things', thing['@iot.id'], thing_patch)
+
+            # Check result
+            if status_code in [200, 201]:
+                log.info('YES patched Thing! device_id=%s status=%s' % (device_id, status_msg))
+            else:
+                log.warn('FAIL patching Thing! device_id=%s status=%s resp=%s' % (device_id, status_msg, response_text))
+
+
     def post_sensor(self, record):
         format_args = dict()
 
@@ -246,6 +284,7 @@ class STAOutput(HttpOutput):
 
         format_args['station_id'] = record['device_id']
         format_args['project_id'] = record['device_id']/10000
+        format_args['last_update'] = self.format_datetime(record['time'])
         # format_args['station_altitude'] = record['altitude']
         format_args['station_lon'] = record['lon']
         format_args['station_lat'] = record['lat']
@@ -384,9 +423,7 @@ class STAOutput(HttpOutput):
         format_args = dict()
 
         # Time format: "yyyy-MM-dd'T'HH:mm+0N00"  e.g. 2013-09-29T18:46:19+0100
-        t = record['time']
-        t_offset = t.tzinfo._offset.seconds / 3600
-        format_args['sample_time'] = t.strftime('%Y-%m-%dT%H:%M:%S' + '+0%d:00' % t_offset)
+        format_args['sample_time'] = self.format_datetime(record['time'])
         format_args['sample_value'] = record['value']
         format_args['datastream_id'] = datastream['@iot.id']
         format_args['parameters'] = '"gid": %d, "raw_gid": %d, "station": %d, "name": "%s"' % (
@@ -394,6 +431,9 @@ class STAOutput(HttpOutput):
 
         # Create POST payload from template
         payload = self.entity_templates['observation'].format(**format_args)
+
+        # Update last update time property for Thing from Observation
+        thing['properties']['last_update'] = format_args['sample_time']
 
         # REST: post to remote collection
         self.path = '/Observations'
