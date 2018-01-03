@@ -14,6 +14,8 @@ CREATE TABLE smartem_raw.timeseries (
   hour integer not null,
   data json,
   complete boolean default false,
+  device_type character varying not null default 'jose',
+  device_version character varying not null default '1',
   PRIMARY KEY (gid)
 ) WITHOUT OIDS;
 

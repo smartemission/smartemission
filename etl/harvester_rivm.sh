@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# ETL for reading last values from Smart Emission CityGIS Raw Sensor API
+# ETL for reading last values from from the RIVM LML SOS Rest API
 #
 
 STETL_ARGS="stetl -c harvester_rivm.cfg -a options/`hostname`.args"

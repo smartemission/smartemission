@@ -75,6 +75,8 @@ class RefineFilter(Filter):
         day = record_in['day']
         hour = record_in['hour']
         validate_errs = 0
+
+        # Go through each record in timeseries list
         for sensor_vals in ts_list:
             # Go through all the configured sensor outputs we need to calc values for
             for sensor_name in self.sensor_names:

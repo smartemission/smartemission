@@ -40,7 +40,7 @@ PORT_MAP="-p 80:80"
 
 #
 LINK_MAP="--link ${PG_HOST}:${PG_HOST} --link ${GS_HOST}:${GS_HOST} --link ${SOS52N_HOST}:${SOS52N_HOST} --link ${INFLUXDB_HOST}:${INFLUXDB_HOST} --link ${GRAFANA_HOST}:${GRAFANA_HOST} --link ${STA_GOST_HOST}:${STA_GOST_HOST} --link ${STA_GOSTDASHBOARD_HOST}:${STA_GOSTDASHBOARD_HOST} --link ${MON_PROMETHEUS_HOST}:${MON_PROMETHEUS_HOST} --link ${MON_GRAFANA_HOST}:${MON_GRAFANA_HOST}"
-# LINK_MAP="--link ${PG_HOST}:${PG_HOST} --link ${STA_GOST_HOST}:${STA_GOST_HOST}"
+# LINK_MAP="--link ${PG_HOST}:${PG_HOST} --link ${SOS52N_HOST}:${SOS52N_HOST}"
 # NETWORKS="--network=monitoring_front-tier"
 
 HOSTS_MAP="--add-host=parent-host:${PARENT_HOST}"

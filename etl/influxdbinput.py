@@ -150,7 +150,9 @@ class CalibrationInfluxDbInput(InfluxDbInput):
 
         return packet
 
+
 NANOS_FACTOR = 1000 * 1000 * 1000
+
 
 class HarvesterInfluxDbInput(InfluxDbInput):
     """
@@ -184,10 +186,21 @@ class HarvesterInfluxDbInput(InfluxDbInput):
         """
         pass
 
-    @Config(ptype=str, default=None, required=False)
-    def data_param_prefix(self):
+    @Config(ptype=str, default=None, required=True)
+    def device_type(self):
         """
-        The prefix string to place before each parameter name in data, e.g. 'ase_'.
+        The station/device type, e.g. 'ase'.
+
+        Required: False
+
+        Default: None
+        """
+        pass
+
+    @Config(ptype=str, default=None, required=True)
+    def device_version(self):
+        """
+        The station/device version, e.g. '1'.
 
         Required: False
 
@@ -198,7 +211,7 @@ class HarvesterInfluxDbInput(InfluxDbInput):
     @Config(ptype=dict, default=None, required=False)
     def meas_name_to_device_id(self):
         """
-        How to map InfluxDB Measurement names to SE device id's.
+        How to map InfluxDB Measurement (table) names to SE device id's.
         e.g. {'Geonovum1' : '1181001', 'RIVM2' : '1181002'}
 
         Required: False
@@ -428,16 +441,18 @@ class HarvesterInfluxDbInput(InfluxDbInput):
 
         # Timestamp of sample
         record['device_id'] = device_id
+        record['device_type'] = self.device_type
+        record['device_version'] = self.device_version
         record['day'] = day
         record['hour'] = hour
 
         # Optional prefix for each param, usually sensor-box type e.g. "ase_"
-        if self.data_param_prefix:
-            for data_elm in data:
-                keys = data_elm.keys()
-                # https://stackoverflow.com/questions/4406501/change-the-name-of-a-key-in-dictionary
-                for key in keys:
-                    data_elm[self.data_param_prefix + key] = data_elm.pop(key)
+        # if self.data_param_prefix:
+        #     for data_elm in data:
+        #         keys = data_elm.keys()
+        #         # https://stackoverflow.com/questions/4406501/change-the-name-of-a-key-in-dictionary
+        #         for key in keys:
+        #             data_elm[self.data_param_prefix + key] = data_elm.pop(key)
                 
         # Add JSON text blob
         record['data'] = json.dumps({

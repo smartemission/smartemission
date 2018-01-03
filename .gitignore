@@ -192,3 +192,5 @@ vignettes/*.pdf
 .vagrant
 
 .DS_Store
+
+services/sos52n/configbackup
