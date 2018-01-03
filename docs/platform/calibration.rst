@@ -56,8 +56,8 @@ Data was initially manually delivered:
 At a later stage, and thus currently, this data delivery is
 automated and continuous:
 
-* RIVM data is harvested from the public RIVM LML SOS via the ETL `harvester_rivm`
-* Jose data is harvested from the Whale Server(s) via the ETL `harvester`
+* RIVM data is harvested from the public RIVM LML SOS via the ETL `Harvester_rivm`
+* Jose data is harvested from the Whale Server(s) via the ETL `Harvester` and then further extracted via the ETL `Extractor`
 
 The harvested RIVM SOS data provides aggregated hour-records. Data from the Jose sensors have
 irregularities due to lost wifi connection or power issues. The figure
