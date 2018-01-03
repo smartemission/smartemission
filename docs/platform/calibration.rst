@@ -4,8 +4,8 @@
 Calibration
 ===========
 
-This chapter describes how gas measurements in kOhm and ppb are translated
-to the 'better interpretable values' of ug/m3.
+This chapter describes how gas measurements in `kOhm` and `ppb` are translated
+to the standardized and 'better interpretable' units of `ug/m3` (microgram per cubic meter).
 
 The challenge is that Jose sensors produce noisy and biased measurements of
 gas components on a wrong scale. The data is noisy because two consecutive
@@ -27,6 +27,17 @@ RIVM measurements.
 
 These processes were initially executed manually. At a later stage, and thus currently,
 the entire ANN Calibration process is automated.
+
+The idea to use ANN emerged when initial calibration using Linear Regresssion-based
+methods did not render satisfactory results. From studying existing research like
+
+* `"Field calibration of a cluster of low-cost available sensors for air quality monitoring" by Spinelle, Gerboles et al <http://www.sciencedirect.com/science/article/pii/S092540051500355X>`_
+* `"Air Temperature Estimation by Using Artificial Neural Network Models in the Greater Athens Area, Greece" by A. P. Kamoutsis et al. <https://www.hindawi.com/journals/isrn/2013/489350/>`_
+
+ANN appeared a good candidate. Though complex when manually performed, we also
+aimed to overcome this by automating both the learning and calibration process
+within the already existing SE ETL process pipelines.
+
 
 Data
 ====
@@ -263,6 +274,29 @@ RIVM measurements.
         val = pipeline_objects[gas].predict(value_array.reshape(1, -1))[0]
 
     return val
+
+Results
+=======
+
+Calibrated values are also stored in InfluxDB and can be `viewed using Grafana <http://data.smartemission.nl/grafana/>`_.
+Login with name `user` and password `user`.
+
+See an example in Figure 4 and 5 below. Especially in Figure 4, one can see that calibrated values
+follow the RIVM reference values quite nicely. More research is needed to see
+how the ANN is statistically behaves.
+
+
+.. figure:: _static/calibration/grafana2.jpg
+   :align: center
+
+   *Figure 4 - Calibrated and Reference values in Grafana*
+
+
+.. figure:: _static/calibration/grafana1.jpg
+   :align: center
+
+   *Figure 5 - Calibrated and Reference values in Grafana*
+
 
 Implementation
 ==============
