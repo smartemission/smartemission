@@ -7,11 +7,12 @@ BACKUP_DIR="/var/smartem/backup/influxdb"
 NAME="influxdb"
 IMAGE="influxdb:1.4.2"
 
-DBS="airsenseur"
+DBS="smartemission"
 
 # NB possibly best to make InfluxDB empty (db-init-influxdb.sh script)!
 # otherwise this issue: https://github.com/influxdata/influxdb/issues/8320
-#
+# and restore just one DB...
+
 ./stop.sh
 for DB in ${DBS}
 do

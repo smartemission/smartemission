@@ -238,7 +238,7 @@ class InfluxDbOutput(HttpOutput):
 
         # Optional extra geohash as field template
         if self.geohash_field:
-            self.geohash_field_template = ',' + self.geohash_field_name + '=%s'
+            self.geohash_field_template = ',' + self.geohash_field_name + '="%s"'
 
         # will expand to <measurement>,<tags> <fields>
         # e.g. joseraw,station=19,component=no2raw value=12345,geohash_tag=uvx53kryp 1434055562000000000
