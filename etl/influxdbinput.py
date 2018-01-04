@@ -145,7 +145,7 @@ class CalibrationInfluxDbInput(InfluxDbInput):
                     self.last_timestamp = db_ret[-1]['time']
                     log.info('Last timestamp from influxdb is %s' % self.last_timestamp)
                     df = pd.DataFrame.from_records(db_ret)
-                    df = df.pivot_table('value', ['geohash', 'time'],
+                    df = df.pivot_table('value', ['geohash_tag', 'time'],
                                         'component').reset_index()
                     dfs.append(df)
                 else:

@@ -5,10 +5,13 @@
 DATA_DIR="/var/smartem/data/influxdb"
 BACKUP_DIR="/var/smartem/backup/influxdb"
 NAME="influxdb"
-IMAGE="influxdb:1.1.1"
+IMAGE="influxdb:1.4.2"
 
-DBS="airsenseur smartemission"
+DBS="airsenseur"
 
+# NB possibly best to make InfluxDB empty (db-init-influxdb.sh script)!
+# otherwise this issue: https://github.com/influxdata/influxdb/issues/8320
+#
 ./stop.sh
 for DB in ${DBS}
 do
