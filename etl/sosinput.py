@@ -174,7 +174,7 @@ class SosInput(HttpInput):
         json_obj = None
         try:
             json_obj = json.loads(raw_str)
-        except Exception, e:
+        except Exception as e:
             log.error('Cannot parse JSON from %s, err= %s' % (raw_str, str(e)))
 
         return json_obj
@@ -185,6 +185,10 @@ class SosInput(HttpInput):
 
 
 class RIVMSosInput(SosInput, PostgresDbInput):
+    """
+    Specialized SOS Input for RIVM SOS, adds progress tracking.
+    """
+
     @Config(ptype=str, required=True)
     def progress_query(self):
         """

@@ -9,7 +9,6 @@ import sys
 import traceback
 from stetl.component import Config
 from stetl.filter import Filter
-from stetl.inputs.dbinput import PostgresDbInput
 from stetl.packet import FORMAT
 from stetl.util import Util
 
@@ -160,74 +159,3 @@ class ExtractFilter(Filter):
             unique_id, gid, len(records_out), validate_errs))
 
         return packet
-
-
-class LastIdFilter(PostgresDbInput):
-    @Config(ptype=str, required=True)
-    def progress_update(self):
-        """
-        Query to update progress
-
-        Required: True
-
-        Default: ""
-        """
-        pass
-
-    @Config(ptype=str, required=True)
-    def id_key(self):
-        """
-        Key to select id from record array
-
-        Required: True
-        """
-
-    @Config(ptype=str, default=None, required=False)
-    def name_key(self):
-        """
-        Key to select name from record array
-
-        Required: True
-        """
-
-    def __init__(self, configdict, section):
-        PostgresDbInput.__init__(self, configdict, section)
-        self.last_id = None
-
-    def invoke(self, packet):
-        self.last_id = dict()
-
-        if packet.data is None or packet.is_end_of_doc() or packet.is_end_of_stream():
-            log.info("No packet data or end of doc/stream")
-            return packet
-
-        record_in = packet.data
-        if type(record_in) is not list:
-            record_in = [record_in]
-        for record in record_in:
-            if self.name_key is not None:
-                name = record[self.name_key]
-            else:
-                name = "all"
-            if len(record) > 0:
-                new = record[self.id_key]
-                self.last_id[name] = max(self.last_id.get(name, -1), new)
-
-        log.info("Maximum gids are %s", str(self.last_id))
-
-        return packet
-
-    def after_chain_invoke(self, packet):
-        """
-        Called right after entire Component Chain invoke.
-        Used to update last id of processed file record.
-        """
-        for name, progress in self.last_id.iteritems():
-            param = (progress, name)
-            log.info('Updating progress table with (id=%d, name=%s)' % param)
-            self.db.execute(self.progress_update % param)
-            self.db.commit(close=False)
-            log.info('Update progress table ok')
-        else:
-            log.info('No update for progress table')
-        return True
