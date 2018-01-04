@@ -254,11 +254,53 @@ All can be restored as follows, assuming we have the data in some backup. ::
 Admin UI
 ========
 
-There is a simple admin UI for several tasks and inpections. The Admin URL can be found
+There is a simple password-protected admin UI for several tasks and inpections. The Admin URL can be found
 via the "Links" entry SE Platform website (<data|test>.smartemission.nl).
+
+Via a main screen admin tasks and inpections are selected.
+
+.. figure:: _static/screenshots/admin1.jpg
+   :align: center
+
+   *Figure  - SE Admin Page Main Screen*
+
+Database Management
+-------------------
+
+Management of Postgres/PostGIS DB data is provided via phppgadmin.
+
+.. figure:: _static/screenshots/phppgadmin1.jpg
+   :align: center
+
+   *Figure  - Postgres DB Management via phppgadmin*
+
+Management of InfluxDB data is provided via Chronograf.
+
+.. figure:: _static/screenshots/chronograf1.jpg
+   :align: center
+
+   *Figure  - InfluxDB Management via Chronograf*
+
+Services Management
+-------------------
+
+Most of the application servers provide their own management web UI. These can
+be invoked from the admin page as well, for example:
+
+* GeoServer Admin
+* SOS 52North Admin
+* Grafana Admin
+* SensorThings API (via GOST) Dashboard
+
+Log Inspection
+--------------
+
+All log files for the ETL and for the application services can be accessed via the admin screen.
 
 Monitoring
 ==========
+
+Local monitoring tools are invoked from the admin screen (see above).
 
 Services Uptime
 ---------------
