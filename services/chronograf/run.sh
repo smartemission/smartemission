@@ -24,19 +24,18 @@ sudo mkdir -p ${LOG_DIR}
 sudo chmod 777 ${LOG_DIR}
 
 NAME="chronograf"
-IMAGE="chronograf:latest"
+IMAGE="chronograf:1.4-alpine"
 
 # Define Volume mappings, map local config file
 # See https://github.com/toke/docker-chronograf/blob/master/README.md
-VOL_MAP="-v chronograf:/var/lib/chronograf"
-VOL_MAP=""
+VOL_MAP="-v ${DATA_DIR}:/var/lib/chronograf"
 
 # If we need to expose host
 PORT_MAP="-p 8888:8888"
 
 LINK_MAP="--link ${INFLUX_HOST}:${INFLUX_HOST}"
 
-EXTRA_ARGS="--basepath=/adm/chronograf --influxdb-url=http://influxdb:8086 --influxdb-username=${influx_admin_user} --influxdb-password=${influx_admin_password}"
+EXTRA_ARGS="--bolt-path=/var/lib/chronograf/chronograf.db --basepath=/adm/chronograf --influxdb-url=http://influxdb:8086 --influxdb-username=${influx_admin_user} --influxdb-password=${influx_admin_password}"
 
 # Stop and remove possibly old containers
 sudo docker stop ${NAME} > /dev/null 2>&1

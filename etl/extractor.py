@@ -139,8 +139,7 @@ class ExtractFilter(Filter):
                             sensor_record['lon'] = lon
 
                         # No 'point' proceeding without a location
-                        if 'lat' not in sensor_record or \
-                                        'lon' not in sensor_record:
+                        if 'lat' not in sensor_record or 'lon' not in sensor_record:
                             validate_errs += 1
                             continue
 
