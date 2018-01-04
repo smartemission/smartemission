@@ -326,6 +326,20 @@ See https://github.com/Geonovum/smartemission/tree/master/services/influxdb.
 
 To be supplied further.
 
+chronograf - Chronograf
+-----------------------
+
+This runs the Chronograf service as a Docker container.
+Chronograf is a visual admin tool for a.o. InfluxDB. See https://www.influxdata.com:
+
+    Chronograf is a visualization tool for time series data in InfluxDB.
+
+The Docker image comes from https://hub.docker.com/_/chronograf/
+
+See https://github.com/Geonovum/smartemission/tree/master/services/chronograf.
+
+Only accessible via SE Admin web UI. To be supplied further.
+
 grafana - Grafana
 -----------------
 

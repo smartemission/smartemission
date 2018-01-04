@@ -142,6 +142,7 @@ Docker Containers will be created/used for:
 * ``Stetl`` : container for the Python-based ETL framework used
 * ``PostGIS`` : container running PostgreSQL with PostGIS extension
 * ``InfluxDB``: container running InfluxDB server from `InfluxData <https://www.influxdata.com>`_
+* ``Chronograf``: container running Chronograf (InfluxDB Admin) from `InfluxData <https://www.influxdata.com>`_
 * ``Grafana``: container running Grafana Dashboard
 * ``MQTT``: container running Mosquitto MQTT
 * ``NodeRed``: container running NodeRed Dashboard
@@ -166,6 +167,7 @@ The list of Docker Containers, each with their related Docker Image:
 * ``geoserver`` - GeoServer web app - image: ``geonovum/geoserver`` based on ``kartoza/geoserver``
 * ``sos52n`` - 52North SOS web app -  - image: ``geonovum/sos52n``
 * ``influxdb`` - InfluxDB Timeseries DB - image: ``influxdb:1.1.1`` (from `DockerHub <https://hub.docker.com/_/influxdb/>`_)
+* ``chronograf`` - InfluxDB Timeseries DB admin - image: ``chronograf:1.4`` (from `DockerHub <https://hub.docker.com/_/chronograf/>`_)
 * ``grafana`` - InfluxDB Timeseries DB - image: ``grafana/grafana:4.1.1`` (from http://docs.grafana.org/installation/docker/)
 * ``gost`` - GOST from Geodan - image: https://hub.docker.com/r/geodan/gost/
 * ``mosquitto``: container running Mosquitto MQTT - image: ``toke/mosquitto``
