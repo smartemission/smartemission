@@ -32,6 +32,7 @@ VOL_MAP="-v ${DATA_DIR}:/var/lib/chronograf"
 
 # If we need to expose host
 PORT_MAP="-p 8888:8888"
+PORT_MAP=""
 
 LINK_MAP="--link ${INFLUX_HOST}:${INFLUX_HOST}"
 
