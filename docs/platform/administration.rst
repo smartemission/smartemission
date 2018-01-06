@@ -281,6 +281,13 @@ Management of InfluxDB data is provided via Chronograf.
 
    *Figure  - InfluxDB Management via Chronograf*
 
+Also possibility to develop dashboards.
+
+.. figure:: _static/screenshots/chronograf2.jpg
+   :align: center
+
+   *Figure  - InfluxDB Management Dashboards in Chronograf*
+
 Services Management
 -------------------
 
