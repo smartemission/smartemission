@@ -1,40 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_AIRSENSEUR-INFLUX",
-      "label": "AirSenseur-Influx",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "influxdb",
-      "pluginName": "InfluxDB"
-    }
-  ],
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "4.6.3"
-    },
-    {
-      "type": "panel",
-      "id": "graph",
-      "name": "Graph",
-      "version": ""
-    },
-    {
-      "type": "datasource",
-      "id": "influxdb",
-      "name": "InfluxDB",
-      "version": "1.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "singlestat",
-      "name": "Singlestat",
-      "version": ""
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -48,12 +12,12 @@
       }
     ]
   },
-  "description": "AirSensEUR Unit in The Netherlands",
+  "description": "AirSensEUR Units in The Netherlands",
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
   "hideControls": false,
-  "id": null,
+  "id": 6,
   "links": [],
   "refresh": false,
   "rows": [
@@ -66,7 +30,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_AIRSENSEUR-INFLUX}",
+          "datasource": "AirSenseur-Influx",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -111,7 +75,8 @@
                   "type": "fill"
                 }
               ],
-              "measurement": "Geonovum1",
+              "measurement": "JustObjects1",
+              "orderByTime": "ASC",
               "policy": "default",
               "refId": "A",
               "resultFormat": "time_series",
@@ -133,7 +98,7 @@
                 {
                   "key": "name",
                   "operator": "=",
-                  "value": "NO23E50"
+                  "value": "NO2-B43F"
                 }
               ]
             }
@@ -141,7 +106,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "NO2-3E50",
+          "title": "NO2-B4DF",
           "tooltip": {
             "msResolution": true,
             "shared": true,
@@ -192,7 +157,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_AIRSENSEUR-INFLUX}",
+          "datasource": "AirSenseur-Influx",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -237,7 +202,8 @@
                   "type": "fill"
                 }
               ],
-              "measurement": "Geonovum1",
+              "measurement": "JustObjects1",
+              "orderByTime": "ASC",
               "policy": "default",
               "refId": "A",
               "resultFormat": "time_series",
@@ -259,7 +225,7 @@
                 {
                   "key": "name",
                   "operator": "=",
-                  "value": "CO3E300"
+                  "value": "CO/MF-200"
                 }
               ]
             }
@@ -267,7 +233,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "CO-3E300",
+          "title": "CO/MF-200",
           "tooltip": {
             "msResolution": true,
             "shared": true,
@@ -318,7 +284,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_AIRSENSEUR-INFLUX}",
+          "datasource": "AirSenseur-Influx",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -363,7 +329,8 @@
                   "type": "fill"
                 }
               ],
-              "measurement": "Geonovum1",
+              "measurement": "JustObjects1",
+              "orderByTime": "ASC",
               "policy": "default",
               "refId": "A",
               "resultFormat": "time_series",
@@ -385,7 +352,7 @@
                 {
                   "key": "name",
                   "operator": "=",
-                  "value": "NO3E100"
+                  "value": "NO-B4"
                 }
               ]
             }
@@ -393,7 +360,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "NO-3E100",
+          "title": "NO-B4",
           "tooltip": {
             "msResolution": true,
             "shared": true,
@@ -444,7 +411,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_AIRSENSEUR-INFLUX}",
+          "datasource": "AirSenseur-Influx",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -489,7 +456,8 @@
                   "type": "fill"
                 }
               ],
-              "measurement": "Geonovum1",
+              "measurement": "JustObjects1",
+              "orderByTime": "ASC",
               "policy": "default",
               "refId": "A",
               "resultFormat": "time_series",
@@ -511,7 +479,7 @@
                 {
                   "key": "name",
                   "operator": "=",
-                  "value": "O33EF1"
+                  "value": "O3/M-5"
                 }
               ]
             }
@@ -519,7 +487,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "O3-3EF1",
+          "title": "O3/M-5",
           "tooltip": {
             "msResolution": true,
             "shared": true,
@@ -570,7 +538,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_AIRSENSEUR-INFLUX}",
+          "datasource": "AirSenseur-Influx",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -616,7 +584,7 @@
                   "type": "fill"
                 }
               ],
-              "measurement": "Geonovum1",
+              "measurement": "JustObjects1",
               "policy": "default",
               "refId": "A",
               "resultFormat": "time_series",
@@ -685,7 +653,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_AIRSENSEUR-INFLUX}",
+          "datasource": "AirSenseur-Influx",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -730,7 +698,7 @@
                   "type": "fill"
                 }
               ],
-              "measurement": "Geonovum1",
+              "measurement": "JustObjects1",
               "policy": "default",
               "refId": "A",
               "resultFormat": "time_series",
@@ -799,7 +767,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_AIRSENSEUR-INFLUX}",
+          "datasource": "AirSenseur-Influx",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -844,7 +812,7 @@
                   "type": "fill"
                 }
               ],
-              "measurement": "Geonovum1",
+              "measurement": "JustObjects1",
               "policy": "default",
               "refId": "A",
               "resultFormat": "time_series",
@@ -929,7 +897,7 @@
             "rgba(237, 129, 40, 0.89)",
             "rgba(50, 172, 45, 0.97)"
           ],
-          "datasource": "${DS_AIRSENSEUR-INFLUX}",
+          "datasource": "AirSenseur-Influx",
           "decimals": 4,
           "description": "",
           "editable": true,
@@ -983,7 +951,7 @@
               "dsType": "influxdb",
               "groupBy": [],
               "hide": false,
-              "measurement": "Geonovum1",
+              "measurement": "JustObjects1",
               "policy": "default",
               "refId": "A",
               "resultFormat": "time_series",
@@ -1028,7 +996,7 @@
             "rgba(237, 129, 40, 0.89)",
             "rgba(50, 172, 45, 0.97)"
           ],
-          "datasource": "${DS_AIRSENSEUR-INFLUX}",
+          "datasource": "AirSenseur-Influx",
           "decimals": 4,
           "editable": true,
           "error": false,
@@ -1080,7 +1048,7 @@
             {
               "dsType": "influxdb",
               "groupBy": [],
-              "measurement": "Geonovum1",
+              "measurement": "JustObjects1",
               "policy": "default",
               "refId": "A",
               "resultFormat": "time_series",
@@ -1129,7 +1097,7 @@
             "rgba(237, 129, 40, 0.89)",
             "rgba(50, 172, 45, 0.97)"
           ],
-          "datasource": "${DS_AIRSENSEUR-INFLUX}",
+          "datasource": "AirSenseur-Influx",
           "editable": true,
           "error": false,
           "format": "none",
@@ -1193,7 +1161,7 @@
                   "type": "fill"
                 }
               ],
-              "measurement": "Geonovum1",
+              "measurement": "JustObjects1",
               "policy": "default",
               "refId": "A",
               "resultFormat": "time_series",
@@ -1249,8 +1217,8 @@
     "list": []
   },
   "time": {
-    "from": "now-7d",
-    "to": "now"
+    "from": "2017-12-05T15:51:59.838Z",
+    "to": "2017-12-22T09:15:19.226Z"
   },
   "timepicker": {
     "enable": false,
@@ -1280,6 +1248,6 @@
     "type": "timepicker"
   },
   "timezone": "browser",
-  "title": "AirSensEUR_Geonovum1",
-  "version": 1
+  "title": "AirSensEUR_JustObjects1",
+  "version": 7
 }
