@@ -1,92 +1,115 @@
 # -*- coding: utf-8 -*-
 #
-# Filter to consume a raw record of Smart Emission data (one hour for one device) , refining these, producing records.
+# Consume a raw record of Smart Emission data (one hour for one device), refining these, producing records.
 #
 
 
-# Author: Just van den Broecke - 2015
-import sys, traceback
-
-from stetl.filter import Filter
-from stetl.util import Util
-from stetl.packet import FORMAT
-from stetl.component import Config
-
+# Author: Just van den Broecke - 2015-2018
+import sys
+import traceback
+import math
 import pytz
-from sensordefs import *
+from datetime import datetime, timedelta
 
-log = Util.get_log("RefineFilter")
+from smartem.devices.devicereg import DeviceReg
+import logging
+
+log = logging.getLogger('Refiner')
 
 
-class RefineFilter(Filter):
-    """
-    Filter to consume single raw record with sensor (single hour) timeseries values and produce refined record for each component.
-    Refinement entails: calibration (e.g. Ohm to ug/m3) and aggregation (hour-values).
-    Input is a single timeseries record for a single hour with all sensorvalues for a single device within that hour.
-    """
+class Refiner:
+    # Refiner instance is Singleton: one per process.
+    refiners = {}
+    
+    def __init__(self, device):
+        self.device = device
+        self.config_dict = None
 
-    @Config(ptype=list, default=[], required=True)
-    def sensor_names(self):
+    @staticmethod
+    def get_refiner(device_type):
         """
-        The output sensor names to refine.
+        Get Refiner for device type, Singleton factory function.
 
-        Required: True
-
-        Default: []
+        :param device_type:  e.g. "jose" or "ase"
+        :return Refiner instance: single instance for device type
         """
-        pass
+        if device_type not in Refiner.refiners:
+            device = DeviceReg.get_device(device_type)
+            if not device:
+                log.warn('No Device available for device_type=%s (no Device class found)' % device_type)
+                return None
 
-    def __init__(self, configdict, section):
-        Filter.__init__(self, configdict, section, consumes=FORMAT.record, produces=FORMAT.record_array)
-        self.current_record = None
+            Refiner.refiners[device_type] = Refiner(device)
+
+        return Refiner.refiners[device_type]
+
+    def init(self, config_dict):
+        """
+        Initialize with dict of config parameters.
+        :param config_dict:
+        :return:
+        """
+
+        self.config_dict = config_dict
+        self.device.init(self.config_dict)
+
+    def exit(self):
+        self.device.exit()
 
     # M = M + (x-M)/n
     # Here M is the (cumulative moving) average, x is the new value in the
     # sequence, n is the count of values. Using floats as not to loose precision.
-    def moving_average(self, M, x, n, unit):
+    def moving_average(self, moving_avg, x, n, unit):
         if 'dB' in unit:
             # convert Decibel to Bel and then get "real" value (power 10)
-            # print M, x, n
+            # print moving_avg, x, n
             x = math.pow(10, x / 10)
-            M = math.pow(10, M / 10)
-            M = self.moving_average(M, x, n, 'int')
+            moving_avg = math.pow(10, moving_avg / 10)
+            moving_avg = self.moving_average(moving_avg, x, n, 'int')
             # Take average of "real" values and convert back to Bel via log10 and Decibel via *10
-            return math.log10(M) * 10.0
+            return math.log10(moving_avg) * 10.0
 
-        return float(M) + (float(x) - float(M)) / float(n)
+        # Standard moving avg.
+        return float(moving_avg) + (float(x) - float(moving_avg)) / float(n)
 
-    def invoke(self, packet):
-        if packet.data is None or packet.is_end_of_doc() or packet.is_end_of_stream():
-            return packet
+    def refine(self, record_in, sensor_names):
+        # Start dict of output records, key is sensor name, value is a record
+        records_out = dict()
 
-        # The TS input record: single device with json-field with list of dict for values
-        record_in = packet.data
-        record_meta = packet.meta
+        gid_raw = -1
+        day = -1
+        hour = -1
+        if 'gid' in record_in:
+            gid_raw = record_in['gid']
+        if 'day' in record_in:
+            day = record_in['day']
+        if 'hour' in record_in:
+            hour = record_in['hour']
 
-        # Start list of output records
-        records_out = {}
+        device_id = record_in['device_id']
 
         # ts_list (timeseries list) is an array of dict, each dict containing raw sensor values
         ts_list = record_in['data']['timeseries']
-        gid_raw = record_in['gid']
-        unique_id = record_in['unique_id']
+        unique_id = 'device %d' % device_id
+        if 'unique_id' in record_in:
+            unique_id = record_in['unique_id']
+
         log.info('processing unique_id=%s gid_raw=%d ts_count=%d' % (unique_id, gid_raw, len(ts_list)))
-        device_id = record_in['device_id']
-        day = record_in['day']
-        hour = record_in['hour']
+
         validate_errs = 0
+        sensor_defs = self.device.get_sensor_defs()
 
         # Go through each record in timeseries list
         for sensor_vals in ts_list:
             # Go through all the configured sensor outputs we need to calc values for
-            for sensor_name in self.sensor_names:
+            for sensor_name in sensor_names:
                 record = None
                 try:
-                    if sensor_name not in SENSOR_DEFS:
+                    if sensor_name not in sensor_defs:
                         log.warn('Sensor name %s not defined in SENSOR_DEFS' % sensor_name)
                         continue
 
-                    sensor_def = SENSOR_DEFS[sensor_name]
+                    sensor_def = sensor_defs[sensor_name]
                     if 'input' not in sensor_def or 'converter' not in sensor_def:
                         log.warn('No input or converter defined for %s in SENSOR_DEFS' % sensor_name)
                         continue
@@ -94,14 +117,14 @@ class RefineFilter(Filter):
                     # get raw input value(s)
                     # i.e. in some cases multiple inputs are required (e.g. audio bands)
                     input_name = sensor_def['input']
-                    input_valid, reason = check_value(input_name, sensor_vals)
+                    input_valid, reason = self.device.check_value(input_name, sensor_vals)
                     if not input_valid:
                         # log.warn('id=%d-%d-%d-%s gid_raw=%d: invalid input for %s: detail=%s' % (
                         # device_id, day, hour, sensor_name, gid_raw, str(input_name), reason))
                         validate_errs += 1
                         continue
 
-                    value_raw, input_name_0 = get_raw_value(input_name, sensor_vals)
+                    value_raw, input_name_0 = self.device.get_raw_value(input_name, sensor_vals)
                     if value_raw is None:
                         # No use to proceed without raw input value(s)
                         validate_errs += 1
@@ -113,23 +136,41 @@ class RefineFilter(Filter):
                     if sensor_name not in records_out:
                         # Start new record with common data
                         record = dict()
-                        # gid_raw refers to harvested record
-                        record['gid_raw'] = gid_raw
+
+                        # gid_raw refers to harvested record, optional
+                        if gid_raw > 0:
+                            record['gid_raw'] = gid_raw
+
                         record['device_id'] = device_id
-                        record['day'] = day
-                        record['hour'] = hour
 
-                        # GMT does not know about 24 so we move to 00:00 the next day
-                        day_hour = str(day) + str(hour)
-                        if hour == 24:
-                            # Need to move to 00:00 next day if hour is 24
-                            # Just incrementing the day +1 is not enough: we may need to skip to next month
-                            # http://stackoverflow.com/questions/3240458/how-to-increment-the-day-in-datetime-python
-                            next_day = datetime.strptime('%sGMT' % str(day), '%Y%m%dGMT').replace(tzinfo=pytz.utc)
-                            next_day += timedelta(days=1)
-                            day_hour = next_day.strftime('%Y%m%d') + '0'
+                        # Optional fields dependent on input record
+                        if 'value_stale' in record_in:
+                            record['value_stale'] = record_in['value_stale']
 
-                        record['time'] = datetime.strptime('%sGMT' % day_hour, '%Y%m%d%HGMT').replace(tzinfo=pytz.utc)
+                        if 'device_name' in record_in:
+                            record['device_name'] = record_in['device_name']
+
+                        if 'unique_id' not in record_in:
+                            record['unique_id'] = '%d-%s' % (device_id, sensor_name)
+
+                        if day > 0:
+                            record['day'] = day
+                            record['hour'] = hour
+
+                            # GMT does not know about 24 so we move to 00:00 the next day
+                            day_hour = str(day) + str(hour)
+                            if hour == 24:
+                                # Need to move to 00:00 next day if hour is 24
+                                # Just incrementing the day +1 is not enough: we may need to skip to next month
+                                # http://stackoverflow.com/questions/3240458/how-to-increment-the-day-in-datetime-python
+                                next_day = datetime.strptime('%sGMT' % str(day), '%Y%m%dGMT').replace(tzinfo=pytz.utc)
+                                next_day += timedelta(days=1)
+                                day_hour = next_day.strftime('%Y%m%d') + '0'
+
+                            record['time'] = datetime.strptime('%sGMT' % day_hour, '%Y%m%d%HGMT').replace(tzinfo=pytz.utc)
+                        else:
+                            record['time'] = record_in['time']
+
                         record['name'] = sensor_name
                         record['label'] = sensor_def['label']
                         record['unit'] = sensor_def['unit']
@@ -137,15 +178,15 @@ class RefineFilter(Filter):
 
                         # Point location TODO: average, but for now assume static
                         if 's_longitude' in sensor_vals and 's_latitude' in sensor_vals:
-                            lon = SENSOR_DEFS['longitude']['converter'](sensor_vals['s_longitude'])
-                            lat = SENSOR_DEFS['latitude']['converter'](sensor_vals['s_latitude'])
+                            lon = sensor_defs['longitude']['converter'](sensor_vals['s_longitude'])
+                            lat = sensor_defs['latitude']['converter'](sensor_vals['s_latitude'])
 
-                            valid, reason = check_value('latitude', sensor_vals, value=lat)
+                            valid, reason = self.device.check_value('latitude', sensor_vals, value=lat)
                             if not valid:
                                 validate_errs += 1
                                 continue
 
-                            valid, reason = check_value('longitude', sensor_vals, value=lon)
+                            valid, reason = self.device.check_value('longitude', sensor_vals, value=lon)
                             if not valid:
                                 validate_errs += 1
                                 continue
@@ -161,8 +202,8 @@ class RefineFilter(Filter):
                         # GPS height. TODO use air pressure
                         record['altitude'] = 0
                         if 's_altimeter' in sensor_vals:
-                            altitude = SENSOR_DEFS['altitude']['converter'](sensor_vals['s_altimeter'])
-                            valid, reason = check_value('altitude', sensor_vals, value=altitude)
+                            altitude = sensor_defs['altitude']['converter'](sensor_vals['s_altimeter'])
+                            valid, reason = self.device.check_value('altitude', sensor_vals, value=altitude)
                             if not valid:
                                 altitude = 0
 
@@ -184,7 +225,7 @@ class RefineFilter(Filter):
                         # Here M is the (cumulative moving) average, x is the new value in the
                         # sequence, n is the count of values.
                         record['value_raw'] = self.moving_average(value_raw_avg, value_raw, record['sample_count'],
-                                                                  SENSOR_DEFS[input_name_0]['unit'])
+                                                                  sensor_defs[input_name_0]['unit'])
                     else:
                         # First value for avg
                         record['value_raw'] = value_raw
@@ -197,7 +238,7 @@ class RefineFilter(Filter):
                     # 1) check inputs
                     sensor_vals['device_id'] = device_id
                     value = sensor_def['converter'](value_raw, sensor_vals, sensor_def)
-                    output_valid, reason = check_value(sensor_name, sensor_vals, value=value)
+                    output_valid, reason = self.device.check_value(sensor_name, sensor_vals, value=value)
                     if not output_valid:
                         log.warn('id=%d-%d-%d-%s gid_raw=%d: invalid output for %s: detail=%s' % (
                             device_id, day, hour, sensor_name, gid_raw, sensor_name, reason))
@@ -240,7 +281,10 @@ class RefineFilter(Filter):
         for rec in records_out:
             rec['value'] = int(round(rec['value']))
             rec['value_raw'] = int(round(rec['value_raw']))
+            if 'last' in record_in:
+                rec.pop('sample_count')
+                rec.pop('value_min')
+                rec.pop('value_max')
 
-        packet.data = records_out
         log.info('Result unique_id=%s gid_raw=%d record_count=%d val_errs=%d' % (unique_id, gid_raw, len(records_out), validate_errs))
-        return packet
+        return records_out

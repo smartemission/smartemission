@@ -1,10 +1,11 @@
 import math
 import re
-from datetime import datetime, tzinfo, timedelta
 
 import pandas as pd
 
-from running_mean import RunningMean
+from smartem.util.running_mean import RunningMean
+from smartem.util.utc import utc
+from smartem.util.utc import zulu_to_gmt
 
 # Conversion functions for raw values from Josene sensors
 
@@ -189,34 +190,11 @@ def convert_longitude(input, json_obj, sensor_def):
         return None
     return res
 
-# https://aboutsimon.com/blog/2013/06/06/Datetime-hell-Time-zone-aware-to-UNIX-timestamp.html
-# Somehow need to force timezone in....TODO: may use dateutil external package
-class UTC(tzinfo):
-    """UTC"""
-
-    def utcoffset(self, dt):
-        return timedelta(0)
-
-    def tzname(self, dt):
-        return "UTC"
-
-    def dst(self, dt):
-        return timedelta(0)
-
-utc = UTC()
-
 
 def convert_timestamp(input, json_obj=None, sensor_def=None):
     # input: 2016-05-31T15:55:33.2014241Z
     # iso_str : '2016-05-31T15:55:33GMT'
-    iso_str = input.split('.')[0] + 'GMT'
-    # timestamp = timegm(
-    #         time.strptime(iso_str, '%Y-%m-%dT%H:%M:%SGMT')
-    # )
-    # print timestamp
-    # print '-> %s' % datetime.utcfromtimestamp(timestamp).isoformat()
-
-    return datetime.strptime(iso_str, '%Y-%m-%dT%H:%M:%SGMT').replace(tzinfo=utc)
+    return zulu_to_gmt(input)
 
 
 def convert_none(value, json_obj=None, sensor_def=None):
@@ -351,4 +329,3 @@ def convert_audio_max(value, json_obj, sensor_def):
         json_obj['t_audiolevel'] = calc_audio_level(band_max)
 
     return band_max
-

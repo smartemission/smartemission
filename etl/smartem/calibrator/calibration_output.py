@@ -3,15 +3,12 @@ import pickle
 import random
 import sys
 
-from stetl.component import Config
 from stetl.outputs.dboutput import PostgresInsertOutput
 from stetl.outputs.fileoutput import FileOutput
 from stetl.util import Util
 
 import pandas as pd
 import psycopg2
-
-from sensordefs import SENSOR_DEFS
 
 log = Util.get_log('Calibration output')
 
@@ -74,43 +71,3 @@ class ParameterOutput(PostgresInsertOutput):
         packet.data = result_out
 
         return packet
-
-
-class CalibrationStateOutput(PostgresInsertOutput):
-
-    @Config(ptype=dict, default=dict(), required=False)
-    def sensor_model_names(self):
-        """
-        The name of the sensor models in the database. Needed for linking
-        the right model to the right gas.
-
-        Default: dict()
-
-        Required: False
-        """
-
-    @Config(ptype=str, required=True)
-    def process_name(self):
-        """
-        The name of the process in which this calibration model is used. The
-        name is used to get the right state of the model.
-
-        Required: True
-        """
-
-    def before_invoke(self, packet):
-        result_out = list()
-
-        if packet.is_end_of_stream():
-            for k, v in self.sensor_model_names.iteritems():
-                model = SENSOR_DEFS[k]['converter_model']
-                result_out.append({'process': self.process_name,
-                                   'model_id': model['model_id'],
-                                   'state': json.dumps(model['state'])})
-
-        packet.data = result_out
-
-        return packet
-
-
-

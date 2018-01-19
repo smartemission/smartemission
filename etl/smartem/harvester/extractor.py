@@ -14,7 +14,7 @@ from stetl.util import Util
 
 from dateutil import parser
 
-from sensordefs import *
+from smartem.devices.josenedefs import *
 
 log = Util.get_log("Extractor")
 
@@ -146,7 +146,7 @@ class ExtractFilter(Filter):
                         sensor_record['name'] = sensor_name
                         sensor_record['value'] = value_raw
 
-                    except Exception, e:
+                    except Exception as e:
                         log.error('Exception extracting gid=%d dev=%d, '
                                   'err=%s' % (gid, device_id, str(e)))
                         traceback.print_exc(file=sys.stdout)

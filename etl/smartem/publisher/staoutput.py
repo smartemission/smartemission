@@ -6,15 +6,16 @@
 # Author: Just van den Broecke
 #
 
-from stetl.outputs.httpoutput import HttpOutput
+from os import path
 import requests
 import json
 import base64
-from sensordefs import *
+from smartem.devices.josenedefs import *
 
 from stetl.util import Util
 from stetl.packet import FORMAT
 from stetl.component import Config
+from stetl.outputs.httpoutput import HttpOutput
 
 log = Util.get_log('staoutput')
 
@@ -39,19 +40,22 @@ class STAOutput(HttpOutput):
         """
         pass
 
-    @Config(ptype=str, default='statemplates', required=False)
+    @Config(ptype=str, default=None, required=False)
     def template_file_root(self):
         """
         STA template file root: where STA request template-files are stored.
 
         Required: False
 
-        Default: statemplates
+        Default: statemplates relative to file's dir
         """
         pass
 
     def __init__(self, configdict, section):
         HttpOutput.__init__(self, configdict, section, consumes=FORMAT.record_array)
+
+        if self.template_file_root is None:
+            self.template_file_root = path.join(path.dirname(path.realpath(__file__)), 'statemplates')
 
         # Template file, to be used as POST body with substituted values
         # TODO use Jinja2 formatting i.s.o. basic string formatting

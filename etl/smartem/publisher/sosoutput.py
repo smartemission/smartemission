@@ -5,7 +5,7 @@
 #
 # Author: Just van den Broecke
 #
-from os import sys, path
+from os import path
 from stetl.outputs.httpoutput import HttpOutput
 from stetl.util import Util
 from stetl.packet import FORMAT
@@ -31,19 +31,22 @@ class SOSTOutput(HttpOutput):
         """
         pass
 
-    @Config(ptype=str, default='sostemplates', required=False)
+    @Config(ptype=str, default=None, required=False)
     def template_file_root(self):
         """
         SOS template file root: where SOS request and procedure template-files are stored.
 
         Required: False
 
-        Default: sostemplates
+        Default: sostemplates dir relative to this file
         """
         pass
 
     def __init__(self, configdict, section):
         HttpOutput.__init__(self, configdict, section, consumes=FORMAT.record_array)
+
+        if self.template_file_root is None:
+            self.template_file_root = path.join(path.dirname(path.realpath(__file__)), 'sostemplates')
 
         # Template file, to be used as POST body with substituted values
         self.insert_sensor_templ_path = '%s/insert-sensor.json' % self.template_file_root

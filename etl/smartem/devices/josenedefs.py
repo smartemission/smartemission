@@ -1,4 +1,4 @@
-from sensorconverters import *
+from josenefuncs import *
 
 # According to CityGIS the units are defined as follows. ::
 #
@@ -574,83 +574,4 @@ SENSOR_DEFS = {
         'min': 1,
         'max': 999
     }
-
 }
-
-
-# Get raw value or list of values
-def get_raw_value(name, val_dict):
-    val = None
-    if type(name) is list:
-        name = name[0]
-        return get_raw_value(name, val_dict)
-        # name is list of names
-        # for n in name:
-        #     if n in val_dict:
-        #         if val is None:
-        #             val = []
-        #         val.append(val_dict[n])
-    else:
-        # name is single name
-        if name in val_dict:
-            val = val_dict[name]
-
-    if 'audio' in name:
-        # We may have audio encoded in 3 bands
-        bands = [float(val & 255), float((val >> 8) & 255), float((val >> 16) & 255)]
-        val = bands[0]
-
-    return val, name
-
-
-# Check for valid sensor value
-def check_value(name, val_dict, value=None):
-    val = None
-    if type(name) is list:
-        # name is list of names
-        for n in name:
-            result, reason = check_value(n, val_dict, value)
-            if result is False:
-                return result, reason
-    else:
-        # name is single name
-        if name not in val_dict and value is None:
-            return False, '%s not present' % name
-        else:
-            if value is not None:
-                val = value
-            else:
-                val = val_dict[name]
-
-            if val is None:
-                return False, '%s is None' % name
-
-            if name not in SENSOR_DEFS:
-                return False, '%s not in SENSOR_DEFS' % name
-
-            name_def = SENSOR_DEFS[name]
-
-            # AUdio inputs: need to unpack 3 bands and check for decibel vals
-            if 'audio' in name:
-                bands = [float(val & 255), float((val >> 8) & 255), float((val >> 16) & 255)]
-
-                # determine validity of these 3 bands
-                dbMin = name_def['min']
-                dbMax = name_def['max']
-                for i in range(0, len(bands)):
-                    band_val = bands[i]
-                    # outliers
-                    if band_val < dbMin:
-                        return False, '%s: val(%s) < min(%s)' % (name, str(band_val), str(name_def['min']))
-                    elif band_val > dbMax:
-                        return False, '%s: val(%s) > max(%s)' % (name, str(band_val), str(name_def['max']))
-
-                return True, '%s OK' % name
-
-            if 'min' in name_def and val < name_def['min']:
-                return False, '%s: val(%s) < min(%s)' % (name, str(val), str(name_def['min']))
-
-            if 'max' in name_def and val > name_def['max']:
-                return False, '%s: val(%s) > max(%s)' % (name, str(val), str(name_def['max']))
-
-    return True, '%s OK' % name
