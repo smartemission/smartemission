@@ -1,7 +1,7 @@
 FROM geopython/stetl:latest
 
 # Use the standard Stetl Docker Image with some additional packages
-LABEL maintainer "Just van den Broecke <justb4@gmail.com>"
+LABEL maintainer="Just van den Broecke <justb4@gmail.com>"
 
 ENV ADD_PYTHON_DEB_PACKAGES="python-dev python-scipy python-seaborn python-matplotlib"
 ENV ADD_PYTHON_PIP_PACKAGES="wheel Geohash influxdb scikit-learn==0.18"
