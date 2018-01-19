@@ -4,21 +4,21 @@
 Data Management
 ===============
 
-This chapter describes all technical aspects related to data/ETL within
-the Smart Emission Data Platform
-based on the (ETL-)design described within the :ref:`architecture` chapter.
+This chapter describes technical aspects of the data management, the ETL,
+of the Smart Emission (SE) Data Platform, expanding from
+the ETL-design in the :ref:`architecture` chapter.
 
-As sensor data is continuously generated, also the ETL processing
-is continuous.
+As sensor data is continuously generated, also ETL processing is a continuous multistep-sequence.
 
-As indicated there are three ETL-steps in sequence:
+There are three main sequential ETL-steps:
 
-* Harvester - fetch raw sensor values from "Whale server"
-* Refiner - validate, convert, calibrate and aggregate raw sensor values
-* Publisher - publish refined values to various (OGC) services
+* Harvesters - fetch raw sensor values from sensor data collectors like the "Whale server"
+* Refiners - validate, convert, calibrate and aggregate raw sensor values
+* Publishers - publish refined values to various (OGC) services
 
-The ``Extractor`` is used for Calibration purposes: to publish raw indicators
-from the sensors into an ``InfluxDB`` time-series DB.
+The ``Extractor`` is used for Calibration: it fetches reference and raw sensor
+data into an ``InfluxDB`` time-series DB as input for the Artificial Neural Network (ANN) learning
+process, called the ``Calibrator``.
 
 Implementation for all ETL can be found here:
 https://github.com/Geonovum/smartemission/blob/master/etl
@@ -26,33 +26,34 @@ https://github.com/Geonovum/smartemission/blob/master/etl
 General
 =======
 
-This section describes general aspects applicable to all ETL processing.
+This section describes general aspects applicable to all SE ETL processing.
 
 Stetl Framework
 ---------------
 
 The `ETL-framework Stetl <http://stetl.org>`_ is used for all ETL-steps.
-The Stetl framework is general-purpose and written in Python. A specific ETL-process
-is constructed by a Stetl config file. This config file specifies
+The Stetl framework is an Open Source, general-purpose, ETL framework and programming model
+written in Python.
+
+Each ETL-process is constructed by a Stetl config file. This config file specifies
 the Inputs, Filters and Outputs and parameters for that ETL-process. Stetl provides a
 multitude of reusable Inputs, Filters and Outputs. For example
 ready-to-use Outputs for Postgres and HTTP. For specific processing
 specific Inputs, Filters and Outputs can be developed by deriving from
-Stetl-base classes. This applies
-also to the SE-project.
+Stetl-base classes. This applies also to the SE-project.
 
-For each ETL-step a specific Stetl config file is developed with
-some SE-specific Components.
+For each ETL-step a specific Stetl config file is developed with some SE-specific Components.
 
-Deployment of Stetl processes is effected using
-a generic `Stetl Docker Image <https://github.com/Geonovum/smartemission/blob/master/docker/stetl>`_
-is reused in every ETL-step.
+SE Stetl processes are deplyed and run using
+a generic `Stetl Docker Image <https://github.com/Geonovum/smartemission/blob/master/docker/stetl>`_ derived
+from the core Stetl Docker image.
 
 ETL Scheduling
 --------------
 
-The three ETL steps are running as scheduled processes using Unix `cron` activated with the
-`SE Platform cronfile <https://github.com/Geonovum/smartemission/blob/master/platform/cronfile.txt>`_.
+ETL processes run using the Unix `cron` scheduler. See the
+`SE Platform cronfile <https://github.com/Geonovum/smartemission/blob/master/platform/cronfile.txt>`_ for
+the schedules.
 
 Sync-tracking
 -------------
@@ -61,9 +62,11 @@ Any continuous ETL, in particular in combination with data from remote systems, 
 failures: a remote server may be down, systems may be upgraded or restarted, the
 ETL software itself may be upgraded. Somehow an ETL-component needs to "keep track"
 of its last successful data processing: specifically for which device, which sensor and
-which timestamp. As programmatic tracking may suffer those same vulnerabilities, it
-was chosen to use the PostgreSQL database for tracking. Each of the three main steps
-will track its synchronization within a Postgres table. In the cases of the Harvester
+which timestamp.
+
+As programmatic tracking may suffer those same vulnerabilities, it
+was chosen to use the PostgreSQL (PG) database for tracking. Each of the three main ETL-steps
+will track its progress within PG-tables. In the cases of the Harvester
 and the Refiner this synchronization is even strongly coupled to a PG `TRIGGER`: i.e.
 only if data has been successfully written/committed to the DB will the
 sync-state be updated. An ETL-process will always resume at the point of the
@@ -75,61 +78,83 @@ Why Multistep?
 
 Although all ETL could be performed within a single, continuous process, there are several
 reasons why a multistep, scheduled ETL processing from all Harvested data
-has been beneficial. This in combination with "sync-tracking" provides
+has been applied. "Multistep", started by Harvesting (pull vs push) in combination with "sync-tracking" provides
 the following benefits:
 
 * clear separation of concerns: Harvesting, Refining, Publishing
 * all or individual ETL-steps can be "replayed" whenever some bug/enhancement appeared during development
 * being more lean towards server downtime and network failures
+* testing: each step can be thouroughly tested (using input data for that step)
+* Harvesting (thus pull vs push) shields the SE Platform from "push overload".
 
 Each of the three ETL-steps are expanded below.
 
-Harvester
-=========
+Harvesters
+==========
 
-The ``Harvester`` as its name implies, regularly fetches raw sensor data from
-the remote raw sensor data-collector, a.k.a. the "CityGIS Whale Server".
-The Harvester uses the ``Raw Sensor API`` web-service that was specifically
-developed for the project. Via this API timeseries data is fetched as JSON
-for each station (device). Each JSON data element contains the
-raw data for all sensors within a single station as accumulated in the current or previous
-hour. These JSON data blobs are stored by the Harvester within a Postgres DB unmodified.
-In this fashion we always will have access to the original raw data.
+``Harvesters`` fetch raw sensor data from
+remote raw sensor sources like data-collectors, services (e.g. SOS) or databases (e.g. InfluxDB).
+Currently there are Harvesters for CityGIS and Intemo data collectors for Josene devices
+and InfluxDB databases for others like AirSensEUR devices.
+Harvesters are scheduled via `cron`.  As a result a Harvester will store its raw
+data in the `smartem_raw.timeseries` database table (see below).
 
-The Harvester, like all other ETL is developed using the `Stetl ETL framework <http://stetl.org>`_.
-As Stetl already supplies a Postgres/PostGIS output, only a specific
-reader for the Raw Sensor API needed to be developed:
-the `RawSensorTimeseriesInput <https://github.com/Geonovum/smartemission/blob/master/etl/rawsensorapi.py>`_.
-
-Like indicated, the Harvester will regularly fetch data, as scheduled by the
-system's crontab
+Harvesters, like all other ETL are developed using the `Stetl ETL framework <http://stetl.org>`_.
+As Stetl already supplies a Postgres/PostGIS output, specific
+readers like the the Raw Sensor API needed to be developed:
+the `RawSensorTimeseriesInput <https://github.com/Geonovum/smartemission/blob/master/etl/smartem/rawsensorapi.py>`_.
 
 Database
 --------
 
-The main table where the Harvester stores its data. Note the use of the ``data`` field
-as ``json`` column. The ``device_id`` is the unique station id. ::
+The main table where Harvesters store data. Note the use of the ``data`` field
+as a ``json`` column. The ``device_id`` is the unique station id. ::
 
 	CREATE TABLE smartem_raw.timeseries (
 	  gid serial,
-	  unique_id character varying (16) not null,
+	  unique_id character varying not null,
 	  insert_time timestamp with time zone default current_timestamp,
 	  device_id integer not null,
 	  day integer not null,
 	  hour integer not null,
 	  data json,
 	  complete boolean default false,
+	  device_type character varying not null default 'jose',
+	  device_version character varying not null default '1',
 	  PRIMARY KEY (gid)
 	) WITHOUT OIDS;
 
-Implementation
---------------
+Whale Harvester
+---------------
 
-Below are links to the various implementation files related to the ``Harvester``.
+The Whale Harvester uses the ``Raw Sensor (Whale) API`` is a custom web-service specifically
+developed for the project. Via this API raw timeseries data of Josene devices/stations is fetched as JSON objects.
+Each JSON object contains the raw data for all sensors within a single station as accumulated in the current or previous
+hour. These JSON data blobs are stored by the Harvester in the `smartem_raw.timeseries` database table unmodified.
+In this fashion we always will have access to the original raw data.
 
-* Shell script: https://github.com/Geonovum/smartemission/blob/master/etl/harvester.sh
-* Stetl config: https://github.com/Geonovum/smartemission/blob/master/etl/harvester.cfg
-* Stetl input: https://github.com/Geonovum/smartemission/blob/master/etl/rawsensorapi.py
+
+Below are links to the various implementation files related to the ``Whale Harvester``.
+
+* Shell script: https://github.com/Geonovum/smartemission/blob/master/etl/harvester_whale.sh
+* Stetl config: https://github.com/Geonovum/smartemission/blob/master/etl/harvester_whale.cfg
+* Stetl input: https://github.com/Geonovum/smartemission/blob/master/etl/smartem/harvester/rawsensortimeseriesinput.py
+* Database: https://github.com/Geonovum/smartemission/blob/master/etl/db/db-schema-raw.sql
+
+InfluxDB Harvester
+------------------
+
+The InfluxDB Harvester was introduced (in 2018) to enable harvesting of raw sensor data from AirSensEUR (ASE) sensor devices.
+ASEs publish their raw data to remote InfluxDB Measurements collections (like tables).
+The InfluxDB Harvester fetches from these InfluxDB Measurements and stores raw data
+in the `smartem_raw.timeseries` database table unmodified. This process is more generic thus
+may accomodate both local and remote InfluxDB Measurements.
+
+Below are links to the various implementation files related to the ``InfluxDB Harvester``.
+
+* Shell script: https://github.com/Geonovum/smartemission/blob/master/etl/harvester_influxdb.sh
+* Stetl config: https://github.com/Geonovum/smartemission/blob/master/etl/harvester_influxdb.cfg
+* Stetl input: https://github.com/Geonovum/smartemission/blob/master/etl/smartem/harvester/harvestinfluxdb.py
 * Database: https://github.com/Geonovum/smartemission/blob/master/etl/db/db-schema-raw.sql
 
 Last Values
@@ -137,7 +162,11 @@ Last Values
 
 The "Last" values ETL is an optimization/shorthand to provide all three ETL-steps
 (Harvest, Refine, Publish) for only the last/current
-sensor values within a single ETL process. All refined data is stored within a single
+sensor values within a single ETL process. This was supposed to be a temporary
+solution but has survived and foun useful up to this day as the main drawback from the Harvester approach is
+the lack of real-time/pushed data.
+
+All refined data is stored within a single
 DB-table. This table maintains only last values, no history, thus data is overwritten
 constantly. ``value_stale`` denotes when an indicator has not provided a fresh values in
 2 hours. ::
@@ -147,7 +176,7 @@ constantly. ``value_stale`` denotes when an indicator has not provided a fresh v
 	  unique_id character varying,
 	  insert_time timestamp with time zone default current_timestamp,
 	  device_id integer,
-	  device_name character varying (32),
+	  device_name character varying,
 	  name character varying,
 	  label character varying,
 	  unit  character varying,
@@ -178,7 +207,7 @@ Implementation file for the ``Last Values ETL``:
 
 * https://github.com/Geonovum/smartemission/blob/master/etl/last.sh
 * https://github.com/Geonovum/smartemission/blob/master/etl/last.cfg
-* https://github.com/Geonovum/smartemission/blob/master/etl/rawsensorapi.py
+* https://github.com/Geonovum/smartemission/blob/master/etl/smartem/harvester/rawsensorlastinput.py
 * database: https://github.com/Geonovum/smartemission/blob/master/etl/db/db-schema-last.sql
 
 NB theoretically last values could be obtained by setting VIEWs on the Refined
@@ -186,8 +215,8 @@ data tables and the SOS. However in previous projects this rendered significant
 performance implications. Also the Last Values API was historically developed
 first before refined history data and SOS were available in the project.
 
-Refiner
-=======
+Refiners
+========
 
 Most raw sensor values as harvested from the CityGIS-platform via the Raw Sensor API
 need to be converted
@@ -214,8 +243,8 @@ values (kOhm). There is no linear relationship with these resistance-values
 and standard gas concentration units like mg/m3 or ppm.
 In that case Calibration needs to be applied.
 
-Calibration
------------
+Calibration (Josene Sensors)
+----------------------------
 
 Especially for gas-components this may be a challenge. Here raw sensor-values are expressed in
 kOhms (NO2, O3 and CO) except for CO2 which is given in ppb. Audio-values are already provided in decibels.
@@ -395,11 +424,12 @@ Below are typical values as obtained via the raw sensor API ::
 
 
 Below each of these sensor values are elaborated.
-All conversions are implemented in using two Python scripts, called from the
+All conversions are implemented in using these Python scripts, called from the
 Refiner ETL:
 
-* `sensordefs.py <https://github.com/Geonovum/smartemission/blob/master/etl/sensordefs.py>`_ definitions of sensors
-* `sensorconverters.py <https://github.com/Geonovum/smartemission/blob/master/etl/sensorconverters.py>`_ converter routines
+* `josenedevice.py <https://github.com/Geonovum/smartemission/blob/master/etl/smartem/devices/josene.py>`_ Device implementation
+* `josenedefs.py <https://github.com/Geonovum/smartemission/blob/master/etl/smartem/devices/josenedefs.py>`_ definitions of sensors
+* `josenefuncs.py <https://github.com/Geonovum/smartemission/blob/master/etl/smartem/devices/josenefuncs.py>`_ mostly converter routines
 
 By using a generic config file `sensordefs.py <https://github.com/Geonovum/smartemission/blob/master/etl/sensordefs.py>`_
 all validation and calibration is specified generically. Below some sample entries. ::
@@ -567,15 +597,15 @@ Gas Calibration with ANN
 ------------------------
 
 Within the SE project a separate activity is performed for gas-calibration based on Big Data Analysis
-statistical methods. Values coming from SE sensors were compared to actual RIVM values. By matching predicted
+statistical methods. Values coming from SE sensors were compared to actual RIVM reference values. By matching predicted
 values with RIVM-values, a formula for each gas-component is established and refined. The initial approach
 was to use linear analysis methods. However, further along in the project the use
 of `Artificial Neural Networks (ANN) <https://en.wikipedia.org/wiki/Artificial_neural_network>`_
 appeared to be the most promising.
 
-Gas Calibration for SE is described more extensively in :ref:`calibration`.
+Gas Calibration using ANN for SE is described more extensively in :ref:`calibration`.
 
-Source code for ANN Gas Calibration: https://github.com/Geonovum/smartemission/tree/master/etl/calibration/src
+Source code for ANN Gas Calibration learning process: https://github.com/Geonovum/smartemission/tree/master/etl/smartem/calibrator .
 
 GPS Data
 --------
@@ -684,10 +714,10 @@ Python code: ::
 	        return None
 	    return humPercent
 
-Publisher
-=========
+Publishers
+==========
 
-The ``Publisher`` ETL process reads "Refined" indicator data and publishes
+A ``Publisher`` ETL process reads "Refined" indicator data and publishes
 these to various web-services. Most specifically this entails publication to:
 
 * OGC Sensor Observation Service (SOS)
@@ -759,9 +789,9 @@ Below are links to the sources of the SOS Publisher implementation.
 
 * ETL run script: https://github.com/Geonovum/smartemission/blob/master/etl/sospublisher.sh
 * Stetl conf: https://github.com/Geonovum/smartemission/blob/master/etl/sospublisher.cfg
-* Refined DB Input: https://github.com/Geonovum/smartemission/blob/master/etl/smartemdb.py
-* SOS-T publication: https://github.com/Geonovum/smartemission/blob/master/etl/sosoutput.py
-* SOS-T templates: https://github.com/Geonovum/smartemission/blob/master/etl/sostemplates
+* Refined DB Input: https://github.com/Geonovum/smartemission/blob/master/etl/smartem/refineddbinput.py
+* SOS-T publication: https://github.com/Geonovum/smartemission/blob/master/etl/smartem/publisher/sosoutput.py
+* SOS-T templates: https://github.com/Geonovum/smartemission/blob/master/etl/smartem/publisher/sostemplates
 * Input database schema: https://github.com/Geonovum/smartemission/blob/master/etl/db/db-schema-refined.sql (source input schema)
 * Re-init SOS DB schema (.sh): https://github.com/Geonovum/smartemission/blob/master/services/sos52n/config/sos-clear.py
 * Restart SOS Publisher (.sh): https://github.com/Geonovum/smartemission/blob/master/etl/db/sos-publisher-init.sh  (inits last gis published to -1)
@@ -849,9 +879,9 @@ Below are links to the sources of the STA Publisher implementation.
 
 * ETL run script: https://github.com/Geonovum/smartemission/blob/master/etl/stapublisher.sh
 * Stetl conf: https://github.com/Geonovum/smartemission/blob/master/etl/stapublisher.cfg
-* Refined DB Input: https://github.com/Geonovum/smartemission/blob/master/etl/smartemdb.py
-* STA publication: https://github.com/Geonovum/smartemission/blob/master/etl/staoutput.py
-* STA templates: https://github.com/Geonovum/smartemission/blob/master/etl/statemplates
+* Refined DB Input: https://github.com/Geonovum/smartemission/blob/master/etl/smartem/refineddbinput.py
+* STA publication: https://github.com/Geonovum/smartemission/blob/master/etl/smartem/publisher/staoutput.py
+* STA templates: https://github.com/Geonovum/smartemission/blob/master/etl/smartem/publisher/statemplates
 * Input database schema: https://github.com/Geonovum/smartemission/blob/master/etl/db/db-schema-refined.sql (source schema)
 * Restart STA publisher (.sh): https://github.com/Geonovum/smartemission/blob/master/etl/db/sta-publisher-init.sh  (inits last gis published to -1)
 * Clear/init STA server (.sh): https://github.com/Geonovum/smartemission/blob/master/etl/db/staclear.sh  (deletes all Entities!)

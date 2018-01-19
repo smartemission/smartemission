@@ -1,31 +1,38 @@
 # ETL - Extract, Transform, Load for sensor data
 
-Sources for ETL of Smart Emission project Nijmegen.
+Sources for ETL of the Smart Emission Platform. Originally this ETL was developed
+for the Smart Emission Project Nijmegen and the Intemo Josene Sensor Device. 
+As to accommodate other sensor devices like the [EU JRC AirSensEUR](http://www.airsenseur.org), the ETL-framework
+has been generalized. 
 
-Uses host-specific variables for databases, passwords etc (not in GitHub).
+Uses host-specific variables for databases, passwords etc (not stored in GitHub).
 
-All ETL is developed using [Stetl](http://stetl.org).
+All ETL is developed using [Stetl](http://stetl.org). Stetl is a Python framework and programming model for any ETL
+process. The essence of Stetl is that each ETL process is a chain of linked Input, Filters and Output Python classes
+specified in a Stetl Config File.
 
-Each Stetl Config file (`.cfg`) describes an ETL process. `.sh` files invoke the ETL processes.
+Each Stetl Config file (`.cfg`) describes an ETL process. `.sh` files invoke the ETL processes. Stetl is run via Docker.
 Additional Python files implement specific ETL modules not defined
-in the Stetl Framework.
+in the Stetl Framework and are available under the Python [smartem](smartem) package.
 
 All ETL processes are invoked using the same [Stetl Docker image](../docker/stetl/Dockerfile) and
 scheduled via `cron`: [cronfile.txt](../platform/cronfile.txt)
 
 The main ETL is multi-step as follows.
 
-## Step 1: Fetching from RAW Sensor remote API
+## Step 1: Harvesters - Fetching raw sensor data
+
+The SE ETL follows a "pull" model: raw sensor data is "harvested" from data collector servers and other sensor networks.
 
 The following ETL configs/processes:
 
-- Harvester: get all raw timeseries sensor-values from the [Whale API](../docs/specs/rawsensor-api/rawsensor-api.txt) for all devices [harvester.cfg](harvester.cfg)
+- Harvester Whale: get all raw timeseries sensor-values from the [Whale API](../docs/specs/rawsensor-api/rawsensor-api.txt) for Intemo Jose sensor devices, see [harvester_whale.cfg](harvester_whale.cfg)
+- Harvester Influx: get all raw timeseries sensor-values from an InfluxDB, initially for AirSensEUR (ASE) devices, see [harvester_influx.cfg](harvester_influx.cfg)
 
-As a result this raw sensor-data is stored in PostGIS [db-schema-raw.sql](db/db-schema-raw.sql). 
-The Raw Data fetched via the Harvester is 
-further processed in Step 2 Refiner.
+As a result all raw sensor-data is stored in PostGIS using the schema [db-schema-raw.sql](db/db-schema-raw.sql). 
+The Raw Data fetched via the Harvesters is further processed in Step 2 Refiner.
 
-## Step 2: Refiner
+## Step 2: Refiners
 
 In this step all raw harvested timeseries data is "refined". Refinement involves the following:
 
@@ -34,23 +41,23 @@ In this step all raw harvested timeseries data is "refined". Refinement involves
 - calibration: calibrate raw sensor gas-values to standard units using ANN (e.g. resistance/Ohm to AQ ug/m3 concentration)
 - aggregation: make hourly average values for each sensor (''uurwaarden'')
 
-See [refiner.cfg](refiner.cfg) and [refiner.py](refiner.py).
-In particular the above steps are driven from the [sensordefs.py](sensordefs.py).
-ANN calibration is implemented under [calibration](calibration).
+See [refiner.cfg](refiner.cfg) and [smartem/refiner](smartem/refiner).
+In particular the above steps are driven from the type of sensor device.
+The learning process for ANN calibration is implemented under [smartem/calibrator](smartem/calibrator).
 
 As a result of this step, sensor-data timeseries (hour-values) are
 stored in PostGIS [db-schema-refined.sql](db/db-schema-refined.sql) AND in InfluxDB. 
 
-## Step 3: Publisher
+## Step 3: Publishers
 
 In this step all refined/aggregated timeseries data is published to various IoT/SWE services. 
 The following publishers are present:
 
 - SOSPublisher - publish to a remote SOS via SOS-T(ransactional) protocol [sospublisher.cfg](sospublisher.cfg)
-- STAPublisher - publish to a remote SensorThings API via REST [stapublisher.cfg](stapublisher.cfg) 
+- STAPublisher - publish to a remote SensorThings API (STA) via REST [stapublisher.cfg](stapublisher.cfg) 
 
 All publication/output ETL uses plain Python string templates (no need for Jinja2 yet) with parameter 
-substitution, e.g. [sostemplates](sostemplates) for SOS and [statemplates](statemplates) for STA. 
+substitution, e.g. [smartem/publisher/sostemplates](smartem/publisher/sostemplates) for SOS and [smartem/publisher/statemplates](smartem/publisher/statemplates) for STA. 
 
 NB publication to WFS and WMS is not explicitly required: these services directly
 use the timeseries refined tables and Postgres VIEWs from Step 2.
@@ -67,6 +74,8 @@ but the project needed to develop the SmartApp with last values.
 As a result this raw sensor-data is stored in PostGIS [db-schema-last.sql](db/db-schema-last.sql).
  
 ## Calibration
+
+(Currently only for Intemo Josene devices)
 
 In order to collect reference data and generate the ANN Calibration Estimator, 
 three additional ETL processes have been added later in the project (dec 2016):
