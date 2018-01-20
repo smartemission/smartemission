@@ -4,7 +4,6 @@ import re
 import pandas as pd
 
 from smartem.util.running_mean import RunningMean
-from smartem.util.utc import utc
 from smartem.util.utc import zulu_to_gmt
 
 # Conversion functions for raw values from Josene sensors

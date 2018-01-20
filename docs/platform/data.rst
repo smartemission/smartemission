@@ -44,7 +44,7 @@ Stetl-base classes. This applies also to the SE-project.
 
 For each ETL-step a specific Stetl config file is developed with some SE-specific Components.
 
-SE Stetl processes are deplyed and run using
+SE Stetl processes are deployed and run using
 a generic `Stetl Docker Image <https://github.com/Geonovum/smartemission/blob/master/docker/stetl>`_ derived
 from the core Stetl Docker image.
 
@@ -84,7 +84,7 @@ the following benefits:
 * clear separation of concerns: Harvesting, Refining, Publishing
 * all or individual ETL-steps can be "replayed" whenever some bug/enhancement appeared during development
 * being more lean towards server downtime and network failures
-* testing: each step can be thouroughly tested (using input data for that step)
+* testing: each step can be thoroughly tested (using input data for that step)
 * Harvesting (thus pull vs push) shields the SE Platform from "push overload".
 
 Each of the three ETL-steps are expanded below.
@@ -102,7 +102,7 @@ data in the `smartem_raw.timeseries` database table (see below).
 Harvesters, like all other ETL are developed using the `Stetl ETL framework <http://stetl.org>`_.
 As Stetl already supplies a Postgres/PostGIS output, specific
 readers like the the Raw Sensor API needed to be developed:
-the `RawSensorTimeseriesInput <https://github.com/Geonovum/smartemission/blob/master/etl/smartem/rawsensorapi.py>`_.
+the `RawSensorTimeseriesInput <https://github.com/Geonovum/smartemission/blob/master/etl/smartem/harvester/rawsensortimeseriesinput.py>`_.
 
 Database
 --------
@@ -127,7 +127,7 @@ as a ``json`` column. The ``device_id`` is the unique station id. ::
 Whale Harvester
 ---------------
 
-The Whale Harvester uses the ``Raw Sensor (Whale) API`` is a custom web-service specifically
+The Whale Harvester uses the ``Raw Sensor (Whale) API``, a custom web-service specifically
 developed for the project. Via this API raw timeseries data of Josene devices/stations is fetched as JSON objects.
 Each JSON object contains the raw data for all sensors within a single station as accumulated in the current or previous
 hour. These JSON data blobs are stored by the Harvester in the `smartem_raw.timeseries` database table unmodified.
@@ -152,8 +152,8 @@ may accomodate both local and remote InfluxDB Measurements.
 
 Below are links to the various implementation files related to the ``InfluxDB Harvester``.
 
-* Shell script: https://github.com/Geonovum/smartemission/blob/master/etl/harvester_influxdb.sh
-* Stetl config: https://github.com/Geonovum/smartemission/blob/master/etl/harvester_influxdb.cfg
+* Shell script: https://github.com/Geonovum/smartemission/blob/master/etl/harvester_influx.sh
+* Stetl config: https://github.com/Geonovum/smartemission/blob/master/etl/harvester_influx.cfg
 * Stetl input: https://github.com/Geonovum/smartemission/blob/master/etl/smartem/harvester/harvestinfluxdb.py
 * Database: https://github.com/Geonovum/smartemission/blob/master/etl/db/db-schema-raw.sql
 
@@ -799,7 +799,7 @@ Below are links to the sources of the SOS Publisher implementation.
 Sensor Things API (STA)
 -----------------------
 
-The `STAOutput <https://github.com/Geonovum/smartemission/blob/master/etl/staoutput.py>`_ class
+The `STAOutput <https://github.com/Geonovum/smartemission/blob/master/etl/smartem/publisher/staoutput.py>`_ class
 is used to publish to any SensorThings API server using the standardized
 `OGC SensorThings REST API <http://docs.opengeospatial.org/is/15-078r6/15-078r6.html>`_.
 The implementation is reasonably straightforward, with the following specifics:
@@ -812,7 +812,7 @@ via ``POST`` requests to the STA REST API and cached locally in the ETL process 
 of the ``ETL Run``.
 
 ``STA Templates``: all STA requests are built using
-`STA template files <https://github.com/Geonovum/smartemission/blob/master/etl/statemplates>`_.
+`STA template files <https://github.com/Geonovum/smartemission/blob/master/etl/smartem/publisher/statemplates>`_.
 In these files a complete request body (POST or PATCH)
 is contained, with specific parameters, like ``station_id`` symbolically defined. At publication
 time these are substituted.

@@ -4,7 +4,7 @@ from stetl.packet import FORMAT
 from stetl.util import Util
 
 import pandas as pd
-from influxdb import InfluxDBClient
+from smartem.influxdbinput import InfluxDbInput
 
 log = Util.get_log('Calibration input')
 

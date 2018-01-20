@@ -1,9 +1,9 @@
 # ETL - Extract, Transform, Load for sensor data
 
 Sources for ETL of the Smart Emission Platform. Originally this ETL was developed
-for the Smart Emission Project Nijmegen and the Intemo Josene Sensor Device. 
+for the Smart Emission Project Nijmegen and the Intemo Josene Sensor Device (2015-2017). 
 As to accommodate other sensor devices like the [EU JRC AirSensEUR](http://www.airsenseur.org), the ETL-framework
-has been generalized. 
+has been generalized (2018). 
 
 Uses host-specific variables for databases, passwords etc (not stored in GitHub).
 
