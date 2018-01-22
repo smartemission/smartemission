@@ -1,0 +1,8 @@
+stetl
+Geohash
+influxdb
+scikit-learn==0.18
+pandas
+scipy
+seaborn
+matplotlib

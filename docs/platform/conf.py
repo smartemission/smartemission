@@ -14,6 +14,18 @@
 
 import sys
 import os
+# import mock
+#
+# MOCK_MODULES = ['numpy', 'scipy', 'scipy.stats', 'scipy.sparse',
+#                 'pandas', 'matplotlib', 'matplotlib.pyplot',
+#                 'scipy.interpolate', 'seaborn',
+#                 'stetl.component', 'stetl.packet', 'stetl.util',
+#                 'stetl.inputs.httpinput', 'stetl.inputs.dbinput', 'stetl.inputs.fileinput',
+#                 'stetl.outputs.httpoutput', 'stetl.outputs.dboutput',
+#                 'stetl.postgis', 'stetl.input', 'stetl.output']
+# for mod_name in MOCK_MODULES:
+#     sys.modules[mod_name] = mock.Mock()
+#
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
