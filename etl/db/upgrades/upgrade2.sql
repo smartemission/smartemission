@@ -10,7 +10,7 @@ CREATE INDEX timeseries_day_hour_idx ON smartem_raw.timeseries USING btree (day,
 -- Updates to support more sensor types, default is Josene
 ALTER TABLE smartem_raw.timeseries  ADD COLUMN device_type character varying not null default 'jose';
 ALTER TABLE smartem_raw.timeseries  ADD COLUMN device_version character varying not null default '1';
-
+UPDATE smartem_raw.timeseries SET complete = TRUE;
 
 -- TRIGGER to update checkpointing by storing last day/hour for each device
 -- Thus the Harvester always knows where to start from when running

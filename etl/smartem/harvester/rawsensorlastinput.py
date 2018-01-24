@@ -135,6 +135,7 @@ class RawSensorLastInput(RawSensorAPIInput):
         record['last'] = True
 
         record['device_type'] = 'jose'
+        record['device_version'] = '1'
 
         # Add JSON text blob
         record['data'] = {
