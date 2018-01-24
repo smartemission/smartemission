@@ -9,6 +9,7 @@ from sklearn.model_selection import cross_val_predict
 from sklearn.model_selection import cross_val_score
 
 from smartem.util.running_mean import RunningMean
+from smartem.devices.josene import Josene
 
 matplotlib.use('Agg')
 import pandas as pd
@@ -109,6 +110,7 @@ class Calibrator(Filter):
         self._return_gs_elem = ['cv_results_', 'best_estimator_',
                                 'best_score_', 'best_params_', 'best_index_',
                                 'scorer_', 'n_splits_']
+        self.sensor_defs = Josene().get_sensor_defs()
 
     def init(self):
         ss = StandardScaler()
@@ -129,7 +131,7 @@ class Calibrator(Filter):
         return self.current_target_id + 1 < len(self.targets)
 
     def current_sensordef(self):
-        return SENSOR_DEFS[Calibrator.TARGET2SENSORDEF[self.current_target]]
+        return self.sensor_defs[Calibrator.TARGET2SENSORDEF[self.current_target]]
 
     def invoke(self, packet):
         packet.set_end_of_stream(False)
@@ -175,8 +177,8 @@ class Calibrator(Filter):
 
     def filter_gasses(self, df):
         df = df.sort_values('time')
-        for component, weight in self.running_means.iteritems():
-            f = lambda x: RunningMean.series_running_mean(x, weight)
+        for component in self.running_means:
+            f = lambda x: RunningMean.series_running_mean(x, self.running_means[component])
             df[component] = df.groupby('geohash')[component].transform(f)
 
         return df

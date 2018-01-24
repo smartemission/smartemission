@@ -87,6 +87,7 @@ class Refiner:
             hour = record_in['hour']
 
         device_id = record_in['device_id']
+        device_meta = self.device.get_meta_id(record_in['device_version'])
 
         # ts_list (timeseries list) is an array of dict, each dict containing raw sensor values
         ts_list = record_in['data']['timeseries']
@@ -105,13 +106,15 @@ class Refiner:
             for sensor_name in sensor_names:
                 record = None
                 try:
-                    if sensor_name not in sensor_defs:
-                        log.warn('Sensor name %s not defined in SENSOR_DEFS' % sensor_name)
+                    sensor_def = self.device.get_sensor_def(sensor_name, sensor_vals)
+                    if not sensor_def:
+                        # log.warn('Sensor name %s not defined for device_meta=%s dev_id=%s' %
+                        #          (sensor_name, device_meta, str(device_id)))
                         continue
 
-                    sensor_def = sensor_defs[sensor_name]
                     if 'input' not in sensor_def or 'converter' not in sensor_def:
-                        log.warn('No input or converter defined for %s in SENSOR_DEFS' % sensor_name)
+                        log.warn('No input or converter defined for %s device_meta=%s dev_id=%s' %
+                                                         (sensor_name, device_meta, str(device_id)))
                         continue
 
                     # get raw input value(s)
@@ -142,6 +145,8 @@ class Refiner:
                             record['gid_raw'] = gid_raw
 
                         record['device_id'] = device_id
+                        record['device_meta'] = device_meta
+                        record['sensor_meta'] = self.device.get_sensor_meta_id(sensor_name, sensor_vals)
 
                         # Optional fields dependent on input record
                         if 'value_stale' in record_in:
@@ -177,20 +182,8 @@ class Refiner:
                         record['sample_count'] = 0
 
                         # Point location TODO: average, but for now assume static
-                        if 's_longitude' in sensor_vals and 's_latitude' in sensor_vals:
-                            lon = sensor_defs['longitude']['converter'](sensor_vals['s_longitude'])
-                            lat = sensor_defs['latitude']['converter'](sensor_vals['s_latitude'])
-
-                            valid, reason = self.device.check_value('latitude', sensor_vals, value=lat)
-                            if not valid:
-                                validate_errs += 1
-                                continue
-
-                            valid, reason = self.device.check_value('longitude', sensor_vals, value=lon)
-                            if not valid:
-                                validate_errs += 1
-                                continue
-
+                        lon, lat = self.device.get_lon_lat(sensor_vals)
+                        if lon and lat:
                             # Both lat and lon are valid!
                             record['point'] = 'SRID=4326;POINT(%f %f)' % (lon, lat)
 

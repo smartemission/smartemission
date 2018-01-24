@@ -1,5 +1,5 @@
 {{
   "name": "{name}",
-  "definition": "https://github.com/Geonovum/smartemission/blob/master/etl/sensordefs.py",
+  "definition": "https://github.com/Geonovum/smartemission/blob/master/etl/smartem/devices",
   "description": "{name} in {unit}"
 }}

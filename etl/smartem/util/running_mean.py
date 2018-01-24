@@ -80,6 +80,7 @@ class RunningMean(dict):
 
         return series
 
+
 if __name__ == "__main__":
     from pandas import Series
     a = Series([1, 10, 100, 1000])

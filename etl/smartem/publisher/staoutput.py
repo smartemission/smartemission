@@ -10,7 +10,6 @@ from os import path
 import requests
 import json
 import base64
-from smartem.devices.josenedefs import *
 
 from stetl.util import Util
 from stetl.packet import FORMAT
@@ -231,11 +230,16 @@ class STAOutput(HttpOutput):
         """
         for device_id in self.things:
             thing = self.things[device_id]
+            if 'last_update' not in thing['properties'] or \
+                    'device_meta' not in thing['properties']:
+                continue
+
             # update (patch) Thing last update time once per session
             thing_patch = {
                 "properties": {
                     "id": device_id,
-                    "project_id": int(device_id)/10000,
+                    "project_id": int(device_id) / 10000,
+                    "device_meta": thing['properties']['device_meta'],
                     "last_update": thing['properties']['last_update']
                 }
             }
@@ -247,12 +251,11 @@ class STAOutput(HttpOutput):
             else:
                 log.warn('FAIL patching Thing! device_id=%s status=%s resp=%s' % (device_id, status_msg, response_text))
 
-
     def post_sensor(self, record):
         format_args = dict()
 
         format_args['name'] = record['name']
-        format_args['label'] = record['unit']
+        format_args['sensor_meta'] = record['sensor_meta']
 
         # Create POST payload from template
         payload = self.entity_templates['sensor'].format(**format_args)
@@ -287,8 +290,9 @@ class STAOutput(HttpOutput):
         format_args = dict()
 
         format_args['station_id'] = record['device_id']
-        format_args['project_id'] = record['device_id']/10000
+        format_args['project_id'] = int(record['device_id'] / 10000)
         format_args['last_update'] = self.format_datetime(record['time'])
+        format_args['device_meta'] = record['device_meta']
         # format_args['station_altitude'] = record['altitude']
         format_args['station_lon'] = record['lon']
         format_args['station_lat'] = record['lat']
@@ -332,7 +336,6 @@ class STAOutput(HttpOutput):
         # 'lat': 51.472585, , 'lon': 5.671208, , 'altitude': 210, }
         format_args = dict()
         name = record['name']
-        sensor_def = SENSOR_DEFS[name]
 
         format_args['thing_id'] = thing['@iot.id']
 
@@ -352,7 +355,7 @@ class STAOutput(HttpOutput):
         format_args['observedproperty_id'] = observedproperty['@iot.id']
         format_args['station_id'] = record['device_id']
         format_args['name'] = record['name']
-        format_args['label'] = sensor_def['label']
+        format_args['label'] = record['label']
         format_args['unit'] = record['unit']
 
         # Create POST payload from template
@@ -380,7 +383,7 @@ class STAOutput(HttpOutput):
             if 'error' in th_resp or 'value' not in th_resp:
                 log.error('Error response fetching Thing for device id %s: rsp=%s' % (device_id, str(th_resp)))
                 return None
-            
+
             th_list = th_resp['value']
             for th in th_list:
                 th_name_n = th['name']
@@ -430,14 +433,17 @@ class STAOutput(HttpOutput):
         format_args['sample_time'] = self.format_datetime(record['time'])
         format_args['sample_value'] = record['value']
         format_args['datastream_id'] = datastream['@iot.id']
-        format_args['parameters'] = '"gid": %d, "raw_gid": %d, "station": %d, "name": "%s"' % (
-        record['gid'], record['gid_raw'], record['device_id'], record['name'])
+        format_args[
+            'parameters'] = '"gid": %d, "raw_gid": %d, "station": %d, "device_meta": "%s", "sensor_meta": "%s", "name": "%s"' % (
+            record['gid'], record['gid_raw'], record['device_id'], record['device_meta'], record['sensor_meta'],
+            record['name'])
 
         # Create POST payload from template
         payload = self.entity_templates['observation'].format(**format_args)
 
-        # Update last update time property for Thing from Observation
+        # Update last update and device_meta time property for Thing from Observation
         thing['properties']['last_update'] = format_args['sample_time']
+        thing['properties']['device_meta'] = record['device_meta']
 
         # REST: post to remote collection
         self.path = '/Observations'

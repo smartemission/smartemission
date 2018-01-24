@@ -4,7 +4,7 @@
 Web Services
 ============
 
-This chapter describes how various OGC OWS web services are realized on top of the
+This chapter describes how various mostly OGC OWS web services are realized on top of the
 converted/transformed data as described in the `data chapter <data.html>`_.
 In particular:
 
@@ -12,8 +12,11 @@ In particular:
 * OWS SOS (plus REST) service
 * Smart Emission SOS Emulator service for Last Values
 * SensorThings API
-* InfluxDB
+* InfluxDB + Chronograf
 * Grafana
+* Monitoring: Prometheus + Grafana
+
+All services are defined under https://github.com/Geonovum/smartemission/tree/master/services.
 
 Web Frontend
 ============
@@ -96,9 +99,24 @@ Implementation
 SensorThings API
 ================
 
-For the SensorThings API the Geodan GOST STA implementation is used.
+From https://wiki.tum.de/display/sddi/SensorThings+API :
+
+	"The OGC SensorThings API provides an open, geospatial-enabled and unified way to interconnect the Internet of Things (IoT)
+	devices, data, and applications over the Web. The OGC SensorThings API is an open standard, and
+	that means it is non-proprietary, platform-independent, and perpetual royalty-free.
+	Although it is a new standard, it builds on a rich set of proven-working and widely-adopted open standards,
+	such as the Web protocols and the OGC Sensor Web Enablement (SWE) standards, including the ISO/OGC
+	Observation and Measurement (O&M) data model.
+
+	The main difference between the SensorThings API and the OGC Sensor Observation Service (SOS) is that the
+	SensorThings API is designed specifically for the resource-constrained IoT devices and the Web developer community.
+	As a result, the SensorThings API is lightweight and follows the REST principles,
+	the use of an efficient JSON encoding, the use of MQTT protocol, the use of the flexible OASIS OData protocol and URL conventions."
+
+For the SensorThings API the `Geodan GOST <https://www.gostserver.xyz/>`_ STA implementation is used.
+
 The GOST server is available at http://data.smartemission.nl/gost/v1.0.
-The GOST Dashboard is available at http://data.smartemission.nl/gost/Dashboard/.
+The GOST Dashboard is available at http://data.smartemission.nl/adm/gostdashboard/ (admin access only).
 
 NB all modifying HTTP methods (POST, PUT, DELETE, PATCH) and the GOST Dashboard
 are password-protected.
@@ -106,19 +124,26 @@ are password-protected.
 Implementation
 --------------
 
-* Docker image: https://hub.docker.com/r/geodan/gost/
+Using two Docker Images: one for the GOST Server and one for the GOST Dashboard. The
+database is served from the SE PostGIS Docker Container.
+
+* Docker image GOST Server: https://hub.docker.com/r/geodan/gost/
+* Docker image GOST Dashboard v2: https://hub.docker.com/r/geodan/gost-dashboard-v2/
 * Running: https://github.com/Geonovum/smartemission/tree/master/services/gost
+* Running: https://github.com/Geonovum/smartemission/tree/master/services/gostdashboard
+
+NB The Dashboard is not yet fully running via the SE web proxy pending `this issue <https://github.com/gost/dashboard-v2/issues/2>`_.
 
 MQTT - Mosquitto
 ================
 
 For the SensorThings API (GOST) MQTT is used. MQTT is a generic IoT protocol
-that can be used in other contexts besides STA.
+that can be used in other contexts besides STA. *NB MQTT is not currently in use within SE.*
 
 The MQTT server is available at http://data.smartemission.nl:1883
 and http://data.smartemission.nl:9001
 
-See also the GOST Dashboard at http://data.smartemission.nl/gost/Dashboard/.
+See also the GOST Dashboard at http://data.smartemission.nl/adm/gostdashboard/ (admin only).
 
 Implementation
 --------------

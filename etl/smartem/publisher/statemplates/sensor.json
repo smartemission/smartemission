@@ -1,6 +1,6 @@
 {{
   "name": "{name}",
-  "description": "Sensor for {name} in {label}",
+  "description": "sensor_meta={sensor_meta}",
   "encodingType": "application/pdf",
   "metadata": "https://media.readthedocs.org/pdf/smartplatform/latest/smartplatform.pdf"
 }}

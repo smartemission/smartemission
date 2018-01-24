@@ -22,7 +22,8 @@ class HarvesterInfluxDbInput(InfluxDbInput):
     Strategy is to use checkpointing: keep track of each sensor/timeseries how far we are
     in harvesting.
 
-    Algoritm:
+    Algorithm:
+
         * fetch all Measurements (table names)
         * for each Measurement:
         * if Measurement (name) is not in progress-table insert and set day,hour to 0
@@ -32,6 +33,7 @@ class HarvesterInfluxDbInput(InfluxDbInput):
         * ignore timeseries for current day/hour, as the hour will not be yet filled (and Refiner may else already process)
         * stored entry: measurement, day, hour, json blob
         * finish: when all done or when max_proc_time_secs passed
+        
     """
 
     @Config(ptype=int, default=None, required=True)

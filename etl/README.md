@@ -9,9 +9,11 @@ Uses host-specific variables for databases, passwords etc (not stored in GitHub)
 
 All ETL is developed using [Stetl](http://stetl.org). Stetl is a Python framework and programming model for any ETL
 process. The essence of Stetl is that each ETL process is a chain of linked Input, Filters and Output Python classes
-specified in a Stetl Config File.
+specified in a Stetl Config File. 
 
-Each Stetl Config file (`.cfg`) describes an ETL process. `.sh` files invoke the ETL processes. Stetl is run via Docker.
+The `.sh` files each invoke a Stetl ETL process via Docker using a Stetl config (`.cfg`) file specific
+for that ETL process. Stetl is run via Docker. 
+
 Additional Python files implement specific ETL modules not defined
 in the Stetl Framework and are available under the Python [smartem](smartem) package.
 

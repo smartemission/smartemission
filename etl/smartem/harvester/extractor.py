@@ -14,7 +14,7 @@ from stetl.util import Util
 
 from dateutil import parser
 
-from smartem.devices.josenedefs import *
+from smartem.devices.josene import Josene
 
 log = Util.get_log("Extractor")
 
@@ -52,6 +52,8 @@ class ExtractFilter(Filter):
                         produces=FORMAT.record_array)
         self.current_record = None
         self.last_id = None
+        self.device = Josene()
+        self.sensor_defs = self.device.get_sensor_defs()
 
     def invoke(self, packet):
         if packet.data is None or packet.is_end_of_doc() or packet.is_end_of_stream():
@@ -101,7 +103,7 @@ class ExtractFilter(Filter):
                     try:
                         # get raw input value(s)
                         # i.e. in some cases multiple inputs are required (e.g. audio bands)
-                        valid, reason = check_value(sensor_name, sensor_vals)
+                        valid, reason = self.device.check_value(sensor_name, sensor_vals)
                         if not valid:
                             # log.warn(
                             #     'id=%d-%d-%d-%s gid=%d: invalid input for %s: detail=%s' % (
@@ -111,7 +113,7 @@ class ExtractFilter(Filter):
                             continue
 
                         # value should be available
-                        value_raw, _ = get_raw_value(sensor_name, sensor_vals)
+                        value_raw, _ = self.device.get_raw_value(sensor_name, sensor_vals)
                         if value_raw is None:
                             # No use to proceed without raw input value(s)
                             log.warn('Value raw is None for %s' % sensor_name)
@@ -119,15 +121,15 @@ class ExtractFilter(Filter):
                             continue
 
                         if 's_longitude' in sensor_vals and 's_latitude' in sensor_vals:
-                            lon = SENSOR_DEFS['longitude']['converter'](sensor_vals['s_longitude'])
-                            lat = SENSOR_DEFS['latitude']['converter'](sensor_vals['s_latitude'])
+                            lon =  self.sensor_defs['longitude']['converter'](sensor_vals['s_longitude'])
+                            lat =  self.sensor_defs['latitude']['converter'](sensor_vals['s_latitude'])
 
-                            valid, reason = check_value('latitude', sensor_vals, value=lat)
+                            valid, reason = self.device.check_value('latitude', sensor_vals, value=lat)
                             if not valid:
                                 validate_errs += 1
                                 continue
 
-                            valid, reason = check_value('longitude', sensor_vals, value=lon)
+                            valid, reason = self.device.check_value('longitude', sensor_vals, value=lon)
                             if not valid:
                                 validate_errs += 1
                                 continue

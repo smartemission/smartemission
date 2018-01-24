@@ -10,6 +10,19 @@ Smart Emission
 
 * `Smart Emission Platform (PDF) <_static/dissemination/rivm-17jan2017/SmartEmission-RIVM-170117.pdf>`_
 * `Smart Emission - Building a Spatial Data Infrastructure for an Environmental Citizen Sensor Network <_static/dissemination/sensorweb-munster-30aug2016/paper-munster-conf.pdf>`_
+* `Making sense of standards An evaluation and harmonisation of standards in the sensor web - M.C. Kastelijns (PDF) <http://www.gdmc.nl/publications/2016/Making_Sense_of_Standards_Sensor_Web.pdf>`_
+
+Sensors
+-------
+
+* `Luchtkwaliteit meten met	sensoren - Joost Wesseling,	Annemarie van Alphen, Hester Volten, Edith van Putten - RIVM, Statusoverzicht januari 2016 <http://www.rivm.nl/dsresource?objectid=420a3851-7bae-4a1b-8c57-587422cb21b4&type=org&disposition=inline>`_
+* https://www.samenmetenaanluchtkwaliteit.nl/apparaten-en-kits
+
+Calibration
+-----------
+
+* `Field calibration of a cluster of low-cost available sensors for air quality monitoring. Part A: Ozone and nitrogen dioxide <https://www.sciencedirect.com/science/article/pii/S092540051500355X>`_  - Laurent Spinelle, Michel Gerboles, Maria Gabriella Villani, Manuel Aleixandre, Fausto Bonavitacola
+* `Field calibration of a cluster of low-cost commercially available sensors for air quality monitoring. Part B: NO, CO and CO2 <https://www.sciencedirect.com/science/article/pii/S092540051631070X>`_ - Laurent Spinelle, Michel Gerboles, Maria Gabriella Villani, Manuel Aleixandre, Fausto Bonavitacola
 
 Education
 ---------

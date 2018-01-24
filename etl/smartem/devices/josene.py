@@ -18,7 +18,7 @@ log = logging.getLogger('JoseneDevice')
 class Josene(Device):
 
     def __init__(self):
-        Device.__init__(self)
+        Device.__init__(self, 'jose')
         self.model_query = "SELECT id,parameters,model from calibration_models WHERE predicts = '%s' AND invalid = FALSE ORDER BY timestamp DESC LIMIT 1"
         self.state_query = "SELECT state from calibration_state WHERE process = '%s' AND model_id = %d ORDER BY timestamp DESC LIMIT 1"
         self.state_insert = "INSERT INTO calibration_state (process, model_id, state) VALUES ('%s', %d, '%s')"
@@ -194,3 +194,22 @@ class Josene(Device):
                     return False, '%s: val(%s) > max(%s)' % (name, str(val), str(name_def['max']))
 
         return True, '%s OK' % name
+
+    # Get location as lon, lat
+    def get_lon_lat(self, val_dict):
+        result = (None, None)
+        if 's_longitude' in val_dict and 's_latitude' in val_dict:
+            lon = SENSOR_DEFS['longitude']['converter'](val_dict['s_longitude'])
+            lat = SENSOR_DEFS['latitude']['converter'](val_dict['s_latitude'])
+
+            valid, reason = self.check_value('latitude', val_dict, value=lat)
+            if not valid:
+                return result
+
+            valid, reason = self.check_value('longitude', val_dict, value=lon)
+            if not valid:
+                return result
+
+            result = (lon, lat)
+
+        return result

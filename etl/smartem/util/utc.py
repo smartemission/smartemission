@@ -1,5 +1,6 @@
 from datetime import datetime, tzinfo, timedelta
 
+
 class UTC(tzinfo):
     """
     See https://aboutsimon.com/blog/2013/06/06/Datetime-hell-Time-zone-aware-to-UNIX-timestamp.html

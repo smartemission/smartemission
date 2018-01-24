@@ -10,6 +10,8 @@ CREATE TABLE smartem_refined.timeseries (
   gid_raw integer, -- gid of the harvested raw data record
   insert_time timestamp with time zone default current_timestamp,
   device_id integer,
+  device_meta character varying default 'jose-1',
+  sensor_meta character varying default 'unknown',
   name character varying,
   label character varying,
   unit  character varying,
@@ -99,12 +101,12 @@ INSERT INTO smartem_refined.etl_progress (worker, source_table, last_gid, last_u
 -- Stations
 DROP VIEW IF EXISTS smartem_refined.stations CASCADE;
 CREATE VIEW smartem_refined.stations AS
-  SELECT DISTINCT on (d.device_id) d.gid, d.device_id, d.point, d.altitude, d.time as last_update, ST_X(point) as lon, ST_Y(point) as lat  FROM smartem_refined.timeseries as d order by d.device_id;
+  SELECT DISTINCT on (d.device_id) d.gid, d.device_id, d.device_meta, d.point, d.altitude, d.time as last_update, ST_X(point) as lon, ST_Y(point) as lat  FROM smartem_refined.timeseries as d order by d.device_id;
 
 -- Alle Laatste Metingen
 DROP VIEW IF EXISTS smartem_refined.v_timeseries;
 CREATE VIEW smartem_refined.v_timeseries AS
-  SELECT device_id, name, label,
+  SELECT device_id, device_meta, sensor_meta, name, label,
     unit, value, value_raw, value_min, value_max, time, day, hour, sample_count, point, gid, gid_raw,
     ST_X(point) as lon, ST_Y(point) as lat, EXTRACT(epoch from time ) AS timestamp
   FROM smartem_refined.timeseries ORDER BY name ASC;
@@ -112,91 +114,91 @@ CREATE VIEW smartem_refined.v_timeseries AS
 -- Laatste Metingen per Component
 DROP VIEW IF EXISTS smartem_refined.v_timeseries_CO2;
 CREATE VIEW smartem_refined.v_timeseries_CO2 AS
-  SELECT device_id, name, label,
+  SELECT device_id, device_meta, sensor_meta, name, label,
     unit, value, value_raw, value_min, value_max, time, day, hour, sample_count, point, gid, gid_raw
   FROM smartem_refined.timeseries WHERE name = 'co2' ORDER BY device_id, gid DESC;
 
 DROP VIEW IF EXISTS smartem_refined.v_timeseries_CO;
 CREATE VIEW smartem_refined.v_timeseries_CO AS
-  SELECT device_id, name, label,
+  SELECT device_id, device_meta, sensor_meta, name, label,
     unit, value, value_raw, value_min, value_max, time, day, hour, sample_count, point, gid, gid_raw
   FROM smartem_refined.timeseries WHERE name = 'co' ORDER BY device_id, gid DESC;
 
 DROP VIEW IF EXISTS smartem_refined.v_timeseries_CO_raw;
 CREATE VIEW smartem_refined.v_timeseries_CO_raw AS
-  SELECT device_id, name, label,
+  SELECT device_id, device_meta, sensor_meta, name, label,
     unit, value, value_raw, value_min, value_max, time, day, hour, sample_count, point, gid, gid_raw
   FROM smartem_refined.timeseries WHERE name = 'coraw' ORDER BY device_id, gid DESC;
 
 DROP VIEW IF EXISTS smartem_refined.v_timeseries_NO2;
 CREATE VIEW smartem_refined.v_timeseries_NO2 AS
-  SELECT device_id, name, label,
+  SELECT device_id, device_meta, sensor_meta, name, label,
     unit, value, value_raw, value_min, value_max, time, day, hour, sample_count, point, gid, gid_raw
   FROM smartem_refined.timeseries WHERE name = 'no2' ORDER BY device_id, gid DESC;
 
 DROP VIEW IF EXISTS smartem_refined.v_timeseries_NO2_raw;
 CREATE VIEW smartem_refined.v_timeseries_NO2_raw AS
-  SELECT device_id, name, label,
+  SELECT device_id, device_meta, sensor_meta, name, label,
     unit, value, value_raw, value_min, value_max, time, day, hour, sample_count, point, gid, gid_raw
   FROM smartem_refined.timeseries WHERE name = 'no2raw' ORDER BY device_id, gid DESC;
 
 DROP VIEW IF EXISTS smartem_refined.v_timeseries_O3;
 CREATE VIEW smartem_refined.v_timeseries_O3 AS
-  SELECT device_id, name, label,
+  SELECT device_id, device_meta, sensor_meta, name, label,
     unit, value, value_raw, value_min, value_max, time, day, hour, sample_count, point, gid, gid_raw
   FROM smartem_refined.timeseries WHERE name = 'o3' ORDER BY device_id, gid DESC;
 
 DROP VIEW IF EXISTS smartem_refined.v_timeseries_O3_raw;
 CREATE VIEW smartem_refined.v_timeseries_O3_raw AS
-  SELECT device_id, name, label,
+  SELECT device_id, device_meta, sensor_meta, name, label,
     unit, value, value_raw, value_min, value_max, time, day, hour, sample_count, point, gid, gid_raw
   FROM smartem_refined.timeseries WHERE name = 'o3raw' ORDER BY device_id, gid DESC;
 
 DROP VIEW IF EXISTS smartem_refined.v_timeseries_PM10;
 CREATE VIEW smartem_refined.v_timeseries_PM10 AS
-  SELECT device_id, name, label,
+  SELECT device_id, device_meta, sensor_meta, name, label,
     unit, value, value_raw, value_min, value_max, time, day, hour, sample_count, point, gid, gid_raw
   FROM smartem_refined.timeseries WHERE name = 'pm10' ORDER BY device_id, gid DESC;
 
 DROP VIEW IF EXISTS smartem_refined.v_timeseries_PM2_5;
 CREATE VIEW smartem_refined.v_timeseries_PM2_5 AS
-  SELECT device_id, name, label,
+  SELECT device_id, device_meta, sensor_meta, name, label,
     unit, value, value_raw, value_min, value_max, time, day, hour, sample_count, point, gid, gid_raw
   FROM smartem_refined.timeseries WHERE name = 'pm2_5' ORDER BY device_id, gid DESC;
 
 -- DROP VIEW IF EXISTS smartem_refined.v_timeseries_PM1;
 -- CREATE VIEW smartem_refined.v_timeseries_PM1 AS
---   SELECT device_id, name, label,
+--   SELECT device_id, device_meta, sensor_meta, name, label,
 --     unit, value, value_raw, value_min, value_max, time, day, hour, sample_count, point, gid, gid_raw
 --   FROM smartem_refined.timeseries WHERE name = 'pm1' ORDER BY device_id, gid DESC;
 
 DROP VIEW IF EXISTS smartem_refined.v_timeseries_temperature;
 CREATE VIEW smartem_refined.v_timeseries_temperature AS
-  SELECT device_id, name, label,
+  SELECT device_id, device_meta, sensor_meta, name, label,
     unit, value, value_raw, value_min, value_max, time, day, hour, sample_count, point, gid, gid_raw
   FROM smartem_refined.timeseries WHERE name = 'temperature' ORDER BY device_id, gid DESC;
 
 DROP VIEW IF EXISTS smartem_refined.v_timeseries_humidity;
 CREATE VIEW smartem_refined.v_timeseries_humidity AS
-  SELECT device_id, name, label,
+  SELECT device_id, device_meta, sensor_meta, name, label,
     unit, value, value_raw, value_min, value_max, time, day, hour, sample_count, point, gid, gid_raw
   FROM smartem_refined.timeseries WHERE name = 'humidity' ORDER BY device_id, gid DESC;
 
 DROP VIEW IF EXISTS smartem_refined.v_timeseries_barometer;
 CREATE VIEW smartem_refined.v_timeseries_barometer AS
-  SELECT device_id, name, label,
+  SELECT device_id, device_meta, sensor_meta, name, label,
     unit, value, value_raw, value_min, value_max, time, day, hour, sample_count, point, gid, gid_raw
   FROM smartem_refined.timeseries WHERE name = 'pressure' ORDER BY device_id, gid DESC;
 
 DROP VIEW IF EXISTS smartem_refined.v_timeseries_noise_avg;
 CREATE VIEW smartem_refined.v_timeseries_noise_avg AS
-  SELECT device_id, name, label,
+  SELECT device_id, device_meta, sensor_meta, name, label,
     unit, value, value_raw, value_min, value_max, time, day, hour, sample_count, point, gid, gid_raw
   FROM smartem_refined.timeseries WHERE name = 'noiseavg' ORDER BY device_id, gid DESC;
 
 DROP VIEW IF EXISTS smartem_refined.v_timeseries_noise_level_avg;
 CREATE VIEW smartem_refined.v_timeseries_noise_level_avg AS
-  SELECT device_id, name, label,
+  SELECT device_id, device_meta, sensor_meta, name, label,
     unit, value, value_raw, value_min, value_max, time, day, hour, sample_count, point, gid, gid_raw
   FROM smartem_refined.timeseries WHERE name = 'noiselevelavg' ORDER BY device_id, gid DESC;
 
