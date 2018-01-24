@@ -1,13 +1,15 @@
--- 16.jan.2018
+-- 24.jan.2018
+
+--
+-- UPDATES FOR Raw timeseries Tables/VIews
+--
 
 DROP INDEX IF EXISTS timeseries_day_hour_idx;
 CREATE INDEX timeseries_day_hour_idx ON smartem_raw.timeseries USING btree (day, hour);
 
 -- Updates to support more sensor types, default is Josene
-ALTER TABLE smartem_raw.timeseries  ADD COLUMN IF NOT EXISTS
-  device_type character varying not null default 'jose';
-ALTER TABLE smartem_raw.timeseries  ADD COLUMN IF NOT EXISTS
-  device_version character varying not null default '1';
+ALTER TABLE smartem_raw.timeseries  ADD COLUMN device_type character varying not null default 'jose';
+ALTER TABLE smartem_raw.timeseries  ADD COLUMN device_version character varying not null default '1';
 
 
 -- TRIGGER to update checkpointing by storing last day/hour for each device
@@ -57,10 +59,11 @@ CREATE VIEW smartem_raw.timeseries_last AS
   SELECT * from smartem_raw.timeseries
   WHERE complete = FALSE  ORDER BY device_id;
 
-ALTER TABLE smartem_refined.timeseries  ADD COLUMN IF NOT EXISTS
-  device_meta character varying default 'jose-1';
-ALTER TABLE smartem_refined.timeseries  ADD COLUMN IF NOT EXISTS
-  sensor_meta character varying default 'unknown';
+--
+-- UPDATES FOR Refined Table
+--
+ALTER TABLE smartem_refined.timeseries  ADD COLUMN device_meta character varying default 'jose-1';
+ALTER TABLE smartem_refined.timeseries  ADD COLUMN sensor_meta character varying default 'unknown';
 
 UPDATE smartem_refined.timeseries
   SET sensor_meta = (case
