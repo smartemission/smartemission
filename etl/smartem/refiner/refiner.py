@@ -122,8 +122,8 @@ class Refiner:
                     input_name = sensor_def['input']
                     input_valid, reason = self.device.check_value(input_name, sensor_vals)
                     if not input_valid:
-                        # log.warn('id=%d-%d-%d-%s gid_raw=%d: invalid input for %s: detail=%s' % (
-                        # device_id, day, hour, sensor_name, gid_raw, str(input_name), reason))
+                        log.warn('id=%d-%d-%d-%s meta=%s gid_raw=%d: invalid input for %s: detail=%s' % (
+                           device_id, day, hour, sensor_name, device_meta, gid_raw, str(input_name), reason))
                         validate_errs += 1
                         continue
 
