@@ -189,6 +189,8 @@ class Refiner:
 
                         # No 'point' proceeding without a location
                         if 'point' not in record:
+                            log.warn('id=%d-%d-%d-%s meta=%s gid_raw=%d: no GPS location' % (
+                               device_id, day, hour, sensor_name, device_meta, gid_raw))
                             validate_errs += 1
                             continue
 
