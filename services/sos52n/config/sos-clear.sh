@@ -13,4 +13,4 @@ pushd ..
 ./run.sh
 popd
 
-echo "DON'T FORGET TO CALL ../../../etl/db/sos-publisher-init.sh TO RESTART PUBLICATION!!"
+echo "DON'T FORGET TO CALL ../../../database/util/sos-publisher-init.sh TO RESTART PUBLICATION!!"

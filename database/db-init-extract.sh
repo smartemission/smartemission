@@ -6,4 +6,4 @@
 
 . common.sh
 
-psql -h ${PGHOST} ${PGDB} -f db-schema-extract.sql
+psql -h ${PGHOST} ${PGDB} -f schema/db-schema-extract.sql

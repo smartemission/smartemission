@@ -139,7 +139,7 @@ Below are links to the various implementation files related to the ``Whale Harve
 * Shell script: https://github.com/Geonovum/smartemission/blob/master/etl/harvester_whale.sh
 * Stetl config: https://github.com/Geonovum/smartemission/blob/master/etl/harvester_whale.cfg
 * Stetl input: https://github.com/Geonovum/smartemission/blob/master/etl/smartem/harvester/rawsensortimeseriesinput.py
-* Database: https://github.com/Geonovum/smartemission/blob/master/etl/db/db-schema-raw.sql
+* Database: https://github.com/Geonovum/smartemission/blob/master/database/schema/db-schema-raw.sql
 
 InfluxDB Harvester
 ------------------
@@ -155,7 +155,7 @@ Below are links to the various implementation files related to the ``InfluxDB Ha
 * Shell script: https://github.com/Geonovum/smartemission/blob/master/etl/harvester_influx.sh
 * Stetl config: https://github.com/Geonovum/smartemission/blob/master/etl/harvester_influx.cfg
 * Stetl input: https://github.com/Geonovum/smartemission/blob/master/etl/smartem/harvester/harvestinfluxdb.py
-* Database: https://github.com/Geonovum/smartemission/blob/master/etl/db/db-schema-raw.sql
+* Database: https://github.com/Geonovum/smartemission/blob/master/database/schema/db-schema-raw.sql
 
 Last Values
 -----------
@@ -208,7 +208,7 @@ Implementation file for the ``Last Values ETL``:
 * https://github.com/Geonovum/smartemission/blob/master/etl/last.sh
 * https://github.com/Geonovum/smartemission/blob/master/etl/last.cfg
 * https://github.com/Geonovum/smartemission/blob/master/etl/smartem/harvester/rawsensorlastinput.py
-* database: https://github.com/Geonovum/smartemission/blob/master/etl/db/db-schema-last.sql
+* database: https://github.com/Geonovum/smartemission/blob/master/database/schema/db-schema-last.sql
 
 NB theoretically last values could be obtained by setting VIEWs on the Refined
 data tables and the SOS. However in previous projects this rendered significant
@@ -780,7 +780,7 @@ Deleting SOS Entities
 Also re-init of the 52North SOS DB is possible via the
 `sos-clear.py script <https://github.com/Geonovum/smartemission/blob/master/services/sos52n/config/sos-clear.py>`_
 (use with care!). This needs to go hand-in-hand with
-a `restart of the SOS Publisher <https://github.com/Geonovum/smartemission/blob/master/etl/db/sos-publisher-init.sh>`_ .
+a `restart of the SOS Publisher <https://github.com/Geonovum/smartemission/blob/master/database/util/sos-publisher-init.sh>`_ .
 
 Implementation
 ~~~~~~~~~~~~~~
@@ -792,9 +792,9 @@ Below are links to the sources of the SOS Publisher implementation.
 * Refined DB Input: https://github.com/Geonovum/smartemission/blob/master/etl/smartem/refineddbinput.py
 * SOS-T publication: https://github.com/Geonovum/smartemission/blob/master/etl/smartem/publisher/sosoutput.py
 * SOS-T templates: https://github.com/Geonovum/smartemission/blob/master/etl/smartem/publisher/sostemplates
-* Input database schema: https://github.com/Geonovum/smartemission/blob/master/etl/db/db-schema-refined.sql (source input schema)
+* Input database schema: https://github.com/Geonovum/smartemission/blob/master/database/schema/db-schema-refined.sql (source input schema)
 * Re-init SOS DB schema (.sh): https://github.com/Geonovum/smartemission/blob/master/services/sos52n/config/sos-clear.py
-* Restart SOS Publisher (.sh): https://github.com/Geonovum/smartemission/blob/master/etl/db/sos-publisher-init.sh  (inits last gis published to -1)
+* Restart SOS Publisher (.sh): https://github.com/Geonovum/smartemission/blob/master/database/util/sos-publisher-init.sh  (inits last gis published to -1)
 
 Sensor Things API (STA)
 -----------------------
@@ -868,9 +868,9 @@ Deleting STA Entities
 ~~~~~~~~~~~~~~~~~~~~~
 
 Also deletion of all Entities is possible via the
-`staclear.py script <https://github.com/Geonovum/smartemission/blob/master/etl/db/staclear.py>`_
+`staclear.py script <https://github.com/Geonovum/smartemission/blob/master/database/util/staclear.py>`_
 (use with care!). This needs to go hand-in-hand with
-a `restart of the STA Publisher <https://github.com/Geonovum/smartemission/blob/master/etl/db/sta-publisher-init.sh>`_ .
+a `restart of the STA Publisher <https://github.com/Geonovum/smartemission/blob/master/database/util/sta-publisher-init.sh>`_ .
 
 Implementation
 ~~~~~~~~~~~~~~
@@ -882,7 +882,7 @@ Below are links to the sources of the STA Publisher implementation.
 * Refined DB Input: https://github.com/Geonovum/smartemission/blob/master/etl/smartem/refineddbinput.py
 * STA publication: https://github.com/Geonovum/smartemission/blob/master/etl/smartem/publisher/staoutput.py
 * STA templates: https://github.com/Geonovum/smartemission/blob/master/etl/smartem/publisher/statemplates
-* Input database schema: https://github.com/Geonovum/smartemission/blob/master/etl/db/db-schema-refined.sql (source schema)
-* Restart STA publisher (.sh): https://github.com/Geonovum/smartemission/blob/master/etl/db/sta-publisher-init.sh  (inits last gis published to -1)
-* Clear/init STA server (.sh): https://github.com/Geonovum/smartemission/blob/master/etl/db/staclear.sh  (deletes all Entities!)
-* Clear/init STA server (.py): https://github.com/Geonovum/smartemission/blob/master/etl/db/staclear.py  (deletes all Entities!)
+* Input database schema: https://github.com/Geonovum/smartemission/blob/master/database/schema/db-schema-refined.sql (source schema)
+* Restart STA publisher (.sh): https://github.com/Geonovum/smartemission/blob/master/database/util/sta-publisher-init.sh  (inits last gis published to -1)
+* Clear/init STA server (.sh): https://github.com/Geonovum/smartemission/blob/master/database/util/staclear.sh  (deletes all Entities!)
+* Clear/init STA server (.py): https://github.com/Geonovum/smartemission/blob/master/database/util/staclear.py  (deletes all Entities!)

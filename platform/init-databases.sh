@@ -15,7 +15,7 @@ pushd ../services/influxdb
   ./run.sh
 popd
 
-pushd ../etl/db
+pushd ../database
   ./db-init-meta.sh
   ./db-init-last.sh
   ./db-init-raw.sh

@@ -7,8 +7,8 @@ HNAME=`hostname`
 
 echo "Using host-specific options for ${HNAME}"
 
-pushd ../options
-. ${HNAME}.args
+pushd ../etl/options
+  . ${HNAME}.args
 popd
 
 export PGUSER=${pg_user}

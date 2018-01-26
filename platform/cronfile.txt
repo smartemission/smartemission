@@ -42,4 +42,4 @@ SMARTEM=/opt/geonovum/smartem/git
 0 0 * * * cd $SMARTEM/platform; ./backup.sh > /var/smartem/backup/backup.log 2>&1
 
 # Fix SOS Station locations (see issue https://github.com/Geonovum/smartemission/issues/72)
-0 * * * * $SMARTEM/etl/db/sos-update-feature-geom.sh
+0 * * * * $SMARTEM/database/util/sos-update-feature-geom.sh

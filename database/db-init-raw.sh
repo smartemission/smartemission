@@ -5,5 +5,4 @@
 
 . common.sh
 
-SQL=../../services/gost/config/gost-init-db.sql
-psql -h ${PGHOST} ${PGDB} -f ${SQL}
+psql -h ${PGHOST} ${PGDB} -f schema/db-schema-raw.sql

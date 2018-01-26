@@ -165,7 +165,7 @@ This is specific to STA server from SensorUp. ::
 	screen -S sta
 
     # STA clear data
-    cd ~/git/etl/db
+    cd ~/git/database
     ./staclear.sh
     
     # if this does not work re-init on server
@@ -212,7 +212,7 @@ This is specific to SOS server from 52North. ::
     ./sos-clear.sh
 
 	# SOS Publisher: restart
-    cd ~/git/etl/db
+    cd ~/git/database/util
 	./sos-publisher-init.sh
 
 	# SOS Test if publishing works again

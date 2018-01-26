@@ -5,7 +5,11 @@
 # USAGE ./db-restore.sh <pad naar dump bestand>
 
 # Set credentials
+SCRIPT_DIR=${0%/*}
+
+pushd ${SCRIPT_DIR}/../
 . common.sh
+popd
 
 if [ $# -eq 0 ]
 then

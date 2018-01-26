@@ -5,4 +5,4 @@
 
 . common.sh
 
-psql -h ${PGHOST} ${PGDB} -f db-schema-meta.sql
+psql -h ${PGHOST} ${PGDB} -f schema/db-schema-meta.sql
