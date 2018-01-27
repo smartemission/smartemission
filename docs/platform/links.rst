@@ -11,6 +11,7 @@ Smart Emission
 * `Smart Emission Platform (PDF) <_static/dissemination/rivm-17jan2017/SmartEmission-RIVM-170117.pdf>`_
 * `Smart Emission - Building a Spatial Data Infrastructure for an Environmental Citizen Sensor Network <_static/dissemination/sensorweb-munster-30aug2016/paper-munster-conf.pdf>`_
 * `Making sense of standards An evaluation and harmonisation of standards in the sensor web - M.C. Kastelijns (PDF) <http://www.gdmc.nl/publications/2016/Making_Sense_of_Standards_Sensor_Web.pdf>`_
+* `Emit #1 – Into Spatiotemporal <https://justobjects.nl/emit-1/>`_ blog posts on SE on `justobjects.nl <https://justobjects.nl>`_
 
 Sensors
 -------

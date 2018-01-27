@@ -31,7 +31,7 @@ The following ETL configs/processes:
 - Harvester Whale: get all raw timeseries sensor-values from the [Whale API](../docs/specs/rawsensor-api/rawsensor-api.txt) for Intemo Jose sensor devices, see [harvester_whale.cfg](harvester_whale.cfg)
 - Harvester Influx: get all raw timeseries sensor-values from an InfluxDB, initially for AirSensEUR (ASE) devices, see [harvester_influx.cfg](harvester_influx.cfg)
 
-As a result all raw sensor-data is stored in PostGIS using the schema [db-schema-raw.sql](db/db-schema-raw.sql). 
+As a result all raw sensor-data is stored in PostGIS using the schema [db-schema-raw.sql](../database/schema/db-schema-raw.sql). 
 The Raw Data fetched via the Harvesters is further processed in Step 2 Refiner.
 
 ## Step 2: Refiners
@@ -48,7 +48,7 @@ In particular the above steps are driven from the type of sensor device.
 The learning process for ANN calibration is implemented under [smartem/calibrator](smartem/calibrator).
 
 As a result of this step, sensor-data timeseries (hour-values) are
-stored in PostGIS [db-schema-refined.sql](db/db-schema-refined.sql) AND in InfluxDB. 
+stored in PostGIS [db-schema-refined.sql](../database/schema/db-schema-refined.sql) AND in InfluxDB. 
 
 ## Step 3: Publishers
 
@@ -73,7 +73,7 @@ but the project needed to develop the SmartApp with last values.
 
 - Last: get and convert last sensor-values for all devices: [last.cfg](last.cfg).
 
-As a result this raw sensor-data is stored in PostGIS [db-schema-last.sql](db/db-schema-last.sql).
+As a result this raw sensor-data is stored in PostGIS [db-schema-last.sql](../database/schema/db-schema-last.sql).
  
 ## Calibration
 
