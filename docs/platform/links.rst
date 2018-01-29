@@ -11,13 +11,14 @@ Smart Emission
 * `Smart Emission Platform (PDF) <_static/dissemination/rivm-17jan2017/SmartEmission-RIVM-170117.pdf>`_
 * `Smart Emission - Building a Spatial Data Infrastructure for an Environmental Citizen Sensor Network <_static/dissemination/sensorweb-munster-30aug2016/paper-munster-conf.pdf>`_
 * `Making sense of standards An evaluation and harmonisation of standards in the sensor web - M.C. Kastelijns (PDF) <http://www.gdmc.nl/publications/2016/Making_Sense_of_Standards_Sensor_Web.pdf>`_
-* `Emit #1 – Into Spatiotemporal <https://justobjects.nl/emit-1/>`_ blog posts on SE on `justobjects.nl <https://justobjects.nl>`_
+* `Emit #1+ – series of blog posts on SE Platform <https://justobjects.nl/category/smartemission/>`_  by Just van den Broecke on `justobjects.nl <https://justobjects.nl>`_
 
 Sensors
 -------
 
 * `Luchtkwaliteit meten met	sensoren - Joost Wesseling,	Annemarie van Alphen, Hester Volten, Edith van Putten - RIVM, Statusoverzicht januari 2016 <http://www.rivm.nl/dsresource?objectid=420a3851-7bae-4a1b-8c57-587422cb21b4&type=org&disposition=inline>`_
 * https://www.samenmetenaanluchtkwaliteit.nl/apparaten-en-kits
+* `"Meetspecialisten praten elkaar bij over luchtsensoren" <https://www.samenmetenaanluchtkwaliteit.nl/nieuws/meetspecialisten-praten-elkaar-bij-over-luchtsensoren>`_  Presentaties op symposium Samen Meten 2017, o.a. Jan Vonk, Joost Wesseling (RIVM)
 
 Calibration
 -----------
@@ -39,17 +40,6 @@ Data
 * Landelijk Meetnet Luchtkwaliteit http://www.lml.rivm.nl/
 * Ruwe LML XML data RIVM: http://geluid.rivm.nl/sos
 * Download XML in IPR format: http://www.regione.piemonte.it/ambiente/aria/rilev/ariaday-test/xmlexport/read?startDate=&endDate=&action=selection
-
-Linux Server
-------------
-
-* Algemene handleiding Ubuntu FOSS Geo inrichting: http://docs.kademo.nl/project/geolinuxserver.html
-
-Demos and Servers
------------------
-
-* SOS 52N Project Server: http://sensors.geonovum.nl/sos
-* WMS/WFS Project Server: http://sensors.geonovum.nl/gs
 
 Europe
 ------

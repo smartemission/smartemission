@@ -167,4 +167,8 @@ The presentation slides (PDF) are here:
 
 * `Smart Emission Platform (PDF) <_static/dissemination/rivm-17jan2017/SmartEmission-RIVM-170117.pdf>`_
 
+Emit Blog Posts - 2018+
+=======================
 
+`Emit #1+ – series of blog posts on SE Platform <https://justobjects.nl/category/smartemission/>`_
+by Just van den Broecke on `justobjects.nl <https://justobjects.nl>`_

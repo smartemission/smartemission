@@ -8,7 +8,7 @@
 # ./query.sh test.smartemission.nl airsenseur "SHOW SERIES FROM Geonovum1"
 # ./query.sh test.smartemission.nl airsenseur 'DROP MEASUREMENT JustObjects1'
 
-pushd ../../etl/db
+pushd ../../database
   . common.sh
 popd
 

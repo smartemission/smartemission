@@ -6,6 +6,7 @@
 
 import json
 import time
+import random
 from stetl.component import Config
 from stetl.util import Util
 from stetl.inputs.httpinput import HttpInput
@@ -63,6 +64,9 @@ class RawSensorAPIInput(HttpInput):
 
         if len(self.device_ids) > 0:
             self.device_ids_idx = 0
+            # For bether throughput as WHale server is too slow
+            # If we do sequentially higher dev numbers would not be processed.
+            random.shuffle(self.device_ids)
             # self.device_ids = [20010004]
 
         log.info('Found %4d devices: %s' % (len(self.device_ids), str(self.device_ids)))
