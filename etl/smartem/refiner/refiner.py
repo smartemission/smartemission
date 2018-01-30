@@ -106,7 +106,7 @@ class Refiner:
             for sensor_name in sensor_names:
                 record = None
                 try:
-                    sensor_def = self.device.get_sensor_def(sensor_name, sensor_vals)
+                    sensor_def = self.device.get_sensor_def(sensor_name)
                     if not sensor_def:
                         # log.warn('Sensor name %s not defined for device_meta=%s dev_id=%s' %
                         #          (sensor_name, device_meta, str(device_id)))
@@ -115,6 +115,10 @@ class Refiner:
                     if 'input' not in sensor_def or 'converter' not in sensor_def:
                         log.warn('No input or converter defined for %s device_meta=%s dev_id=%s' %
                                                          (sensor_name, device_meta, str(device_id)))
+                        continue
+
+                    # In some cases the sensor_vals are unrelated to the sensor_name (mainly ASE)
+                    if not self.device.can_resolve(sensor_name, sensor_vals):
                         continue
 
                     # get raw input value(s)
@@ -232,7 +236,7 @@ class Refiner:
 
                     # 1) check inputs
                     sensor_vals['device_id'] = device_id
-                    value = sensor_def['converter'](value_raw, sensor_vals, sensor_def)
+                    value = sensor_def['converter'](value_raw, sensor_vals, sensor_def, self.device)
                     output_valid, reason = self.device.check_value(sensor_name, sensor_vals, value=value)
                     if not output_valid:
                         log.warn('id=%d-%d-%d-%s gid_raw=%d: invalid output for %s: detail=%s' % (

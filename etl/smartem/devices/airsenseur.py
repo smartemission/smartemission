@@ -24,11 +24,32 @@ class AirSensEUR(Device):
     def exit(self):
         pass
 
+    def can_resolve(self, sensor_name, val_dict):
+        sensor_def = self.get_sensor_def(sensor_name)
+        if not sensor_def:
+            return False
+
+        if 'input' not in sensor_def:
+            # Last input in chain
+            return sensor_name == val_dict['name']
+
+        input_list = sensor_def['input']
+        if type(input_list) is str:
+            input_list = [input_list]
+            
+        result = True
+        for input_name in input_list:
+            if not self.can_resolve(input_name, val_dict):
+                result = False
+                break
+
+        return result
+
     def get_sensor_defs(self):
         return SENSOR_DEFS
 
     def get_sensor_meta_id(self, sensor_name, val_dict):
-        sensor_def = self.get_sensor_def(sensor_name, val_dict)
+        sensor_def = self.get_sensor_def(sensor_name)
         meta_id = 'unknown'
         if 'meta_id' not in sensor_def:
             input_list = sensor_def['input']

@@ -29,23 +29,23 @@ def ppb_to_ugm3(component, input):
     return ppb_to_ugm3_factor[component] * float(input)
 
 
-def ppb_co_to_ugm3(input, json_obj=None, sensor_def=None):
+def ppb_co_to_ugm3(input, json_obj=None, sensor_def=None, device=None):
     return ppb_to_ugm3('co', input)
 
 
-def ppb_co2_to_ugm3(input, json_obj=None, sensor_def=None):
+def ppb_co2_to_ugm3(input, json_obj=None, sensor_def=None, device=None):
     return ppb_to_ugm3('co2', input)
 
 
-def ppb_co2_to_ppm(input, json_obj=None, sensor_def=None):
+def ppb_co2_to_ppm(input, json_obj=None, sensor_def=None, device=None):
     return input / 1000.0
 
 
-def ppb_no2_to_ugm3(input, json_obj=None, sensor_def=None):
+def ppb_no2_to_ugm3(input, json_obj=None, sensor_def=None, device=None):
     return ppb_to_ugm3('no2', input)
 
 
-def ppb_o3_to_ugm3(input, json_obj=None, sensor_def=None):
+def ppb_o3_to_ugm3(input, json_obj=None, sensor_def=None, device=None):
     return input
 
 
@@ -65,7 +65,7 @@ def update_running_mean(running_means, alpha, obs):
     return running_means
 
 
-def ohm_to_ugm3(input, json_obj, sensor_def):
+def ohm_to_ugm3(input, json_obj, sensor_def, device=None):
 
     # check model specification
     if not ('converter_model' in sensor_def
@@ -104,32 +104,32 @@ def ohm_to_ugm3(input, json_obj, sensor_def):
     return val
 
 
-def ohm_co_to_ugm3(input, json_obj, sensor_def):
-    return ohm_to_ugm3(input, json_obj, sensor_def)
+def ohm_co_to_ugm3(input, json_obj, sensor_def, device=None):
+    return ohm_to_ugm3(input, json_obj, sensor_def, device=None)
 
 
-def ohm_no2_to_ugm3(input, json_obj, sensor_def):
-    return ohm_to_ugm3(input, json_obj, sensor_def)
+def ohm_no2_to_ugm3(input, json_obj, sensor_def, device=None):
+    return ohm_to_ugm3(input, json_obj, sensor_def, device=None)
 
 
 def ohm_o3_to_ugm3(input, json_obj, sensor_def):
-    return ohm_to_ugm3(input, json_obj, sensor_def)
+    return ohm_to_ugm3(input, json_obj, sensor_def, device=None)
 
 
-def ohm_to_kohm(input, json_obj=None, sensor_def=None):
+def ohm_to_kohm(input, json_obj=None, sensor_def=None, device=None):
     return float(input) / 1000.0
 
 
-def ohm_no2_to_kohm(input, json_obj=None, sensor_def=None):
+def ohm_no2_to_kohm(input, json_obj=None, sensor_def=None, device=None):
     val = ohm_to_kohm(input, json_obj, sensor_def)
     return val
 
 # e.g. for PM10 and PM2_5
-def nanogram_to_microgram(input, json_obj=None, sensor_def=None):
+def nanogram_to_microgram(input, json_obj=None, sensor_def=None, device=None):
     return float(input) / 1000.0
 
 
-def convert_temperature(input, json_obj=None, sensor_def=None):
+def convert_temperature(input, json_obj=None, sensor_def=None, device=None):
     if input == 0:
         return None
 
@@ -140,14 +140,14 @@ def convert_temperature(input, json_obj=None, sensor_def=None):
     return tempC
 
 
-def convert_barometer(input, json_obj=None, sensor_def=None):
+def convert_barometer(input, json_obj=None, sensor_def=None, device=None):
     result = float(input) / 100.0
     if result > 1100.0:
         return None
     return result
 
 
-def convert_humidity(input, json_obj=None, sensor_def=None):
+def convert_humidity(input, json_obj=None, sensor_def=None, device=None):
     humPercent = float(input) / 1000.0
     if humPercent > 100:
         return None
@@ -161,7 +161,7 @@ def convert_humidity(input, json_obj=None, sensor_def=None):
 # n1: 0 of 8, 0=East/North, 8=West/South
 # n2 en n3: whole degrees (0-180)
 # n4-n8: fraction of degrees (max 999999)
-def convert_coord(input, json_obj=None, sensor_def=None):
+def convert_coord(input, json_obj=None, sensor_def=None, device=None):
     sign = 1.0
     if input >> 28:
         sign = -1.0
@@ -174,7 +174,7 @@ def convert_coord(input, json_obj=None, sensor_def=None):
     return result
 
 
-def convert_latitude(input, json_obj, sensor_def):
+def convert_latitude(input, json_obj, sensor_def, device=None):
     res = convert_coord(input)
     if res is not None and (res < -90.0 or res > 90.0):
         # log.error('Invalid latitude device=%d : %d' % (json_obj['p_unitserialnumber'], res))
@@ -182,7 +182,7 @@ def convert_latitude(input, json_obj, sensor_def):
     return res
 
 
-def convert_longitude(input, json_obj, sensor_def):
+def convert_longitude(input, json_obj, sensor_def, device=None):
     res = convert_coord(input)
     if res is not None and (res < -180.0 or res > 180.0):
         # log.error('Invalid longitude device=%d : %d' % (json_obj['p_unitserialnumber'], res))
@@ -190,13 +190,13 @@ def convert_longitude(input, json_obj, sensor_def):
     return res
 
 
-def convert_timestamp(input, json_obj=None, sensor_def=None):
+def convert_timestamp(input, json_obj=None, sensor_def=None, device=None):
     # input: 2016-05-31T15:55:33.2014241Z
     # iso_str : '2016-05-31T15:55:33GMT'
     return zulu_to_gmt(input)
 
 
-def convert_none(value, json_obj=None, sensor_def=None):
+def convert_none(value, json_obj=None, sensor_def=None, device=None):
     return value
 
 
@@ -227,7 +227,7 @@ def calc_audio_level(db):
 
     return level_num
 
-def convert_noise_level(value, json_obj, sensor_def):
+def convert_noise_level(value, json_obj, sensor_def, device=None):
     return calc_audio_level(value)
 
 # Converts audio var and populates average NB all in dB(A) !
@@ -240,7 +240,7 @@ def convert_noise_level(value, json_obj, sensor_def):
 # Normaal tellen wij op van 31,5 Hz tot 8 kHz. In totaal 9 oktaafanden. 31,5  63  125  250  500  1000  2000  4000 en 8000 Hz
 #
 # Of 27   1/3 oktaafbanden: 25, 31.5, 40, 50, 63, 80, enz
-def convert_noise_avg(value, json_obj, sensor_def):
+def convert_noise_avg(value, json_obj, sensor_def, device=None):
     # For each audio observation:
     # decode into 3 bands (0,1,2)
     # determine average of these  bands
@@ -298,7 +298,7 @@ def convert_noise_avg(value, json_obj, sensor_def):
 
 # Converts audio var and populates virtual max value vars
 # NB not used: now taking average of max values, see convert_audio_avg()
-def convert_audio_max(value, json_obj, sensor_def):
+def convert_audio_max(value, json_obj, sensor_def, device=None):
     # For each audio observation:
     # decode into 3 bands (0,1,2)
     # determine max of these  bands
