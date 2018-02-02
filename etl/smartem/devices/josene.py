@@ -113,11 +113,11 @@ class Josene(Device):
 
     def save_state(self, model_id, state):
         insert_query = self.state_insert % (self.process_name, model_id, state)
-        log.info('Inserting calibration model state with query: %s' % insert_query)
+        log.info('Inserting calibration model state for process %s model_id=%d' % (self.process_name, model_id))
 
         ret = self.db.execute(insert_query)
         if ret != 1:
-            log.warn("Cannot save state for process %s model_id=%d" % (self.process_name, model_id))
+            log.warn('Cannot save state for process %s model_id=%d' % (self.process_name, model_id))
 
     # Get raw sensor value or list of values
     def get_raw_value(self, name, val_dict):
