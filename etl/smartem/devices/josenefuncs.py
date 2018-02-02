@@ -4,49 +4,9 @@ import re
 import pandas as pd
 
 from smartem.util.running_mean import RunningMean
-from smartem.util.utc import zulu_to_gmt
+from devicefuncs import *
 
-# Conversion functions for raw values from Josene sensors
-
-# Zie http://www.apis.ac.uk/unit-conversion
-# ug/m3 = PPB * moleculair gewicht/moleculair volume
-# waar molec vol = 22.41 * T/273 * 1013/P
-#
-# Typische waarden:
-# Nitrogen dioxide 1 ppb = 1.91 ug/m3  bij 10C 1.98, bij 30C 1.85 --> 1.9
-# Ozone 1 ppb = 2.0 ug/m3  bij 10C 2.1, bij 30C 1.93 --> 2.0
-# Carbon monoxide 1 ppb = 1.16 ug/m3 bij 10C 1.2, bij 30C 1.1 --> 1.15
-#
-# Benzene 1 ppb = 3.24 ug/m3
-# Sulphur dioxide 1 ppb = 2.66 ug/m3
-# For now a crude approximation as the measurements themselves are also not very accurate
-# For now a crude conversion (1 atm, 20C)
-def ppb_to_ugm3(component, input):
-    ppb_to_ugm3_factor = {'o3': 2.0, 'no2': 1.9, 'co': 1.15, 'co2': 1.8}
-    if input == 0 or input > 1000000 or component not in ppb_to_ugm3_factor:
-        return None
-
-    return ppb_to_ugm3_factor[component] * float(input)
-
-
-def ppb_co_to_ugm3(input, json_obj=None, sensor_def=None, device=None):
-    return ppb_to_ugm3('co', input)
-
-
-def ppb_co2_to_ugm3(input, json_obj=None, sensor_def=None, device=None):
-    return ppb_to_ugm3('co2', input)
-
-
-def ppb_co2_to_ppm(input, json_obj=None, sensor_def=None, device=None):
-    return input / 1000.0
-
-
-def ppb_no2_to_ugm3(input, json_obj=None, sensor_def=None, device=None):
-    return ppb_to_ugm3('no2', input)
-
-
-def ppb_o3_to_ugm3(input, json_obj=None, sensor_def=None, device=None):
-    return input
+# Conversion functions specific to Josene sensors
 
 
 def running_mean(previous_val, new_val, alpha):
@@ -105,28 +65,20 @@ def ohm_to_ugm3(input, json_obj, sensor_def, device=None):
 
 
 def ohm_co_to_ugm3(input, json_obj, sensor_def, device=None):
-    return ohm_to_ugm3(input, json_obj, sensor_def, device=None)
+    return ohm_to_ugm3(input, json_obj, sensor_def, device)
 
 
 def ohm_no2_to_ugm3(input, json_obj, sensor_def, device=None):
-    return ohm_to_ugm3(input, json_obj, sensor_def, device=None)
+    return ohm_to_ugm3(input, json_obj, sensor_def, device)
 
 
-def ohm_o3_to_ugm3(input, json_obj, sensor_def):
-    return ohm_to_ugm3(input, json_obj, sensor_def, device=None)
-
-
-def ohm_to_kohm(input, json_obj=None, sensor_def=None, device=None):
-    return float(input) / 1000.0
+def ohm_o3_to_ugm3(input, json_obj, sensor_def, device=None):
+    return ohm_to_ugm3(input, json_obj, sensor_def, device)
 
 
 def ohm_no2_to_kohm(input, json_obj=None, sensor_def=None, device=None):
-    val = ohm_to_kohm(input, json_obj, sensor_def)
+    val = ohm_to_kohm(input, json_obj, sensor_def, device)
     return val
-
-# e.g. for PM10 and PM2_5
-def nanogram_to_microgram(input, json_obj=None, sensor_def=None, device=None):
-    return float(input) / 1000.0
 
 
 def convert_temperature(input, json_obj=None, sensor_def=None, device=None):
@@ -190,16 +142,6 @@ def convert_longitude(input, json_obj, sensor_def, device=None):
     return res
 
 
-def convert_timestamp(input, json_obj=None, sensor_def=None, device=None):
-    # input: 2016-05-31T15:55:33.2014241Z
-    # iso_str : '2016-05-31T15:55:33GMT'
-    return zulu_to_gmt(input)
-
-
-def convert_none(value, json_obj=None, sensor_def=None, device=None):
-    return value
-
-
 # From https://www.teachengineering.org/view_activity.php?url=collection/nyu_/activities/nyu_noise/nyu_noise_activity1.xml
 # level dB(A)
 #  1     0-20  zero to quiet room
@@ -227,8 +169,10 @@ def calc_audio_level(db):
 
     return level_num
 
+
 def convert_noise_level(value, json_obj, sensor_def, device=None):
     return calc_audio_level(value)
+
 
 # Converts audio var and populates average NB all in dB(A) !
 # Logaritmisch optellen van de waarden per frequentieband voor het verkrijgen van de totaalwaarde:
@@ -295,6 +239,7 @@ def convert_noise_avg(value, json_obj, sensor_def, device=None):
     # json_obj['v_audiolevel'] = calc_audio_level(json_obj['v_audioavg'])
     # print 'Unit %s - %s band_db=%f avg_db=%d level=%d' % (json_obj['p_unitserialnumber'], sensor_def, band_avg, json_obj['v_audioavg'], json_obj['v_audiolevel'] )
     return json_obj['noiseavg']
+
 
 # Converts audio var and populates virtual max value vars
 # NB not used: now taking average of max values, see convert_audio_avg()

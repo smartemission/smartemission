@@ -1,8 +1,3 @@
-import math
-import re
-
-from smartem.util.utc import zulu_to_gmt
-
 #
 # Conversion functions for raw values from ASE-based sensors
 #
@@ -25,6 +20,7 @@ TWO_POW_16 = 65536.0
 # V = (Vref - RefAD) + DigitalReading * 2 *  RefAD / 2**16
 def bits2millivolt(value, record_in=None, sensor_def=None, device=None):
     """
+    Convert (evaluated) bits value to millivolt according to Vref and RefAD ASE formulas.
 
     :param int value: input value raw 2 byte number 0..65535
     :param dict json_obj: complete record data object
@@ -45,9 +41,3 @@ def bits2millivolt(value, record_in=None, sensor_def=None, device=None):
 
     # V = (Vref - RefAD) + value * 2 *  RefAD / 2**16
     return ((v_ref - v_ref_ad) + value * 2.0 * v_ref_ad / TWO_POW_16) * 1000.0
-
-
-# Null/no ops, return value as-is.
-def convert_none(value, json_obj=None, sensor_def=None, device=None):
-    return value
-

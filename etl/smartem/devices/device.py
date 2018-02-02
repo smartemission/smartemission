@@ -1,16 +1,20 @@
 # -*- coding: utf-8 -*-
 #
-# Consume a raw record of Smart Emission data (one hour for one device), refining these, producing records.
+# Abstraction of a "station" or "sensor device", base class for specific
+# device types like Josene and AirSensEUR.
 #
-
-
 # Author: Just van den Broecke - 2015-2018
+
 import logging
 
 log = logging.getLogger('Device')
 
 
 class Device:
+    """
+    Abstraction of a "station" or "sensor device", base class for specific
+    device types like Josene and AirSensEUR.
+    """
 
     def __init__(self, type):
         self.device_type = type

@@ -1,3 +1,4 @@
+from devicefuncs import *
 from airsenseurfuncs import *
 
 # All sensor definitions, both base sensors (AirSensEUR) and derived (virtual) sensors
@@ -165,7 +166,7 @@ SENSOR_DEFS = {
             'unit': 'Celsius',
             'input': 'Tempe',
             'meta_id': 'ase-Tempe',
-            # Is already in C
+            # Is already in Celsius
             'converter': convert_none,
             'type': int,
             'min': -25,

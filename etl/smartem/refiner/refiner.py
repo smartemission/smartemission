@@ -100,7 +100,7 @@ class Refiner:
         validate_errs = 0
         sensor_defs = self.device.get_sensor_defs()
 
-        # Go through each record in timeseries list
+        # Go through each record in timeseries list for single device
         for sensor_vals in ts_list:
             # Go through all the configured sensor outputs we need to calc values for
             for sensor_name in sensor_names:
@@ -142,6 +142,7 @@ class Refiner:
                     value_raw_avg = None
                     if sensor_name not in records_out:
                         # Start new record with common data
+                        # Subsequent data will be averaged.
                         record = dict()
 
                         # gid_raw refers to harvested record, optional

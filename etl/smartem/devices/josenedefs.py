@@ -1,3 +1,4 @@
+from devicefuncs import *
 from josenefuncs import *
 
 # According to CityGIS the units are defined as follows. ::
@@ -471,7 +472,7 @@ SENSOR_DEFS = {
             'unit': 'ppm',
             'input': 's_co2',
             'meta_id': 'co2-S23',
-            'converter': ppb_co2_to_ppm,
+            'converter': ppb_to_ppm,
             'type': int,
             'min': 0,
             'max': 5000
