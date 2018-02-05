@@ -48,7 +48,7 @@ CREATE OR REPLACE FUNCTION smartem_raw.harvester_progress_update() RETURNS TRIGG
         -- make use of the special variable TG_OP to work out the operation.
         --
 
-        IF ((TG_OP = 'INSERT') AND (NEW.complete = TRUE)) THEN
+        IF ((TG_OP = 'INSERT' OR TG_OP = 'UPDATE') AND (NEW.complete = TRUE)) THEN
           -- Delete possibly existing entry for device
           DELETE FROM smartem_raw.harvester_progress WHERE device_id = NEW.device_id;
 

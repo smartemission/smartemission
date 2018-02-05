@@ -182,11 +182,11 @@ class RawSensorTimeseriesInput(RawSensorAPIInput):
         for h in hours_all:
             hour = int(h)
             if self.day > self.day_last or (self.day == self.day_last and hour > self.hour_last):
-                # if self.day_last == current_day and hour >= current_hour:
-                #     # never append the last hour of today
-                #     log.info('Skip current hour from %d to %d for device %d on day %d' % (hour, hour, self.device_id, self.day))
-                # else:
-                self.hours.append(hour)
+                if self.day_last == current_day and hour - 1 >= current_hour:
+                    # never append the last hour of today
+                    log.info('Skip current hour from %d to %d for device %d on day %d' % (hour, hour, self.device_id, self.day))
+                else:
+                    self.hours.append(hour)
 
         if len(self.hours) > 0:
             self.hours_idx = 0
@@ -254,13 +254,14 @@ class RawSensorTimeseriesInput(RawSensorAPIInput):
         # Skip harvesting the current hour as it will not yet be complete, so try the next device, hour
         # 2016-10-30 08:12:10,789 RawSensorAPI INFO Skipped device-day-hour: 55-20161030-8 (it is still sampling current hour 7)
         skips = 0
-        #while self.day == current_day and self.hour == current_hour and not self.all_done():
-            #skips += 1
-            #log.info('Skip #%d: device-day-hour: %d-%d-%d (still sampling current hour %d)' % (skips, self.device_id, self.day, self.hour, current_hour))
+        while self.day == current_day and (self.hour - 1) == current_hour and not self.all_done():
+            skips += 1
+            log.info('Skip #%d: device-day-hour: %d-%d-%d (still sampling current hour %d)' % (skips, self.device_id, self.day, self.hour, current_hour))
             # Force to skip to next device, sometimes we have an even later hour
-            #self.next_hour()
+            self.next_hour()
             # 30.okt.16: Fix for #24 #25 gaps in data: because next_hour() may jump to next device and unconditionally fetch current hour...
             # so fix is to use while loop until a valid hour available or we are all done
+            # 5.2.18 : tried incomplete hours as complete = False but this 
 
         # Still hours?
         if self.hour > 0:
@@ -305,12 +306,12 @@ class RawSensorTimeseriesInput(RawSensorAPIInput):
         record['day'] = self.day
         record['hour'] = self.hour
 
-        # Determine if hour is "complete"
-        record['complete'] = False
-        cur_day, cur_hour = self.get_current_day_hour()
-        if cur_day > record['day'] \
-                or (cur_day == record['day'] and cur_hour >= record['hour']):
-            record['complete'] = True
+        # Assume hour is "complete" (5.2.18: skip complete = False entries for now).
+        record['complete'] = True
+        # cur_day, cur_hour = self.get_current_day_hour()
+        # if cur_day > record['day'] \
+        #         or (cur_day == record['day'] and cur_hour >= record['hour']):
+        #     record['complete'] = True
 
         # Add JSON text blob
         record['data'] = data
