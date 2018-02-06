@@ -18,6 +18,7 @@ Contents:
    administration.rst
    dissemination.rst
    code.rst
+   cookbook.rst
    contact.rst
    links.rst
    notes.rst
