@@ -511,3 +511,16 @@ Result: ::
 	         "resultTime": "2018-02-06T11:00:00+01:00"
 	      },
 
+** Get Observations using date/time **
+
+The field `phenomenonTime` of Observation denotes the date/time of the original Observation.
+
+As the Observations in the SE GOST server always denote hourly averages the   `phenomenonTime` applies to the
+*previous hour* of the  `phenomenonTime`. Best, in terms of response times, is to use explicit intervals with the
+`ge, gt` and `le, lt` operators. At this time using ISO 8601 intervals results in long response times.
+
+To get all `Observations` of a specific hour let's say between 11:00 and 12:00 on January 29, 2018:
+
+  `http://data.smartemission.nl/gost/v1.0/Observations?$filter=phenomenonTime gt '2018-01-29T11:00:00.000Z' and phenomenonTime le '2018-01-29T12:00:00.000Z'&$select=result,phenomenonTime,parameters <http://data.smartemission.nl/gost/v1.0/Observations?$filter=phenomenonTime%20gt%20%272018-01-29T11:00:00.000Z%27%20and%20%20phenomenonTime%20le%20%272018-01-29T12:00:00.000Z%27&$select=result,phenomenonTime,parameters>`_
+
+This can also be used to get the latest Observations.
