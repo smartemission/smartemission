@@ -511,7 +511,7 @@ Result: ::
 	         "resultTime": "2018-02-06T11:00:00+01:00"
 	      },
 
-** Get Observations using date/time **
+**Get Observations using date/time**
 
 The field `phenomenonTime` of Observation denotes the date/time of the original Observation.
 
