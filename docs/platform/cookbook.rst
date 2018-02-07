@@ -36,6 +36,7 @@ Resources:
 * `SensorThings API OGC Standard <http://docs.opengeospatial.org/is/15-078r6/15-078r6.html>`_
 * http://ogc-iot.github.io/ogc-iot-api/datamodel.html - datamodel explanation
 * http://developers.sensorup.com/docs/ - developer-friendly API docs, including JavaScript/cURL examples
+* https://gost1.docs.apiary.io - STA GOST-provided API docs
 * https://sensorup.atlassian.net/wiki/spaces/SPS - some more examples
 
 The mapping of the STA entities is as follows:
@@ -56,6 +57,7 @@ In addition for a `Thing` in SE the following conventions apply:
 
 * `name` attribute corresponds to SE Device id
 * `properties` is a free-form key/value list field using
+
  - `device_meta`: device type and version e.g. `jose-1`
  - `id`: device type and version e.g. `jose-1`
  - `last_update`: last date/time update was received from device
@@ -152,6 +154,67 @@ Getting Things expanding `Locations`, useful to plot e.g. SE Devices with (last)
 
   http://data.smartemission.nl/gost/v1.0/Things?$expand=Locations
 
+Same, but requesting a more compact response (less attributes) using the `$select` option:
+
+  http://data.smartemission.nl/gost/v1.0/Things?$expand=Locations($select=location)&$select=id,name
+
+Result: ::
+
+	{
+	   "@iot.count": 182,
+	   "@iot.nextLink": "http://data.smartemission.nl/gost/v1.0/Things?$expand=Locations($select=location)&$top=100&$skip=100",
+	   "value": [
+	      {
+	         "@iot.id": 182,
+	         "name": "20060009",
+	         "Locations": [
+	            {
+	               "location": {
+	                  "coordinates": [
+	                     -2.048575,
+	                     -2.048575
+	                  ],
+	                  "type": "Point"
+	               }
+	            }
+	         ]
+	      },
+	      {
+	         "@iot.id": 181,
+	         "name": "20060005",
+	         "Locations": [
+	            {
+	               "location": {
+	                  "coordinates": [
+	                     5.671203,
+	                     51.47254
+	                  ],
+	                  "type": "Point"
+	               }
+	            }
+	         ]
+	      },
+			.
+			.
+	      {
+	         "@iot.id": 83,
+	         "name": "88",
+	         "Locations": [
+	            {
+	               "location": {
+	                  "coordinates": [
+	                     5.865303,
+	                     51.846375
+	                  ],
+	                  "type": "Point"
+	               }
+	            }
+	         ]
+	      }
+	   ]
+	}
+
+
 Getting all `Things` with `Locations` with specific `property`, for example all Devices for SE project `2001` (city of Zoetermeer):
 
   `http://data.smartemission.nl/gost/v1.0/Things?$filter=properties/project_id eq '2001'&$expand=Locations <http://data.smartemission.nl/gost/v1.0/Things?$filter=properties/project_id%20eq%20%272001%27&$expand=Locations>`_
@@ -160,7 +223,7 @@ or all SE Nijmegen project (0) Devices:
 
   `http://data.smartemission.nl/gost/v1.0/Things?$filter=properties/project_id% eq '0'&$expand=Locations <http://data.smartemission.nl/gost/v1.0/Things?$filter=properties/project_id%20eq%20%270%27&$expand=Locations>`_
 
-Getting Things expanding `Locations` and `Datastreams`, useful to plot e.g. Stations with (last) locations on a map, also
+Getting Things expanding `Locations` and `Datastreams` is often useful to plot e.g. Station icons on a map, also
 providing info on all Indicators (`Datastreams`):
 
   http://data.smartemission.nl/gost/v1.0/Things?$expand=Locations,Datastreams
@@ -296,7 +359,13 @@ In the `parameters` some SE-specific data is encapsulated:
 * `"station": 20000001` - the Device id
 
 
-Getting last `Observations` for a specific Device is not straightforward. One can first by get all `Datastreams` for a `Thing`, and
+Getting last `Observations` for a specific Device (`Thing`) is a common scenario.
+Think of a web viewer:
+
+- on opening the viewer all Devices are shown as icons on map
+- clicking on an icon shows all last measurements (Observations) for all `Datastreams` of the `Thing`
+
+One can first all `Datastreams` for a `Thing`, and
 then for each `Datastream` get the last `Observation` using `$top=1`. Example for Device `20010001`:
 
 1. Get the `Thing` for example by Device id, expanding `Datastreams`:
@@ -309,9 +378,93 @@ then for each `Datastream` get the last `Observation` using `$top=1`. Example fo
 
   PM2_5: http://data.smartemission.nl/gost/v1.0/Datastreams(1254)/Observations?$top=1
 
-NB there could be a more direct way to get the last Observations from a Thing but somehow
-`http://data.smartemission.nl/gost/v1.0/Things?$filter=name eq '20010001'&$expand=Datastreams/Observations <http://data.smartemission.nl/gost/v1.0/Things?$filter=name%20eq%20%2720010001%27&$expand=Datastreams/Observations>`_
-does not give satisfactory results (last Observations for single Indicator). We are open to suggestions!
+A more direct way to get the last `Observation` for each `Datastream` from a `Thing` queried by `device_id` in a single GET:
+
+  `http://data.smartemission.nl/gost/v1.0/Things?$filter=name eq '20010001'&$expand=Datastreams/Observations($top=1) <http://data.smartemission.nl/gost/v1.0/Things?$filter=name%20eq%20%2720010001%27&$expand=Datastreams/Observations($top=1)>`_
+
+Or when the `Thing` id (`131` here) is known, simpler:
+
+  `http://data.smartemission.nl/gost/v1.0/Things(131)?$expand=Datastreams/Observations($top=1) <http://data.smartemission.nl/gost/v1.0/Things(131)?$expand=Datastreams/Observations($top=1)>`_
+
+Using `$select`, to receive less data attributes. Here query for Device id `20010001` last `Observations` showing only `id` and `name` of each `Datastream`:
+
+  `http://data.smartemission.nl/gost/v1.0/Things?$filter=name eq '20010001'&$select=id,name&$expand=Datastreams($select=id,name),Datastreams/Observations($top=1) <http://data.smartemission.nl/gost/v1.0/Things?$filter=name%20eq%20%2720010001%27&$select=id,name&$expand=Datastreams($select=id,name),Datastreams/Observations($top=1)>`_
+
+Result: ::
+
+	{
+	   "@iot.count": 1,
+	   "value": [
+	      {
+	         "@iot.id": 131,
+	         "name": "20010001",
+	         "Datastreams": [
+	            {
+	               "@iot.id": 1255,
+	               "name": "pm10",
+	               "Observations": [
+	                  {
+	                     "@iot.id": 5145885,
+	                     "phenomenonTime": "2018-02-07T11:00:00.000Z",
+	                     "result": 137,
+	                     "parameters": {
+	                        "device_meta": "jose-1",
+	                        "gid": 5145910,
+	                        "name": "pm10",
+	                        "raw_gid": 493875,
+	                        "sensor_meta": "pm10-S29",
+	                        "station": 20010001
+	                     },
+	                     "resultTime": "2018-02-07T12:00:00+01:00"
+	                  }
+	               ]
+	            },
+	            {
+	               "@iot.id": 1254,
+	               "name": "pm2_5",
+	               "Observations": [
+	                  {
+	                     "@iot.id": 5145881,
+	                     "phenomenonTime": "2018-02-07T11:00:00.000Z",
+	                     "result": 122,
+	                     "parameters": {
+	                        "device_meta": "jose-1",
+	                        "gid": 5145906,
+	                        "name": "pm2_5",
+	                        "raw_gid": 493875,
+	                        "sensor_meta": "pm2_5-S2A",
+	                        "station": 20010001
+	                     },
+	                     "resultTime": "2018-02-07T12:00:00+01:00"
+	                  }
+	               ]
+	            },
+				.
+				.
+	            {
+	               "@iot.id": 1248,
+	               "name": "noiseavg",
+	               "Observations": [
+	                  {
+	                     "@iot.id": 5145882,
+	                     "phenomenonTime": "2018-02-07T11:00:00.000Z",
+	                     "result": 47,
+	                     "parameters": {
+	                        "device_meta": "jose-1",
+	                        "gid": 5145907,
+	                        "name": "noiseavg",
+	                        "raw_gid": 493875,
+	                        "sensor_meta": "au-V30_V3F",
+	                        "station": 20010001
+	                     },
+	                     "resultTime": "2018-02-07T12:00:00+01:00"
+	                  }
+	               ]
+	            }
+	         ]
+	      }
+	   ]
+	}
 
 Last 100 Observations from any Indicators from any Devices:
 
@@ -357,3 +510,4 @@ Result: ::
 	         "FeatureOfInterest@iot.navigationLink": "http://data.smartemission.nl/gost/v1.0/Observations(5131982)/FeatureOfInterest",
 	         "resultTime": "2018-02-06T11:00:00+01:00"
 	      },
+
