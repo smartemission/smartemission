@@ -216,6 +216,6 @@ CREATE VIEW smartem_rt.v_cur_measurements_noise_level_avg AS
   FROM smartem_rt.v_cur_measurements WHERE name = 'noiselevelavg';
 
 -- All Current/Active Stations
-DROP VIEW IF EXISTS smartem_rt.cur_stations CASCADE;
+DROP VIEW IF EXISTS smartem_rt.v_cur_stations CASCADE;
 CREATE VIEW smartem_rt.cur_stations AS
   SELECT DISTINCT on (d.device_id) d.gid, d.device_id as device_id, d.device_id%10000 as device_subid, d.device_id/10000 as project_id, d.device_name, d.device_meta, d.point, d.altitude, d.value_stale, d.sample_time as last_update, lon, lat FROM smartem_rt.v_cur_measurements as d order by d.device_id;
