@@ -27,11 +27,14 @@ SensorThings API
 ----------------
 
 The easiest way to get data out of the SE Platform is via the `SensorThings API <http://docs.opengeospatial.org/is/15-078r6/15-078r6.html>`_.
-As this API is REST-based one can already navigate through its enities via the web browser.
+As this API is REST-based one can already navigate through its entities via a web browser.
 For example the URL http://data.smartemission.nl/gost/v1.0 will show all `Entities`. Each can be clicked
 to navigate through the model.
 
-Resources:
+Resources
+~~~~~~~~~
+
+Some STA documentation, inparticular API usage.
 
 * `SensorThings API OGC Standard <http://docs.opengeospatial.org/is/15-078r6/15-078r6.html>`_
 * http://ogc-iot.github.io/ogc-iot-api/datamodel.html - datamodel explanation
@@ -39,10 +42,10 @@ Resources:
 * https://gost1.docs.apiary.io - STA GOST-provided API docs
 * https://sensorup.atlassian.net/wiki/spaces/SPS - some more examples
 
-The mapping of the STA entities is as follows:
+The mapping of the STA entities to SE objects is as follows:
 
 * `Thing`: corresponds to single SE Device (Station)
-* `Location`: holds single/last geographical Point location of Thing, thus SE Device
+* `Location`: holds single/last geographical `Point` location of `Thing`, thus SE Device
 * `Datastream`:  corresponds to single indicator (e.g. Temperature or NO2) of single/specific SE Device
 * `Observation`: corresponds to single measurement (e.g. Temperature or NO2) of single/specific `Datastream`
 * `Sensor` and `ObservedProperty` provide metadata for a single/specific SE device indicator (mostly a sensor) thus `Datastream`
@@ -51,9 +54,9 @@ So a single `Thing` has multiple Datastreams, each `Datastream` provides multipl
 `Observations` for a single `Sensor` and single `ObservedProperty`.
 This corresponds to a single SE Device containing multiple indicators (mostly sensors) where each
 indicator provides multiple measurements. Thus `Thing`, `Datastream` and `Observation` will be the three Entities mostly
-used.
+used when interacting with STA.
 
-In addition for a `Thing` in SE the following conventions apply:
+In addition, for a `Thing` in SE the following conventions apply:
 
 * `name` attribute corresponds to SE Device id
 * `properties` is a free-form key/value list field using

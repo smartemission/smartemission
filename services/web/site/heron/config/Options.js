@@ -694,23 +694,14 @@ Heron.options.map.toolbar = [
 Ext.namespace("Heron.options.bookmarks");
 Heron.options.bookmarks =
     [
-        //{
-        //    id: 'smartemco',
-        //    name: 'Smart Emission Latest CO',
-        //    desc: 'Current (Latest) values CO',
-        //    layers: ['OpenBasisKaart OSM', 'Smart Emission - Stations', 'Smart Emission - Current CO'],
-        //    x: 187041,
-        //    y: 427900,
-        //    zoom: 8
-        //},
         {
-            id: 'smartemcoraw',
-            name: 'Smart Emission Latest CO Raw',
-            desc: 'Current (Latest) values CO Raw',
-            layers: ['OpenBasisKaart OSM', 'Smart Emission - Stations', 'Smart Emission - Current CO Raw'],
-            x: 187041,
-            y: 427900,
-            zoom: 8
+           id: 'smartemco',
+           name: 'Smart Emission Latest CO',
+           desc: 'Current (Latest) values CO',
+           layers: ['OpenBasisKaart OSM', 'Smart Emission - Stations', 'Smart Emission - Current CO'],
+           x: 187041,
+           y: 427900,
+           zoom: 8
         },
         {
             id: 'smartemco2',
@@ -721,41 +712,22 @@ Heron.options.bookmarks =
             y: 427900,
             zoom: 8
         },
-        //{
-        //    id: 'smartemno2',
-        //    name: 'Smart Emission Latest NO2',
-        //    desc: 'Current (Latest) values NO2',
-        //    layers: ['OpenSimpleTopo TMS', 'Smart Emission - Stations', 'Smart Emission - Current NO2'],
-        //    x: 187041,
-        //    y: 427900,
-        //    zoom: 8
-        //},
         {
-            id: 'smartemno2raw',
-            name: 'Smart Emission Latest NO2 Raw',
-            desc: 'Current (Latest) values NO2 Raw',
-            layers: ['OpenBasisKaart OSM', 'Smart Emission - Stations', 'Smart Emission - Current NO2 Raw'],
-            x: 187041,
-            y: 427900,
-            zoom: 8
+           id: 'smartemno2',
+           name: 'Smart Emission Latest NO2',
+           desc: 'Current (Latest) values NO2',
+           layers: ['OpenSimpleTopo TMS', 'Smart Emission - Stations', 'Smart Emission - Current NO2'],
+           x: 187041,
+           y: 427900,
+           zoom: 8
         },
         {
             id: 'smartemo3',
-            name: 'Smart Emission Latest O3 ug/m3',
+            name: 'Smart Emission Current O3 ug/m3',
             desc: 'Smart Emission - Current O3',
             layers: ['OpenBasisKaart OSM', 'Smart Emission - Stations', 'Smart Emission - Current O3'],
             x: 187041,
             y: 427900,
             zoom: 8
-        },
-        {
-            id: 'smartemo3raw',
-            name: 'Smart Emission Latest O3 Raw',
-            desc: 'Smart Emission - Current O3 Raw',
-            layers: ['OpenBasisKaart OSM', 'Smart Emission - Stations', 'Smart Emission - Current O3 Raw'],
-            x: 187041,
-            y: 427900,
-            zoom: 8
         }
-
     ];

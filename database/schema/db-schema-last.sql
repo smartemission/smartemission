@@ -39,6 +39,10 @@ DROP VIEW IF EXISTS smartem_rt.stations CASCADE;
 CREATE VIEW smartem_rt.stations AS
   SELECT DISTINCT on (d.device_id) d.gid, d.device_id as device_id, d.device_id%10000 as device_subid, d.device_id/10000 as project_id, d.device_name, d.device_meta, d.point, d.altitude, d.value_stale, d.time as last_update, ST_X(point) as lon, ST_Y(point) as lat  FROM smartem_rt.last_device_output as d order by d.device_id;
 
+--
+-- LAST MEASUREMENTS
+--
+
 -- Alle Laatste Metingen
 DROP VIEW IF EXISTS smartem_rt.v_last_measurements;
 CREATE VIEW smartem_rt.v_last_measurements AS
@@ -138,3 +142,75 @@ CREATE VIEW smartem_rt.v_last_measurements_noise_level_avg AS
     name, value_raw, value_stale, time AS sample_time, value, point, gid, unique_id
   FROM smartem_rt.last_device_output WHERE value_stale = 0 AND name = 'noiselevelavg' ORDER BY device_id, gid DESC;
 
+--
+-- CURRENT MEASUREMENTS
+--
+
+-- All Current Measurements (last hour)
+DROP VIEW IF EXISTS smartem_rt.v_cur_measurements CASCADE;
+CREATE VIEW smartem_rt.v_cur_measurements AS
+  SELECT gid, unique_id, device_id, device_name, device_meta, sensor_meta,label, unit,
+    name, value_raw, value_stale, time AS sample_time, value, point,
+    ST_X(point) as lon, ST_Y(point) as lat, EXTRACT(epoch from time ) AS timestamp
+  FROM smartem_rt.last_device_output WHERE value_stale = 0 AND time > now() - interval '15 minutes' ORDER BY device_id ASC;
+
+-- Current Measurements per Component
+DROP VIEW IF EXISTS smartem_rt.v_cur_measurements_CO2;
+CREATE VIEW smartem_rt.v_cur_measurements_CO2 AS
+  SELECT *
+  FROM smartem_rt.v_cur_measurements WHERE name = 'co2';
+
+DROP VIEW IF EXISTS smartem_rt.v_cur_measurements_CO;
+CREATE VIEW smartem_rt.v_cur_measurements_CO AS
+  SELECT *
+  FROM smartem_rt.v_cur_measurements WHERE name = 'co';
+
+DROP VIEW IF EXISTS smartem_rt.v_cur_measurements_NO2;
+CREATE VIEW smartem_rt.v_cur_measurements_NO2 AS
+  SELECT *
+  FROM smartem_rt.v_cur_measurements WHERE name = 'no2';
+
+DROP VIEW IF EXISTS smartem_rt.v_cur_measurements_O3;
+CREATE VIEW smartem_rt.v_cur_measurements_O3 AS
+  SELECT *
+  FROM smartem_rt.v_cur_measurements WHERE name = 'o3';
+
+DROP VIEW IF EXISTS smartem_rt.v_cur_measurements_PM10;
+CREATE VIEW smartem_rt.v_cur_measurements_PM10 AS
+  SELECT *
+  FROM smartem_rt.v_cur_measurements WHERE name = 'pm10';
+
+DROP VIEW IF EXISTS smartem_rt.v_cur_measurements_PM2_5;
+CREATE VIEW smartem_rt.v_cur_measurements_PM2_5 AS
+  SELECT *
+  FROM smartem_rt.v_cur_measurements WHERE name = 'pm2_5';
+
+-- DROP VIEW IF EXISTS smartem_rt.v_cur_measurements_PM1;
+-- CREATE VIEW smartem_rt.v_cur_measurements_PM1 AS
+--   SELECT *
+--   FROM smartem_rt.v_cur_measurements WHERE name = 'pm1' ORDER BY device_id, gid DESC;
+--
+DROP VIEW IF EXISTS smartem_rt.v_cur_measurements_temperature;
+CREATE VIEW smartem_rt.v_cur_measurements_temperature AS
+  SELECT *
+  FROM smartem_rt.v_cur_measurements WHERE name = 'temperature';
+
+DROP VIEW IF EXISTS smartem_rt.v_cur_measurements_humidity;
+CREATE VIEW smartem_rt.v_cur_measurements_humidity AS
+  SELECT *
+  FROM smartem_rt.v_cur_measurements WHERE name = 'humidity';
+
+DROP VIEW IF EXISTS smartem_rt.v_cur_measurements_barometer;
+CREATE VIEW smartem_rt.v_cur_measurements_barometer AS
+  SELECT *
+  FROM smartem_rt.v_cur_measurements WHERE name = 'pressure';
+
+DROP VIEW IF EXISTS smartem_rt.v_cur_measurements_noise_avg;
+CREATE VIEW smartem_rt.v_cur_measurements_noise_avg AS
+  SELECT *
+  FROM smartem_rt.v_cur_measurements WHERE name = 'noiseavg';
+
+DROP VIEW IF EXISTS smartem_rt.v_cur_measurements_noise_level_avg;
+CREATE VIEW smartem_rt.v_cur_measurements_noise_level_avg AS
+  SELECT *
+  FROM smartem_rt.v_cur_measurements WHERE name = 'noiselevelavg';

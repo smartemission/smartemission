@@ -111,7 +111,7 @@ CREATE VIEW smartem_refined.v_timeseries AS
     ST_X(point) as lon, ST_Y(point) as lat, EXTRACT(epoch from time ) AS timestamp
   FROM smartem_refined.timeseries ORDER BY name ASC;
 
--- Laatste Metingen per Component
+ -- Laatste Metingen per Component
 DROP VIEW IF EXISTS smartem_refined.v_timeseries_CO2;
 CREATE VIEW smartem_refined.v_timeseries_CO2 AS
   SELECT device_id, device_meta, sensor_meta, name, label,
