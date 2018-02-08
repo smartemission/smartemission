@@ -33,19 +33,19 @@ def nocache(view):
 def get_stations():
     # Do query from DB
     db = PostGIS(config)
-    return db.do_query('SELECT * from stations', 'stations')
+    return db.do_query('SELECT * from v_cur_stations', 'v_cur_stations')
 
 # Shorthand to get (last values) array from DB
 def get_last_values(station):
     # Do query from DB
     db = PostGIS(config)
 
-    # Default is to get all last measurements
-    query = 'SELECT * from v_last_measurements'
+    # Default is to get all current measurements
+    query = 'SELECT * from v_cur_measurements'
     if station:
         # Last measurements for single station
         query = query + ' WHERE device_id = ' + station
-    return db.do_query(query, 'v_last_measurements')
+    return db.do_query(query, 'v_cur_measurements')
 
 # Shorthand to create proper JSON HTTP response
 def make_json_response(json_doc):

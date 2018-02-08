@@ -347,11 +347,8 @@ Heron.layout = {
                                 "Smart Emission - History Noise Level Average",
                                 "Smart Emission - History CO2 ppm",
                                 "Smart Emission - History CO ug/m3",
-                                "Smart Emission - History CO kOhm Raw",
                                 "Smart Emission - History NO2 ug/m3",
-                                "Smart Emission - History NO2 kOhm Raw",
                                 "Smart Emission - History O3 ug/m3",
-                                "Smart Emission - History O3 kOhm Raw",
                                 "Smart Emission - History PM10 ug/m3",
                                 "Smart Emission - History PM25 ug/m3"
                             ]

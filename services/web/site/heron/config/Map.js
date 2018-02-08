@@ -1915,6 +1915,4 @@ Heron.options.layertree.tree = [
             {nodeType: "gx_layer", layer: "KNMI - Rain Radar (Color)"}
         ]
     }
-
-
 ];
