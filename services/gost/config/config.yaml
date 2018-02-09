@@ -23,3 +23,6 @@ mqtt:
     enabled: true
     host: mosquitto
     port: 1883
+logger:
+    fileName: /var/log/gost
+    verbose: false
