@@ -85,7 +85,7 @@ Heron.layout = {
                     xtype: 'hr_gxplayerpanel',
                     id: 'gxplayerpanel',
                     border: true,
-                    autoScroll: false,
+                    autoScroll: true,
                     collapsed: false,
                     title: 'Lagen Beheer',
 //                    header: false,
