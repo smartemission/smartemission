@@ -514,6 +514,12 @@ Result: ::
 	         "resultTime": "2018-02-06T11:00:00+01:00"
 	      },
 
+**Get all Things with Locations and Latest Observation**
+
+Uses multiple inline-options separated with semi-colon:
+
+  `http://data.smartemission.nl/gost/v1.0/Things?$expand=Locations($select=location),Datastreams($select=id,name),Datastreams/Observations($select=id,phenomenonTime,result;$top=1)&$select=id,name,properties <http://data.smartemission.nl/gost/v1.0/Things?$expand=Locations($select=location),Datastreams($select=id,name),Datastreams/Observations($select=id,phenomenonTime,result;$top=1)&$select=id,name,properties>`_
+
 **Get Observations using date/time**
 
 The field `phenomenonTime` of Observation denotes the date/time of the original Observation.
