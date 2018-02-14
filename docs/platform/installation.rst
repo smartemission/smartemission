@@ -28,6 +28,85 @@ in which the SE Platform is run.
 - backups for all configuration and databases is scheduled each midnight
 - a test http://test.smartemission.nl and production http://data.smartemission.nl server exists
 
+Security
+========
+
+Dependent on local requirements and context (e.g. firewall already in place).
+
+Basics: https://www.thefanclub.co.za/how-to/how-secure-ubuntu-1604-lts-server-part-1-basics
+
+UFW Uncomplicated Firewall
+--------------------------
+
+https://help.ubuntu.com/16.04/serverguide/firewall.html
+Install UFW and enable, open a terminal window and enter :  ::
+
+	apt-get install ufw
+	ufw allow ssh
+	ufw allow http
+	ufw allow https
+
+	# Enable the firewall.
+	ufw enable
+    shutdown -r now
+
+	# Check the status of the firewall.
+	ufw status verbose
+
+	Status: active
+	Logging: on (low)
+	Default: deny (incoming), allow (outgoing), disabled (routed)
+	New profiles: skip
+
+	To                         Action      From
+	--                         ------      ----
+	22                         ALLOW IN    Anywhere
+	80                         ALLOW IN    Anywhere
+	443                        ALLOW IN    Anywhere
+	1883                       ALLOW IN    Anywhere
+	8086                       ALLOW IN    Anywhere
+	22 (v6)                    ALLOW IN    Anywhere (v6)
+	80 (v6)                    ALLOW IN    Anywhere (v6)
+	443 (v6)                   ALLOW IN    Anywhere (v6)
+	1883 (v6)                  ALLOW IN    Anywhere (v6)
+	8086 (v6)                  ALLOW IN    Anywhere (v6)
+
+fail2ban
+--------
+
+See https://www.digitalocean.com/community/tutorials/how-to-install-and-use-fail2ban-on-ubuntu-14-04.
+And: https://www.thefanclub.co.za/how-to/how-secure-ubuntu-1604-lts-server-part-1-basics ::
+
+	apt-get install -y fail2ban
+
+    cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+
+    # Maak config in /etc/fail2ban/jail.local
+
+    # EXAMPLE
+	# See jail.conf(5) man page for more information
+	[sshd]
+
+	enabled  = true
+	port     = ssh
+	filter   = sshd
+	logpath  = /var/log/auth.log
+	maxretry = 3
+
+	[DEFAULT]
+
+	# "bantime" is the number of seconds that a host is banned.
+	# bantime  = 600
+	bantime  = 604800
+
+	# A host is banned if it has generated "maxretry" during the last "findtime"
+	# seconds.
+	# findtime  = 600
+	findtime = 900
+
+	# "maxretry" is the number of failures before a host get banned.
+	maxretry = 5
+
 Installation
 ============
 
@@ -45,6 +124,7 @@ Get the SE Platform `bootstrap.sh <https://github.com/Geonovum/smartemission/pla
     # In e.g. home dir
     $ apt-get install curl
     $ curl -O https://raw.githubusercontent.com/Geonovum/smartemission/master/platform/bootstrap.sh
+
 
 Install and Build
 -----------------

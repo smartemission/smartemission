@@ -2,10 +2,12 @@
 #
 # This prepares an empty Ubuntu system for running the SmartEmission Data Platform
 # run this script once as root.
+# NB not required when your system already has Docker and docker-compose!!
+#
 #
 # NB2 On Fiware lab VM: add "127.0.0.1 localhost hostname" to /etc/hosts
 #
-# Just van den Broecke - 2016
+# Just van den Broecke - 2016-2018
 
 # Bring system uptodate
 
@@ -60,11 +62,6 @@ sudo apt-get install -y python-pip libyaml-dev libpython2.7-dev git emacs24-nox 
 # Also Docker Compose
 sudo pip install pyyaml
 sudo pip install docker-compose
-
-sudo mkdir -p /var/smartem/log/etl
-sudo chmod 777 /var/smartem/log/etl
-sudo mkdir -p /var/smartem/data
-sudo mkdir -p /var/smartem/backup
 
 # Postfix: choose Local System
 sudo apt-get -y install postfix

@@ -8,10 +8,16 @@
 
 script_dir=${0%/*}
 
-sudo cp ${script_dir}/smartem.initd.sh /etc/init.d/smartem
-sudo chmod +x /etc/init.d/smartem
+
+mkdir -p /var/smartem/log/etl
+chmod 777 /var/smartem/log/etl
+mkdir -p /var/smartem/data
+mkdir -p /var/smartem/backup
+
+cp ${script_dir}/smartem.initd.sh /etc/init.d/smartem
+chmod +x /etc/init.d/smartem
 
 # Traditional TODO look into Upstart Way
-sudo update-rc.d smartem defaults
+update-rc.d smartem defaults
 
 echo "READY: now start SE Data Platform using 'service smartem start'"
