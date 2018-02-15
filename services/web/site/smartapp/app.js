@@ -56,7 +56,7 @@ $(document).ready(function () {
             // See to which category an observation belongs by matching the label
             var gasses = [];
             var meteo = [];
-            var audio = [];
+            var audio = {};
 
             for (var idx in data) {
                 var component = data[idx];
@@ -73,7 +73,7 @@ $(document).ready(function () {
                     // Is it audio?
                 } else if (audioIds.indexOf(componentId) >= 0) {
                     // Is it a audio?
-                    audio.push(component);
+                    audio[componentId] = component;
 
                     if (componentId == 'noiselevelavg') {
                         component['offset'] = parseInt(component.lastValue.value) * 20 - 10;
