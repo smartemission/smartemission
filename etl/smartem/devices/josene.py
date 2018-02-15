@@ -177,13 +177,21 @@ class Josene(Device):
                     # determine validity of these 3 bands
                     dbMin = name_def['min']
                     dbMax = name_def['max']
+                    err_cnt = 0
+                    msg = ''
                     for i in range(0, len(bands)):
                         band_val = bands[i]
-                        # outliers
+                        # accumulate outliers
                         if band_val < dbMin:
-                            return False, '%s: val(%s) < min(%s)' % (name, str(band_val), str(name_def['min']))
+                            err_cnt +=1
+                            msg += '%s: val(%s) < min(%s)\n' % (name, str(band_val), str(name_def['min']))
                         elif band_val > dbMax:
-                            return False, '%s: val(%s) > max(%s)' % (name, str(band_val), str(name_def['max']))
+                            err_cnt +=1
+                            msg += '%s: val(%s) > max(%s)\n' % (name, str(band_val), str(name_def['max']))
+
+                    # Only invalid if all bands outside range
+                    if err_cnt >= len(bands):
+                        return False, msg
 
                     return True, '%s OK' % name
 

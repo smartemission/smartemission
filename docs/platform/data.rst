@@ -801,7 +801,7 @@ The conversion algorithms are further implemented as follows. First the definiti
             'meta_id': 'au-V30_V3F',
             'converter': convert_noise_avg,
             'type': int,
-            'min': -100,
+            'min': 1,
             'max': 195
         },
     'noiselevelavg':
