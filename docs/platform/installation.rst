@@ -13,15 +13,15 @@ These are requirements and principles to understand and install an instance of t
 It is required to have an understanding of `Docker <https://www.docker.com>`_, as that is the main environment
 in which the SE Platform is run.
 
-- Required OS: Ubuntu Linux 14.04 or later (tested on 14.04)
-- all components are Docker Images run as Docker Containers
+- Required OS: Ubuntu Linux 14.04 or later (tested on 14.04 and 16.04)
+- all components are Docker Images run as Docker Containers (with exception `cAdvisor` on Ubuntu 14.04)
 - all required code comes from GitHub: https://github.com/Geonovum/smartemission
-- all dynamic data: settings, databases, logfiles is maintained on the system (via Docker container *Volume-mapping*)
-- Docker images are connected via Docker Link (``--link``)  mapping
+- all dynamic data: settings, databases, logfiles, website, ETL scripts is maintained on the host system (via Docker container *Volume-mapping*)
+- Docker images are connected and networked via Docker Link (``--link``)  mapping
 - all access to application services containers (GeoServer, SOS, Grafana etc) is proxied via the Apache2 `web` Docker container
-- settings per-system, like for test and production are kept in per-host ``<yourhostname>.args``
+- settings per-system, like passwords and other settings, are kept in per-host ``etl/options/<yourhostname>.args`` (see below)
 - dynamic data (databases, logs, backups) is maintained under ``/var/smartem``.
-- a single ``bootstrap.sh`` script will install ``Docker`` plus other required packages (see below)
+- a single ``bootstrap.sh`` script will install ``Docker`` plus other required packages (optional, see below)
 - all ETL/calibration processes run as scheduled ``cron`` jobs
 - all ETL Processes use a single Docker Image that embeds the `Stetl ETL Tool <http://stetl.org>`_
 - maintain ETL functionality in GitHub and just refresh/pull GitHub dir on server (no need for rebuilding Docker)
@@ -31,7 +31,7 @@ in which the SE Platform is run.
 Security
 ========
 
-Dependent on local requirements and context (e.g. firewall already in place).
+Dependent on local requirements and context (e.g. firewall already in place) install basic security tools.
 
 Basics: https://www.thefanclub.co.za/how-to/how-secure-ubuntu-1604-lts-server-part-1-basics
 
@@ -125,6 +125,11 @@ Get the SE Platform `bootstrap.sh <https://github.com/Geonovum/smartemission/pla
     $ apt-get install curl
     $ curl -O https://raw.githubusercontent.com/Geonovum/smartemission/master/platform/bootstrap.sh
 
+Get the SE Platform `bootstrap-nodocker.sh <https://github.com/Geonovum/smartemission/platform/bootstrap-nodocker.sh>`_ script: ::
+
+    # In e.g. home dir
+    $ apt-get install curl
+    $ curl -O https://raw.githubusercontent.com/Geonovum/smartemission/master/platform/bootstrap.sh
 
 Install and Build
 -----------------
@@ -135,6 +140,7 @@ SE-code (from GitHub) and build Docker images: ::
     # become root if not already
     $ sudo su  -
 
+    # OPTIONAL
     # Install Docker and required packages
     # plus checkout (Git) all SE code from GitHub
     # Confirm interactive choices: postfix "Local".
@@ -183,6 +189,15 @@ Now create and initialize all databases (PostGIS and InfluxDb): ::
     # Creates and initializes all databases
     # NB WILL DESTROY ANY EXISTING DATA!!
     ./init-databases.sh
+
+Load Calibration Data
+---------------------
+
+Mainly ANN models stored in PostGIS. For example get latest data from production: ::
+
+    scp root@test.smartemission.nl:/var/smartem/backup/gis-smartem_calibrated.dmp /var/smartem/backup/
+    cd /opt/geonovum/smartem/git/platform
+    ./restore-db.sh /var/smartem/backup/gis-smartem_calibrated.dmp
 
 Install System Service
 ----------------------
