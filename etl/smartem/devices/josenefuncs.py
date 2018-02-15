@@ -193,7 +193,6 @@ def convert_noise_avg(value, json_obj, sensor_def, device=None):
     input_names = sensor_def['input']
     for input_name in input_names:
         input_value = json_obj[input_name]
-
         # decode dB(A) values into 3 bands (0,1,2)
         bands = [float(input_value & 255), float((input_value >> 8) & 255), float((input_value >> 16) & 255)]
 
@@ -204,7 +203,7 @@ def convert_noise_avg(value, json_obj, sensor_def, device=None):
         dbMax = sensor_def['max']
         for i in range(0, len(bands)):
             band_val = bands[i]
-            # outliers
+            # skip outliers
             if band_val < dbMin or band_val > dbMax:
                 continue
             band_cnt += 1

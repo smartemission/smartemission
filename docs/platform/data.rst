@@ -234,26 +234,33 @@ The `Refiner` implements five data-processing steps:
 * Aggregation
 * Validation (post)
 
+The implementation of these steps is in most cases specific per sensor-type.
+This has been abstracted via the Python base class `Device` with specific
+implementations per sensor station: Josene, AirSensEUR etc.
+
 Validation deals with removing ``outliers``, values outside specific intervals.
 Calibration and Conversion go hand-in-hand: in many cases, like Temperature,
 the sensor-values are already calibrated but provided in another unit like milliKelvin.
 Here a straightforward conversion applies. In particularly raw
-gasvalues may come in resistance
-values (kOhm). There is no linear relationship with these resistance-values
+gas-values may come as resistance (kOhm) or voltage
+values. In most cases there is no linear relationship between these raw values
 and standard gas concentration units like mg/m3 or ppm.
-In that case Calibration needs to be applied.
+In those cases Calibration needs to be applied. This has been elaborated first
+for Josene sensors.
 
 Calibration (Josene Sensors)
 ----------------------------
 
-Especially for gas-components this may be a challenge. Here raw sensor-values are expressed in
-kOhms (NO2, O3 and CO) except for CO2 which is given in ppb. Audio-values are already provided in decibels.
-Meteo-values are more standard and obvious to convert (e.g. milliKelvin to deegree Celsius).
+Raw sensor-values are expressed in
+kOhms (NO2, O3 and CO) except for CO2 which is given in ppb.
+Audio-values are already provided in decibels (dbA).
+Meteo-values are more standard and obvious to convert
+(e.g. milliKelvin to deegree Celsius).
 
 The complexity for the calibration of gasses lies in the fact that many parameters may influence
-measured values: temperature, relative humidity, pressure and even the concentration of
+measured values: temperature, relative humidity, pressure but even the concentration of
 other gasses! For example O3 and NO2. A great deal of scientific literature is already devoted
-to the sensor calibration issue.
+to the sensor calibration issue. Gas Calibration using ANN for SE is described more extensively in :ref:`calibration`.
 
 The units are: ::
 
@@ -326,7 +333,7 @@ The units are: ::
 	P.17
 	P.18
 
-Below are typical values as obtained via the raw sensor API ::
+Below are typical values from a Josene station as obtained via the raw sensor API ::
 
 	# General
 	id: "20",
@@ -424,14 +431,14 @@ Below are typical values as obtained via the raw sensor API ::
 
 
 Below each of these sensor values are elaborated.
-All conversions are implemented in using these Python scripts, called from the
-Refiner ETL:
+All conversions are implemented in using these Python scripts, called within the
+Stetl Refiner ETL process:
 
 * `josenedevice.py <https://github.com/Geonovum/smartemission/blob/master/etl/smartem/devices/josene.py>`_ Device implementation
 * `josenedefs.py <https://github.com/Geonovum/smartemission/blob/master/etl/smartem/devices/josenedefs.py>`_ definitions of sensors
 * `josenefuncs.py <https://github.com/Geonovum/smartemission/blob/master/etl/smartem/devices/josenefuncs.py>`_ mostly converter routines
 
-By using a generic config file `sensordefs.py <https://github.com/Geonovum/smartemission/blob/master/etl/sensordefs.py>`_
+By using a generic config file `josenedefs.py <https://github.com/Geonovum/smartemission/blob/master/etl/smartem/devices/josenedefs.py>`_
 all validation and calibration is specified generically. Below some sample entries. ::
 
 	SENSOR_DEFS = {
@@ -579,8 +586,8 @@ all validation and calibration is specified generically. Below some sample entri
 Each entry has:
 
 * `label`: name for display
-* `unit`: well the unit
-* `input`: optionally one or more input Entries required for conversion (`sensorconverters.py <https://github.com/Geonovum/smartemission/blob/master/etl/sensorconverters.py>`_). May cascade.
+* `unit`: the unit of measurement (uom)
+* `input`: optionally one or more input Entries required for conversion (`josenefuncs.py <https://github.com/Geonovum/smartemission/blob/master/etl/smartem/devices/josenefuncs.py>`_). May cascade.
 * `converter`: pointer to Python conversion function
 * `type`: value type
 * `min/max`: valid range (for validation)
@@ -593,8 +600,8 @@ desired indicators are specified, for example:
 ``temperature,humidity,pressure,noiseavg,noiselevelavg,co2,o3,co,no2,o3raw,coraw,no2raw``.
 In this fashion the Refiner remains generic: driven by required indicators and their Entries.
 
-Gas Calibration with ANN
-------------------------
+Gas Calibration with ANN (Josene)
+---------------------------------
 
 Within the SE project a separate activity is performed for gas-calibration based on Big Data Analysis
 statistical methods. Values coming from SE sensors were compared to actual RIVM reference values. By matching predicted
@@ -607,8 +614,11 @@ Gas Calibration using ANN for SE is described more extensively in :ref:`calibrat
 
 Source code for ANN Gas Calibration learning process: https://github.com/Geonovum/smartemission/tree/master/etl/smartem/calibrator .
 
-GPS Data
---------
+GPS Data (Josene)
+-----------------
+
+GPS data from a Josene sensor is encoded in two integers: `s_latitude` and `s_longitude`.
+Below is the conversion algoritm.
 
 See https://github.com/Geonovum/sospilot/issues/22
 
@@ -685,8 +695,10 @@ In Python: ::
 	        return None
 	    return res
 
-Meteo Data
-----------
+Meteo Data (Josene)
+-------------------
+
+Applies to Temperature, Pressure and Humidity. Conversions are trivial.
 
 Python code: ::
 
@@ -713,6 +725,196 @@ Python code: ::
 	    if humPercent > 100:
 	        return None
 	    return humPercent
+
+Audio Data (Josene)
+-------------------
+
+Audio (noise) data from a Josene station has many indicators: ::
+
+	S.AudioMinus5			Octave -5 in dB(A)
+	S.AudioMinus4			Octave -4 in dB(A)
+	S.AudioMinus3			Octave -3 in dB(A)
+	S.AudioMinus2			Octave -2 in dB(A)
+	S.AudioMinus1			Octave -1 in dB(A)
+	S.Audio0				Octave 0 in dB(A)
+	S.AudioPlus1			Octave +1 in dB(A)
+	S.AudioPlus2			Octave +2 in dB(A)
+	S.AudioPlus3			Octave +3 in dB(A)
+	S.AudioPlus4			Octave +4 in dB(A)
+	S.AudioPlus5			Octave +5 in dB(A)
+	S.AudioPlus6			Octave +6 in dB(A)
+	S.AudioPlus7			Octave +7 in dB(A)
+	S.AudioPlus8			Octave +8 in dB(A)
+	S.AudioPlus9			Octave +9 in dB(A)
+	S.AudioPlus10			Octave +10 in dB(A)
+
+Audio indicators are spread over octaves. For each octave 4 different indicators apply:
+
+* S  momentary, measured just before transmitting data
+* T  maximum peak, during base timer interval
+* U  minimum peak, during base timer interval
+* V average, during base timer interval
+
+for example: ::
+
+	s_audio<octave> (momentary)
+	t_audio<octave> (maximum peak)
+	u_audio<octave> (minimum peak)
+	v_audio<octave> (average)
+
+and encoded example Octave+3: ::
+
+	s_audioplus3: 1841946,
+	v_audioplus2: 1381141,
+	u_audioplus2: 1118225,
+	t_audioplus2: 1645849,
+
+In the first approach only the average (V) indicators are taken and converted/aggregated into
+hourly values through the Refiner. There are requirements to produce more indicators like 5 minute aggregations
+and peak indicators. Two indicators are produced:
+
+* `noiseavg` average hourly noise in dB(A)
+* `noiselevelavg` average hourly noise level (value 1-5)
+
+The raw values are in `uint32` where the first 3 bytes are used for different frequencies
+(example sound pressure octave 8, from ~25 dB(A) to ~100dB(A), ANSI bands 38, 39 and 40):
+
+* Bits 31 to 24 : not used
+* Bits 23 to 16 : 1/3 octave ANSI band e.g. 40, center frequency: 10kHz
+* Bits 15 to 8  : 1/3 octave ANSI band e.g. 39, center frequency: 8kHz
+* Bits 7 to 0   : 1/3 octave ANSI band e.g. 38, center frequency: 6.3kHz
+
+This requires decoding bytes 0,1,2 from each uint32 value, in Python: ::
+
+	bands = [float(input_value & 255), float((input_value >> 8) & 255), float((input_value >> 16) & 255)]
+
+Via a bit shift and bitmask (2pow8-1 or 255), an array of 3 band-values is decoded.
+
+The conversion algorithms are further implemented as follows. First the definition from `josenedefs.py`: ::
+
+    'noiseavg':
+        {
+            'label': 'Average Noise',
+            'unit': 'dB(A)',
+            'input': ['v_audio0', 'v_audioplus1', 'v_audioplus2', 'v_audioplus3', 'v_audioplus4', 'v_audioplus5',
+                      'v_audioplus6', 'v_audioplus7', 'v_audioplus8', 'v_audioplus9'],
+            'meta_id': 'au-V30_V3F',
+            'converter': convert_noise_avg,
+            'type': int,
+            'min': -100,
+            'max': 195
+        },
+    'noiselevelavg':
+        {
+            'label': 'Average Noise Level 1-5',
+            'unit': 'int',
+            'input': 'noiseavg',
+            'meta_id': 'au-V30_V3F',
+            'converter': convert_noise_level,
+            'type': int,
+            'min': 1,
+            'max': 5
+        },
+
+The `convert_noise_avg()` function takes all the `v_` audio values (averages per octave) and
+calculates the average over all octaves: ::
+
+	# Converts audio var and populates average NB all in dB(A) !
+	# Logaritmisch optellen van de waarden per frequentieband voor het
+	# verkrijgen van de totaalwaarde:
+	#
+	# 10^(waarde/10)
+	# En dat voor de waarden van alle frequenties en bij elkaar tellen.
+	# Daar de log van en x10
+	#
+	# Normaal tellen wij op van 31,5 Hz tot 8 kHz. In totaal 9 oktaafbanden:
+	# 31,5  63  125  250  500  1000  2000  4000 en 8000 Hz
+	#
+	# Of 27   1/3 oktaafbanden: 25, 31.5, 40, 50, 63, 80, enz
+	def convert_noise_avg(value, json_obj, sensor_def, device=None):
+	    # For each audio observation:
+	    # decode into 3 bands (0,1,2)
+	    # determine average of these  bands
+	    # determine overall average of all average bands
+	    # Extract values for bands 0-2
+	    input_names = sensor_def['input']
+	    for input_name in input_names:
+	        input_value = json_obj[input_name]
+
+	        # decode dB(A) values into 3 bands (0,1,2)
+	        bands = [float(input_value & 255), float((input_value >> 8) & 255), float((input_value >> 16) & 255)]
+
+	        # determine average of these 3 bands
+	        band_avg = 0
+	        band_cnt = 0
+	        dbMin = sensor_def['min']
+	        dbMax = sensor_def['max']
+	        for i in range(0, len(bands)):
+	            band_val = bands[i]
+	            # skip outliers
+	            if band_val < dbMin or band_val > dbMax:
+	                continue
+	            band_cnt += 1
+
+	            # convert band value Decibel(A) to Bel and then get "real" value (power 10)
+	            band_avg += math.pow(10, band_val / 10)
+	            # print '%s : band[%d]=%f band_avg=%f' %(name, i, bands[i], band_avg)
+
+	        if band_cnt == 0:
+	            return None
+
+	        # Take average of "real" values and convert back to Bel via log10 and Decibel via *10
+	        band_avg = math.log10(band_avg / float(band_cnt)) * 10.0
+
+	        # print '%s : avg=%d' %(name, band_avg)
+
+	        if band_avg < dbMin or band_avg > dbMax:
+	            return None
+
+	        # Initialize  average value to first average calc
+	        if 'noiseavg' not in json_obj:
+	            json_obj['noiseavg'] = band_avg
+	            json_obj['noiseavg_total'] = math.pow(10, band_avg / 10)
+	            json_obj['noiseavg_cnt'] = 1
+	        else:
+	            json_obj['noiseavg_cnt'] += 1
+	            json_obj['noiseavg_total'] += math.pow(10, band_avg / 10)
+	            json_obj['noiseavg'] = int(
+	                round(math.log10(json_obj['noiseavg_total'] / json_obj['noiseavg_cnt']) * 10.0))
+
+	    # Determine octave nr from var name
+	    # json_obj['v_audiolevel'] = calc_audio_level(json_obj['v_audioavg'])
+	    # print 'Unit %s - %s band_db=%f avg_db=%d level=%d' % (json_obj['p_unitserialnumber'], sensor_def, band_avg, json_obj['v_audioavg'], json_obj['v_audiolevel'] )
+	    return json_obj['noiseavg']
+
+From this value the `noiselevelavg` indicator is calculated: ::
+
+	# From https://www.teachengineering.org/view_activity.php?url=collection/nyu_/activities/nyu_noise/nyu_noise_activity1.xml
+	# level dB(A)
+	#  1     0-20  zero to quiet room
+	#  2     20-40 up to average residence
+	#  3     40-80 up to noisy class, alarm clock, police whistle
+	#  4     80-90 truck with muffler
+	#  5     90-up severe: pneumatic drill, artillery,
+	#
+	# Peter vd Voorn:
+	# Voor het categoriseren van de meetwaarden kunnen we het beste beginnen bij de 20 dB(A).
+	# De hoogte waarde zal 95 dB(A) zijn. Bijvoorbeeld een vogel van heel dichtbij.
+	# Je kunt dit nu gewoon lineair verdelen in 5 categorieen. Ieder 15 dB. Het betreft buiten meetwaarden.
+	# 20 fluister stil
+	# 35 rustige woonwijk in een stad
+	# 50 drukke woonwijk in een stad
+	# 65 wonen op korte afstand van het spoor
+	# 80 live optreden van een band aan het einde van het publieksdeel. Praten is mogelijk.
+	# 95 live optreden van een band midden op een plein. Praten is onmogelijk.
+	def calc_audio_level(db):
+	    levels = [20, 35, 50, 65, 80, 95]
+	    level_num = 1
+	    for i in range(0, len(levels)):
+	        if db > levels[i]:
+	            level_num = i + 1
+
+	    return level_num
 
 Publishers
 ==========
