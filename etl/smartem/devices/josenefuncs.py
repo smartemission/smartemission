@@ -187,56 +187,72 @@ def convert_noise_level(value, json_obj, sensor_def, device=None):
 def convert_noise_avg(value, json_obj, sensor_def, device=None):
     # For each audio observation:
     # decode into 3 bands (0,1,2)
-    # determine average of these  bands
-    # determine overall average of all average bands
+    # determine sum of these  bands (sound for octave)
+    # determine overall sum of all octave bands
+    
     # Extract values for bands 0-2
     input_names = sensor_def['input']
+    dbMin = sensor_def['min']
+    dbMax = sensor_def['max']
+
+    # octave_values = []
     for input_name in input_names:
         input_value = json_obj[input_name]
-        # decode dB(A) values into 3 bands (0,1,2)
+
+        # decode dB(A) values into 3 bands (0,1,2) for this octave
         bands = [float(input_value & 255), float((input_value >> 8) & 255), float((input_value >> 16) & 255)]
 
-        # determine average of these 3 bands
-        band_avg = 0
+        # determine sum of these 3 bands
+        band_sum = 0
         band_cnt = 0
-        dbMin = sensor_def['min']
-        dbMax = sensor_def['max']
         for i in range(0, len(bands)):
             band_val = bands[i]
+
             # skip outliers
             if band_val < dbMin or band_val > dbMax:
                 continue
+
             band_cnt += 1
 
             # convert band value Decibel(A) to Bel and then get "real" value (power 10)
-            band_avg += math.pow(10, band_val / 10)
-            # print '%s : band[%d]=%f band_avg=%f' %(name, i, bands[i], band_avg)
+            band_sum += math.pow(10, band_val / 10)
+            # print '%s : band[%d]=%f band_sum=%f' %(name, i, bands[i], band_sum)
 
         if band_cnt == 0:
             return None
 
-        # Take average of "real" values and convert back to Bel via log10 and Decibel via *10
-        band_avg = math.log10(band_avg / float(band_cnt)) * 10.0
+        # Take sum of "real" values and convert back to Bel via log10 and Decibel via *10
+        # band_sum = math.log10(band_sum / float(band_cnt)) * 10.0
+        band_sum = math.log10(band_sum) * 10.0
 
-        # print '%s : avg=%d' %(name, band_avg)
+        # print '%s : avg=%d' %(name, band_sum)
 
-        if band_avg < dbMin or band_avg > dbMax:
+        if band_sum < dbMin or band_sum > dbMax:
             return None
 
-        # Initialize  average value to first average calc
+        # octave_values.append(round(band_sum))
+
+        # Gather values
         if 'noiseavg' not in json_obj:
-            json_obj['noiseavg'] = band_avg
-            json_obj['noiseavg_total'] = math.pow(10, band_avg / 10)
+            # Initialize sum value to first 1/3 octave band value
+            json_obj['noiseavg'] = band_sum
+            json_obj['noiseavg_total'] = math.pow(10, band_sum / 10)
             json_obj['noiseavg_cnt'] = 1
         else:
+            # Add 1/3 octave band value to total and derive dB(A) value
             json_obj['noiseavg_cnt'] += 1
-            json_obj['noiseavg_total'] += math.pow(10, band_avg / 10)
+            json_obj['noiseavg_total'] += math.pow(10, band_sum / 10)
+            #json_obj['noiseavg'] = int(
+            #    round(math.log10(json_obj['noiseavg_total'] / json_obj['noiseavg_cnt']) * 10.0))
             json_obj['noiseavg'] = int(
-                round(math.log10(json_obj['noiseavg_total'] / json_obj['noiseavg_cnt']) * 10.0))
+                round(math.log10(json_obj['noiseavg_total']) * 10.0))
+
+    if json_obj['noiseavg'] < dbMin or json_obj['noiseavg'] > dbMax:
+        return None
 
     # Determine octave nr from var name
     # json_obj['v_audiolevel'] = calc_audio_level(json_obj['v_audioavg'])
-    # print 'Unit %s - %s band_db=%f avg_db=%d level=%d' % (json_obj['p_unitserialnumber'], sensor_def, band_avg, json_obj['v_audioavg'], json_obj['v_audiolevel'] )
+    # print 'Unit %s - %s band_db=%f avg_db=%d level=%d' % (json_obj['p_unitserialnumber'], sensor_def, band_sum, json_obj['v_audioavg'], json_obj['v_audiolevel'] )
     return json_obj['noiseavg']
 
 

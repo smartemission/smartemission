@@ -309,77 +309,77 @@ SENSOR_DEFS = {
         {
             'label': 'Audio 0-40Hz',
             'unit': 'dB(A)',
-            'min': 1,
+            'min': 0,
             'max': 195
         },
     'v_audioplus1':
         {
             'label': 'Audio 40-80Hz',
             'unit': 'dB(A)',
-            'min': 1,
+            'min': 0,
             'max': 195
         },
     'v_audioplus2':
         {
             'label': 'Audio 80-160Hz',
             'unit': 'dB(A)',
-            'min': 1,
+            'min': 0,
             'max': 195
         },
     'v_audioplus3':
         {
             'label': 'Audio 160-315Hz',
             'unit': 'dB(A)',
-            'min': 1,
+            'min': 0,
             'max': 195
         },
     'v_audioplus4':
         {
             'label': 'Audio 315-630Hz',
             'unit': 'dB(A)',
-            'min': 1,
+            'min': 0,
             'max': 195
         },
     'v_audioplus5':
         {
             'label': 'Audio 630Hz-1.25kHz',
             'unit': 'dB(A)',
-            'min': 1,
+            'min': 0,
             'max': 195
         },
     'v_audioplus6':
         {
             'label': 'Audio 1.25-2.5kHz',
             'unit': 'dB(A)',
-            'min': 1,
+            'min': 0,
             'max': 195
         },
     'v_audioplus7':
         {
             'label': 'Audio 2.5-5kHz',
             'unit': 'dB(A)',
-            'min': 1,
+            'min': 0,
             'max': 195
         },
     'v_audioplus8':
         {
             'label': 'Audio 5-10kHz',
             'unit': 'dB(A)',
-            'min': 1,
+            'min': 0,
             'max': 195
         },
     'v_audioplus9':
         {
             'label': 'Audio 10-20kHz',
             'unit': 'dB(A)',
-            'min': 1,
+            'min': 0,
             'max': 195
         },
     'v_audioplus10':
         {
             'label': 'Audio 20-25kHz',
             'unit': 'dB(A)',
-            'min': 1,
+            'min': 0,
             'max': 195
         },
     # START user-defined/derived Sensors
@@ -452,7 +452,7 @@ SENSOR_DEFS = {
             'meta_id': 'au-V30_V3F',
             'converter': convert_noise_avg,
             'type': int,
-            'min': 1,
+            'min': 0,
             'max': 195
         },
     'noiselevelavg':
