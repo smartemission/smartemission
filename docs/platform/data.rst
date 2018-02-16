@@ -729,7 +729,25 @@ Python code: ::
 Audio Data (Josene)
 -------------------
 
-Audio (noise) data from a Josene station has many indicators: ::
+Calculations with audio data (sound pressure, noise values) are somewhat different from
+gasses and meteo:
+
+* units are logarithmic (decibels or dB(A))
+* sound pressures are divided over frequencies/bands
+* total sound pressure values are summations over frequencies/bands (not averages!)
+
+These principles were not immediately understood and evolved during developement.
+See also some discussion around `this issue <https://github.com/Geonovum/smartemission/issues/88>`_.
+
+The links helped in understanding and check calculations via an online sound calculator:
+
+* http://www.sengpielaudio.com/calculator-spl.htm
+* http://www.sengpielaudio.com/calculator-octave.htm
+
+Raw Data
+~~~~~~~~
+
+Audio (sound pressure) data from a Josene station has multiple indicators: ::
 
 	S.AudioMinus5			Octave -5 in dB(A)
 	S.AudioMinus4			Octave -4 in dB(A)
@@ -748,11 +766,11 @@ Audio (noise) data from a Josene station has many indicators: ::
 	S.AudioPlus9			Octave +9 in dB(A)
 	S.AudioPlus10			Octave +10 in dB(A)
 
-Audio indicators are spread over octaves. For each octave 4 different indicators apply:
+Sound pressure values are spread over octaves. For each octave four different indicators apply:
 
-* S  momentary, measured just before transmitting data
-* T  maximum peak, during base timer interval
-* U  minimum peak, during base timer interval
+* S momentary, measured just before transmitting data
+* T maximum peak, during base timer interval
+* U minimum peak, during base timer interval
 * V average, during base timer interval
 
 for example: ::
@@ -762,46 +780,49 @@ for example: ::
 	u_audio<octave> (minimum peak)
 	v_audio<octave> (average)
 
-and encoded example Octave+3: ::
+and encoded (uint32) example Octave+3: ::
 
 	s_audioplus3: 1841946,
 	v_audioplus2: 1381141,
 	u_audioplus2: 1118225,
 	t_audioplus2: 1645849,
 
-In the first approach only the average (V) indicators are taken and converted/aggregated into
-hourly values through the Refiner. There are requirements to produce more indicators like 5 minute aggregations
-and peak indicators. Two indicators are produced:
-
-* `noiseavg` average hourly noise in dB(A)
-* `noiselevelavg` average hourly noise level (value 1-5)
-
-The raw values are in `uint32` where the first 3 bytes are used for different frequencies
-(example sound pressure octave 8, from ~25 dB(A) to ~100dB(A), ANSI bands 38, 39 and 40):
+For each octave, values are in `uint32` where bytes 0-2 are used for sound pressure at frequencies
+according to ANSI frequency bands. For example: sound pressure for octave 8, ANSI bands 38, 39 and 40:
 
 * Bits 31 to 24 : not used
 * Bits 23 to 16 : 1/3 octave ANSI band e.g. 40, center frequency: 10kHz
 * Bits 15 to 8  : 1/3 octave ANSI band e.g. 39, center frequency: 8kHz
 * Bits 7 to 0   : 1/3 octave ANSI band e.g. 38, center frequency: 6.3kHz
 
-This requires decoding bytes 0,1,2 from each uint32 value, in Python: ::
+This requires decoding bytes 0,1,2 from each `uint32` value, in Python: ::
 
 	bands = [float(input_value & 255), float((input_value >> 8) & 255), float((input_value >> 16) & 255)]
 
-Via a bit shift and bitmask (2pow8-1 or 255), an array of 3 band-values is decoded.
+Via a bit shift and bitmask (2pow8-1 or 255), an array of 3 band-values (bytes 0-2) for each frequency is decoded.
 
-The conversion algorithms are further implemented as follows. First the definition from `josenedefs.py`: ::
+Calculating Noise Indicators
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In the first approach only the average (`V`) indicators are taken and converted/aggregated into
+hourly values through the `Refiner`. There are requirements to produce more indicators like 5 minute aggregations
+and peak indicators. Two indicators are produced:
+
+* `noiseavg` average hourly noise in dB(A)
+* `noiselevelavg` average hourly noise level (value 1-5)
+
+Conversions are implemented as follows. First the definition from `josenedefs.py`: ::
 
     'noiseavg':
         {
             'label': 'Average Noise',
             'unit': 'dB(A)',
             'input': ['v_audio0', 'v_audioplus1', 'v_audioplus2', 'v_audioplus3', 'v_audioplus4', 'v_audioplus5',
-                      'v_audioplus6', 'v_audioplus7', 'v_audioplus8', 'v_audioplus9'],
+                      'v_audioplus6', 'v_audioplus7', 'v_audioplus8'],
             'meta_id': 'au-V30_V3F',
             'converter': convert_noise_avg,
             'type': int,
-            'min': 1,
+            'min': 0,
             'max': 195
         },
     'noiselevelavg':
@@ -816,75 +837,97 @@ The conversion algorithms are further implemented as follows. First the definiti
             'max': 5
         },
 
-The `convert_noise_avg()` function takes all the `v_` audio values (sum per octave) and
-calculates the sum over all octaves: ::
+The `convert_noise_avg()` function takes all a selection (31,5Hz  to 8kHz) of `v_audio*` audio values (sum per octave) and
+calculates the sum over all octaves, from `josenefuncs.py`.
+Note that subbands 0 (40 Hz) of `v_audio0` and subband 2 (10KHz) of `v_audioplus8` are removed. ::
 
-	# Converts audio var and populates average NB all in dB(A) !
-	# Logaritmisch optellen van de waarden per frequentieband voor het
-	# verkrijgen van de totaalwaarde:
+	# Converts audio var and populates sum NB all in dB(A) !
+	# Logaritmisch optellen van de waarden per frequentieband voor het verkrijgen van de totaalwaarde:
 	#
 	# 10^(waarde/10)
 	# En dat voor de waarden van alle frequenties en bij elkaar tellen.
 	# Daar de log van en x10
 	#
-	# Normaal tellen wij op van 31,5 Hz tot 8 kHz. In totaal 9 oktaafbanden:
+	# Normaal tellen wij op van 31,5 Hz tot 8 kHz. In totaal 9 oktaafanden.
 	# 31,5  63  125  250  500  1000  2000  4000 en 8000 Hz
 	#
-	# Of 27   1/3 oktaafbanden: 25, 31.5, 40, 50, 63, 80, enz
+	# Of 27 1/3 oktaafbanden: 25, 31.5, 40, 50, 63, 80, enz
 	def convert_noise_avg(value, json_obj, sensor_def, device=None):
 	    # For each audio observation:
 	    # decode into 3 bands (0,1,2)
-	    # determine average of these  bands
-	    # determine overall average of all average bands
+	    # determine sum of these  bands (sound for octave)
+	    # determine overall sum of all octave bands
+
 	    # Extract values for bands 0-2
 	    input_names = sensor_def['input']
+	    dbMin = sensor_def['min']
+	    dbMax = sensor_def['max']
+
+	    # octave_values = []
 	    for input_name in input_names:
 	        input_value = json_obj[input_name]
 
-	        # decode dB(A) values into 3 bands (0,1,2)
+	        # decode dB(A) values into 3 bands (0,1,2) for this octave
 	        bands = [float(input_value & 255), float((input_value >> 8) & 255), float((input_value >> 16) & 255)]
 
-	        # determine average of these 3 bands
-	        band_avg = 0
+	        if input_name is 'v_audio0':
+	            # Remove 40Hz subband
+	            del bands[0]
+	        elif input_name is 'v_audioplus8':
+	            # Remove 10KHz subband
+	            del bands[2]
+
+	        # determine sum of these 3 bands
+	        band_sum = 0
 	        band_cnt = 0
-	        dbMin = sensor_def['min']
-	        dbMax = sensor_def['max']
 	        for i in range(0, len(bands)):
 	            band_val = bands[i]
+
 	            # skip outliers
 	            if band_val < dbMin or band_val > dbMax:
 	                continue
+
 	            band_cnt += 1
 
 	            # convert band value Decibel(A) to Bel and then get "real" value (power 10)
-	            band_avg += math.pow(10, band_val / 10)
-	            # print '%s : band[%d]=%f band_avg=%f' %(name, i, bands[i], band_avg)
+	            band_sum += math.pow(10, band_val / 10)
+	            # print '%s : band[%d]=%f band_sum=%f' %(name, i, bands[i], band_sum)
 
 	        if band_cnt == 0:
 	            return None
 
-	        # Take average of "real" values and convert back to Bel via log10 and Decibel via *10
-	        band_avg = math.log10(band_avg / float(band_cnt)) * 10.0
+	        # Take sum of "real" values and convert back to Bel via log10 and Decibel via *10
+	        # band_sum = math.log10(band_sum / float(band_cnt)) * 10.0
+	        band_sum = math.log10(band_sum) * 10.0
 
-	        # print '%s : avg=%d' %(name, band_avg)
+	        # print '%s : avg=%d' %(name, band_sum)
 
-	        if band_avg < dbMin or band_avg > dbMax:
+	        if band_sum < dbMin or band_sum > dbMax:
 	            return None
 
-	        # Initialize  average value to first average calc
+	        # octave_values.append(round(band_sum))
+
+	        # Gather values
 	        if 'noiseavg' not in json_obj:
-	            json_obj['noiseavg'] = band_avg
-	            json_obj['noiseavg_total'] = math.pow(10, band_avg / 10)
+	            # Initialize sum value to first 1/3 octave band value
+	            json_obj['noiseavg'] = band_sum
+	            json_obj['noiseavg_total'] = math.pow(10, band_sum / 10)
 	            json_obj['noiseavg_cnt'] = 1
 	        else:
+	            # Add 1/3 octave band value to total and derive dB(A) value
 	            json_obj['noiseavg_cnt'] += 1
-	            json_obj['noiseavg_total'] += math.pow(10, band_avg / 10)
+	            json_obj['noiseavg_total'] += math.pow(10, band_sum / 10)
+	            #json_obj['noiseavg'] = int(
+	            #    round(math.log10(json_obj['noiseavg_total'] / json_obj['noiseavg_cnt']) * 10.0))
 	            json_obj['noiseavg'] = int(
-	                round(math.log10(json_obj['noiseavg_total'] / json_obj['noiseavg_cnt']) * 10.0))
+	                round(math.log10(json_obj['noiseavg_total']) * 10.0))
+
+	    if json_obj['noiseavg'] < dbMin or json_obj['noiseavg'] > dbMax:
+	        return None
 
 	    # Determine octave nr from var name
 	    # json_obj['v_audiolevel'] = calc_audio_level(json_obj['v_audioavg'])
-	    # print 'Unit %s - %s band_db=%f avg_db=%d level=%d' % (json_obj['p_unitserialnumber'], sensor_def, band_avg, json_obj['v_audioavg'], json_obj['v_audiolevel'] )
+	    # print 'Unit %s - %s band_db=%f avg_db=%d level=%d' % (json_obj['p_unitserialnumber'], sensor_def, band_sum, json_obj['v_audioavg'], json_obj['v_audiolevel'] )
 	    return json_obj['noiseavg']
 
 From this value the `noiselevelavg` indicator is calculated: ::
@@ -915,6 +958,30 @@ From this value the `noiselevelavg` indicator is calculated: ::
 	            level_num = i + 1
 
 	    return level_num
+
+The hourly average is calculated by averaging all values within the `Refiner`: ::
+
+    # M = M + (x-M)/n
+    # Here M is the (cumulative moving) average, x is the new value in the
+    # sequence, n is the count of values. Using floats as not to loose precision.
+    def moving_average(self, moving_avg, x, n, unit):
+        if 'dB' in unit:
+            # convert Decibel to Bel and then get "real" value (power 10)
+            # print moving_avg, x, n
+            x = math.pow(10, x / 10)
+            moving_avg = math.pow(10, moving_avg / 10)
+            moving_avg = self.moving_average(moving_avg, x, n, 'int')
+            # Take average of "real" values and convert back to Bel via log10 and Decibel via *10
+            return math.log10(moving_avg) * 10.0
+
+        # Standard moving avg.
+        return float(moving_avg) + (float(x) - float(moving_avg)) / float(n)
+
+So summarizing Sound Pressure hourly values are calculated in three steps:
+
+* sum sound pressure dB(A) per octave by summing its 1/3 octave subbands
+* sum sound pressure dB(A) for all octaves
+* calculate hourly average from these last sums
 
 Publishers
 ==========
