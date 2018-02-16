@@ -816,8 +816,8 @@ The conversion algorithms are further implemented as follows. First the definiti
             'max': 5
         },
 
-The `convert_noise_avg()` function takes all the `v_` audio values (averages per octave) and
-calculates the average over all octaves: ::
+The `convert_noise_avg()` function takes all the `v_` audio values (sum per octave) and
+calculates the sum over all octaves: ::
 
 	# Converts audio var and populates average NB all in dB(A) !
 	# Logaritmisch optellen van de waarden per frequentieband voor het

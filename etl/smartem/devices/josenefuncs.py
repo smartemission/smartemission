@@ -174,14 +174,15 @@ def convert_noise_level(value, json_obj, sensor_def, device=None):
     return calc_audio_level(value)
 
 
-# Converts audio var and populates average NB all in dB(A) !
+# Converts audio var and populates sum NB all in dB(A) !
 # Logaritmisch optellen van de waarden per frequentieband voor het verkrijgen van de totaalwaarde:
 #
 # 10^(waarde/10)
 # En dat voor de waarden van alle frequenties en bij elkaar tellen.
 # Daar de log van en x10
 #
-# Normaal tellen wij op van 31,5 Hz tot 8 kHz. In totaal 9 oktaafanden. 31,5  63  125  250  500  1000  2000  4000 en 8000 Hz
+# Normaal tellen wij op van 31,5 Hz tot 8 kHz. In totaal 9 oktaafanden.
+# 31,5  63  125  250  500  1000  2000  4000 en 8000 Hz
 #
 # Of 27   1/3 oktaafbanden: 25, 31.5, 40, 50, 63, 80, enz
 def convert_noise_avg(value, json_obj, sensor_def, device=None):
@@ -202,6 +203,13 @@ def convert_noise_avg(value, json_obj, sensor_def, device=None):
         # decode dB(A) values into 3 bands (0,1,2) for this octave
         bands = [float(input_value & 255), float((input_value >> 8) & 255), float((input_value >> 16) & 255)]
 
+        if input_name is 'v_audio0':
+            # Remove 40Hz subband
+            del bands[0]
+        elif input_name is 'v_audioplus8':
+            # Remove 10KHz subband
+            del bands[2]
+        
         # determine sum of these 3 bands
         band_sum = 0
         band_cnt = 0

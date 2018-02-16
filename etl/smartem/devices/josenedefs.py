@@ -448,7 +448,7 @@ SENSOR_DEFS = {
             'label': 'Average Noise',
             'unit': 'dB(A)',
             'input': ['v_audio0', 'v_audioplus1', 'v_audioplus2', 'v_audioplus3', 'v_audioplus4', 'v_audioplus5',
-                      'v_audioplus6', 'v_audioplus7', 'v_audioplus8', 'v_audioplus9'],
+                      'v_audioplus6', 'v_audioplus7', 'v_audioplus8'],
             'meta_id': 'au-V30_V3F',
             'converter': convert_noise_avg,
             'type': int,
