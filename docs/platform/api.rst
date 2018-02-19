@@ -33,11 +33,9 @@ push the refined (validated, optionally aggregated, converted and/or calibrated)
 API services that provide (mostly standard OGC) Web APIs from which clients (e.g. Web Viewer Apps), even
 in theory another SE Harvester, can consume the data.
 
-There are two groups of APIs: Inbound (producer) APIs (orange) and Outbound (consumer) APIs (blue).
+There are two groups of APIs: Inbound (producer) APIs (in orange) and Outbound (consumer) APIs (in blue).
 In some cases the reason for an API-existence is historic: in the initial phase of the
-project, experience needed to be gained with multiple APIs.
-
-A short overview follows:
+project, experience needed to be gained with multiple APIs. A short overview follows.
 
 Inbound APIs
 ------------
@@ -87,7 +85,7 @@ Sensor Observation Service (SOS)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Data can be pulled from a remote SOS. For the SE platform this is used to pull in reference data
-from RIVM for ANN Calibration. See also the :ref:`calibration` chapter.
+from RIVM for the ANN Calibration learning process. See also the :ref:`calibration` chapter.
 
 Outbound APIs
 -------------
