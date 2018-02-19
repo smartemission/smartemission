@@ -14,6 +14,7 @@ Contents:
    data.rst
    calibration.rst
    services.rst
+   api.rst
    installation.rst
    administration.rst
    dissemination.rst
