@@ -4,7 +4,6 @@
     <title>SmartApp</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <!--<link rel="stylesheet" href="https://unpkg.com/leaflet@0.7.3/dist/leaflet.css"/>-->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
        integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
        crossorigin=""/>
@@ -26,6 +25,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.3/js/bootstrap-select.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
     <script src="lib/sidebar/L.Control.Sidebar.js"></script>
+    <script src="lib/imgtooltip/image-tooltip.js"></script>
     <script src="app.js"></script>
 
     <style>
@@ -46,90 +46,106 @@
     <!-- Handlebars template -->
     <script id="entry-template" type="text/x-handlebars-template">
 	    <div>
-            <header class="w3-container w3-cyan">
+            <header class="w3-container w3-blue">
                 <h1>Smart Emission</h1>
             </header>
 			
-			<div class="w3-container">
-                <div class="w3-row">
-                    <div class="w3-container w3-center">
-						<img src="media/logo.png" width="100%" height="55">
-                    </div>
-                </div>
-				<hr>
-            </div>
-			
+			<!--<div class="w3-container">-->
+                <!--<div class="w3-row">-->
+                    <!--<div class="w3-container w3-center">-->
+						<!--<img src="media/logo.png" width="100%" height="55">-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+
             <div class="w3-container">
                 <div class="w3-row">
-                    <div class="w3-quarter">
-                        <img src="media/locatie-icon.png" width="40" height="70">
-                    </div>
-                    <div class="w3-col s8">
-						<h4>Station {{ station.properties.id }}</h4>
-                        <h6>{{ station.geometry.coordinates.[1] }}, {{ station.geometry.coordinates.[0] }} </h6>
+                    <div class="w3-container">
+                        <table cellspacing="6" cellpadding="8">
+                            <tr>
+                                <td>&nbsp;<h2>Station&nbsp;&nbsp;</h2></td>
+                                <td>&nbsp;<h2>{{ station.properties.id }}</h2></td>
+                                <!--<td>&nbsp;</td>-->
+                            </tr>
+                            <tr>
+                                <td><h5>Locatie&nbsp;&nbsp;</h5></td>
+                                <td><h5>{{ station.geometry.coordinates.[1] }}, {{ station.geometry.coordinates.[0]
+                                    }} </h5></td>
+                                <!--<td><img src="media/locatie-icon.png" width="13" height="21"></td>-->
+                            </tr>
+                            <tr>
+                                <td><h5>Laatste&nbsp;&nbsp;</h5><h5>Meting&nbsp;&nbsp;</h5></td>
+                                <td><h5>{{ station.properties.last_update }}</h5></td>
+                                <!--<td><img src="media/clock.png" width="15" height="15"></td>-->
+                            </tr>
+                        </table>
+                        <hr>
                     </div>
                 </div>
-            </div>
-			
-			
-		    <div class="w3-container">
-                <div class="w3-row">
-				<hr>
-                    <div class="w3-quarter">
-                        <img src="media/clock.png" width="60" height="60">
-                    </div>
-                    <div class="w3-col s8">
-                        <h4>Laatste meting </h4>
-                        <h6>{{ station.properties.last_update }}</h6>
-                    </div>
-                </div>
-				<hr>
             </div>
 
-			<div class="w3-container">
-                <div class="w3-container w3-center">
-                    <p>LET OP: dit zijn indicatieve waarden</p>
-				<hr>
-                </div>
-            </div>
+
+            <!--<div class="w3-container">-->
+                <!--<div class="w3-container w3-center">-->
+                    <!--<p>LET OP: dit zijn indicatieve waarden</p>-->
+				<!--<hr>-->
+                <!--</div>-->
+            <!--</div>-->
 			
+            {{#if data.gasses}}
             <div class="w3-container">
 				<div class="w3-row">
                     <div class="w3-container">
-                        <h5>Luchtkwaliteit</h5>
+                        <h3>Luchtkwaliteit</h3>
                     </div>
                 </div>
             </div>
 			
             <div class="w3-container">
-                <div id="table1">
-                    <table class="w3-table w3-bordered w3-striped">
+                    <table class="w3-table w3-bordered">
                         <thead>
                         <tr>
-                            <th>Meeteenheden</th>
-                            <th>Waarde station {{ station.properties.id }}</th>
-                            <th>Waarde LML station</th>
+                            <th>Stof</th>
+                            <th>Indicatie</th>
+                            <th>Waarde</th>
                         </tr>
                         </thead>
                         <tbody>
                         {{#each data.gasses}}
                         <tr>
-							<td>{{ parameters.phenomenon.label }}</td>
-							<td>{{ lastValue.value }} {{ uom }}</td>
-							<td>nvt</td>
+                            <td><b>{{ parameters.phenomenon.label }}</b></td>
+                            <td style="background-color:{{ index.color }}; color:{{ index.fontColor }};">{{ index.text }}</td>
+							<td style="background-color:{{ index.color }}; color:{{ index.fontColor }};">{{ lastValue.value }} {{ uom }}</td>
                         {{/each}}
                         </tr>
 						</tbody>
                     </table>
+
+            </div>
+            <div class="w3-container">
+				<div class="w3-row">
+                    <div class="w3-container">
+                        <h6>Legenda - <a target="_new" href="https://www.luchtmeetnet.nl/uitleg#">uitleg</a></h6>
+                    </div>
                 </div>
             </div>
-            <br>
+            <div class="w3-container">
+                <table>
+                     <tr> <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                         {{#each gassesLegend}}
+                         <td width="20%" style="background-color:{{ color }}; color:{{ fontColor }};">&nbsp;&nbsp;<small>{{ text }}</small>&nbsp;&nbsp;</td>
+                     {{/each}}
+                     </tr>
+                 </table>
+                <hr>
+            </div>
+            {{/if}}
 
             {{#if data.audio.noiseavg}}
             <div class="w3-container">
                 <div class="w3-row">
                     <div class="w3-col s7 w3-container">
-                        <h5>Geluid</h5>
+                        <h3>Geluid</h3>
                     </div>
                     <!-- <div class="w3-col s2 w3-padding-16" >
                         <img src="media/slidebox.png" width="150" height="20" >
@@ -141,39 +157,37 @@
             </div>
 
             <div class="w3-container">
-                <div class="w3-row">
-					<div class="w3-col s6 w3-container">
-						<p>
-							{{ data.audio.noiseavg.lastValue.value }} {{ data.audio.noiseavg.uom }}
-						</p>
-					</div>
-
-                    <div class="w3-col s5 w3-container">
-               						<p>Niveau {{ data.audio.noiselevelavg.lastValue.value }} van 5</p>
-               					</div>
-
-					<!-- <div class="w3-col s5 w3-container">
-						<p>Zacht</p>
-					</div>
-					<div class="w3-col s1">
-						<p>Hard</p>
-					</div>   -->
-				</div>	
+                <table class="w3-table">
+                     <thead>
+                     <tr>
+                         <th>Waarde decibel (A)</th>
+                         <th>Niveau</th>
+                     </tr>
+                     </thead>
+                     <tbody>
+                     <tr>
+				<td>{{ data.audio.noiseavg.lastValue.value }} </td>
+                         <td>{{ data.audio.noiselevelavg.lastValue.value }} van 5</td>
+                         <td>&nbsp;&nbsp;&nbsp;</td>
+                      </tr>
+			</tbody>
+                 </table>
+                <hr>
             </div>
             {{/if}}
 
             <div class="w3-container">
 				<div class="w3-container">
-                    <h5>Meteo</h5>
+                    <h3>Meteo</h3>
                 </div>
             </div>
             <div class="w3-container">
                  <div id="table">
-                     <table class="w3-table w3-bordered w3-striped">
+                     <table class="w3-table w3-bordered">
                          <thead>
                          <tr>
-                             <th>Meeteenheden</th>
-                             <th>Waarde station {{ station.properties.id }}</th>
+                             <th>Indicator</th>
+                             <th>Waarde</th>
                          </tr>
                          </thead>
                          <tbody>
@@ -186,10 +200,9 @@
 
  						</tbody>
                      </table>
+                     <br>
                  </div>
              </div>
-             <br>
-
         </div>
     </script>
 

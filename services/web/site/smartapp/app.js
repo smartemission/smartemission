@@ -17,8 +17,8 @@ $(document).ready(function () {
     var template = Handlebars.compile(source);
 
     // URL of the Smart Emission SOS REST API
-    // var apiUrl = 'http://api.smartemission.nl/sosemu/api/v1';
-    var apiUrl = '/sosemu/api/v1';
+     var apiUrl = 'http://api.smartemission.nl/sosemu/api/v1';
+    //var apiUrl = '/sosemu/api/v1';
 
     // See http://stackoverflow.com/questions/11916780/changing-getjson-to-jsonp
     // Notice the callback=? . This triggers a JSONP call
@@ -31,9 +31,45 @@ $(document).ready(function () {
     // sensor-component names
     // var gasIds = 'co2,o3,no2,co,o3raw,coraw,no2raw,pm10,pm2_5';
     // No Raw Values: https://github.com/Geonovum/smartemission/issues/83
-    var gasIds = 'co2,o3,no2,co,pm10,pm2_5';
+    var gasIds = 'co2,o3,no2,co,pm10,pm2_5';                                                style="background-color:{{ index.color }}; color:{{ index.fontColor }};"
     var meteoIds = 'temperature,pressure,humidity';
     var audioIds = 'noiseavg,noiselevelavg';
+    var aqIndexesNL = {
+        no2: [0, 30, 75, 125, 200],
+        o3: [0, 40, 100, 180, 240],
+        pm10: [0, 30, 75, 125, 200],
+        pm2_5: [0, 20, 50, 90, 140]
+    };
+    var aqIndexesNLLegend =
+        [
+            {color: '#3399CC', fontColor: '#FFFFFF', text: 'Goed'},
+            {color: '#FFFF00', fontColor: '#000000', text: 'Matig'},
+            {color: '#FF9900', fontColor: '#000000', text: 'Onvoldoende'},
+            {color: '#FF0000', fontColor: '#FFFFFF', text: 'Slecht'},
+            {color: '#660099', fontColor: '#FFFFFF', text: 'Zeer Slecht'},
+        ];
+
+
+    // Create icon based on feature props and selected state
+    function getAQIndex(component) {
+        var indexValue = {color: '#FFFFFF', fontColor: '#000000', text: 'nvt'};
+        var name = component.id;
+        if (aqIndexesNL.hasOwnProperty(name)) {
+            var value = component.lastValue.value;
+            var indexArr = aqIndexesNL[name];
+            var index = indexArr.length - 1;
+            for (var i = 0; i < indexArr.length; i++) {
+                if (value < indexArr[i]) {
+                    break;
+                }
+                index = i;
+            }
+            if (index >= 0 && index < aqIndexesNLLegend.length) {
+                indexValue = aqIndexesNLLegend[index];
+            }
+        }
+        return indexValue;
+    }
 
     // Create icon based on feature props and selected state
     function getMarkerIcon(feature, selected) {
@@ -65,7 +101,7 @@ $(document).ready(function () {
                 // Is it a gas?
                 if (gasIds.indexOf(componentId) >= 0) {
                     gasses.push(component);
-
+                    component['index'] = getAQIndex(component);
                     // Is it a meteo?
                 } else if (meteoIds.indexOf(componentId) >= 0) {
                     meteo.push(component);
@@ -84,6 +120,7 @@ $(document).ready(function () {
             // Create station data struct: splitting up component categories
             var stationData = {
                 station: feature,
+                gassesLegend: aqIndexesNLLegend,
                 data: {
                     gasses: gasses,
                     meteo: meteo,
