@@ -82,6 +82,25 @@ $(document).ready(function () {
             iconAnchor: [10, 40]
         });
     }
+    var hoverPup;
+    // Show the marker mouse over popup
+    function show_marker_hover(e, feature) {
+        // var props = feature.properties;
+        // hoverPup = L.popup()
+        //  .setLatLng(e.latlng)
+        //  .setContent(props.label + ' <br>laatste meting: ' + props.last_update)
+        //  .openOn(map);
+        // return false;
+    }
+
+    // Hide the marker mouse over popup
+    function hide_marker_hover(e, feature) {
+        // if (hoverPup && map) {
+        //     map.closePopup(hoverPup);
+        //     hoverPup = undefined;
+        // }
+        // return false;
+    }
 
     // Show the station side bar popup
     function show_station_popup(feature) {
@@ -185,13 +204,17 @@ $(document).ready(function () {
                 var icon = getMarkerIcon(feature, false);
                 var marker = L.marker(latlng, {icon: icon});
                 markers[feature.properties.id] = marker;
+                // marker.bindPopup("Popup content");
                 return marker;
             }
         }).addTo(markerCluster)
             // When station-marker clicked get Timeseries with last value for that Station
-            .on('click', function (e) {
-                var feature = e.layer.feature;
-                show_station_popup(feature);
+            .on('mouseover', function (e) {
+                show_marker_hover(e, feature);
+            }).on('mouseout', function (e) {
+                // hide_marker_hover(e, feature);
+            }).on('click', function (e) {
+                show_station_popup(e.layer.feature);
             });
 
         map.addLayer(markerCluster);
@@ -227,6 +250,29 @@ $(document).ready(function () {
     sidebar.on('hidden', function () {
         console.log('Sidebar is hidden.');
     });
+
+    L.Control.Watermark = L.Control.extend({
+        onAdd: function(map) {
+            // var img = L.DomUtil.create('img');
+            //
+            // img.src = 'media/selogo1.png';
+            // img.style.width = '60px';
+            // return img;
+            var content = L.DomUtil.create('div', 'aboutse');
+            content.innerHTML = '<a target="_new" href="/"><img src="media/selogo1.png" width="50px"/></a><br><h4><a target="_new" href="/">Smart Emission</a></h4>';
+            return content;
+        },
+
+        onRemove: function(map) {
+            // Nothing to do here
+        }
+    });
+    
+    L.control.watermark = function(opts) {
+        return new L.Control.Watermark(opts);
+    };
+
+    L.control.watermark({ position: 'topright' }).addTo(map);
 
     //sidebar.on(sidebar.getCloseButton(), 'click', function () {
     //    console.log('Close button clicked.');

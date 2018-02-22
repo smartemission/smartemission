@@ -64,7 +64,7 @@ services:
     network_mode: bridge
 #    networks:
 #      - back-tier
-    restart: always
+    restart: unless-stopped
 #    deploy:
 #      placement:
 #        constraints:
@@ -79,7 +79,7 @@ services:
     network_mode: bridge
 #    networks:
 #      - back-tier
-    restart: always
+    restart: unless-stopped
     command:
       - '-config.file=/etc/alertmanager/config-gen.yml'
       - '-storage.path=/alertmanager'
