@@ -40,6 +40,9 @@
             font-size: 40px;
 			color: white;
         }
+        h2 {
+            text-align: center;
+        }
         .aboutse {
             text-align: center;
         }
@@ -50,50 +53,28 @@
     <script id="entry-template" type="text/x-handlebars-template">
 	    <div>
             <header class="w3-container w3-blue">
-                <h1>Smart Emission</h1>
+                <h2 style="">Station {{ station.properties.id }}</h2>
             </header>
-			
-			<!--<div class="w3-container">-->
-                <!--<div class="w3-row">-->
-                    <!--<div class="w3-container w3-center">-->
-						<!--<img src="media/logo.png" width="100%" height="55">-->
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</div>-->
 
             <div class="w3-container">
                 <div class="w3-row">
                     <div class="w3-container">
+                        <p>&nbsp;</p>
                         <table cellspacing="6" cellpadding="8">
-                            <tr>
-                                <td>&nbsp;<h2>Station&nbsp;&nbsp;</h2></td>
-                                <td>&nbsp;<h2>{{ station.properties.id }}</h2></td>
-                                <!--<td>&nbsp;</td>-->
-                            </tr>
-                            <tr>
-                                <td><h5>Locatie&nbsp;&nbsp;</h5></td>
+                             <tr>
+                                <td><h5>Locatie&nbsp;&nbsp;&nbsp;&nbsp;</h5></td>
                                 <td><h5>{{ station.geometry.coordinates.[1] }}, {{ station.geometry.coordinates.[0]
                                     }} </h5></td>
-                                <!--<td><img src="media/locatie-icon.png" width="13" height="21"></td>-->
                             </tr>
                             <tr>
                                 <td><h5>Laatste&nbsp;&nbsp;</h5><h5>Meting&nbsp;&nbsp;</h5></td>
                                 <td><h5>{{ station.properties.last_update }}</h5></td>
-                                <!--<td><img src="media/clock.png" width="15" height="15"></td>-->
                             </tr>
                         </table>
                         <hr>
                     </div>
                 </div>
             </div>
-
-
-            <!--<div class="w3-container">-->
-                <!--<div class="w3-container w3-center">-->
-                    <!--<p>LET OP: dit zijn indicatieve waarden</p>-->
-				<!--<hr>-->
-                <!--</div>-->
-            <!--</div>-->
 			
             {{#if data.gasses}}
             <div class="w3-container">

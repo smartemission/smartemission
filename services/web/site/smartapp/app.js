@@ -259,7 +259,7 @@ $(document).ready(function () {
             // img.style.width = '60px';
             // return img;
             var content = L.DomUtil.create('div', 'aboutse');
-            content.innerHTML = '<a target="_new" href="/"><img src="media/selogo1.png" width="50px"/></a><br><h4><a target="_new" href="/">Smart Emission</a></h4>';
+            content.innerHTML = '<a target="_new" href="/"><img src="media/selogo1.png" width="50px"/></a><br><h4 style="background: white;"><a target="_new" href="/">Smart Emission</a></h4>';
             return content;
         },
 
