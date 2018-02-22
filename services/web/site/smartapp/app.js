@@ -129,10 +129,10 @@ $(document).ready(function () {
                 } else if (audioIds.indexOf(componentId) >= 0) {
                     // Is it a audio?
                     audio[componentId] = component;
-
-                    if (componentId == 'noiselevelavg') {
-                        component['offset'] = parseInt(component.lastValue.value) * 20 - 10;
-                    }
+                    //
+                    // if (componentId == 'noiselevelavg') {
+                    //     component['offset'] = parseInt(component.lastValue.value) * 20 - 10;
+                    // }
                 }
             }
 
