@@ -31,6 +31,17 @@ class RawSensorAPIInput(HttpInput):
         """
         pass
 
+    @Config(ptype=list, default=[], required=False)
+    def skip_devices(self):
+        """
+        List of strings with device id's that need to be skipped.
+
+        Required: False
+
+        Default: None
+        """
+        pass
+
     def __init__(self, configdict, section, produces=FORMAT.record_array):
         HttpInput.__init__(self, configdict, section, produces)
 
@@ -60,7 +71,13 @@ class RawSensorAPIInput(HttpInput):
         # We need just the device id's
         # array element is like "/sensors/v1/devices/8", so cut out the id
         for d in device_urls:
-            self.device_ids.append(int(d.split('/')[-1]))
+            device_id = d.split('/')[-1]
+
+            # Skip id's of e.g. obsolete or transfered devices
+            if device_id in self.skip_devices:
+                continue
+
+            self.device_ids.append(int(device_id))
 
         if len(self.device_ids) > 0:
             self.device_ids_idx = 0
