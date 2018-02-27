@@ -20,6 +20,7 @@ Contents:
    dissemination.rst
    code.rst
    cookbook.rst
+   evolution.rst
    contact.rst
    links.rst
    notes.rst
