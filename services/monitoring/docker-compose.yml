@@ -47,7 +47,7 @@ services:
       - '--storage.tsdb.path=/prometheus'
       - '--web.console.libraries=/usr/share/prometheus/console_libraries'
       - '--web.console.templates=/usr/share/prometheus/consoles'
-      - "--web.external-url=http://${se_host}${se_port}/adm/prometheus"
+      - "--web.external-url=http://${se_host}/adm/prometheus"
      # - '--storage.tsdb.retention=200h'
      # - '--web.route-prefix=/prometheus'
 
@@ -81,34 +81,34 @@ services:
 #      - back-tier
     restart: unless-stopped
     command:
-      - '-config.file=/etc/alertmanager/config-gen.yml'
-      - '-storage.path=/alertmanager'
+      - '--config.file=/etc/alertmanager/config-gen.yml'
+      - '--storage.path=/alertmanager'
 #    deploy:
 #      placement:
 #        constraints:
 #          - node.hostname == moby
 
-#  node-exporter:
-#    image: prom/node-exporter
-#    volumes:
-#      - /proc:/host/proc:ro
-#      - /sys:/host/sys:ro
-#      - /:/rootfs:ro
-#    command:
-#      - '--path.procfs=/host/proc'
-#      - '--path.sysfs=/host/sys'
-#      - --collector.filesystem.ignored-mount-points
-#      - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+  node-exporter:
+    image: prom/node-exporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - --collector.filesystem.ignored-mount-points
+      - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
 #    ports:
 #      - 9100:9100
-#    network_mode: bridge
+    network_mode: bridge
 #    networks:
 #      - back-tier
-#    restart: always
+    restart: unless-stopped
 #    deploy:
 #      mode: global
 
-   cadvisor:
+  cadvisor:
      image: google/cadvisor
      # image: geonovum/cadvisor:v0.28.3
      volumes:
@@ -118,10 +118,10 @@ services:
        - /var/lib/docker/:/var/lib/docker:ro
 #    ports:
 #      - 8080:8080
-    network_mode: bridge
+     network_mode: bridge
 #    networks:
 #      - back-tier
-    restart: unless-stopped
+     restart: unless-stopped
 #    deploy:
 #      mode: global
 
