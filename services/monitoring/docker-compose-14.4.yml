@@ -1,3 +1,5 @@
+# docker-compose file for Ubuntu 14.04
+# diff with docker-compose.yml : node-exporter and cAdvisor run on host
 # Adapted from Brian Christner's: https://github.com/vegasbrianc/prometheus
 # All credits there!
 # Taken version-2 branch on dec 18, 2017.
@@ -54,13 +56,13 @@ services:
 #    ports:
 #      - 9090:9090
     links:
-      - cadvisor:cadvisor
+      # - cadvisor:cadvisor
       # - node-exporter:node-exporter
       - alertmanager:alertmanager
-    depends_on:
-      - cadvisor
+    # depends_on:
+      # - cadvisor
       # - node-exporter
-      
+
     network_mode: bridge
 #    networks:
 #      - back-tier
@@ -108,20 +110,20 @@ services:
 #    deploy:
 #      mode: global
 
-   cadvisor:
-     image: google/cadvisor
-     # image: geonovum/cadvisor:v0.28.3
-     volumes:
-       - /:/rootfs:ro
-       - /var/run:/var/run:rw
-       - /sys:/sys:ro
-       - /var/lib/docker/:/var/lib/docker:ro
+  # cadvisor:
+    # image: google/cadvisor
+    # image: geonovum/cadvisor:v0.28.3
+    # volumes:
+      # - /:/rootfs:ro
+      # - /var/run:/var/run:rw
+      # - /sys:/sys:ro
+      # - /var/lib/docker/:/var/lib/docker:ro
 #    ports:
 #      - 8080:8080
-    network_mode: bridge
+    # network_mode: bridge
 #    networks:
 #      - back-tier
-    restart: unless-stopped
+    # restart: always
 #    deploy:
 #      mode: global
 
