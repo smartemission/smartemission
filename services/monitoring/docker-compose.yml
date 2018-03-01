@@ -109,8 +109,8 @@ services:
 #      mode: global
 
   cadvisor:
-     image: google/cadvisor
-     # image: geonovum/cadvisor:v0.28.3
+     # image: google/cadvisor
+     image: geonovum/cadvisor:v0.28.3
      volumes:
        - /:/rootfs:ro
        - /var/run:/var/run:rw
