@@ -18,7 +18,6 @@ Contents:
    installation.rst
    administration.rst
    dissemination.rst
-   code.rst
    cookbook.rst
    evolution.rst
    contact.rst
