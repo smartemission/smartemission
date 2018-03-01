@@ -55,11 +55,11 @@ services:
 #      - 9090:9090
     links:
       - cadvisor:cadvisor
-      # - node-exporter:node-exporter
+      - node-exporter:node-exporter
       - alertmanager:alertmanager
     depends_on:
       - cadvisor
-      # - node-exporter
+      - node-exporter
       
     network_mode: bridge
 #    networks:

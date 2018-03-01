@@ -396,6 +396,22 @@ Similar to GeoServer: Tomcat with .war file and keeping config outside Docker co
 and mapping DB to ``postgis`` container.
 See https://github.com/Geonovum/smartemission/tree/master/docker/sos52n.
 
+This service configures and runs
+an `OGC SOS <http://www.opengeospatial.org/standards/sos>`_ server using
+a Docker Image that embeds the `52North SOS Server <https://github.com/52North/SOS>`_.
+
+Setup (Once)
+~~~~~~~~~~~~
+
+* Setup PG database schema once using `config/sos-clear.sh`.
+* SOS (server): `config/settings.json`.
+* jsclient (viewer): `config/jsclient/settings.json`.
+
+A sqlite DB contains all settings that can be managed via the GUI
+and is best copied from a previous configured SOS
+instance in `/var/smartem/data/sos52n/configuration.db`.
+On the first start this dir will be created and linked using Docker volume mapping.
+
 gost - Geodan STA
 -----------------
 
@@ -509,7 +525,8 @@ Secure and pass via Apache proxy: ::
         RequestHeader unset Authorization
     </Location>
 
-Add `Prometheus` with url http://prometheus:9090/adm/prometheus as DataSource.
+Add `Prometheus` with url http://prometheus:9090/adm/prometheus as DataSource
+with access `proxy`.
 
 Import Dashboard `1860`: https://grafana.com/dashboards/1860 to view Node Exporter stats.
 and `179`: https://grafana.com/dashboards/179 to view Docker stats. Locally adapted versions of these are available

@@ -1,4 +1,3 @@
-File Edit Options Buffers Tools Sh-Script Help
 #!/bin/bash
 #
 source ../../etl/options/`hostname`.args

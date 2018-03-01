@@ -37,7 +37,7 @@ function restart_image() {
   echo "restart ${NAME} with volumes: ${VOL_MAP}"
   
   # Finally run with all mappings
-  sudo docker run --restart=always --name ${NAME} ${LINK_MAP} ${PORT_MAP} ${VOL_MAP} -d ${IMAGE}
+  sudo docker run --restart=no --name ${NAME} ${LINK_MAP} ${PORT_MAP} ${VOL_MAP} -d ${IMAGE}
   sudo docker cp ${script_dir}/config/jsclient/settings.json sos52n:/usr/local/tomcat/webapps/sos52n/static/client/jsClient
 }
 
