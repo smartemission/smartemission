@@ -14,11 +14,18 @@ Introduction
 
 Within the world of SensorWeb and IoT, many platforms are developed and offered.
 Some with Open Source, others with proprietary source. Data may be Open, partially Open or completely closed.
-Same for standards and APIs used for (web) services. Some platforms are
-from end-to-end "complete": they include data acquisition from sensors, data management/storage,
-services and viewers, often in the form of a "Portal".
+Same goes for standards and APIs used for (web) services. Some platforms are
+"end-to-end complete": they include data acquisition from sensors, data management/storage,
+services and viewers, often in the form of a "Portal" and "Dashboards". Most of these portals
+are built with proprietary source, use custom APIs and usually provide
+subscription models ("Cloud Services") for end users. Also data is usually hosted
+at major providers like Amazon and Google, most often not within The Netherlands.
+Licensing models may change at will. But the convenience is great, often
+plug-and-play integrations (like with ThingsNetwork).
+Examples are numerous, we mention just `MyDevices Cayenne <https://cayenne.mydevices.com>`_ and
+`OpenSensors <https://opensensors.com/>`_.
 
-This chapter is not to list all major platforms, but puts focus on a a very high level
+This chapter is not to list and review all major sensor/IoT platforms, but puts focus on a a very high level
 functional architecture applied to sensor network initiatives within The Netherlands.
 
 Components
@@ -226,16 +233,40 @@ The above architecure could be implemented by multiple organizations. For exampl
 on the (Dutch) national level scenarios can be envisioned where local and governmental
 organizations and parties "from the market" each fill-in functional blocks based on their specialization.
 This could result in what could be called a **Federated Architecture**, i.e. no single party
-provides/controls all building blocks. In theory any party could join.
+provides/controls all building blocks. In theory any party could join (via the APIs and Registry).
 
-A good example of such architecture is `The ThingsNetwork <https://www.thethingsnetwork.org/>`_, a community-driven
-LoRaWAN network based on well-defined components and APIs.
+A good example of such a federated architecture brought
+to practice is `The ThingsNetwork (TTN) <https://www.thethingsnetwork.org/>`_, a community-driven
+LoRaWAN network based on well-defined components and APIs. Setup for different purpose and domain but
+working very well in practice because of well-defined building blocks and APIs, making
+it extensible as any party can join and add a building block.
+A Forum with community managers and a central website
+with documentation, info and portal functions also has a great role in TTN.
 
-For example, let's say Kadaster and RIVM would realize such an architecture, roles could be divided
-as follows:
+Back to Smart Emission evolution and expanding the architecture from Figure 1.
+For example, roles for blocks (and thus API providers) could be divided as follows:
 
-* RIVM: Data Collection, Data Processing
+* Intemo, EU JRC: Data Collection
+* RIVM: Data Processing
 * Kadaster: Data Services (via PDOK), Registry
 
-"The market", or any other organization would provide the Apps and sensors.
-Again, for this to work, agreements on APIs have to be made.
+But this division does not need to be that strict. For example RIVM
+may also host Data Collectors and/or provide Data Services. The point is again: a federated architecture
+composed by well-defined building blocks and APIs.
+
+"The market", or any other organization would provide the Apps, sensors
+and Data Collectors.
+
+Again, for this to work, agreements on APIs have to be made and favourably
+components would be developed and reused with Open Source.
+
+
+.. figure:: _static/arch/evolve-example.jpg
+   :align: center
+
+   *Figure 2 - Federated Architecture Example*
+
+An (fictional!) example is provided in the Figure above.
+The roles are not fixed but just for the example.
+The actual APIs need to be worked out. For the latter we foresee
+a role for Geonovum, selecting and profiling standards from mainly OGC and W3C.
