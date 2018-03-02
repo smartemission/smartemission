@@ -4,6 +4,11 @@
 Evolution
 =========
 
+By: Just van den Broecke - v1 - March 2, 2018 - written @Kadaster/PDOK.
+
+This is a chapter from the full Smart Emission platform documentation found at
+`http://smartplatform.readthedocs.io <http://smartplatform.readthedocs.io>`_
+
 This chapter focuses on possible future evolution scenarios for the Smart Emission platform.
 
 See the :ref:`architecture`, :ref:`data` and :ref:`apis` chapters for the overall design and data
