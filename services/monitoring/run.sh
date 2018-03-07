@@ -21,7 +21,7 @@ case ${UBUNTU_VERSION} in
         cadvisor/start.sh
         ;;
     16) export CADVISOR_HOST=cadvisor
-        export NODE_EXPORTER_HOST=${PARENT_HOST}
+        export NODE_EXPORTER_HOST=node-exporter
         export DOCKER_COMPOSE_YML="docker-compose.yml"
         ;;
     *) echo "${UBUNTU_VERSION} unsupported"; exit -1

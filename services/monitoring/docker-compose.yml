@@ -1,4 +1,5 @@
 # Adapted from Brian Christner's: https://github.com/vegasbrianc/prometheus
+# and later: https://github.com/vegasbrianc/docker-pulls/blob/master/docker-compose.yml
 # All credits there!
 # Taken version-2 branch on dec 18, 2017.
 #
@@ -12,10 +13,6 @@ version: '3.1'
 volumes:
     prometheus_data: {}
     grafana_data: {}
-
-#networks:
-#  front-tier:
-#  back-tier:
 
 services:
 
@@ -32,13 +29,9 @@ services:
     env_file:
       - grafana/grafana.conf
     network_mode: bridge
-#    networks:
-#      - back-tier
-#      - front-tier
 
   prometheus:
-    # image: prom/prometheus:v2.0.0
-    image: prom/prometheus:latest
+    image: prom/prometheus:v2.1.0
     volumes:
       - ./prometheus/:/etc/prometheus/
       - prometheus_data:/prometheus
@@ -62,8 +55,6 @@ services:
       - node-exporter
       
     network_mode: bridge
-#    networks:
-#      - back-tier
     restart: unless-stopped
 #    deploy:
 #      placement:
@@ -77,8 +68,6 @@ services:
     volumes:
       - ./alertmanager/:/etc/alertmanager/
     network_mode: bridge
-#    networks:
-#      - back-tier
     restart: unless-stopped
     command:
       - '--config.file=/etc/alertmanager/config-gen.yml'
@@ -89,6 +78,7 @@ services:
 #          - node.hostname == moby
 
   node-exporter:
+    # See https://github.com/vegasbrianc/docker-pulls/blob/master/docker-compose.yml
     image: prom/node-exporter
     volumes:
       - /proc:/host/proc:ro
@@ -99,14 +89,11 @@ services:
       - '--path.sysfs=/host/sys'
       - --collector.filesystem.ignored-mount-points
       - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+#      - '--collector.textfile.directory /etc/node-exporter/'
 #    ports:
 #      - 9100:9100
     network_mode: bridge
-#    networks:
-#      - back-tier
     restart: unless-stopped
-#    deploy:
-#      mode: global
 
   cadvisor:
      # image: google/cadvisor
@@ -119,9 +106,5 @@ services:
 #    ports:
 #      - 8080:8080
      network_mode: bridge
-#    networks:
-#      - back-tier
      restart: unless-stopped
-#    deploy:
-#      mode: global
 
