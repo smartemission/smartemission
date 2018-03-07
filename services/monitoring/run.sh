@@ -13,10 +13,12 @@ echo "External URL is http://${se_host}${se_port}"
 UBUNTU_VERSION=`lsb_release -rs | cut -d'.' -f1`
 echo "Ubuntu version: ${UBUNTU_VERSION}"
 
+# Ubuntu 14.4 does not support Dockerized node-exporter and cAdvisor
+# So use different docker-compose files, hacky but needed.
 case ${UBUNTU_VERSION} in
     14) export CADVISOR_HOST=${PARENT_HOST}
         export NODE_EXPORTER_HOST=${PARENT_HOST}
-        export DOCKER_COMPOSE_YML="docker-compose-14.04.yml"
+        export DOCKER_COMPOSE_YML="docker-compose-14.4.yml"
         node_exporter/start.sh
         cadvisor/start.sh
         ;;
