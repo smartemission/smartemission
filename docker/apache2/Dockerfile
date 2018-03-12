@@ -39,6 +39,6 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # COPY htpasswd /etc/apache2/.htpasswd
 
-EXPOSE 22 80
+EXPOSE 80
 
 CMD ["/usr/bin/supervisord"]

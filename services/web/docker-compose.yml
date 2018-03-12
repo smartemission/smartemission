@@ -1,0 +1,27 @@
+version: '3.1'
+
+services:
+  web:
+    image: geonovum/apache2
+
+    labels:
+      - "traefik.backend=web"
+      - "traefik.frontend.rule=Host:se.docker.localhost,local.smartemission.nl"
+      
+    networks:
+      - web
+
+#    ports:
+#      - "80:80"
+    volumes:
+      - ./config/sites-enabled:/etc/apache2/sites-enabled
+      - ./config/admin:/etc/apache2/admin
+      - ./config/phppgadmin:/etc/phppgadmin
+      - /var/smartem/log/apache2:/var/log/apache2
+      - /opt/geonovum/smartem/git:/opt/geonovum/smartem/git
+      
+networks:
+  web:
+    external:
+      name: traefik_webgateway
+      

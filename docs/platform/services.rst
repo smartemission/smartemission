@@ -41,6 +41,15 @@ Implementation
 * Website and Viewers: https://github.com/Geonovum/smartemission/tree/master/services/web/site
 * Apache2 config: https://github.com/Geonovum/smartemission/tree/master/services/web/config/sites-enabled
 
+NB in 2018 this  will be replaced by a setup using `Traefik <https://traefik.io/>`_.
+
+Links Traefik
+-------------
+
+* https://traefik.io/
+* http://niels.nu/blog/2017/continuous-blog-delivery-p1.html
+* https://www.digitalocean.com/community/tutorials/how-to-use-traefik-as-a-reverse-proxy-for-docker-containers-on-ubuntu-16-04
+
 WFS and WMS Services
 ====================
 
