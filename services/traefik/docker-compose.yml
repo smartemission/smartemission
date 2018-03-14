@@ -3,16 +3,25 @@ version: '3.1'
 services:
   proxy:
     image: traefik:1.5.3-alpine
+
+    container_name: traefik
+
     command: --docker --logLevel=DEBUG
+    
     networks:
-      - webgateway
+      - se_front
+
     ports:
       - "80:80"
       - "8080:8080"
+
+    labels:
+      - "traefik.enable=false"
+      
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./config/traefik.toml:/traefik.toml
 
 networks:
-  webgateway:
-    driver: bridge
+  se_front:
+    external: true
