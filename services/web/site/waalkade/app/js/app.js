@@ -39,13 +39,16 @@ $(document).ready(function () {
     var defaultAQIndexValue = {color: '#FFFFFF', fontColor: '#000000', text: 'nvt'};
 
     var componentDefs = [
-        {id: 'co2', text: 'CO2', uom:'ppm'},
-        {id: 'co', text: 'CO', uom:'ug/m3'},
-        {id: 'no2', text: 'NO2', uom:'ug/m3'},
-        {id: 'o3', text: 'O3', uom:'ug/m3'},
+        // {id: 'co2', text: 'CO2', uom:'ppm'},
+        // {id: 'co', text: 'CO', uom:'ug/m3'},
+        // {id: 'no2', text: 'NO2', uom:'ug/m3'},
+        // {id: 'o3', text: 'O3', uom:'ug/m3'},
         {id: 'pm10', text: 'PM 10', uom:'ug/m3'},
         {id: 'pm2_5', text: 'PM 2.5', uom:'ug/m3'},
-        {id: 'noiseavg', text: 'Geluid', uom:'dBA'}
+        {id: 'noiseavg', text: 'Geluid', uom:'dBA'},
+        {id: 'temperature', text: 'Temp', uom:'C'},
+        {id: 'humidity', text: 'Hum', uom:'%'}
+
     ];
 
     // Create icon based on feature props and selected state
@@ -74,7 +77,7 @@ $(document).ready(function () {
         var allData = {
             componentDefs: componentDefs,
             gassesLegend: aqIndexesNLLegend,
-            stationsData: []
+            stationsData: new Array(10)
         };
 
         var calls = stationIds.length;
@@ -88,7 +91,7 @@ $(document).ready(function () {
                 // See to which category an observation belongs by matching the label
                 var components = [];
                 var stationData = {
-                    stationId: this.stationId,
+                    stationId: this.stationId % 10,
                     components: []
                 };
 
@@ -114,12 +117,14 @@ $(document).ready(function () {
                     stationData.components.push(component);
 
                 }
-                allData.stationsData.push(stationData);
+                allData.stationsData[stationData.stationId] = stationData;
 
                 // When all stations fetched: render
                 calls--;
                 if (calls <= 0) {
 
+                    // Sort stations by stationId
+                    
                     var html = template(allData);
 
                     // Hier met JQuery
@@ -138,7 +143,7 @@ $(document).ready(function () {
     $.getJSON(stationsUrl, function (data) {
     });
 
-    show_station_data([31, 20050006, 20050007, 20050008, 87, 42]);
+    show_station_data([20060001, 20060002, 20060003, 20060004, 20060005, 20060006, 20060007, 20060008]);
 
 
 });
