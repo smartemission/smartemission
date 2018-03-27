@@ -7,7 +7,6 @@ GIT="/opt/geonovum/smartem/git"
 LOG="/var/smartem/log"
 TC_LOG="${LOG}/tomcat-geoserver"
 NAME="geoserver"
-# IMAGE="kartoza/geoserver:2.8.0"
 IMAGE="geonovum/geoserver:2.9.0"
 PG_HOST="postgis"
 DATA_DIR="/var/smartem/data"
@@ -21,7 +20,7 @@ VOL_MAP_FULL="${VOL_MAP_DATA} ${VOL_MAP_LOGS}"
 # If we need to expose 8080 from host, but we use Apache AJP
 # PORT_MAP="-p 8080:8080"
 PORT_MAP=""
-LINK_MAP="--link ${PG_HOST}:${PG_HOST}"
+# LINK_MAP="--link ${PG_HOST}:${PG_HOST}"
 
 # Restart with volume mapping(s) provided in $1
 function restart_gs() {
@@ -32,7 +31,7 @@ function restart_gs() {
   sudo docker rm ${NAME} > /dev/null 2>&1
   echo "restart ${NAME} with volumes: ${VOL_MAP}"
   # Finally run with all mappings
-  sudo docker run --restart=always --name ${NAME} ${LINK_MAP} ${PORT_MAP} ${VOL_MAP} -d ${IMAGE}
+  sudo docker run --restart=unless-stopped --name ${NAME} --network="se_back" ${PORT_MAP} ${VOL_MAP} -d ${IMAGE}
 }
 
 # Some tricky stuff to get full GS data dir on host when non-existing on host
@@ -49,13 +48,13 @@ if [ ! -d "${GS_DATA_DIR}" ]; then
    # Copy from original data dir in container and rename by moving on host
    sudo docker cp geoserver:/opt/geoserver/data_dir $DATA_DIR
    sudo rm -rf ${GS_DATA_DIR}
-   sudo mv  ${DATA_DIR}/data_dir $GS_DATA_DIR
+   sudo mv  ${DATA_DIR}/data_dir ${GS_DATA_DIR}
    sudo rm -rf ${TC_LOG}
 
    # Rerun with full volume mapping
    restart_gs ${VOL_MAP_FULL}
 else
-   echo "Ok, using existing GeoServer data dir: $GS_DATA_DIR on host"
+   echo "Ok, using existing GeoServer data dir: ${GS_DATA_DIR} on host"
    restart_gs ${VOL_MAP_FULL}
 fi
 

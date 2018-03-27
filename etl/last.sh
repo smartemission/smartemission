@@ -5,7 +5,6 @@
 
 STETL_ARGS="stetl -c last.cfg -a options/`hostname`.args"
 WORK_DIR="`pwd`"
-PG_HOST=postgis
 IMAGE=smartemission/stetl:latest
 NAME="stetl_last"
 
@@ -13,4 +12,4 @@ NAME="stetl_last"
 sudo docker stop ${NAME} > /dev/null 2>&1
 sudo docker rm ${NAME} > /dev/null 2>&1
 
-sudo docker run --rm --name ${NAME} --link ${PG_HOST}:${PG_HOST} -v ${WORK_DIR}:${WORK_DIR} -w ${WORK_DIR} ${IMAGE} ${STETL_ARGS}
+sudo docker run --rm --name ${NAME} --network="se_back" -v ${WORK_DIR}:${WORK_DIR} -w ${WORK_DIR} ${IMAGE} ${STETL_ARGS}

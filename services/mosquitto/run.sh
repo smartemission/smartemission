@@ -29,6 +29,6 @@ PORT_MAP="-p 1883:1883 -p 9001:9001"
 # Stop and remove possibly old containers
 sudo docker stop ${NAME} > /dev/null 2>&1
 sudo docker rm ${NAME} > /dev/null 2>&1
-sudo docker run --name ${NAME} ${PORT_MAP} ${VOL_MAP} -d ${IMAGE}
+sudo docker run --name ${NAME} --network="se_back" ${PORT_MAP} ${VOL_MAP} -d ${IMAGE}
 
 # sudo docker logs --follow mosquitto

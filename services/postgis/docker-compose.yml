@@ -1,0 +1,26 @@
+version: '3.1'
+
+services:
+  postgis:
+    image: smartemission/postgis:9.4-2.1
+
+    container_name: postgis
+
+    labels:
+      # Not visible by Traefik
+      - "traefik.enable=false"
+
+    expose:
+     - "5432"
+
+    networks:
+      # Only visible in SE backend Docker network
+      - se_back
+
+    volumes:
+      - /var/smartem/data/postgresql:/var/lib/postgresql
+      - /var/smartem/backup:/var/smartem/backup
+
+networks:
+  se_back:
+    external: true

@@ -22,7 +22,7 @@ VOL_MAP_FULL="-v ${SOS_DATA_DIR}:/opt/sosconfig ${VOL_MAP_MIN}"
 # If we need to expose 8080 from host, but we use Apache AJP
 # PORT_MAP="-p 8080:8080"
 PORT_MAP=""
-LINK_MAP="--link ${PG_HOST}:${PG_HOST}"
+# LINK_MAP="--link ${PG_HOST}:${PG_HOST}"
 
 # When running: get into container with bash
 # sudo docker exec -it sos52n  bash
@@ -37,7 +37,7 @@ function restart_image() {
   echo "restart ${NAME} with volumes: ${VOL_MAP}"
   
   # Finally run with all mappings
-  sudo docker run --restart=no --name ${NAME} ${LINK_MAP} ${PORT_MAP} ${VOL_MAP} -d ${IMAGE}
+  sudo docker run --restart=no --name ${NAME} --network="se_back" ${PORT_MAP} ${VOL_MAP} -d ${IMAGE}
   sudo docker cp ${script_dir}/config/jsclient/settings.json sos52n:/usr/local/tomcat/webapps/sos52n/static/client/jsClient
 }
 

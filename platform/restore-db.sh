@@ -8,7 +8,7 @@
 export PGDB=gis
 export PGUSER=docker
 export PGPASSWORD=docker
-export PGHOST=`sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' postgis`
+export PGHOST=`sudo docker inspect --format '{{ .NetworkSettings.Networks.se_back.IPAddress }}' postgis`
 
 if [ $# -eq 0 ]
 then

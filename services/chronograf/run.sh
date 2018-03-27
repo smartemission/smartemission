@@ -34,13 +34,13 @@ VOL_MAP="-v ${DATA_DIR}:/var/lib/chronograf"
 PORT_MAP="-p 8888:8888"
 PORT_MAP=""
 
-LINK_MAP="--link ${INFLUX_HOST}:${INFLUX_HOST}"
+# LINK_MAP="--link ${INFLUX_HOST}:${INFLUX_HOST}"
 
 EXTRA_ARGS="--bolt-path=/var/lib/chronograf/chronograf.db --basepath=/adm/chronograf --influxdb-url=http://influxdb:8086 --influxdb-username=${influx_admin_user} --influxdb-password=${influx_admin_password}"
 
 # Stop and remove possibly old containers
 sudo docker stop ${NAME} > /dev/null 2>&1
 sudo docker rm ${NAME} > /dev/null 2>&1
-sudo docker run --name ${NAME} ${PORT_MAP} ${VOL_MAP} ${LINK_MAP} -d ${IMAGE} ${EXTRA_ARGS}
+sudo docker run --name ${NAME} ${PORT_MAP} ${VOL_MAP} --network="se_back" -d ${IMAGE} ${EXTRA_ARGS}
 
 # sudo docker logs --follow chronograf

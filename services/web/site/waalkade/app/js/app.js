@@ -105,6 +105,8 @@ $(document).ready(function () {
 
             var timeseriesUrl = apiUrl + '/timeseries?format=json&station=' + stationId + '&expanded=true&callback=?';
 
+            $("#s"+(stationId % 10)).css('background-color', '#00cc00');
+
             // Get last data for each station: async XHR calls so order is random.
             $.getJSON({url: timeseriesUrl, context: {stationId: stationId}}, function (data) {
                 // See to which category an observation belongs by matching the label
@@ -139,7 +141,6 @@ $(document).ready(function () {
 
                 // Place in station order 1..N
                 allData.stationsData[stationData.stationId] = stationData;
-                $("#s"+stationData.stationId).css('background-color', '#00cc00');
 
                 // Only when all stations fetched: render
                 calls--;

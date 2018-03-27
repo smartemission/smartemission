@@ -5,11 +5,7 @@
 
 STETL_ARGS="stetl -c sospublisher.cfg -a options/`hostname`.args"
 WORK_DIR="`pwd`"
-PG_HOST="postgis"
-SOS52N_HOST="sos52n"
-LINK_MAP="--link ${PG_HOST}:${PG_HOST} --link ${SOS52N_HOST}:${SOS52N_HOST}"
 VOL_MAP="-v ${WORK_DIR}:${WORK_DIR}"
-
 IMAGE=smartemission/stetl:latest
 NAME="stetl_sospublish"
 
@@ -17,4 +13,4 @@ NAME="stetl_sospublish"
 sudo docker stop ${NAME} > /dev/null 2>&1
 sudo docker rm ${NAME} > /dev/null 2>&1
 
-sudo docker run --name ${NAME} ${LINK_MAP} ${VOL_MAP} -w ${WORK_DIR} ${IMAGE} ${STETL_ARGS}
+sudo docker run --name ${NAME} --network="se_back" ${VOL_MAP} -w ${WORK_DIR} ${IMAGE} ${STETL_ARGS}

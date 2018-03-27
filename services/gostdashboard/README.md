@@ -6,15 +6,20 @@ the [GOST Dashboard V2 Docker Image](https://store.docker.com/community/images/g
 
 The Dashboard used to be part of the GOST Server but since v0.4 it has 
 been moved to a separate repo and Docker Image. First as `gost/dashboard` (Angular),
-now as `gost/dashboard-v2` (Web Components and Polymer)
+now as `gost/dashboard-v2` (developed with Web Components and Polymer)
 
 ## Running
 
-Use the command ./run.sh
+Use the command `./run.sh` and `./stop.sh` or
+                           
+```
+export HOSTNAME
+docker-compose up
+
+```
 
 ## Links
 
 * GOST Server - https://github.com/gost/server
 * GOST DB - https://github.com/gost/gost-db
 * GOST Dashboard - https://github.com/gost/dashboard-v2
-

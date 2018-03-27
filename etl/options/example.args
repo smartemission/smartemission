@@ -129,8 +129,13 @@ grafana_admin_password=grafana_admin_pw
 
 # * db: gost_db_host, gost_db_database, gost_db_port, gost_db_user, gost_db_password.
 # * mqtt: gost_mqtt_host, gost_mqtt_port
-#  server: gost_server_host, gost_server_port, gost_server_external_uri, gost_client_content
-gost_server_external_uri=http://data.smartemission.nl/gost
+#  server: gost_server_host, gost_server_port, GOST_SERVER_EXTERNAL_URI, gost_client_content
+GOST_SERVER_EXTERNAL_URI=http://data.smartemission.nl/gost
+GOST_DB_HOST=postgis
+GOST_DB_PORT=5432
+GOST_DB_DATABASE=gis
+GOST_DB_USER=docker
+GOST_DB_PASSWORD=docker
 
 # general host domain name
 se_host=test.smartemission.nl

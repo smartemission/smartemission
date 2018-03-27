@@ -12,16 +12,18 @@ Setup once using [config/gost-init-db.sh](config/gost-init-db.sh).
 
 See [gost_configuration.md](https://github.com/gost/docs/blob/master/gost_configuration.md).
 
-The following configuration parameters can be 
-overruled from the following environment variables:
-
-* db: gost_db_host, gost_db_database, gost_db_port, gost_db_user, gost_db_password.
-* mqtt: gost_mqtt_host, gost_mqtt_port
-* server: gost_server_host, gost_server_port, gost_server_external_uri, gost_client_content
+Uses host-specific config vars. `HOSTNAME` needs to be exported for `docker-compose`
+to find the env file specific to the host.
 
 ## Running
 
-Use the command ./run.sh
+Use the command `./run.sh` and `./stop.sh` or
+
+```
+export HOSTNAME
+docker-compose up
+
+```
 
 ## Links
 

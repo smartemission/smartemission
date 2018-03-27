@@ -28,7 +28,7 @@ sudo docker stop ${NAME} > /dev/null 2>&1
 sudo docker rm ${NAME} > /dev/null 2>&1
 
 # Finally run, keeping DB-data, config and logs on the host
-sudo docker run --name ${NAME} ${PORT_MAP} ${VOL_MAP} -d -t ${IMAGE} -config /etc/influxdb/influxdb.conf
+sudo docker run --name ${NAME} --network="se_back" ${PORT_MAP} ${VOL_MAP} -d -t ${IMAGE} -config /etc/influxdb/influxdb.conf
 
 # generate conf: docker run --rm influxdb influxd config > influxdb.conf
 # create db: curl -G http://localhost:8086/query --data-urlencode "q=CREATE DATABASE mydb"

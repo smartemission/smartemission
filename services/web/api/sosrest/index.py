@@ -43,8 +43,15 @@ def get_last_values(station):
     # Default is to get all current measurements
     query = 'SELECT * from v_cur_measurements'
     if station:
+        # stations = station.split(',')
+
         # Last measurements for single station
         query = query + ' WHERE device_id = ' + station
+
+        # May have provided multiple comma-separated stations
+        # if len(stations) > 1:
+        #     for i in range(1, len(stations)-1):
+        #         query = query + ' OR device_id = ' + stations[i]
     return db.do_query(query, 'v_cur_measurements')
 
 # Shorthand to create proper JSON HTTP response

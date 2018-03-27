@@ -1,3 +1,3 @@
 #!/bin/bash
-#
-docker stop gostdashboard
+
+docker-compose rm --force --stop

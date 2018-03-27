@@ -1,8 +1,8 @@
+# Common variable values, see .env/.args files for host-specific values
 server:
     name: GOST Server
     host: 0.0.0.0
     port: 8080
-    externalUri: http://localhost:8080/
     clientContent: ./client/
     maxEntityResponse: 100
     indentedJson: true
@@ -10,11 +10,6 @@ server:
     httpsCert:
     httpsKey:
 database:
-    host: postgis
-    port: 5432
-    user: docker
-    password: docker
-    database: gis
     schema: v1
     ssl: false
     maxIdleConns: 10

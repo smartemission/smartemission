@@ -1,0 +1,39 @@
+version: '3.1'
+
+services:
+  postgis:
+    image: influxdb:1.4.2
+    container_name: influxdb
+
+    labels:
+      - "traefik.backend=influxdb"
+      - "traefik.enable=true"
+      - "traefik.frontend.priority=500"
+      - "traefik.frontend.rule=HostRegexp:{subdomain:[a-z]+}.smartemission.nl;PathPrefixStrip:/influxdb"
+      - "traefik.docker.network=se_front"
+
+    expose:
+     - "8086"
+
+    ports:
+      - "8086:8086"
+
+    networks:
+      # Visible in SE backend and frontend Docker network
+      - se_front
+      - se_back
+
+    volumes:
+      - /var/smartem/data/influxdb:/var/lib/influxdb
+      - /var/smartem/log/influxdb:/var/log/influxdb
+      - ./config/influxdb.conf:/etc/influxdb/influxdb.conf:ro
+      - /var/smartem/backup/influxdb:/backup
+
+networks:
+  se_front:
+    external: true
+  se_back:
+    external: true
+
+# generate conf: docker run --rm influxdb influxd config > influxdb.conf
+# create db: curl -G http://localhost:8086/query --data-urlencode "q=CREATE DATABASE mydb"

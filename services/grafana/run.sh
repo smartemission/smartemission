@@ -22,7 +22,7 @@ VOL_MAP_PART=" "
 VOL_MAP_FULL="-v ${DATA_DIR}:/var/lib/grafana -v ${LOG_DIR}:/var/log/grafana -v ${CONFIG_DIR}:/etc/grafana"
 
 PORT_MAP="-p 3000:3000"
-LINK_MAP="--link ${INFLUX_HOST}:${INFLUX_HOST}"
+# LINK_MAP="--link ${INFLUX_HOST}:${INFLUX_HOST}"
 
 # Get Admin Pwd from local options file
 source ${SCRIPT_DIR}/../../etl/options/`hostname`.args
@@ -37,7 +37,7 @@ function restart_image() {
   sudo docker rm ${NAME} > /dev/null 2>&1
   echo "restart ${NAME} with volumes: ${VOL_MAP}"
   # Finally run with all mappings
-  sudo docker run --name ${NAME} ${PORT_MAP} ${VOL_MAP} ${LINK_MAP} ${ENV_MAP} -d ${IMAGE}
+  sudo docker run --name ${NAME} ${PORT_MAP} ${VOL_MAP} --network="se_back" ${ENV_MAP} -d ${IMAGE}
 }
 
 # Some tricky stuff to get all Grafana dirs on host when non-existing on host

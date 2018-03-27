@@ -1,56 +1,40 @@
-# Adapted by Just from original  for Gost v0.5
-# https://raw.githubusercontent.com/gost/docker-compose/master/docker-compose-0.5.yml
-# to work with our postgis Docker container.
-
 version: '3.1'
 
 services:
-    gost:
-        image: geodan/gost:0.5
-#        depends_on:
-#            - mosquitto
-#            - postgis
-        volumes:
-          - ./config/config.yaml:/go/bin/gost/config.yaml:ro
-        environment:
-            gost_server_external_uri: ${gost_server_external_uri}
-#            gost_db_host: postgis
-#            gost_mqtt_host: mosquitto
-        network_mode: bridge
+  gost:
+    image: smartemission/gost:latest
 
-    dashboard:
-        image: geodan/gost-dashboard:0.5
-        ports:
-          - "8083:8080"
-        depends_on:
-            - gost
-        network_mode: bridge
+    container_name: gost
 
-#    node-red:
-#        image: nodered/node-red-docker
-#        volumes:
-#            - nodered:/data
-#        ports:
-#            - "1880:1880"
-#    mosquitto:
-#        image: toke/mosquitto
-#        volumes:
-#            - mosquitto_data:/mqtt/data
-#            - mosquitto_conf:/mqtt/config:ro
-#        ports:
-#            - "1883:1883"
-#            - "9001:9001"
-#    gost-db:
-#        image: geodan/gost-db:0.5
-#        volumes:
-#            - postgis:/var/lib/postgresql/data
-#        environment:
-#            POSTGRES_DB: gost
-#            POSTGRES_USER: postgres
-#            POSTGRES_PASSWORD: postgres
+    env_file:
+      # See https://github.com/gost/docs/blob/master/gost_configuration.md
+      # for config vars
+      - ../../etl/options/${HOSTNAME}.args
 
-#volumes:
-#    postgis: {}
-#    nodered: {}
-#    mosquitto_data: {}
-#    mosquitto_conf: {}
+      # Or set as env vars
+      # GOST_SERVER_EXTERNAL_URI=http://<host>:[port]/gost
+      # GOST_DB_HOST=postgis
+      # GOST_DB_PORT=
+      # GOST_DB_DATABASE=
+      # GOST_DB_USER=
+      # GOST_DB_PASSWORD=
+
+    labels:
+      - "traefik.backend=gost"
+      - "traefik.enable=true"
+      - "traefik.frontend.priority=500"
+      - "traefik.frontend.rule=HostRegexp:{subdomain:[a-z]+}.smartemission.nl;PathPrefixStrip:/gost"
+      - "traefik.docker.network=se_front"
+
+    expose:
+     - "8080"
+
+    networks:
+      - se_front
+      - se_back
+
+networks:
+  se_front:
+    external: true
+  se_back:
+    external: true

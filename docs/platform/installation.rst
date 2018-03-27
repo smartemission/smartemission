@@ -256,9 +256,9 @@ Some handy Docker commands: ::
     sudo docker exec -it apache2 bash
 
     # Find local Docker Bridge address of running container
-    docker inspect --format '{{ .NetworkSettings.IPAddress }}' postgis
+    docker inspect --format '{{ .NetworkSettings.Networks.se_back.IPAddress }}' postgis
     # Example: psql to local postgis container
-    psql -h `docker inspect --format '{{ .NetworkSettings.IPAddress }}' postgis` -U docker -W gis
+    psql -h `docker inspect --format '{{ .NetworkSettings.Networks.se_back.IPAddress }}' postgis` -U docker -W gis
 
 
 Docker Containers
@@ -284,7 +284,7 @@ This shorthand script `run.sh <https://github.com/Geonovum/smartemission/service
 To connect with ``psql`` from host using PG client package on host: ::
 
     # sudo apt-get install postgresql-client-9.3
-    psql -h `docker inspect --format '{{ .NetworkSettings.IPAddress }}' postgis` -U docker -W -l
+    psql -h `docker inspect --format '{{ .NetworkSettings.Networks.se_back.IPAddress }}' postgis` -U docker -W -l
 
     Password for user docker:
                                      List of databases

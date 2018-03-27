@@ -20,7 +20,7 @@ export PGHOST=${pg_host}
 if [ "${PGUSER}" == "docker" ]
 then
 	# Use local connection, we do not expose PG to outside world
-	export PGHOST=`sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' postgis`
+	export PGHOST=`sudo docker inspect --format '{{ .NetworkSettings.Networks.se_back.IPAddress }}' postgis`
 fi
 
 # export STAHOST=`sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' gost`
