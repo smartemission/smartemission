@@ -13,10 +13,10 @@
 
     <!-- Handlebars template -->
     <script id="entry-template" type="text/x-handlebars-template">
-	    <div class="container-fluid">
-            
+        <div class="container-fluid">
+
             <div class="container">
-				<div class="row">
+                <div class="row">
                     <div class="container">
                         <img src="app/media/kaartje.png">
                     </div>
@@ -25,76 +25,88 @@
 
             <div class="container">
                 <div class="row">
-                    <table class="table bordered">
-                        <thead>
-                        <tr>
-                            <th>Station<br/>&nbsp;</th>
-                            {{#each componentDefs}}
+                    <div class="table-responsive">
+                        <table class="table bordered">
+                            <thead>
+                            <tr>
+                                <th>Station<br/>&nbsp;</th>
+                                {{#each componentDefs}}
 
-                            <th>{{ text }}<br/>({{ uom }})</th>
+                                <th>{{ text }}<br/>({{ uom }})</th>
+                                {{/each}}
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {{#each stationsData}}
+
+                            <tr>
+                                <td>
+                                    <strong>{{ stationId }}</strong>
+                                </td>
+                                {{#each components}}
+
+                                <td style="background-color:{{ index.color }}; color:{{ index.fontColor }};">{{ value
+                                    }}
+                                </td>
+                                {{/each}}
+                            </tr>
                             {{/each}}
 
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {{#each stationsData}}
-
-                        <tr>
-                             <td>
-                                 <strong>{{ stationId }}</strong>
-                             </td>
-                            {{#each components}}
-
-                            <td style="background-color:{{ index.color }}; color:{{ index.fontColor }};">{{ value }}</td>
-                            {{/each}}
-                          </tr>
-                        {{/each}}
-
- 						</tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
             <div class="container">
-                 <div class="row">
-                 <table>
-                     <thead>
-                     <tr>
-                         <th>Legenda</th>
-                     </tr>
-                     </thead>
-                     <tbody>
-                      <tr>
-                          {{#each gassesLegend}}
-                          <td width="20%" style="background-color:{{ color }}; color:{{ fontColor }};">&nbsp;&nbsp;<small>{{ text }}</small>&nbsp;&nbsp;</td>
-                         {{/each}}
-                      </tr>
-                     </tbody>
-                  </table>
-                 </div>
-             </div>
-
-            {{#if data.gasses}}
- 
-            <div class="container">
-                    <table class="table bordered">
+                <div class="row">
+                    <div class="table-responsive">
+                    <table class="table">
                         <thead>
                         <tr>
-                            <th>Stof</th>
-                            <th>Indicatie</th>
-                            <th>Waarde</th>
+                            <th>Legenda</th>
                         </tr>
                         </thead>
                         <tbody>
-                        {{#each data.gasses}}
                         <tr>
-                            <td><b>{{ parameters.phenomenon.label }}</b></td>
-                            <td style="background-color:{{ index.color }}; color:{{ index.fontColor }};">{{ index.text }}</td>
-							<td style="background-color:{{ index.color }}; color:{{ index.fontColor }};">{{ lastValue.value }} {{ uom }}</td>
-                        {{/each}}
+                            {{#each gassesLegend}}
+                            <td width="20%" style="background-color:{{ color }}; color:{{ fontColor }};">&nbsp;&nbsp;<small>
+                                {{ text }}
+                            </small>&nbsp;&nbsp;
+                            </td>
+                            {{/each}}
                         </tr>
-						</tbody>
+                        </tbody>
                     </table>
+                    </div>
+                </div>
+            </div>
+
+            {{#if data.gasses}}
+
+            <div class="container">
+                <table class="table bordered">
+                    <thead>
+                    <tr>
+                        <th>Stof</th>
+                        <th>Indicatie</th>
+                        <th>Waarde</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each data.gasses}}
+                    <tr>
+                        <td><b>{{ parameters.phenomenon.label }}</b></td>
+                        <td style="background-color:{{ index.color }}; color:{{ index.fontColor }};">{{ index.text }}
+                        </td>
+                        <td style="background-color:{{ index.color }}; color:{{ index.fontColor }};">{{ lastValue.value
+                            }} {{ uom }}
+                        </td>
+                        {{/each}}
+                    </tr>
+                    </tbody>
+                </table>
 
             </div>
             {{/if}}
@@ -105,30 +117,30 @@
                     <div class="col s7 container">
                         <h3>Geluid</h3>
                     </div>
-                 </div>
+                </div>
             </div>
 
             <div class="container">
                 <table class="table">
-                     <thead>
-                     <tr>
-                         <th>Waarde decibel (A)</th>
-                         <th>Niveau</th>
-                     </tr>
-                     </thead>
-                     <tbody>
-                     <tr>
-				<td>{{ data.audio.noiseavg.lastValue.value }} </td>
-                         <td>{{ data.audio.noiselevelavg.lastValue.value }} van 5</td>
-                         <td>&nbsp;&nbsp;&nbsp;</td>
-                      </tr>
-			</tbody>
-                 </table>
+                    <thead>
+                    <tr>
+                        <th>Waarde decibel (A)</th>
+                        <th>Niveau</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{{ data.audio.noiseavg.lastValue.value }}</td>
+                        <td>{{ data.audio.noiselevelavg.lastValue.value }} van 5</td>
+                        <td>&nbsp;&nbsp;&nbsp;</td>
+                    </tr>
+                    </tbody>
+                </table>
                 <hr>
             </div>
             {{/if}}
 
-         </div>
+        </div>
     </script>
 
 </head>
@@ -138,9 +150,9 @@
 <div id="overview"></div>
 
 <script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
         crossorigin="anonymous"></script>
