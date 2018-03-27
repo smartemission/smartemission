@@ -9,6 +9,8 @@ $(document).ready(function () {
     var apiUrl = 'http://api.smartemission.nl/sosemu/api/v1';
     // var apiUrl = '/sosemu/api/v1';
 
+    var weerNijmegenUrl = 'http://weerlive.nl/api/json-10min.php?locatie=51.85,5.86';
+
     // See http://stackoverflow.com/questions/11916780/changing-getjson-to-jsonp
     // Notice the callback=? . This triggers a JSONP call
     var stationsUrl = apiUrl + '/stations?format=json&callback=?';
@@ -67,8 +69,24 @@ $(document).ready(function () {
         return indexValue;
     }
 
+    // Render all data
+    function render_data(allData) {
+        // Fill template
+        var html = template(allData);
+
+        // Put rendered html in page element
+        var overviewElm = $("#overview");
+
+        // overviewElm clear first
+        overviewElm.empty();
+        overviewElm.append(html);
+    }
+
     // Fetch and render station data for supplied list of station id's.
     function show_station_data() {
+        // Blink green if exists
+        $("#se_img").css('background-color', '#00cc00');
+
         var stationIds = STATIONS_LIST;
         var date = new Date();
         var dateTime = date.toLocaleDateString('nl-NL') + ' - ' + date.toLocaleTimeString('nl-NL')
@@ -76,11 +94,12 @@ $(document).ready(function () {
             dateTime: dateTime,
             componentDefs: componentDefs,
             gassesLegend: aqIndexesNLLegend,
+            weatherData: {},
             stationsData: new Array(10)
         };
 
-        // Total XHR calls to make
-        var calls = stationIds.length;
+        // Total XHR calls to make (+1 for weather data)
+        var calls = stationIds.length + 1;
         for (var i=0; i < stationIds.length; i++) {
             var stationId = stationIds[i];
 
@@ -120,22 +139,26 @@ $(document).ready(function () {
 
                 // Place in station order 1..N
                 allData.stationsData[stationData.stationId] = stationData;
+                $("#s"+stationData.stationId).css('background-color', '#00cc00');
 
                 // Only when all stations fetched: render
                 calls--;
                 if (calls <= 0) {
-                    // Fill template
-                    var html = template(allData);
-
-                    // Put rendered html in page element
-                    var overviewElm = $("#overview");
-
-                    // overviewElm clear first
-                    overviewElm.empty();
-                    overviewElm.append(html);
+                    render_data(allData);
                 }
             });
         }
+        
+        // Get last data for each station: async XHR calls so order is random.
+        $.getJSON(weerNijmegenUrl, function (data) {
+            allData.weatherData = data.liveweer[0];
+
+            // Only when all stations fetched: render
+            calls--;
+            if (calls <= 0) {
+                render_data(allData);
+            }
+        });
 
     }
 

@@ -19,77 +19,87 @@
         <div class="container-fluid">
 
             <div class="container">
-                <div class="row">
-                    <div class="container">
-                        <h3>Waalkade - {{ dateTime }}</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="container">
-                        <img src="app/media/kaartje.png">
-                    </div>
-                </div>
+                <img src="app/media/kaartje.png">
             </div>
 
-            <div class="container">
-                <div class="row">
-                    <div class="table-responsive">
-                        <table class="table bordered">
-                            <thead>
-                            <tr>
-                                <th>&nbsp;</th>
-                                {{#each componentDefs}}
-
-                                <th>{{ text }}<br/>({{ uom }})</th>
-                                {{/each}}
-
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {{#each stationsData}}
-
-                            <tr>
-                                <td>
-                                    <strong>{{ stationId }}</strong>
-                                </td>
-                                {{#each components}}
-                                  <td style="background-color:{{ index.color }}; color:{{ index.fontColor }};">{{ value }}</td>
-                                {{/each}}
-                            </tr>
-                            {{/each}}
-
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            <div class="container table-responsive borderless">
+                <table class="table borderless table-condensed">
+                    <tr>
+                        <td><strong>{{ dateTime }}</strong></td>
+                        <td><strong>Wind: {{ weatherData.windms }} m/s {{ weatherData.windr }}</strong></td>
+                        <td>&nbsp;</td>
+                    </tr>
+                </table>
             </div>
 
-            <div class="container">
-                <div class="row">
-                    <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th colspan="5">
-                                Legenda - <a target="_new" href="https://www.luchtmeetnet.nl/uitleg#">uitleg</a></h6>
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            {{#each gassesLegend}}
-                            <td width="20%" style="font-size:small; background-color:{{ color }}; color:{{ fontColor }};">
-                                {{ text }}
-                            </td>
-                            {{/each}}
-                        </tr>
-                        </tbody>
-                    </table>
-                    </div>
-                </div>
+            <div class="container table-responsive">
+                <table class="table bordered table-condensed">
+                    <thead>
+                    <tr>
+                        <th><div id="se_img"><a href="http://data.smartemission.nl" target="new"><img src="app/media/selogo1.png"></a></div></th>
+                        {{#each componentDefs}}
+
+                        <th>{{ text }}<br/>({{ uom }})</th>
+                        {{/each}}
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each stationsData}}
+
+                    <tr>
+                        <td>
+                            <span id="s{{ stationId }}"><strong>{{ stationId }}</strong></span>
+                        </td>
+                        {{#each components}}
+                          <td style="background-color:{{ index.color }}; color:{{ index.fontColor }};">{{ value }}</td>
+                        {{/each}}
+                    </tr>
+                    {{/each}}
+
+                    </tbody>
+                </table>
             </div>
+
+            <div class="container borderless">
+                &nbsp;
+            </div>
+
+            <div class="container table-responsive borderless">
+                <table class="table borderless table-sm">
+                    <thead>
+                    <tr>
+                        <th colspan="5">
+                            Legenda - <a target="_new" href="https://www.luchtmeetnet.nl/uitleg#">Uitleg</a>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        {{#each gassesLegend}}
+                        <td width="20%" style="font-size:small; background-color:{{ color }}; color:{{ fontColor }};">
+                            {{ text }}
+                        </td>
+                        {{/each}}
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="container borderless">
+                &nbsp;
+            </div>
+
+            <div class="container table-responsive borderless">
+                <table class="table borderless table-sm">
+                    <tr>
+                        <td>
+                            <i>Data: <a href="http://data.smartemission.nl">Smart Emission Platform</a> en KNMI Weer API (wind, via <a href="http://weerlive.nl">weerlive.nl</a></i>)
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
         </div>
     </script>
 </head>

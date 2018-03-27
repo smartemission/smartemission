@@ -17,8 +17,8 @@ $(document).ready(function () {
     var template = Handlebars.compile(source);
 
     // URL of the Smart Emission SOS REST API
-     var apiUrl = 'http://api.smartemission.nl/sosemu/api/v1';
-    //var apiUrl = '/sosemu/api/v1';
+    // var apiUrl = 'http://api.smartemission.nl/sosemu/api/v1';
+    var apiUrl = '/sosemu/api/v1';
 
     // See http://stackoverflow.com/questions/11916780/changing-getjson-to-jsonp
     // Notice the callback=? . This triggers a JSONP call
@@ -31,7 +31,7 @@ $(document).ready(function () {
     // sensor-component names
     // var gasIds = 'co2,o3,no2,co,o3raw,coraw,no2raw,pm10,pm2_5';
     // No Raw Values: https://github.com/Geonovum/smartemission/issues/83
-    var gasIds = 'co2,o3,no2,co,pm10,pm2_5';                                                style="background-color:{{ index.color }}; color:{{ index.fontColor }};"
+    var gasIds = 'co2,o3,no2,co,pm10,pm2_5';
     var meteoIds = 'temperature,pressure,humidity';
     var audioIds = 'noiseavg,noiselevelavg';
     var aqIndexesNL = {
