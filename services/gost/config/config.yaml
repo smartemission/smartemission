@@ -1,6 +1,6 @@
 # Common variable values, see .env/.args files for host-specific values
 server:
-    name: GOST Server
+    name: SE GOST Server
     host: 0.0.0.0
     port: 8080
     clientContent: ./client/
@@ -18,6 +18,10 @@ mqtt:
     enabled: true
     host: mosquitto
     port: 1883
+    prefix: GOST
+    clientId: gost
+    subscriptionQos: 1
+    persistent: true
 logger:
     fileName: /var/log/gost
     verbose: false
