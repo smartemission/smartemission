@@ -13,20 +13,15 @@ $(document).ready(function () {
     // Notice the callback=? . This triggers a JSONP call
     var stationsUrl = apiUrl + '/stations?format=json&callback=?';
 
-    // Split into categories for ease of templating: gasses, meteo and audio
-    // See https://github.com/Geonovum/smartemission/blob/master/etl/sensordefs.py for
-    // sensor-component names
-    // var gasIds = 'co2,o3,no2,co,o3raw,coraw,no2raw,pm10,pm2_5';
-    // No Raw Values: https://github.com/Geonovum/smartemission/issues/83
-    var gasIds = 'co2,o3,no2,co,pm10,pm2_5';
-    // var meteoIds = 'temperature,pressure,humidity';
-    // var audioIds = 'noiseavg,noiselevelavg';
+    var STATIONS_LIST = [20060001, 20060002, 20060003, 20060004, 20060005, 20060006, 20060007, 20060008];
+
     var aqIndexesNL = {
         no2: [0, 30, 75, 125, 200],
         o3: [0, 40, 100, 180, 240],
         pm10: [0, 30, 75, 125, 200],
         pm2_5: [0, 20, 50, 90, 140]
     };
+
     var aqIndexesNLLegend =
         [
             {color: '#3399CC', fontColor: '#FFFFFF', text: 'Goed'},
@@ -72,25 +67,31 @@ $(document).ready(function () {
         return indexValue;
     }
 
-    // Show the station side bar popup
-    function show_station_data(stationIds) {
+    // Fetch and render station data for supplied list of station id's.
+    function show_station_data() {
+        var stationIds = STATIONS_LIST;
+        var date = new Date();
+        var dateTime = date.toLocaleDateString('nl-NL') + ' - ' + date.toLocaleTimeString('nl-NL')
         var allData = {
+            dateTime: dateTime,
             componentDefs: componentDefs,
             gassesLegend: aqIndexesNLLegend,
             stationsData: new Array(10)
         };
 
+        // Total XHR calls to make
         var calls = stationIds.length;
-        var callUrls = [];
         for (var i=0; i < stationIds.length; i++) {
             var stationId = stationIds[i];
 
             var timeseriesUrl = apiUrl + '/timeseries?format=json&station=' + stationId + '&expanded=true&callback=?';
 
+            // Get last data for each station: async XHR calls so order is random.
             $.getJSON({url: timeseriesUrl, context: {stationId: stationId}}, function (data) {
                 // See to which category an observation belongs by matching the label
                 var components = [];
                 var stationData = {
+                    // get station id from context and use only last digit as id.
                     stationId: this.stationId % 10,
                     components: []
                 };
@@ -107,7 +108,7 @@ $(document).ready(function () {
                     components[componentId] = component;
                 }
 
-                // Place only component present in right order
+                // Extract and place component data in right order
                 for (var cidx=0; cidx < componentDefs.length; cidx++) {
                     var componentId = componentDefs[cidx].id;
                     var component = {'name': componentId, 'value': '-', 'index': defaultAQIndexValue};
@@ -115,19 +116,18 @@ $(document).ready(function () {
                         component = components[componentId];
                     }
                     stationData.components.push(component);
-
                 }
+
+                // Place in station order 1..N
                 allData.stationsData[stationData.stationId] = stationData;
 
-                // When all stations fetched: render
+                // Only when all stations fetched: render
                 calls--;
                 if (calls <= 0) {
-
-                    // Sort stations by stationId
-                    
+                    // Fill template
                     var html = template(allData);
 
-                    // Hier met JQuery
+                    // Put rendered html in page element
                     var overviewElm = $("#overview");
 
                     // overviewElm clear first
@@ -139,11 +139,6 @@ $(document).ready(function () {
 
     }
 
-    // First get stations JSON object via REST
-    $.getJSON(stationsUrl, function (data) {
-    });
-
-    show_station_data([20060001, 20060002, 20060003, 20060004, 20060005, 20060006, 20060007, 20060008]);
-
-
+    show_station_data();
+    setInterval(show_station_data, 90*1000);
 });
