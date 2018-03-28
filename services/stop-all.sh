@@ -4,7 +4,7 @@
 #
 script_dir=${0%/*}
 
-SERVICES="web monitoring gostdashboard geoserver sos52n gost mosquitto postgis grafana chronograf influxdb "
+SERVICES="web monitoring gostdashboard geoserver sos52n sosemu gost mosquitto postgis grafana chronograf influxdb "
 for SERVICE in ${SERVICES}
 do
   echo "stopping ${SERVICE}"

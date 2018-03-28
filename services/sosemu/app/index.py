@@ -29,11 +29,13 @@ def nocache(view):
 
     return update_wrapper(no_cache, view)
 
+
 # Shorthand to get stations array from DB
 def get_stations():
     # Do query from DB
     db = PostGIS(config)
     return db.do_query('SELECT * from v_cur_stations', 'v_cur_stations')
+
 
 # Shorthand to get (last values) array from DB
 def get_last_values(station):
@@ -100,6 +102,7 @@ def stations():
             return make_json_response(json_doc)
 
 
+
 # Get last values for single station  (as JSON or HTML)
 # Example: /api/v1/timeseries?station=23&expanded=true
 @app.route('/api/v1/timeseries')
@@ -123,6 +126,7 @@ def timeseries(package=None):
             return make_jsonp_response(json_doc, jsonp_cb)
         else:
             return make_json_response(json_doc)
+
 
 if __name__ == '__main__':
     # Run as main via python index.py

@@ -34,7 +34,7 @@ class PostGIS:
 
             self.set_schema()
             log.debug("Connected to database %s" % (self.config['database']))
-        except Exception, e:
+        except Exception as e:
             log.error("Cannot connect to database '%s'" % (self.config['database']))
             raise
 
@@ -42,7 +42,7 @@ class PostGIS:
         self.e = None
         try:
             self.connection.close()
-        except (Exception), e:
+        except Exception as e:
             self.e = e
             log.error("error %s in close" % (str(e)))
 
@@ -88,7 +88,7 @@ class PostGIS:
                 self.cursor.execute(sql)
 
                 # log.debug(self.cursor.statusmessage)
-        except (Exception), e:
+        except Exception as e:
             log.error("error %s in query: %s with params: %s" % (str(e), str(sql), str(parameters)))
             #            self.log_actie("uitvoeren_db", "n.v.t", "fout=%s" % str(e), True)
             return -1
