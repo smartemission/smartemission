@@ -31,7 +31,7 @@ RUN apk add --no-cache --virtual .build-deps gcc build-base linux-headers postgr
     && pip install psycopg2 eventlet gunicorn flask
 
 # Add runscript and app to root dir
-ADD docker/*.sh /
+COPY entry.sh /
 ADD app /app
 
 # Install and Remove build-related packages for smaller image size
@@ -39,4 +39,4 @@ RUN chmod a+x /*.sh && apk del .build-deps
 
 EXPOSE ${CONTAINER_PORT}
 
-ENTRYPOINT /run.sh
+ENTRYPOINT /entry.sh
