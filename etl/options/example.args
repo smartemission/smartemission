@@ -134,8 +134,8 @@ GOST_SERVER_EXTERNAL_URI=http://data.smartemission.nl/gost
 GOST_DB_HOST=postgis
 GOST_DB_PORT=5432
 GOST_DB_DATABASE=gis
-GOST_DB_USER=docker
-GOST_DB_PASSWORD=docker
+GOST_DB_USER=usr
+GOST_DB_PASSWORD=pw
 
 # general host domain name
 se_host=test.smartemission.nl
@@ -144,3 +144,11 @@ se_port=
 # gmail for notification
 GMAIL_ACCOUNT=smart.emission.srv@gmail.com
 GMAIL_AUTH_TOKEN=XXXX
+
+# SOSEmu settings
+SOSEMU_DB_NAME=gis
+SOSEMU_DB_HOST=postgis
+SOSEMU_DB_PORT=5432
+SOSEMU_DB_SCHEMA=smartem_rt
+SOSEMU_DB_USER=usr
+SOSEMU_DB_PASSWORD=pw
