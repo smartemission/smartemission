@@ -30,7 +30,7 @@
                 <table class="table borderless table-condensed">
                     <tr>
                         <td><strong>{{ dateTime }}</strong></td>
-                        <td><strong>Wind: {{ weatherData.windms }} m/s {{ weatherData.windr }}</strong></td>
+                        <td><strong>Wind: {{ weatherData.windr }} {{ weatherData.windms }} m/s </strong></td>
                         <td>&nbsp;</td>
                     </tr>
                 </table>
@@ -53,7 +53,7 @@
 
                     <tr>
                         <td>
-                            <span id="s{{ stationId }}"><strong>{{ stationId }}</strong></span>
+                            <div id="s{{ stationId }}" style="color: #cc0000; font-weight: bold; font-size: 120%;">{{ stationId }}</div>
                         </td>
                         {{#each components}}
                           <td style="background-color:{{ index.color }}; color:{{ index.fontColor }};">{{ value }}</td>
@@ -93,7 +93,10 @@
 <div class="container-fluid">
 
     <div class="container">
-        <img src="app/media/kaartje.png">
+        &nbsp;
+    </div>
+    <div class="container">
+        <img style="width:100%; height:auto" src="app/media/kaartje-groot.png">
     </div>
 
     <div id="overview">
