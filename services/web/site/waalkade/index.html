@@ -64,6 +64,27 @@
                     </tbody>
                 </table>
             </div>
+            <div class="container table-responsive borderless">
+              <table class="table borderless table-sm">
+                 <thead>
+                 <tr>
+                     <th colspan="5">
+                         Legenda - <a target="_new" href="https://www.luchtmeetnet.nl/uitleg#">Uitleg</a>
+                     </th>
+                 </tr>
+                 </thead>
+                 <tbody>
+                 <tr>
+                     {{#each gassesLegend}}
+                     <td width="20%" style="font-size:small; background-color:{{ color }}; color:{{ fontColor }};">
+                         {{ text }}
+                     </td>
+                     {{/each}}
+                 </tr>
+                 </tbody>
+               </table>
+            </div>
+
     </script>
 </head>
 
