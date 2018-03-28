@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Smart Emission (SE) Nijmegen - Waalkade</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
@@ -13,6 +14,15 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
           crossorigin="anonymous">
+
+    <!-- Add ES5 shim and sham for IE8 -->
+    <script src="app/js/videojs-ie8.js"></script>
+
+    <!-- Load the source files -->
+    <link href="app/css/video-js.css" rel="stylesheet" type="text/css">
+    <script src="app/js/video.js"></script>
+    <script src="app/js/videojs-flash.js"></script>
+    <script src="app/js/videojs-contrib-hls.js"></script>
 
     <!-- Handlebars template -->
     <script id="entry-template" type="text/x-handlebars-template">
@@ -87,7 +97,13 @@
             </div>
 
             <div class="container borderless">
-                &nbsp;
+                <video id="vid1" class="video-js vjs-default-skin" controls preload="auto" width="640" height="480"
+                    poster="app/media/preview.jpg" autoplay="true"
+                    data-setup='{}'>
+                    <source src="https://5a5d6a3ee3a13.streamlock.net/live/waalkade.stream/playlist.m3u8" type="application/x-mpegURL">
+                    <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+                </video>
+
             </div>
 
             <div class="container table-responsive borderless">
