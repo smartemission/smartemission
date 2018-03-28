@@ -15,7 +15,7 @@ $(document).ready(function () {
     // Notice the callback=? . This triggers a JSONP call
     var stationsUrl = apiUrl + '/stations?format=json&callback=?';
 
-    var STATIONS_LIST = [20060001, 20060002, 20060003, 20060004, 20060005, 20060006, 20060007, 20060008];
+    var STATIONS_LIST = [20080001, 20080002, 20080003, 20080004, 20080005, 20080006, 20080007, 20080008];
 
     var aqIndexesNL = {
         no2: [0, 30, 75, 125, 200],
