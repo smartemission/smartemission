@@ -3,14 +3,15 @@
 The `SmartApp` is a minimal web application that shows the current values of
 SE sensor stations.
 
+## Docker Image
+
+The image is hosted at: https://github.com/smartemission/docker-se-smartapp
+and acquired from Docker Hub: https://hub.docker.com/r/smartemission/se-smartapp
+
 ## Environment
 
-The following environment vars need to be set, either via `docker-compose` or
-Kubernetes.
-
-|Environment variable|
-|---|
-|SMARTAPP_DATA_URL default '/sosemu/api/v1'|
+At the moment no environment variables are required: the `SmartApp` will use the
+locally running `sosemu` API.
 
 ## Architecture
 

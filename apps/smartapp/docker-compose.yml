@@ -3,7 +3,6 @@ version: "3"
 services:
 
   sosemu:
-    build: ./
 
     image: smartemission/smartapp:latest
 
@@ -13,19 +12,6 @@ services:
 
     networks:
       - se_back
-
-    env_file:
-      # See https://github.com/gost/docs/blob/master/gost_configuration.md
-      # for config vars
-      - ../../etl/options/${HOSTNAME}.args
-
-#    environment:
-#      - SOSEMU_DB_NAME=thedb
-#      - SOSEMU_DB_HOST=thedbhost
-#      - SOSEMU_DB_PORT=thedbport
-#      - SOSEMU_DB_SCHEMA=theschema
-#      - SOSEMU_DB_USER=theuser
-#      - SOSEMU_DB_PASSWORD=thepasswd
 
 #    ports:
 #      - 80:80
