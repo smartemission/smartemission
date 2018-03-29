@@ -29,6 +29,7 @@ RUN a2enmod proxy
 RUN a2enmod proxy_ajp
 RUN a2enmod proxy_http
 RUN a2enmod cgi
+RUN a2enmod rewrite
 
 # DB admin
 # COPY phppgadmin/phppgadmin.conf /etc/apache2/conf-available

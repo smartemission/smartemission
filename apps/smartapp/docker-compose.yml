@@ -3,11 +3,11 @@ version: "3"
 services:
 
   sosemu:
-    # build: ./
+    build: ./
 
-    image: smartemission/se-sosemu:latest
+    image: smartemission/smartapp:latest
 
-    container_name: sosemu
+    container_name: smartapp
 
     restart: unless-stopped
 
