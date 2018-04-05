@@ -6,5 +6,5 @@
 
 # sudo docker build -t --build-arg IMAGE_TIMEZONE="Europe/Amsterdam" geonovum/stetl:latest .
 
-sudo docker build -t smartemission/stetl:latest .
+docker build -t smartemission/se-stetl:latest .
 

@@ -179,7 +179,7 @@ SENSOR_DEFS = {
             'label': 'NO2RawOhm',
             'unit': 'Ohm',
             'min': 800,
-            'max': 820000
+            'max': 3000000
         },
     's_coresistance':
         {
