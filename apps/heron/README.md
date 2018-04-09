@@ -1,6 +1,6 @@
 # Heron service
 
-The `Heron Viewer`  provides a detailed viewer.
+The `Heron Viewer` provides a detailed viewer for current and history sensor values.
 
 ## Hosting
 
@@ -11,14 +11,11 @@ The Docker Image is hosted as: [smartemission/se-heron at DockerHub](https://hub
 The following environment vars need to be set, either via `docker-compose` or
 Kubernetes.
 
-|Environment variable|
-|---|
-|SOSEMU_DB_HOST|
-|SOSEMU_DB_PORT|
-|SOSEMU_DB_NAME|
-|SOSEMU_DB_SCHEMA|
-|SOSEMU_DB_USER|
-|SOSEMU_DB_PASSWORD|
+|Environment Variable|Default
+|---|---
+|HERON_PROXY_REFERERS|localhost,smartemission.nl,geonovum.nl,heron-mc.org
+|HERON_PROXY_HOSTS|map5.nl,knmi.nl,nationaalgeoregister.nl,nlextract.nl,rivm.nl,smartemission.nl
+|HERON_LOG_LEVEL|20
 
 ## Architecture
 
