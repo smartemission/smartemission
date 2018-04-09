@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+
+  sosemu:
+
+    image: smartemission/heron:latest
+
+    container_name: heron
+
+    restart: unless-stopped
+
+    networks:
+      - se_back
+
+#    ports:
+#      - 80:80
+
+networks:
+  se_back:
+    external: true

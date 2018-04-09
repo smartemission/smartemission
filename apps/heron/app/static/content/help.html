@@ -1,0 +1,166 @@
+<div class="hr-page-content">
+    <div class="hr-page-title">HeronViewer - Help</div>
+    <div class="hr-page-text">
+        <h2>Introductie</h2>
+        <hr>
+        <p>De HeronViewer is een geavanceerde Desktop GIS web client.</p>
+        <p>Zie ook de <a target="_new" href="content/technisch.html">Technische documentatie van de HeronViewer</a>.</p>
+        <p>Some links</p>
+        <ul>
+            <li>
+                <a target="_new" href="http://smartemission.nl">Main Smart Emission website</a>
+            </li>
+            <li><a href="http://smartplatform.readthedocs.org/en/latest/">Smart Emission Data Platform</a> - Technische
+                documentatie SE Data Platform
+            </li>            <li>
+                <a target="_new" href="http://heron-mc.org">Heron website</a>
+            </li>
+        </ul>
+
+        <h2>Download Timeseries</h2>
+        <p>Download of refined (validated, calibrated, aggregated) and raw timeseries (history) data is possible in various
+            ways.
+            Apart from the SOS/WMS/WFS APIs above data can be downloaded via the Viewers.</p>
+        <h3>52North Viewer (SOS)</h3>
+        <p>
+            See the <a href="/sos52n/static/client/jsClient/index.html" target="_new">SOS Viewer (52North)</a>. When viewing
+            the Chart, click in "I" (Info) button on the right under each component.
+
+        </p>
+        <h3>Heron Viewer (WFS)</h3>
+        <p>
+            Download as CSV and other formats is possible via WFS using this Heron Viewer:
+        </p>
+        <ul>
+            <li>Choose the <i>Binoculairs</i> <img
+                    src="http://lib.heron-mc.org/heron/latest/resources/images/silk/find.png"> icon within the top-toolbar
+            </li>
+            <li> A search form window pops up</li>
+            <li>Choose Station and Component</li>
+            <li>press the "Zoeken" button. Searching may take some time...be patient</li>
+            <li>A result table-grid appears. Choose "Download" and choose download format, e.g. CSV</li>
+        </ul>
+        <p>
+        Advanced: it is even possible to download RIVM historic data (from 2014 on): enable the Layer RIVM Stations. Choose
+        the Search form "Door geometriën te tekenen"
+        </p>
+        <p>Tip: For raw/direct download via your browser or a download tool like curl, a quick WFS download be done this
+            base URL:</p>
+        <p>
+            <code>http://data.smartemission.nl/geoserver/wfs?request=GetFeature&typename=timeseries_<strong>component</strong>&outputformat=csv&CQL_FILTER=device_id=<strong>station
+            id</strong></code>
+        </p>
+        <p>
+            where <strong>component</strong> is one of 'co2', 'co', 'coraw', 'no2', 'no2raw', 'o3', 'o3raw', 'temperature', 'pressure', 'humidity',
+            'noise_level_avg' and
+            <strong>station id</strong> a station number like 12.
+        </p>
+        <p>
+            Example: <a
+                href="/geoserver/wfs?request=GetFeature&typename=timeseries_no2&cql_filter=device_id=20&outputformat=csv">all
+            NO2 hourly averages station 20 (CSV)</a>
+        </p>
+
+        <h2>Kaartlagen Functies</h2>
+        <hr>
+
+        <!-- Evt kunnen we ook content selectief verversen ipv alles in een enkele help.html
+        <ul>
+            <li><a href="#" onclick="Heron.widgets.MenuHandler.onLinkSelect('hr-geo-main')">See the Map</a></li>
+        </ul>  -->
+
+        <p>
+            Hier tekst...
+        </p>
+
+        <h3>Lagen</h3>
+
+        <h3>Aktieve Lagen</h3>
+
+        <h3>Legenda</h3>
+
+        <h2>Toolbar Functies</h2>
+        <hr>
+
+        <p>
+            Beschrijving.... </p>
+
+        <h3><img src="content/images/magnifier_zoom_in.png" style="vertical-align:middle"/> <img
+                src="content/images/magnifier_zoom_out.png" style="vertical-align:middle"/> Inzoomen/uitzoomen</h3>
+
+        <p>Houd muisknop ingedrukt en trek rechthoek.</p>
+
+        <h3><img src="content/images/handtool3.png" style="vertical-align:middle"/> Verschuiven</h3>
+
+        <h3><img src="content/images/ruler.png" style="vertical-align:middle"/> <img
+                src="content/images/ruler_square.png" style="vertical-align:middle"/> Meten</h3>
+
+        <h3><img src="content/images/map_go.png" style="vertical-align:middle"/> Ga naar punt op kaart</h3>
+
+
+        <p>Popup formulier waarin coordinaten in verschillende coordinaatsystemen (RD,WGS84,ETRS89) kunnen worden
+            ingegeven.
+            Punten kunnen onthouden blijven.</p>
+
+        <h3><img src="content/images/information.png" style="vertical-align:middle"/> Informatie Functie</h3>
+
+
+        <p>Wanneer ingedrukt geeft informatie over objecten in alle zichtbare (WMS en Vector) kaartlagen.
+            Uitzondering zijn getegelde
+            lagen (TMS/WMTS). </p>
+
+        <h3><img src="content/images/find.png" style="vertical-align:middle"/> Zoek Formulieren (WFS), zie boven.</h3>
+
+
+        <p>Geeft popup met keuze uit meerdere zoekformulieren. Allen werken via WFS.</p>
+
+        <h3><img src="content/images/upload.png" style="vertical-align:middle"/> Upload</h3>
+
+        <p>Hiermee kunnen geo-bestanden in een lokale "Klad-laag" worden geladen.</p>
+        <h4>Restricties en Limitaties</h4>
+        <ul>
+
+            <li>
+                Shapefile moet zipfile zijn met 1 enkele laag.
+            </li>
+            <li>
+                Gebruik deze functie voor kleinere bestanden (100-Kb, enkele 100-en objecten)
+            </li>
+            <li>
+                Internet Explorer kan traag laden, gebruik Chrome browser indien mogelijk
+            </li>
+            <li>
+                CSV bestanden moeten kolommen geheten x en y bevatten (of X en Y).
+            </li>
+        </ul>
+
+        <h3><img src="content/images/map_edit.png" style="vertical-align:middle"/> Tekenen (Redlining)</h3>
+
+
+        <p>Geeft popup met tekenfuncties.</p>
+
+        <h3><img src="content/images/printer.png" style="vertical-align:middle"/> Printen</h3>
+
+        <p>Hiermee kan het kaartbeeld worden geprint. Er verschijnt formulier waarin de layout gekozen kan worden en
+            aangepast.</p>
+        <h4>Restricties en Limitaties</h4>
+        <ul>
+
+            <li>
+                A0 kan lege overlays, m.n. bij WMS geven. Dit komt omdat WMS-en zoals in PDOK limiaties hebben in
+                grootte plaatje of aantal bytes.
+            </li>
+            <li>
+                A0 kan soms lang duren.
+            </li>
+            <li>
+                Gaat qua styling niet altijd goed met Vector lagen
+            </li>
+            <li>
+                Legenda's werken in principe maar hebben soms vreemde effecten
+            </li>
+        </ul>
+
+
+    </div>
+</div>
