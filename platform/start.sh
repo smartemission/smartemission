@@ -12,4 +12,8 @@ pushd ${script_dir}/../services
 ./run-all.sh
 popd
 
+pushd ${script_dir}/../apps
+./run-all.sh
+popd
+
 crontab ${script_dir}/cronfile.txt

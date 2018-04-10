@@ -13,3 +13,7 @@ crontab -r
 pushd ${script_dir}/../services
 ./stop-all.sh
 popd
+
+pushd ${script_dir}/../apps
+./stop-all.sh
+popd
