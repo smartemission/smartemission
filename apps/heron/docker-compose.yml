@@ -2,7 +2,7 @@ version: "3"
 
 services:
 
-  sosemu:
+  heron:
 
     image: smartemission/se-heron:latest
 

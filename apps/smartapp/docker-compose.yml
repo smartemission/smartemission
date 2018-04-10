@@ -2,9 +2,9 @@ version: "3"
 
 services:
 
-  sosemu:
+  smartapp:
 
-    image: smartemission/smartapp:latest
+    image: smartemission/se-smartapp:latest
 
     container_name: smartapp
 
