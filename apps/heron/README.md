@@ -2,9 +2,10 @@
 
 The `Heron Viewer` provides a detailed viewer for current and history sensor values.
 
-## Hosting
+## Docker Image
 
-The Docker Image is hosted as: [smartemission/se-heron at DockerHub](https://hub.docker.com/r/smartemission/se-heron).
+The Docker image sources are hosted at: https://github.com/smartemission/docker-se-heron
+and the Image can be acquired from Docker Hub: https://hub.docker.com/r/smartemission/se-heron
 
 ## Environment
 
