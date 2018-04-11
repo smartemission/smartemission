@@ -4,7 +4,7 @@
 #
 script_dir=${0%/*}
 
-SERVICES="heron smartapp waalkade"
+SERVICES="admin heron home smartapp waalkade"
 for SERVICE in ${SERVICES}
 do
   echo "stopping ${SERVICE}"

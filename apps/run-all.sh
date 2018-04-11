@@ -7,7 +7,7 @@ script_dir=${0%/*}
 #docker network create --driver=bridge se_front
 #docker network create --driver=bridge se_back
 
-SERVICES="heron smartapp waalkade"
+SERVICES="admin heron home smartapp waalkade"
 for SERVICE in ${SERVICES}
 do
   echo "starting ${SERVICE}"

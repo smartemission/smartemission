@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+
+  home:
+
+    image: smartemission/se-home:latest
+
+    container_name: home
+
+    restart: unless-stopped
+
+    labels:
+      - "traefik.backend=home"
+      - "traefik.enable=true"
+      - "traefik.frontend.priority=500"
+      - "traefik.frontend.rule=HostRegexp:{subdomain:[a-z]+}.smartemission.nl;PathPrefixStrip:/"
+      - "traefik.docker.network=se_front"
+
+    networks:
+      - se_back
+      - se_front
+
+#    ports:
+#      - 80:80
+
+networks:
+  se_front:
+    external: true
+  se_back:
+    external: true
