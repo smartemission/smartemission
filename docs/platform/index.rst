@@ -11,6 +11,7 @@ Contents:
 
    intro.rst
    architecture.rst
+   components.rst
    data.rst
    calibration.rst
    services.rst
