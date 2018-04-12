@@ -53,7 +53,7 @@ Waalkade          Apps           Viewer Nijmegen project          GH DH    1    
 GostDashboard     Apps,Admin     Admin dashboard Gost             GH DH    3       -
 Grafana           Apps           View InfluxDB Data               GH DH    3       -
 Chronograf        Apps,Admin     Admin dashboard InfluxDB         GH DH    3       -
-SOSEmu            Services       REST API SOS subset              GH DH    3       avail
+SOSEmu            Services       REST API SOS subset              GH DH    1       avail
 GeoServer         Services       WMS (Time), WFS server           GH DH    1       avail
 Gost              Services       SensorThings API (STA) server    GH DH    2       inprog
 SOS52N            Services       52North SOS server               GH DH    3       inprog
