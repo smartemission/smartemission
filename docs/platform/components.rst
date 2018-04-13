@@ -58,7 +58,7 @@ GeoServer         Services       WMS (Time), WFS server           GH DH    1    
 Gost              Services       SensorThings API (STA) server    GH DH    2       inprog
 SOS52N            Services       52North SOS server               GH DH    3       inprog
 Mosquitto         Services       MQTT server coupled with Gost    GH DH    2       -
-PhpPgAdmin        Apps           Manager PostgreSQL               GH DH    2       -
+PhpPgAdmin        Apps,Admin     Manager PostgreSQL               GH DH    2       -
 HarvesterLast     ETL            Harvester last sensor data       GH DH    1       avail
 HarvesterWhale    ETL            Harvester historic sensor data   GH DH    1       -
 HarvesterInflux   ETL            Harvester InfluxDB sensor data   GH DH    3       -
@@ -71,9 +71,9 @@ STAPublisher      ETL            Publish refined data to STA      GH DH    2    
 InfluxDB          Datastore      Calibration refdata/collector    GH DH    3       -
 Postgis           Datastore      Main database (not used in K8s)  GH DH    N.A.    N.A.
 Traefik           Services       Proxy server (not used in K8s)   GH DH    N.A.    N.A.
-Prometheus        Mon,Apps       Monitoring metrics collector     GH DH    3       -
-AlertManager      Mon            Prometheus (Prom.)alerter        GH DH    3       -
-CAdvisor          Mon            Prom. Docker metrics exporter    GH DH    3       -
-NodeExporter      Mon            Prom. host  metrics exporter     GH DH    3       -
-GrafanaMon        Mon,Apps       Grafana Dashboards Prometheus    GH DH    3       -
+Prometheus        Mon,Apps       Monitoring metrics collector     GH DH    4       -
+AlertManager      Mon            Prometheus (Prom.)alerter        GH DH    4       -
+CAdvisor          Mon            Prom. Docker metrics exporter    GH DH    4       -
+NodeExporter      Mon            Prom. host  metrics exporter     GH DH    4       -
+GrafanaMon        Mon,Apps       Grafana Dashboards Prometheus    GH DH    4       -
 ================  =============  ===============================  ======== ======= ========
