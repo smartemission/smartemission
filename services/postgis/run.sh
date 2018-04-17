@@ -8,7 +8,6 @@ docker-compose stop
 docker-compose rm -f
 
 # Finally run
-# sudo docker run --restart=always --name ${NAME} ${PORT_MAP} ${VOL_MAP} -d -t ${IMAGE}
 docker-compose up -d
 
 # TIP to connect from host to postgis container

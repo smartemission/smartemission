@@ -2,6 +2,5 @@
 #
 docker-compose stop
 docker-compose rm -f
-# docker stop postgis
 
 

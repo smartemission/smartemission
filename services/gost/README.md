@@ -6,7 +6,7 @@ the Docker container for [Geodan GOST](https://www.gostserver.xyz).
 
 ## Database
 
-Setup once using [config/gost-init-db.sh](config/gost-init-db.sh).
+Setup once using ...
 
 ## Configuration
 

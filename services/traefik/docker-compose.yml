@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
   proxy:
-    image: traefik:1.5.3-alpine
+    image: traefik:1.5.4-alpine
 
     container_name: traefik
 
@@ -10,6 +10,7 @@ services:
     
     networks:
       - se_front
+      - se_back
 
     ports:
       - "80:80"
@@ -24,4 +25,6 @@ services:
 
 networks:
   se_front:
+    external: true
+  se_back:
     external: true

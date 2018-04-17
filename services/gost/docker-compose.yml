@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
   gost:
-    image: smartemission/gost:latest
+    image: smartemission/se-gost:latest
 
     container_name: gost
 
@@ -24,17 +24,14 @@ services:
       - "traefik.enable=true"
       - "traefik.frontend.priority=500"
       - "traefik.frontend.rule=HostRegexp:{subdomain:[a-z]+}.smartemission.nl;PathPrefixStrip:/gost"
-      - "traefik.docker.network=se_front"
+      - "traefik.docker.network=se_back"
 
     expose:
      - "8080"
 
     networks:
-      - se_front
       - se_back
 
 networks:
-  se_front:
-    external: true
   se_back:
     external: true

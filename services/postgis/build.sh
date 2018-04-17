@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Build apache2 Docker image with options
+# Build Docker image with SE options
 
-sudo docker build -t smartemission/postgis:9.4-2.1 .
+docker build -t smartemission/se-postgis:9.4-2.1 .
 

@@ -11,6 +11,9 @@ defaultEntryPoints = ["http"]
 # http should be redirected to https
 	[entryPoints.http]
 	address = ":80"
+#    [entryPoints.http.redirect]
+#      regex = "(http:\\/\\/[^\\/]+\\/([^\\?]+)[^\\/])$"
+#      replacement = "$1/"
 #[entryPoints.http.redirect]
 #entryPoint = "https"
 
