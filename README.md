@@ -1,5 +1,7 @@
 # smartemission
 
+**NB all resources/software here is now being moved to a new GitHub Organization for SE: https://github.com/smartemission**
+
 *"The Smart Emission Data Platform assembles, processes and unlocks sensor data for* 
 *Air Quality, Sound, and Meteo from citizen-based sensor networks."* 
 
@@ -16,3 +18,4 @@ The landing page for that project is http://smartemission.nl.
 
 **Documentation** for the Smartemission Data Platform is generated from this repo and
 can be found at: http://smartplatform.readthedocs.org
+
