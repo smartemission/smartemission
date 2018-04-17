@@ -11,7 +11,7 @@ UPDATE v1.featureofinterest SET geojson = concat('{"type": "Point", "coordinates
 
 -- NEW geojson shadow column for feature column
 ALTER TABLE v1.location ADD COLUMN geojson jsonb;
-UPDATE v1.location SET geojson = concat('{"type": "Point", "coordinates": [' || ST_X(feature) || ', ' ||  ST_Y(feature) || ']}')::jsonb;
+UPDATE v1.location SET geojson = concat('{"type": "Point", "coordinates": [' || ST_X(location) || ', ' ||  ST_Y(location) || ']}')::jsonb;
 
 
 -- Optimizations for observation table
