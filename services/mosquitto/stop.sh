@@ -1,5 +1,5 @@
 #!/bin/bash
 #
-docker stop mosquitto
+# docker stop and remove
 
-
+docker-compose rm --force --stop
