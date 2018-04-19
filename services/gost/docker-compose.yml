@@ -23,6 +23,7 @@ services:
       - "traefik.backend=gost"
       - "traefik.enable=true"
       - "traefik.frontend.priority=500"
+      - "traefik.frontend.rule=Method:GET"
       - "traefik.frontend.rule=HostRegexp:{subdomain:[a-z]+}.smartemission.nl;PathPrefixStrip:/gost"
       - "traefik.docker.network=se_back"
 

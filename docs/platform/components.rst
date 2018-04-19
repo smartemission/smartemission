@@ -57,17 +57,17 @@ SOSEmu            Services       REST API SOS subset              GH DH    1    
 GeoServer         Services       WMS (Time), WFS server           GH DH    1       avail
 Gost              Services       SensorThings API (STA) server    GH DH    2       inprog
 SOS52N            Services       52North SOS server               GH DH    3       inprog
-Mosquitto         Services       MQTT server coupled with Gost    GH DH    2       -
-PhpPgAdmin        Apps,Admin     Manager PostgreSQL               GH DH    2       -
+Mosquitto         Services       MQTT server coupled with Gost    GH DH    2       inprog
+PhpPgAdmin        Apps,Admin     Manager PostgreSQL               GH DH    2       inprog
 HarvesterLast     ETL            Harvester last sensor data       GH DH    1       avail
-HarvesterWhale    ETL            Harvester historic sensor data   GH DH    1       -
+HarvesterWhale    ETL            Harvester historic sensor data   GH DH    1       avail
 HarvesterInflux   ETL            Harvester InfluxDB sensor data   GH DH    3       -
 HarvesterRivm     ETL            Harvester RIVM ANN ref-data      GH DH    4       -
 Extractor         ETL            Extract SE refdata for ANN ref   GH DH    4       -
 Calibrator        ETL            ANN Learning engine              GH DH    4       -
-Refiner           ETL            Transformation/Calibration       GH DH    1       -
+Refiner           ETL            Transformation/Calibration       GH DH    1       avail
 SOSPublisher      ETL            Publish refined data to SOS      GH DH    3       -
-STAPublisher      ETL            Publish refined data to STA      GH DH    2       -
+STAPublisher      ETL            Publish refined data to STA      GH DH    2       inprog
 InfluxDB          Datastore      Calibration refdata/collector    GH DH    3       -
 Postgis           Datastore      Main database (not used in K8s)  GH DH    N.A.    N.A.
 Traefik           Services       Proxy server (not used in K8s)   GH DH    N.A.    N.A.

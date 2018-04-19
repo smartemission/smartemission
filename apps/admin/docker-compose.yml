@@ -4,7 +4,7 @@ services:
 
   admin:
 
-    image: smartemission/se-admin:latest
+    image: smartemission/se-admin:1.0.0
 
     container_name: admin
 
@@ -14,8 +14,9 @@ services:
       - "traefik.backend=admin"
       - "traefik.enable=true"
       - "traefik.frontend.priority=500"
-      - "traefik.frontend.rule=HostRegexp:{subdomain:[a-z]+}.smartemission.nl;PathPrefixStrip:/admin"
-      - "traefik.frontend.headers.customRequestHeaders=X-Script-Name:/admin"
+      - "traefik.frontend.rule=HostRegexp:{subdomain:[a-z]+}.smartemission.nl;PathPrefixStrip:/adm"
+      - "traefik.frontend.headers.customRequestHeaders=X-Script-Name:/adm"
+      - "traefik.frontend.auth.basic=sadmin:$$apr1$$gVo/HcPx$$2AudzGfyX7Xxg7aD/b1zf."
       - "traefik.docker.network=se_back"
 
     volumes:

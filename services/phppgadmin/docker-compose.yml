@@ -1,0 +1,33 @@
+version: '3.1'
+
+services:
+  phppgadmin:
+
+    image: dockage/phppgadmin:latest
+
+    container_name: phppgadmin
+
+    environment:
+      # See https://github.com/dockage/phppgadmin
+      # Or set as env vars
+      - PHP_PG_ADMIN_SERVER_HOST=postgis
+      - PHP_PG_ADMIN_SERVER_PORT=5432
+
+    labels:
+      - "traefik.backend=phppgadmin"
+      - "traefik.enable=true"
+      - "traefik.frontend.priority=600"
+      - "traefik.frontend.rule=Method:GET"
+      - "traefik.frontend.rule=HostRegexp:{subdomain:[a-z]+}.smartemission.nl;PathPrefixStrip:/adm/pg"
+      - "traefik.frontend.auth.basic=sadmin:$$apr1$$gVo/HcPx$$2AudzGfyX7Xxg7aD/b1zf."
+      - "traefik.docker.network=se_back"
+
+#    expose:
+#     - "8080"
+
+    networks:
+      - se_back
+
+networks:
+  se_back:
+    external: true
