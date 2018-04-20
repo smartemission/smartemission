@@ -4,9 +4,6 @@
 #
 script_dir=${0%/*}
 
-docker network create --driver=bridge se_front
-docker network create --driver=bridge se_back
-
 SERVICES="traefik postgis phppgadmin influxdb chronograf grafana geoserver sosemu mosquitto gost gostdashboard monitoring"
 for SERVICE in ${SERVICES}
 do

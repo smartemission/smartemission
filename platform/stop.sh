@@ -17,3 +17,5 @@ popd
 pushd ${script_dir}/../apps
 ./stop-all.sh
 popd
+
+docker network rm se_back se_front
