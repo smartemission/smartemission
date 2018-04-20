@@ -1,0 +1,40 @@
+version: '3.1'
+
+services:
+  grafana:
+    image: grafana/grafana:4.6.3
+    container_name: grafana
+
+    env_file:
+      # See https://github.com/geoserver/docs/blob/master/geoserver_configuration.md
+      # for config vars
+      - ../../etl/options/${HOSTNAME}.args
+
+    labels:
+      - "traefik.backend=grafana"
+      - "traefik.enable=true"
+      - "traefik.frontend.priority=500"
+      - "traefik.frontend.rule=HostRegexp:{subdomain:[a-z]+}.smartemission.nl;PathPrefixStrip:/grafana"
+      - "traefik.docker.network=se_back"
+
+    expose:
+     - "3000"
+
+#    ports:
+#      - "8086:8086"
+
+    networks:
+      # Visible in SE backend and frontend Docker network
+      - se_back
+
+    volumes:
+      - /var/smartem/data/grafana:/var/lib/grafana
+      - /var/smartem/log/grafana:/var/log/grafana
+      - ./config:/etc/grafana
+
+networks:
+  se_back:
+    external: true
+
+# generate conf: docker run --rm grafana influxd config > grafana.conf
+# create db: curl -G http://localhost:8086/query --data-urlencode "q=CREATE DATABASE mydb"

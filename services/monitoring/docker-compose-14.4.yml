@@ -23,6 +23,15 @@ services:
 
   grafana:
     image: grafana/grafana:4.6.3
+    labels:
+      - "traefik.backend=grafanamon"
+      - "traefik.enable=true"
+      - "traefik.frontend.priority=600"
+      - "traefik.frontend.rule=Method:GET"
+      - "traefik.frontend.rule=HostRegexp:{subdomain:[a-z]+}.smartemission.nl;PathPrefixStrip:/adm/grafanamon"
+      # - "traefik.frontend.auth.basic=sadmin:$$apr1$$gVo/HcPx$$2AudzGfyX7Xxg7aD/b1zf."
+      - "traefik.docker.network=se_back"
+
     depends_on:
       - prometheus
     links:
@@ -33,14 +42,21 @@ services:
       - grafana_data:/var/lib/grafana
     env_file:
       - grafana/grafana.conf
-    network_mode: bridge
-#    networks:
-#      - back-tier
-#      - front-tier
+    networks:
+      # Visible in SE backend and frontend Docker network
+      - se_back
 
   prometheus:
     # image: prom/prometheus:v2.0.0
     image: prom/prometheus:latest
+    labels:
+      - "traefik.backend=prometheus"
+      - "traefik.enable=true"
+      - "traefik.frontend.priority=600"
+      - "traefik.frontend.rule=Method:GET"
+      - "traefik.frontend.rule=HostRegexp:{subdomain:[a-z]+}.smartemission.nl;PathPrefixStrip:/adm/prometheus"
+      # - "traefik.frontend.auth.basic=sadmin:$$apr1$$gVo/HcPx$$2AudzGfyX7Xxg7aD/b1zf."
+      - "traefik.docker.network=se_back"
     volumes:
       - ./prometheus/:/etc/prometheus/
       - prometheus_data:/prometheus
@@ -63,9 +79,9 @@ services:
       # - cadvisor
       # - node-exporter
 
-    network_mode: bridge
-#    networks:
-#      - back-tier
+    networks:
+      # Visible in SE backend and frontend Docker network
+      - se_back
     restart: unless-stopped
 #    deploy:
 #      placement:
@@ -78,13 +94,18 @@ services:
 #      - 9093:9093
     volumes:
       - ./alertmanager/:/etc/alertmanager/
-    network_mode: bridge
-#    networks:
-#      - back-tier
+    networks:
+      # Visible in SE backend and frontend Docker network
+      - se_back
     restart: unless-stopped
     command:
       - '-config.file=/etc/alertmanager/config-gen.yml'
       - '-storage.path=/alertmanager'
+
+networks:
+  se_back:
+    external: true
+
 #    deploy:
 #      placement:
 #        constraints:

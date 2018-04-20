@@ -124,6 +124,7 @@ influx_as_measurement_rivm=rivm
 #
 
 grafana_admin_password=grafana_admin_pw
+GF_SECURITY_ADMIN_PASSWORD=grafana_admin_pw
 
 #
 # GOST SensorThings API
@@ -154,3 +155,10 @@ SOSEMU_DB_PORT=5432
 SOSEMU_DB_SCHEMA=smartem_rt
 SOSEMU_DB_USER=usr
 SOSEMU_DB_PASSWORD=pw
+
+# GeoServer
+DB_HOSTNAME=postgis
+DB_USERNAME=usr
+DB_PASSWD=pw
+GS_USERNAME=usr
+GS_PASSWD=pw

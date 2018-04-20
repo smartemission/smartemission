@@ -1,0 +1,37 @@
+version: '3.1'
+
+services:
+  geoserver:
+    image: smartemission/se-geoserver:2.12.1-1
+
+    container_name: geoserver
+
+    env_file:
+      # See https://github.com/geoserver/docs/blob/master/geoserver_configuration.md
+      # for config vars
+      - ../../etl/options/${HOSTNAME}.args
+
+      # Or set as env vars
+#      DB_HOSTNAME
+#      DB_USERNAME
+#      DB_PASSWD
+#      GS_USERNAME
+#      GS_PASSWD
+
+    labels:
+      - "traefik.backend=geoserver"
+      - "traefik.enable=true"
+      - "traefik.frontend.priority=500"
+      # - "traefik.frontend.rule=Method:GET"
+      - "traefik.frontend.rule=HostRegexp:{subdomain:[a-z]+}.smartemission.nl;PathPrefix:/geoserver"
+      - "traefik.docker.network=se_back"
+
+    expose:
+     - "8080"
+
+    networks:
+      - se_back
+
+networks:
+  se_back:
+    external: true

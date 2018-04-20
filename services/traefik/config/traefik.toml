@@ -24,11 +24,14 @@ defaultEntryPoints = ["http"]
 #[entryPoints.https.tls]
 	[entryPoints.monitor]
 	   address=":8080"
-#	   [entryPoints.monitor.auth]
-#	     [entryPoints.monitor.auth.basic]
-#	       users = [
-#	         "sadmin:$apr1$gVo/HcPx$2AudzGfyX7Xxg7aD/b1zf."
-#	       ]
+	   [entryPoints.monitor.auth]
+	     [entryPoints.monitor.auth.basic]
+	       users = [
+	         "sadmin:$apr1$gVo/HcPx$2AudzGfyX7Xxg7aD/b1zf."
+	       ]
+
+	[entryPoints.influx]
+	   address=":8086"
 
 [api]
 # Status page

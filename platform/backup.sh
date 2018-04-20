@@ -13,6 +13,8 @@ MONTH_DAY=`date +%d`
 MONTH=`date +%m`
 
 BACKUP_DIR=/var/smartem/backup
+LOG_DIR=/var/smartem/log/backup
+mkdir -p ${LOG_DIR}
 mkdir -p ${BACKUP_DIR}
 
 # GeoServer data, SOS52N config data and  Grafana
@@ -44,7 +46,7 @@ export PGUSER=docker
 export PGPASSWORD=docker
 export PGHOST=`sudo docker inspect --format '{{ .NetworkSettings.Networks.se_back.IPAddress }}' postgis`
 
-LOG_FILE=${BACKUP_DIR}/backup_db.log
+LOG_FILE=${LOG_DIR}/backup_db.log
 
 #
 # Function : dump_db
@@ -121,4 +123,4 @@ then
 fi
 
 # To inspect from admin
-cp ${LOG_FILE} /var/smartem/log
+cp ${LOG_FILE} ${BACKUP_DIR}

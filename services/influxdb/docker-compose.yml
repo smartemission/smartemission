@@ -1,7 +1,8 @@
 version: '3.1'
 
 services:
-  postgis:
+
+  influxdb:
     image: influxdb:1.4.2
     container_name: influxdb
 
@@ -10,7 +11,7 @@ services:
       - "traefik.enable=true"
       - "traefik.frontend.priority=500"
       - "traefik.frontend.rule=HostRegexp:{subdomain:[a-z]+}.smartemission.nl;PathPrefixStrip:/influxdb"
-      - "traefik.docker.network=se_front"
+      - "traefik.docker.network=se_back"
 
     expose:
      - "8086"
@@ -20,7 +21,6 @@ services:
 
     networks:
       # Visible in SE backend and frontend Docker network
-      - se_front
       - se_back
 
     volumes:
@@ -30,8 +30,6 @@ services:
       - /var/smartem/backup/influxdb:/backup
 
 networks:
-  se_front:
-    external: true
   se_back:
     external: true
 

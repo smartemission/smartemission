@@ -34,4 +34,4 @@ esac
 envsubst < alertmanager/config.yml > alertmanager/config-gen.yml
 envsubst < prometheus/prometheus.yml > prometheus/prometheus-gen.yml
 
-docker-compose -f ${DOCKER_COMPOSE_YML} up -d
+docker-compose -f ${DOCKER_COMPOSE_YML} up 
