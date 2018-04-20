@@ -12,5 +12,3 @@ do
     ./stop.sh
   popd
 done
-
-docker network rm se_back se_front
