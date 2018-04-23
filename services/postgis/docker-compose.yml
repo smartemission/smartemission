@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
   postgis:
-    image: smartemission/se-postgis:9.4-2.1
+    image: smartemission/se-postgis:9.4-2.1-1
 
     container_name: postgis
 

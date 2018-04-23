@@ -15,7 +15,9 @@ The `.sh` files each invoke a Stetl ETL process via Docker using a Stetl config 
 for that ETL process. Stetl is run via Docker. 
 
 Additional Python files implement specific ETL modules not defined
-in the Stetl Framework and are available under the Python [smartem](smartem) package.
+in the Stetl Framework and are available under the 
+Python [smartem](https://github.com/smartemission/docker-se-stetl/tree/master/smartem) package.
+The Stetl config files for each ETL process are defined [here](https://github.com/smartemission/docker-se-stetl/tree/master/config).
 
 All ETL is now migrated to the new SE GitHub repo: https://github.com/smartemission/docker-se-stetl
 
