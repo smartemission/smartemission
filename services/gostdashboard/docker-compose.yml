@@ -2,19 +2,24 @@ version: '3.1'
 
 services:
   gost:
-    image: smartemission/gost-dashboard:latest
+    image: smartemission/se-gostdashboard:1.0.0
 
     container_name: gostdashboard
 
     labels:
-      - "traefik.backend=gostdashboard"
+      - "traefik.frontend.rule=PathPrefixStrip:/adm/gostdashboard"
+      - "traefik.frontend.priority=8000"
+      - "traefik.port=8080"
       - "traefik.enable=true"
-      - "traefik.frontend.priority=500"
-      - "traefik.frontend.rule=HostRegexp:{subdomain:[a-z]+}.smartemission.nl;PathPrefixStrip:/gostdashboard"
+      - "traefik.backend=gostdashboard"
+      - "traefik.frontend.auth.basic=sadmin:$$apr1$$gVo/HcPx$$2AudzGfyX7Xxg7aD/b1zf."
       - "traefik.docker.network=se_back"
 
-    expose:
-     - "8080"
+#    expose:
+#     - "8080"
+
+#    ports:
+#      - 8080:8080
 
     networks:
       - se_back

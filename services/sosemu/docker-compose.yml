@@ -15,7 +15,7 @@ services:
       - "traefik.backend=sosemu"
       - "traefik.enable=true"
       - "traefik.frontend.priority=500"
-      - "traefik.frontend.rule=HostRegexp:{subdomain:[a-z]+}.smartemission.nl;PathPrefixStrip:/sosemu"
+      - "traefik.frontend.rule=PathPrefixStrip:/sosemu"
       - "traefik.frontend.headers.customRequestHeaders=X-Script-Name:/sosemu"
       - "traefik.docker.network=se_back"
 

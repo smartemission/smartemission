@@ -23,7 +23,7 @@ services:
       - "traefik.enable=true"
       - "traefik.frontend.priority=500"
       # - "traefik.frontend.rule=Method:GET"
-      - "traefik.frontend.rule=HostRegexp:{subdomain:[a-z]+}.smartemission.nl;PathPrefix:/geoserver"
+      - "traefik.frontend.rule=PathPrefix:/geoserver"
       - "traefik.docker.network=se_back"
 
     expose:

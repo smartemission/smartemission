@@ -11,10 +11,10 @@ services:
     restart: unless-stopped
 
     labels:
+      - "traefik.frontend.rule=PathPrefixStrip:/adm"
       - "traefik.backend=admin"
       - "traefik.enable=true"
-      - "traefik.frontend.priority=500"
-      - "traefik.frontend.rule=HostRegexp:{subdomain:[a-z]+}.smartemission.nl;PathPrefixStrip:/adm"
+      - "traefik.frontend.priority=100"
       - "traefik.frontend.headers.customRequestHeaders=X-Script-Name:/adm"
       - "traefik.frontend.auth.basic=sadmin:$$apr1$$gVo/HcPx$$2AudzGfyX7Xxg7aD/b1zf."
       - "traefik.docker.network=se_back"

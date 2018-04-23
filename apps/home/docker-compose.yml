@@ -14,7 +14,7 @@ services:
       - "traefik.backend=home"
       - "traefik.enable=true"
       - "traefik.frontend.priority=5"
-      - "traefik.frontend.rule=HostRegexp:{subdomain:[a-z]+}.smartemission.nl;PathPrefixStrip:/"
+      - "traefik.frontend.rule=PathPrefixStrip:/"
       # - "traefik.frontend.headers.customRequestHeaders=X-Script-Name:/"
       - "traefik.docker.network=se_back"
 
