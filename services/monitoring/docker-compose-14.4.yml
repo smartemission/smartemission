@@ -99,8 +99,8 @@ services:
       - se_back
     restart: unless-stopped
     command:
-      - '-config.file=/etc/alertmanager/config-gen.yml'
-      - '-storage.path=/alertmanager'
+      - '--config.file=/etc/alertmanager/config-gen.yml'
+      - '--storage.path=/alertmanager'
 
 networks:
   se_back:
