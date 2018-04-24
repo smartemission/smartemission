@@ -162,3 +162,9 @@ DB_USERNAME=usr
 DB_PASSWD=pw
 GS_USERNAME=usr
 GS_PASSWD=pw
+
+# 52North SOS Settings
+SOS_SERVICE_URL=https://pdok.smartemission.nl/sos52n/service
+SOS_DB_SCHEMA=sos52n1
+SOS_USERNAME=usr
+SOS_PASSWD=pw

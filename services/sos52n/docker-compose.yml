@@ -1,0 +1,39 @@
+version: '3.1'
+
+services:
+  sos52n:
+    image: smartemission/se-sos52n:4.3.7-1
+
+    container_name: sos52n
+
+    env_file:
+      # See https://github.com/sos52n/docs/blob/master/sos52n_configuration.md
+      # for config vars
+      - ../../etl/options/${HOSTNAME}.args
+
+      # Or set as env vars
+      #DB_HOSTNAME
+      #DB_USERNAME
+      #DB_PASSWD
+      #DB_SCHEMA
+      #SOS_USERNAME
+      #SOS_PASSWD
+
+    labels:
+      - "traefik.backend=sos52n"
+      - "traefik.enable=true"
+      - "traefik.frontend.priority=500"
+      - "traefik.weight=20"
+      - "traefik.port=8080"
+      - "traefik.frontend.rule=PathPrefix:/sos52n"
+      - "traefik.docker.network=se_back"
+
+    expose:
+     - "8080"
+
+    networks:
+      - se_back
+
+networks:
+  se_back:
+    external: true
