@@ -50,8 +50,8 @@ Admin             Apps,Admin     Admin access pages               GH DH    2    
 Heron             Apps           Viewer with history              GH DH    1       inprog
 SmartApp          Apps           Viewer for last values           GH DH    1       avail
 Waalkade          Apps           Viewer Nijmegen project          GH DH    1       avail
-GostDashboard     Apps,Admin     Admin dashboard Gost             GH DH    3       -
-Grafana           Apps           View InfluxDB Data               GH DH    3       -
+GostDashboard     Apps,Admin     Admin dashboard Gost             GH DH    3       inprog
+Grafana           Apps           View InfluxDB Data               GH DH    3       inprog
 Chronograf        Apps,Admin     Admin dashboard InfluxDB         GH DH    3       -
 SOSEmu            Services       REST API SOS subset              GH DH    1       avail
 GeoServer         Services       WMS (Time), WFS server           GH DH    1       avail
@@ -66,7 +66,7 @@ HarvesterRivm     ETL            Harvester RIVM ANN ref-data      GH DH    4    
 Extractor         ETL            Extract SE refdata for ANN ref   GH DH    4       -
 Calibrator        ETL            ANN Learning engine              GH DH    4       -
 Refiner           ETL            Transformation/Calibration       GH DH    1       avail
-SOSPublisher      ETL            Publish refined data to SOS      GH DH    3       -
+SOSPublisher      ETL            Publish refined data to SOS      GH DH    3       inprog
 STAPublisher      ETL            Publish refined data to STA      GH DH    2       inprog
 InfluxDB          Datastore      Calibration refdata/collector    GH DH    3       -
 Postgis           Datastore      Main database (not used in K8s)  GH DH    N.A.    N.A.

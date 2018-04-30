@@ -4,7 +4,7 @@ services:
 
   smartapp:
 
-    image: smartemission/se-smartapp:latest
+    image: smartemission/se-smartapp:1.0.0
 
     container_name: smartapp
 
@@ -14,8 +14,8 @@ services:
       - "traefik.backend=smartapp"
       - "traefik.enable=true"
       - "traefik.frontend.priority=500"
-      - "traefik.frontend.rule=PathPrefixStrip:/smartapp"
-      - "traefik.frontend.headers.customRequestHeaders=X-Script-Name:/smartapp"
+      - "traefik.frontend.rule=PathPrefix:/smartapp"
+      # - "traefik.frontend.headers.customRequestHeaders=X-Script-Name:/smartapp"
       - "traefik.docker.network=se_back"
 
     networks:
