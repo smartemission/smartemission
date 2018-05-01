@@ -1,7 +1,7 @@
 version: '3.1'
 
 services:
-  gost:
+  gostdashboard:
     image: smartemission/se-gostdashboard:1.0.0
 
     container_name: gostdashboard

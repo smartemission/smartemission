@@ -1,3 +1,3 @@
 #!/bin/bash
-#
-docker stop chronograf
+
+docker-compose rm --force --stop

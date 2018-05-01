@@ -4,6 +4,7 @@ services:
 
   influxdb:
     image: influxdb:1.4.2
+
     container_name: influxdb
 
     labels:

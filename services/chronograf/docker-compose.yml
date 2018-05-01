@@ -1,0 +1,36 @@
+version: '3.1'
+
+services:
+
+  chronograf:
+
+    image: chronograf:1.4-alpine
+
+    container_name: chronograf
+
+    command: --basepath=/adm/chronograf --influxdb-url=http://influxdb:8086 --influxdb-username=${influx_admin_user} --influxdb-password=${influx_admin_password}
+
+    labels:
+      - "traefik.frontend.rule=PathPrefixStrip:/adm/chronograf"
+      - "traefik.frontend.priority=8000"
+      - "traefik.port=8888"
+      - "traefik.enable=true"
+      - "traefik.backend=chronograf"
+      - "traefik.frontend.auth.basic=sadmin:$$apr1$$gVo/HcPx$$2AudzGfyX7Xxg7aD/b1zf."
+      - "traefik.docker.network=se_back"
+
+    volumes:
+      - /var/smartem/data/chronograf:/var/lib/chronograf
+
+#    expose:
+#     - "8888"
+
+#    ports:
+#      - 8888:8888
+
+    networks:
+      - se_back
+
+networks:
+  se_back:
+    external: true
