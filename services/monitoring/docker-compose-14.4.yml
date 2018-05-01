@@ -54,7 +54,7 @@ services:
       - "traefik.enable=true"
       - "traefik.frontend.priority=600"
       - "traefik.frontend.rule=Method:GET"
-      - "traefik.frontend.rule=PathPrefixStrip:/adm/prometheus"
+      - "traefik.frontend.rule=PathPrefix:/adm/prometheus"
       # - "traefik.frontend.auth.basic=sadmin:$$apr1$$gVo/HcPx$$2AudzGfyX7Xxg7aD/b1zf."
       - "traefik.docker.network=se_back"
     volumes:
