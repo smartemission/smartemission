@@ -31,7 +31,6 @@ services:
       - "traefik.enable=true"
       - "traefik.frontend.priority=500"
       - "traefik.frontend.rule=PathPrefix:/waalkade"
-      # - "traefik.frontend.headers.customRequestHeaders=X-Script-Name:/waalkade"
       - "traefik.docker.network=se_back"
 
     networks:
