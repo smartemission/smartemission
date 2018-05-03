@@ -7,9 +7,9 @@ ETL Processes
 -------------
 
 Python classes involved in ETL.
-Code and config for all ETL can be found in the `SE GitHub <https://github.com/Geonovum/smartemission/tree/master/etl>`_.
+Code and config for all ETL can be found in the `SE GitHub <https://github.com/smartemission/smartemission/tree/master/etl>`_.
 All Python ETL code is under the 
-`SE smartem Python Package <https://github.com/Geonovum/smartemission/tree/master/etl/smartem>`_.
+`SE smartem Python Package <https://github.com/smartemission/smartemission/tree/master/etl/smartem>`_.
 
 Harvesters and Extractors
 ~~~~~~~~~~~~~~~~~~~~~~~~~

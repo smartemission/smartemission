@@ -16,7 +16,7 @@ In particular:
 * Grafana
 * Monitoring: Prometheus + Grafana
 
-All services are defined under https://github.com/Geonovum/smartemission/tree/master/services.
+All services are defined under https://github.com/smartemission/smartemission/tree/master/services.
 
 Web Frontend
 ============
@@ -34,12 +34,12 @@ The SOS Emulator for Last Values is hosted as a Python Flask app.
 Implementation
 --------------
 
-* Docker image: https://github.com/Geonovum/smartemission/tree/master/docker/apache2
-* Main dir: https://github.com/Geonovum/smartemission/tree/master/services/web
-* Running: https://github.com/Geonovum/smartemission/tree/master/services/web/run.sh
-* SOS Emulator: https://github.com/Geonovum/smartemission/tree/master/services/api/sosrest
-* Website and Viewers: https://github.com/Geonovum/smartemission/tree/master/services/web/site
-* Apache2 config: https://github.com/Geonovum/smartemission/tree/master/services/web/config/sites-enabled
+* Docker image: https://github.com/smartemission/smartemission/tree/master/docker/apache2
+* Main dir: https://github.com/smartemission/smartemission/tree/master/services/web
+* Running: https://github.com/smartemission/smartemission/tree/master/services/web/run.sh
+* SOS Emulator: https://github.com/smartemission/smartemission/tree/master/services/api/sosrest
+* Website and Viewers: https://github.com/smartemission/smartemission/tree/master/services/web/site
+* Apache2 config: https://github.com/smartemission/smartemission/tree/master/services/web/config/sites-enabled
 
 NB in 2018 this  will be replaced by a setup using `Traefik <https://traefik.io/>`_.
 
@@ -81,7 +81,7 @@ During Docker build some specific configuration files are
 copied permanently into the Docker image
 as it is not possible to map these via symlinks from host. These files
 are maintained in
-GitHub https://github.com/Geonovum/smartemission/tree/master/docker/sos52n/resources/config:
+GitHub https://github.com/smartemission/smartemission/tree/master/docker/sos52n/resources/config:
 
 * datasource.properties
 * logback.xml
@@ -93,7 +93,7 @@ A default version is provided. However, to be able to maintain
 this file over reruns of the Docker image a Docker volume mount should be
 done within the service invokation. This is done lazily within the Docker
 run file for the 52North SOS:
-https://github.com/Geonovum/smartemission/blob/master/services/sos52n/run.sh
+https://github.com/smartemission/smartemission/blob/master/services/sos52n/run.sh
 On the first run the `/opt/sosconfig` is mapped locally (plus the SOS log dir).
 From then on `configuration.db` is maintained on the host.
 
@@ -102,8 +102,8 @@ At runtime the `sos52n` Docker instance is linked to the `postgis` Docker instan
 Implementation
 --------------
 
-* Docker image: https://github.com/Geonovum/smartemission/tree/master/docker/sos52n
-* Running: https://github.com/Geonovum/smartemission/tree/master/services/sos52n
+* Docker image: https://github.com/smartemission/smartemission/tree/master/docker/sos52n
+* Running: https://github.com/smartemission/smartemission/tree/master/services/sos52n
 
 SensorThings API
 ================
@@ -138,8 +138,8 @@ database is served from the SE PostGIS Docker Container.
 
 * Docker image GOST Server: https://hub.docker.com/r/geodan/gost/
 * Docker image GOST Dashboard v2: https://hub.docker.com/r/geodan/gost-dashboard-v2/
-* Running: https://github.com/Geonovum/smartemission/tree/master/services/gost
-* Running: https://github.com/Geonovum/smartemission/tree/master/services/gostdashboard
+* Running: https://github.com/smartemission/smartemission/tree/master/services/gost
+* Running: https://github.com/smartemission/smartemission/tree/master/services/gostdashboard
 
 NB The Dashboard is not yet fully running via the SE web proxy pending `this issue <https://github.com/gost/dashboard-v2/issues/2>`_.
 
@@ -158,7 +158,7 @@ Implementation
 --------------
 
 * Docker image: https://hub.docker.com/r/toke/mosquitto/
-* Running: https://github.com/Geonovum/smartemission/tree/master/services/mosquitto
+* Running: https://github.com/smartemission/smartemission/tree/master/services/mosquitto
 
 InfluxDB
 ========
@@ -173,7 +173,7 @@ Implementation
 --------------
 
 * Docker image: https://hub.docker.com/_/influxdb/
-* Running: https://github.com/Geonovum/smartemission/tree/master/services/influxdb
+* Running: https://github.com/smartemission/smartemission/tree/master/services/influxdb
 
 Grafana
 =======
@@ -186,4 +186,4 @@ Implementation
 --------------
 
 * Docker image: https://github.com/grafana/grafana-docker
-* Running: https://github.com/Geonovum/smartemission/tree/master/services/grafana
+* Running: https://github.com/smartemission/smartemission/tree/master/services/grafana

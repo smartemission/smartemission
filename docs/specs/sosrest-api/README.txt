@@ -26,8 +26,8 @@ http://api.smartemission.nl/sosemu/api/v1/timeseries?station=23&expanded=true
 http://api.smartemission.nl/sosemu/api/v1/stations?format=json&callback=mycallback
 
 # Example with Leaflet (uses JSONP)
-http://rawgit.com/Geonovum/smartemission/master/specs/sosrest-api/examples/leaflet.html
+http://rawgit.com/smartemission/smartemission/master/docs/specs/sosrest-api/examples/leaflet.html
 
 # code for examples under
-https://github.com/Geonovum/smartemission/tree/master/specs/sosrest-api/examples
+https://github.com/smartemission/smartemission/tree/master/docs/specs/sosrest-api/examples
 

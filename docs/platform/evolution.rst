@@ -188,9 +188,9 @@ The Whale API has two main services:
 * fetch timeseries (history) data
 * fetch latest data of any device ("last" values)
 
-The `specification <https://github.com/Geonovum/smartemission/blob/master/docs/specs/rawsensor-api/rawsensor-api.txt>`_
+The `specification <https://github.com/smartemission/smartemission/blob/master/docs/specs/rawsensor-api/rawsensor-api.txt>`_
 and examples can be found in GitHub:
-https://github.com/Geonovum/smartemission/tree/master/docs/specs/rawsensor-api.
+https://github.com/smartemission/smartemission/tree/master/docs/specs/rawsensor-api.
 
 
 Sensor Observation Service (SOS)

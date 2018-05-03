@@ -56,9 +56,9 @@ A Pull/Harvesting model and API was chosen as it had advantages over a push-mode
 * resilient from restarts
 * easier to deploy in an OTAP environment: e.g. both Test and Production servers can use the same Data Collectors
 
-The `specification <https://github.com/Geonovum/smartemission/blob/master/docs/specs/rawsensor-api/rawsensor-api.txt>`_
+The `specification <https://github.com/smartemission/smartemission/blob/master/docs/specs/rawsensor-api/rawsensor-api.txt>`_
 and examples can be found in GitHub:
-https://github.com/Geonovum/smartemission/tree/master/docs/specs/rawsensor-api.
+https://github.com/smartemission/smartemission/tree/master/docs/specs/rawsensor-api.
 
 The Whale API has two main services:
 

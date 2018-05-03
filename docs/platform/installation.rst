@@ -15,7 +15,7 @@ in which the SE Platform is run.
 
 - Required OS: Ubuntu Linux 14.04 or later (tested on 14.04 and 16.04)
 - all components are Docker Images run as Docker Containers (with exception `cAdvisor` on Ubuntu 14.04)
-- all required code comes from GitHub: https://github.com/Geonovum/smartemission
+- all required code comes from GitHub: https://github.com/smartemission/smartemission
 - all dynamic data: settings, databases, logfiles, website, ETL scripts is maintained on the host system (via Docker container *Volume-mapping*)
 - Docker images are connected and networked via Docker Link (``--link``)  mapping
 - all access to application services containers (GeoServer, SOS, Grafana etc) is proxied via the Apache2 `web` Docker container
@@ -119,17 +119,17 @@ On an empty Ubuntu Linux system perform all the steps below in that order as use
 Get Bootstrap Script
 --------------------
 
-Get the SE Platform `bootstrap.sh <https://github.com/Geonovum/smartemission/platform/bootstrap.sh>`_ script: ::
+Get the SE Platform `bootstrap.sh <https://github.com/smartemission/smartemission/platform/bootstrap.sh>`_ script: ::
 
     # In e.g. home dir
     $ apt-get install curl
-    $ curl -O https://raw.githubusercontent.com/Geonovum/smartemission/master/platform/bootstrap.sh
+    $ curl -O https://raw.githubusercontent.com/smartemission/smartemission/master/platform/bootstrap.sh
 
-Get the SE Platform `bootstrap-nodocker.sh <https://github.com/Geonovum/smartemission/platform/bootstrap-nodocker.sh>`_ script: ::
+Get the SE Platform `bootstrap-nodocker.sh <https://github.com/smartemission/smartemission/platform/bootstrap-nodocker.sh>`_ script: ::
 
     # In e.g. home dir
     $ apt-get install curl
-    $ curl -O https://raw.githubusercontent.com/Geonovum/smartemission/master/platform/bootstrap.sh
+    $ curl -O https://raw.githubusercontent.com/smartemission/smartemission/master/platform/bootstrap.sh
 
 Install and Build
 -----------------
@@ -161,7 +161,7 @@ Configure
 
 Next configure and install databases and ETL-options. First make your own host-dependent
 configuration file as a copy
-from `example.args <https://github.com/Geonovum/smartemission/etl/options/example.args>`_: ::
+from `example.args <https://github.com/smartemission/smartemission/etl/options/example.args>`_: ::
 
     # Go to config options dir
     $ cd /opt/geonovum/smartem/git/etl/options
@@ -203,7 +203,7 @@ Install System Service
 ----------------------
 
 The entire platform (all Docker Images and `cron jobs <../../platform/cronfile.txt>`_) can be started/stopped with single
-system service command `smartem <https://github.com/Geonovum/smartemission/platform/smartem.initd.sh>`_ : ::
+system service command `smartem <https://github.com/smartemission/smartemission/platform/smartem.initd.sh>`_ : ::
 
     # Installs Linux system service "smartem" in /etc/init.d
     ./install.sh
@@ -276,7 +276,7 @@ postgis - PostGIS Database
 Uses PostGIS Docker image from Kartoza (Tim Sutton, QGIS lead),
 see https://hub.docker.com/r/kartoza/postgis/ and https://github.com/kartoza/docker-postgis .
 
-This shorthand script `run.sh <https://github.com/Geonovum/smartemission/services/postgis/run.sh>`_ will (re)run the ``postgis`` container.
+This shorthand script `run.sh <https://github.com/smartemission/smartemission/services/postgis/run.sh>`_ will (re)run the ``postgis`` container.
 
 .. literalinclude:: ../../services/postgis/run.sh
     :language: bash
@@ -378,10 +378,10 @@ This Dockerfile is very versatile, as it allows to tune Tomcat parameters
 and add GeoServer plugins.
 
 Some local modifications were required, thus a customized Docker image ``geonovum/geoserver``
-has been developed. See https://github.com/Geonovum/smartemission/tree/master/docker/geoserver.
+has been developed. See https://github.com/smartemission/smartemission/tree/master/docker/geoserver.
 
 GeoServer can then be run with the bash-script:
-https://github.com/Geonovum/smartemission/blob/master/services/geoserver/run.sh
+https://github.com/smartemission/smartemission/blob/master/services/geoserver/run.sh
 
 This script maps the local directory ``/var/smartem/data/geoserver`` as the GeoServer data-dir, thus
 keeping it outside the Docker container. Also the mapping is provided to the PostGIS Docker container
@@ -394,7 +394,7 @@ sos - 52North SOS
 
 Similar to GeoServer: Tomcat with .war file and keeping config outside Docker container
 and mapping DB to ``postgis`` container.
-See https://github.com/Geonovum/smartemission/tree/master/docker/sos52n.
+See https://github.com/smartemission/smartemission/tree/master/docker/sos52n.
 
 This service configures and runs
 an `OGC SOS <http://www.opengeospatial.org/standards/sos>`_ server using
@@ -419,7 +419,7 @@ This runs the Geodan GOST SensorThings API server.
 See the README there. Be sure to first create the PostGIS DB schema for GOST.
 
 See the bash-script how to run (no Docker-compose used!):
-https://github.com/Geonovum/smartemission/blob/master/services/gost/run.sh .
+https://github.com/smartemission/smartemission/blob/master/services/gost/run.sh .
 
 influxdb - InfluxDB
 -------------------
@@ -433,7 +433,7 @@ This runs the InfluxDB service as a Docker container. See https://www.influxdata
 
 The Docker image comes from https://hub.docker.com/_/influxdb/
 
-See https://github.com/Geonovum/smartemission/tree/master/services/influxdb.
+See https://github.com/smartemission/smartemission/tree/master/services/influxdb.
 
 To be supplied further.
 
@@ -447,7 +447,7 @@ Chronograf is a visual admin tool for a.o. InfluxDB. See https://www.influxdata.
 
 The Docker image comes from https://hub.docker.com/_/chronograf/
 
-See https://github.com/Geonovum/smartemission/tree/master/services/chronograf.
+See https://github.com/smartemission/smartemission/tree/master/services/chronograf.
 
 Only accessible via SE Admin web UI. To be supplied further.
 
@@ -464,7 +464,7 @@ From http://grafana.org
 Watch the demo and be amazed: http://play.grafana.org
 Documentation: http://docs.grafana.org
 
-See https://github.com/Geonovum/smartemission/tree/master/services/grafana.
+See https://github.com/smartemission/smartemission/tree/master/services/grafana.
 
 To be supplied further.
 
@@ -484,7 +484,7 @@ instance. A complete monitoring stack is deployed via `docker-compose` based on 
 Documentation: https://prometheus.io/docs/ . Howto:
 https://medium.com/@soumyadipde/monitoring-in-docker-stacks-its-that-easy-with-prometheus-5d71c1042443
 
-See https://github.com/Geonovum/smartemission/tree/master/services/monitoring.
+See https://github.com/smartemission/smartemission/tree/master/services/monitoring.
 
 The compose file is as follows:
 
@@ -550,7 +550,7 @@ Once that is resolved we can use official Docker Image. The Dockerfile :
 .. literalinclude:: ../../docker/cadvisor/Dockerfile
     :language: guess
 
-NB cAdvisor via Docker on Ubuntu 14.04 has a `serious issue (like Node_exporter) <https://github.com/Geonovum/smartemission/issues/73>`_
+NB cAdvisor via Docker on Ubuntu 14.04 has a `serious issue (like Node_exporter) <https://github.com/smartemission/smartemission/issues/73>`_
 and `this issue <https://github.com/google/cadvisor/issues/771>`_,
 so needs to be installed on host.
 
@@ -673,7 +673,7 @@ Add node config in `prometheus.yml`: ::
 In Grafana import Dashboard `1860`: https://grafana.com/dashboards/1860 to view Node Exporter stats.
 
 NB Node Exporter via Docker is NOT used to gather Linux/Ubuntu metrics from the local host as this
-gave too many locking issues: https://github.com/Geonovum/smartemission/issues/73
+gave too many locking issues: https://github.com/smartemission/smartemission/issues/73
 
 AlertManager
 ~~~~~~~~~~~~

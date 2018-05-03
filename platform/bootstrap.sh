@@ -71,6 +71,6 @@ mkdir -p /opt/geonovum/smartem
 
 # chown -R ${USER}:${USER} /opt/geonovum
 
-git clone https://github.com/Geonovum/smartemission.git /opt/geonovum/smartem/git
+git clone https://github.com/smartemission/smartemission.git /opt/geonovum/smartem/git
 
 echo "READY: now run ./build.sh and ./install.sh to build and run SE Data Platform"

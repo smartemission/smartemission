@@ -7,7 +7,7 @@ Dissemination
 This chapter collects various presentations and documents related to
 dissemination events like workshops and presentations.
 All "raw" documents can be found in the project GitHub repository
-at https://github.com/Geonovum/smartemission/tree/master/docs/platform/_static/dissemination.
+at https://github.com/smartemission/smartemission/tree/master/docs/platform/_static/dissemination.
 
 Workshop 17 dec 2015
 ====================

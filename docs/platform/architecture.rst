@@ -173,9 +173,9 @@ The list of Docker Containers, each with their related Docker Image:
 * ``mosquitto``: container running Mosquitto MQTT - image: ``toke/mosquitto``
 * ``nodered``: container running NodeRed Dashboard - image ``nodered/node-red-docker``
 
-See https://github.com/Geonovum/smartemission/blob/master/docker for the generic images
-and https://github.com/Geonovum/smartemission/blob/master/etl
-and https://github.com/Geonovum/smartemission/blob/master/services
+See https://github.com/smartemission/smartemission/blob/master/docker for the generic images
+and https://github.com/smartemission/smartemission/blob/master/etl
+and https://github.com/smartemission/smartemission/blob/master/services
 for their use/deployment in Docker Containers.
 
 Test and Production

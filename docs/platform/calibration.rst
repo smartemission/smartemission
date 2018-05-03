@@ -304,7 +304,7 @@ Implementation
 The implementation of the above processes is realized in Python. Like other ETL
 within the Smart Emission Platform, the implementation is
 completely done using the `Stetl ETL Framework <http://stetl.org>`_.
-The complete implementation `can be found in GitHub <https://github.com/Geonovum/smartemission/tree/master/etl>`_.
+The complete implementation `can be found in GitHub <https://github.com/smartemission/smartemission/tree/master/etl>`_.
 
 Four Stetl ETL processes realize the three phases of ANN Calibration:
 

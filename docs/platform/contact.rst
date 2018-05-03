@@ -7,7 +7,7 @@ The website `www.smartemission.nl <http://www.smartemission.nl>`_ is the main en
 
 The SE Data Platform has its own domain: `data.smartemission.nl <http://data.smartemission.nl>`_.
 
-All development is done via GitHub: see https://github.com/Geonovum/smartemission.
+All development is done via GitHub: see https://github.com/smartemission/smartemission.
 
 Developers for the SE Data Platform are `Just van den Broecke <http://justobjects.nl>`_ (lead, document editor), Pieter Marsman (calibration), Thijs Brentjens
 
