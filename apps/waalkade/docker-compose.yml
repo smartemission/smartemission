@@ -2,22 +2,6 @@ version: "3"
 
 services:
 
-  # This exists solely to catch requests that lack the trailing / and
-  # kick them back around with it appended.  I'm just reusing the
-  # whoami cuz it's small and innocuous.
-  # See https://github.com/containous/traefik/issues/563#issuecomment-382960068
-#  scratch:
-#    container_name: scratch
-#    image: emilevauge/whoami
-#    labels:
-#      - "traefik.enable=true"
-#      - "traefik.frontend.rule=PathPrefix:/{waalkade$$}"
-#      - "traefik.frontend.redirect.regex=([^/]*)$$"
-#      - "traefik.frontend.redirect.replacement=$$1/"
-#      - "traefik.docker.network=se_back"
-#    networks:
-#      - se_back
-
   waalkade:
 
     image: smartemission/se-waalkade:1.0.0
