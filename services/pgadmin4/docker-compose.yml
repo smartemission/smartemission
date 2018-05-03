@@ -1,0 +1,35 @@
+version: '3.1'
+
+services:
+  pgadmin4:
+
+    image: dpage/pgadmin4:latest
+
+    container_name: pgadmin4
+
+    environment:
+      # See https://github.com/dockage/phppgadmin
+      # Or set as env vars
+      - PGADMIN_DEFAULT_EMAIL=docker@docker.com
+      - PGADMIN_DEFAULT_PASSWORD=docker
+
+    labels:
+      - "traefik.backend=pgadmin4"
+      - "traefik.enable=true"
+      - "traefik.frontend.priority=600"
+      - "traefik.frontend.rule=Method:GET"
+      - "traefik.frontend.rule=PathPrefixStrip:/pgadmin4"
+      - "traefik.frontend.headers.customRequestHeaders=X-Script-Name:/pgadmin4"
+
+      # - "traefik.frontend.auth.basic=sadmin:$$apr1$$gVo/HcPx$$2AudzGfyX7Xxg7aD/b1zf."
+      - "traefik.docker.network=se_back"
+
+#    expose:
+#     - "8080"
+
+    networks:
+      - se_back
+
+networks:
+  se_back:
+    external: true
