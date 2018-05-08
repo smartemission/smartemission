@@ -22,12 +22,13 @@ architecture from sensor to citizen as depicted in Figure 1a and 1b below.
 
 Figure 1a shows the main flow of data (red arrows) from sensors to viewers, in the following steps:
 
-* data is collected by sensors and sent to Data Management
-* Data Management (ETL) is respnsible for refining raw sensor data and making it available for Web Services
-* refined sensor data is made available via stnadardized OCG Web APIs like WMS (Time), WFS, SOS and SensorThings API
-* viewers like the ``SmartApp`` and ``Heron`` and other clients use these Web APIs to fetch refined sensor (meta)data
+* Data is collected by sensors and sent to Data Management
+* Data Management (ETL) is responsible for refining raw sensor data
+* This refined (validated, calibrated, aggregated) sensor data is made available via Web Services
+* Web Services include standardized OCG Web APIs like WMS (Time), WFS, SOS and the SensorThings API (STA)
+* Viewers like the ``SmartApp`` and ``Heron`` and other clients use these Web APIs to fetch sensor (meta)data
 
-Figure 1b expands on this architecture by showing additional components and dataflows:
+Figure 1b expands on this architecture showing additional components and dataflows:
 
 
 .. figure:: _static/arch/dataflow-apis.jpg
@@ -38,11 +39,12 @@ Figure 1b expands on this architecture by showing additional components and data
 In Figure 1b the following is shown:
 
 * Sensor stations (sensors) send (push) their raw data to **Data Collectors**
-* A Data Collector functions as a buffer, keeping all data history using efficient bulk storage (InfluxDB, MongoDB)
+* A Data Collector functions as a buffer, keeping all data history using efficient bulk storage (InfluxDB, MongoDB, SOS)
 * A Data Collector can be extern (blue) or internal (green) to the SE Data Platform
 * A Data Collector provides an Web API through which its data (history) can be **Harvested** (pulled)
 * The SE Data Platform continuously harvests all sensor data from Data Collectors (push/pull decoupling)
 * A set of ETL (Extract, Transform, Load) components refines/aggregates the raw sensor data, making it available via web service APIs
+* SOS LML harvesting is used for acquiring reference data for :ref:`calibration` only
 
 Some details for the Intemo Josene: The sensor installation is connected to a power supply and to
 the Internet. Internet connection is made by WIFI or telecommunication network (using a GSM chip).
