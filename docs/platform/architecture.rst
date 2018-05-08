@@ -13,41 +13,56 @@ Global Architecture
 ===================
 
 This section sketches "the big picture": how the Smart Emission Data Platform fits into an overall/global
-architecture from sensor to citizen.
+architecture from sensor to citizen as depicted in Figure 1a and 1b below.
 
-The Smart Emission (SE) global architecture starts with the collection of data from environmental
-sensors (see Figure 1). The Jose sensor installation is connected to a power supply and to
-the Internet. Internet connection is made by WIFI or telecommunication network (using a GSM chip).
-The data streams are sent encrypted to a data production platform hosted by company CityGIS.
-The encrypted data is decrypted by a dedicated "Jose Input Service" that also inserts the data
-streams into a MongoDB database using JSON. This MongoDB database is the source production database
-where all raw sensor data streams of the Jose Sensor installation are stored. A dedicated
-REST API – the Raw Sensor API - is developed by CityGIS and Geonovum for
-further distribution of the SE data to other platforms, like the SE Data Distribution platform
-hosted at the FIWARE Lab NL (**NB FIWARE has been skipped**) and the main subject of this chapter.
-
-.. figure:: _static/arch/praatplaat.jpg
+.. figure:: _static/arch/arch-big-picture.jpg
    :align: center
 
-   *Figure 1 - Smart Emission Global Data Architecture*
+   *Figure 1a - Smart Emission Architecture - The Big Picture*
 
-The global data infrastructure consists of:
+Figure 1a shows the main flow of data (red arrows) from sensors to viewers, in the following steps:
 
-* ETL-based pre- and post-processing algorithms;
-* data storage in Postgres/PostGIS;
-* several OGC based APIs.
-* several apps and viewers like the ``SmartApp`` and ``Heron``
+* data is collected by sensors and sent to Data Management
+* Data Management (ETL) is respnsible for refining raw sensor data and making it available for Web Services
+* refined sensor data is made available via stnadardized OCG Web APIs like WMS (Time), WFS, SOS and SensorThings API
+* viewers like the ``SmartApp`` and ``Heron`` and other clients use these Web APIs to fetch refined sensor (meta)data
+
+Figure 1b expands on this architecture by showing additional components and dataflows:
+
+
+.. figure:: _static/arch/dataflow-apis.jpg
+   :align: center
+
+   *Figure 1b - Smart Emission Architecture - Expanded with Dataflows*
+
+In Figure 1b the following is shown:
+
+* Sensor stations (sensors) send (push) their raw data to **Data Collectors**
+* A Data Collector functions as a buffer, keeping all data history using efficient bulk storage (InfluxDB, MongoDB)
+* A Data Collector can be extern (blue) or internal (green) to the SE Data Platform
+* A Data Collector provides an Web API through which its data (history) can be **Harvested** (pulled)
+* The SE Data Platform continuously harvests all sensor data from Data Collectors (push/pull decoupling)
+* A set of ETL (Extract, Transform, Load) components refines/aggregates the raw sensor data, making it available via web service APIs
+
+Some details for the Intemo Josene: The sensor installation is connected to a power supply and to
+the Internet. Internet connection is made by WIFI or telecommunication network (using a GSM chip).
+The data streams are sent encrypted to a Data Collector (see above).
+The encrypted data is decrypted by a dedicated "Jose Input Service" that also inserts the data
+streams into a MongoDB or InfluxDB database using JSON. This database is the source production database
+where all raw sensor data streams of the Jose Sensor installation are stored. A dedicated
+REST API – the Raw Sensor API nicknamed the **Whale API** - is developed by CityGIS and Geonovum for
+further distribution of the SE data to other platforms.
 
 In order to store the relevant SE data in the distribution database harvesting and pre-processing of the
-raw sensor data (from the CityGIS production platform) is performed. First, every N minutes a harvesting
-mechanism collects sensor-data from the production platform using the Raw Sensor API. The data encoded in
+raw sensor data (from the CityGIS and Intemo Data Collectors) is performed. First, every N minutes a **harvesting**
+mechanism collects sensor-data from the Data Collectors using the Raw Sensor API. The data encoded in
 JSON is then processed by a multi-step ETL-based pre-processing mechanism. In several steps the data streams
-are transformed to the Postgres database. For instance, pre-processing is done specifically for the raw data
+are transformed to the Postgres/PostGIS database. For instance, pre-processing is done specifically for the raw data
 from the air quality sensors. Based on a calibration activity in de SE project, the raw data from the air
 quality sensors is transformed to ‘better interpretable’ values. Post-processing is the activity to transform
 the pre-processed values into new types of data using statistics (aggregations), spatial interpolations, etc..
 
-The design of the Smart Emission Data Platform is further expanded below.
+The design of the Smart Emission Data Platform, mainly the ETL design, is further expanded below.
 
 Data Platform Architecture
 ==========================
@@ -109,6 +124,10 @@ Read more  on https://docs.docker.com.
 The details of Docker are not discussed here, there are ample sources on the web. One of the best,
 if not the best, introductory books on Docker is `The Docker Book <https://www.dockerbook.com>`_.
 
+The SE Platform can be completely deployed using either `Docker Compose <https://docs.docker.com/compose/>`_
+or using `Docker Kubernetes <https://kubernetes.io/>`_ (K8s, abbreviated).
+The platform hosted via PDOK is using K8s.
+
 Docker Strategy
 ---------------
 
@@ -121,10 +140,9 @@ Like in Object Oriented Design there are still various strategies and patterns t
 There is a myriad of choices how to define Docker Images, configure and run Containers etc.
 Within the SE Platform the following strategies are followed:
 
-* define only generic/reusable Docker Images, i.e. without SE-specific config/functions
+* define generic/reusable Docker Images,
 * let each Docker image perform a single (server) task: Apache2, GeoServer, PostGIS, 52NSOS etc.
-* keep all configuration, data, logfiles and dynamic data outside Docker container on the Docker host
-* at runtime provision the Docker Container with local mappings to data, ports and other Docker containers
+* all in all this forms a Microservices Architecture
 
 The Docker Containers as sketched in Figure 4 are deployed.
 
@@ -145,38 +163,22 @@ Docker Containers will be created/used for:
 * ``Chronograf``: container running Chronograf (InfluxDB Admin) from `InfluxData <https://www.influxdata.com>`_
 * ``Grafana``: container running Grafana Dashboard
 * ``MQTT``: container running Mosquitto MQTT
-* ``NodeRed``: container running NodeRed Dashboard
 
-The *Networking and Linking* capabilities of Docker will be applied to link Docker Containers,
+The *Docker Networking* capabilities of Docker will be applied to link Docker Containers,
 for example to link GeoServer  and the other application servers to PostGIS.
 Docker Networking may be even applied (VM-) location independent, thus when required
-Containers may be distributed over VM-instances. Another aspect in our Docker-approach
-is that all data, logging, configuration and custom code/(web)content is maintained
-*Local*, i.e. outside Docker Containers/images. This will make the Docker Containers
-more reusable and will provide better control, backup, and monitoring facilities.
+Containers may be distributed over VM-instances. Initially all data, logging, configuration and
+custom code/(web)content was maintained
+*Local*, i.e. on the host, outside Docker Containers/images. This will made the Docker Containers
+less reusable. Later, during PDOK migration, most Docker Images were made self-contained as much
+as possible.
+
 An *Administrative Docker Component* is also present. Code, content and configuration
-is maintained/synced in/with GitHub (see below).  Custom(ized) Docker Containers will
-be published to the Docker Hub, to facilitate immediate reuse.
+is maintained/synced in/with GitHub (see below). Docker Images are available publicly via Docker Hub.
 
+The list of Docker-based components is available in the :ref:`components` chapter.
 
-The list of Docker Containers, each with their related Docker Image:
-
-* ``web`` - web and webapps, proxy to backend - image: ``geonovum/apache2``
-* ``postgis`` - PostgreSQL w PostGIS - image: ``geonovum/postgis`` based on ``kartoza/postgis:9.4-2.1``
-* ``stetl`` - All ETL tasks - image: ``geonovum/stetl``
-* ``geoserver`` - GeoServer web app - image: ``geonovum/geoserver`` based on ``kartoza/geoserver``
-* ``sos52n`` - 52North SOS web app -  - image: ``geonovum/sos52n``
-* ``influxdb`` - InfluxDB Timeseries DB - image: ``influxdb:1.1.1`` (from `DockerHub <https://hub.docker.com/_/influxdb/>`_)
-* ``chronograf`` - InfluxDB Timeseries DB admin - image: ``chronograf:1.4`` (from `DockerHub <https://hub.docker.com/_/chronograf/>`_)
-* ``grafana`` - InfluxDB Timeseries DB - image: ``grafana/grafana:4.1.1`` (from http://docs.grafana.org/installation/docker/)
-* ``gost`` - GOST from Geodan - image: https://hub.docker.com/r/geodan/gost/
-* ``mosquitto``: container running Mosquitto MQTT - image: ``toke/mosquitto``
-* ``nodered``: container running NodeRed Dashboard - image ``nodered/node-red-docker``
-
-See https://github.com/smartemission/smartemission/blob/master/docker for the generic images
-and https://github.com/smartemission/smartemission/blob/master/etl
-and https://github.com/smartemission/smartemission/blob/master/services
-for their use/deployment in Docker Containers.
+See https://github.com/smartemission for the generic Docker images.
 
 Test and Production
 -------------------

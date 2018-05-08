@@ -11,7 +11,7 @@ This is a chapter from the full Smart Emission platform documentation found at
 
 This chapter focuses on possible future evolution scenarios for the Smart Emission platform.
 
-See the :ref:`architecture`, :ref:`data` and :ref:`apis` chapters for the overall design and data
+See the :ref:`architecture`, :ref:`data`, :ref:`components` and :ref:`apis` chapters for the overall design and data
 processing, APIs and dataflow of the SE Platform.
 
 Introduction
