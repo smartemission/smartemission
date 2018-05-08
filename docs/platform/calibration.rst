@@ -59,14 +59,22 @@ automated and continuous:
 * RIVM data is harvested from the public RIVM LML SOS via the ETL `Harvester_rivm`
 * Jose data is harvested from the Whale Server(s) via the ETL `Harvester` and then further extracted via the ETL `Extractor`
 
+The overal datastream is depicted in Figure 1 below.
+
+.. figure:: _static/calibration/datastream-calibration.jpg
+   :align: center
+
+   *Figure 1 - Overall setup ANN calibration*
+
+
 The harvested RIVM SOS data provides aggregated hour-records. Data from the Jose sensors have
-irregularities due to lost wifi connection or power issues. The figure
+irregularities due to lost wifi connection or power issues. Figure 2
 below shows the periods of valid gas measurements taken by Jose sensors.
 
 .. figure:: _static/calibration/jose_measurements.png
    :align: center
 
-   *Figure 1 - Valid gas measurements taken by Jose sensors*
+   *Figure 2 - Valid gas measurements taken by Jose sensors*
 
 .. alternatives
 
@@ -114,7 +122,7 @@ variable.
 .. figure:: _static/calibration/neural_network.png
    :align: center
 
-   *Figure 2 - The structure of a Feed-forward Neural Network can be
+   *Figure 3 - The structure of a Feed-forward Neural Network can be
    visualized as a graph*
 
 .. alternatives
@@ -281,7 +289,7 @@ Results
 Calibrated values are also stored in InfluxDB and can be `viewed using Grafana <http://data.smartemission.nl/grafana/>`_.
 Login with name `user` and password `user`.
 
-See an example in Figure 4 and 5 below. Especially in Figure 4, one can see that calibrated values
+See an example in Figure 5 and 6 below. Especially in Figure 5, one can see that calibrated values
 follow the RIVM reference values quite nicely. More research is needed to see
 how the ANN is statistically behaves.
 
@@ -289,13 +297,13 @@ how the ANN is statistically behaves.
 .. figure:: _static/calibration/grafana2.jpg
    :align: center
 
-   *Figure 4 - Calibrated and Reference values in Grafana*
+   *Figure 5 - Calibrated and Reference values in Grafana*
 
 
 .. figure:: _static/calibration/grafana1.jpg
    :align: center
 
-   *Figure 5 - Calibrated and Reference values in Grafana*
+   *Figure 6 - Calibrated and Reference values in Grafana*
 
 
 Implementation
@@ -304,7 +312,7 @@ Implementation
 The implementation of the above processes is realized in Python. Like other ETL
 within the Smart Emission Platform, the implementation is
 completely done using the `Stetl ETL Framework <http://stetl.org>`_.
-The complete implementation `can be found in GitHub <https://github.com/smartemission/smartemission/tree/master/etl>`_.
+The complete implementation `can be found in GitHub <https://github.com/smartemission/docker-se-stetl>`_.
 
 Four Stetl ETL processes realize the three phases of ANN Calibration:
 

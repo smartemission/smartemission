@@ -21,7 +21,7 @@ data into an ``InfluxDB`` time-series DB as input for the Artificial Neural Netw
 process, called the ``Calibrator``.
 
 Implementation for all ETL can be found here:
-https://github.com/smartemission/smartemission/blob/master/etl
+https://github.com/smartemission/docker-se-stetl.
 
 General
 =======
@@ -45,13 +45,13 @@ Stetl-base classes. This applies also to the SE-project.
 For each ETL-step a specific Stetl config file is developed with some SE-specific Components.
 
 SE Stetl processes are deployed and run using
-a generic `Stetl Docker Image <https://github.com/smartemission/smartemission/blob/master/docker/stetl>`_ derived
+an `SE Stetl Docker Image <https://github.com/smartemission/docker-se-stetl>`_ derived
 from the core Stetl Docker image.
 
 ETL Scheduling
 --------------
 
-ETL processes run using the Unix `cron` scheduler. See the
+ETL processes run using the Unix `cron` scheduler or via K8s Job scheduler. See the
 `SE Platform cronfile <https://github.com/smartemission/smartemission/blob/master/platform/cronfile.txt>`_ for
 the schedules.
 
@@ -102,7 +102,7 @@ data in the `smartem_raw.timeseries` database table (see below).
 Harvesters, like all other ETL are developed using the `Stetl ETL framework <http://stetl.org>`_.
 As Stetl already supplies a Postgres/PostGIS output, specific
 readers like the the Raw Sensor API needed to be developed:
-the `RawSensorTimeseriesInput <https://github.com/smartemission/smartemission/blob/master/etl/smartem/harvester/rawsensortimeseriesinput.py>`_.
+the `RawSensorTimeseriesInput <https://github.com/smartemission/docker-se-stetl/blob/master/smartem/harvester/rawsensortimeseriesinput.py>`_.
 
 Database
 --------
@@ -136,10 +136,10 @@ In this fashion we always will have access to the original raw data.
 
 Below are links to the various implementation files related to the ``Whale Harvester``.
 
-* Shell script: https://github.com/smartemission/smartemission/blob/master/etl/harvester_whale.sh
-* Stetl config: https://github.com/smartemission/smartemission/blob/master/etl/harvester_whale.cfg
-* Stetl input: https://github.com/smartemission/smartemission/blob/master/etl/smartem/harvester/rawsensortimeseriesinput.py
+* Stetl config: https://github.com/smartemission/docker-se-stetl/blob/master/config/harvester_whale.cfg
+* Stetl input: https://github.com/smartemission/docker-se-stetl/blob/master/smartem/harvester/rawsensortimeseriesinput.py
 * Database: https://github.com/smartemission/smartemission/blob/master/database/schema/db-schema-raw.sql
+* Shell script: https://github.com/smartemission/smartemission/blob/master/etl/harvester_whale.sh
 
 InfluxDB Harvester
 ------------------
@@ -152,10 +152,10 @@ may accomodate both local and remote InfluxDB Measurements.
 
 Below are links to the various implementation files related to the ``InfluxDB Harvester``.
 
-* Shell script: https://github.com/smartemission/smartemission/blob/master/etl/harvester_influx.sh
-* Stetl config: https://github.com/smartemission/smartemission/blob/master/etl/harvester_influx.cfg
-* Stetl input: https://github.com/smartemission/smartemission/blob/master/etl/smartem/harvester/harvestinfluxdb.py
+* Stetl config: https://github.com/smartemission/docker-se-stetl/blob/master/config/harvester_influx.cfg
+* Stetl input: https://github.com/smartemission/docker-se-stetl/blob/master/smartem/harvester/harvestinfluxdb.py
 * Database: https://github.com/smartemission/smartemission/blob/master/database/schema/db-schema-raw.sql
+* Shell script: https://github.com/smartemission/smartemission/blob/master/etl/harvester_influx.sh
 
 Last Values
 -----------
@@ -207,7 +207,7 @@ Implementation file for the ``Last Values ETL``:
 
 * https://github.com/smartemission/smartemission/blob/master/etl/last.sh
 * https://github.com/smartemission/smartemission/blob/master/etl/last.cfg
-* https://github.com/smartemission/smartemission/blob/master/etl/smartem/harvester/rawsensorlastinput.py
+* https://github.com/smartemission/docker-se-stetl/blob/master/smartem/harvester/rawsensorlastinput.py
 * database: https://github.com/smartemission/smartemission/blob/master/database/schema/db-schema-last.sql
 
 NB theoretically last values could be obtained by setting VIEWs on the Refined
@@ -434,11 +434,11 @@ Below each of these sensor values are elaborated.
 All conversions are implemented in using these Python scripts, called within the
 Stetl Refiner ETL process:
 
-* `josenedevice.py <https://github.com/smartemission/smartemission/blob/master/etl/smartem/devices/josene.py>`_ Device implementation
-* `josenedefs.py <https://github.com/smartemission/smartemission/blob/master/etl/smartem/devices/josenedefs.py>`_ definitions of sensors
-* `josenefuncs.py <https://github.com/smartemission/smartemission/blob/master/etl/smartem/devices/josenefuncs.py>`_ mostly converter routines
+* `josenedevice.py <https://github.com/smartemission/docker-se-stetl/blob/master/smartem/devices/josene.py>`_ Device implementation
+* `josenedefs.py <https://github.com/smartemission/docker-se-stetl/blob/master/smartem/devices/josenedefs.py>`_ definitions of sensors
+* `josenefuncs.py <https://github.com/smartemission/docker-se-stetl/blob/master/smartem/devices/josenefuncs.py>`_ mostly converter routines
 
-By using a generic config file `josenedefs.py <https://github.com/smartemission/smartemission/blob/master/etl/smartem/devices/josenedefs.py>`_
+By using a generic config file `josenedefs.py <https://github.com/smartemission/docker-se-stetl/blob/master/smartem/devices/josenedefs.py>`_
 all validation and calibration is specified generically. Below some sample entries. ::
 
 	SENSOR_DEFS = {
@@ -587,7 +587,7 @@ Each entry has:
 
 * `label`: name for display
 * `unit`: the unit of measurement (uom)
-* `input`: optionally one or more input Entries required for conversion (`josenefuncs.py <https://github.com/smartemission/smartemission/blob/master/etl/smartem/devices/josenefuncs.py>`_). May cascade.
+* `input`: optionally one or more input Entries required for conversion (`josenefuncs.py <https://github.com/smartemission/docker-se-stetl/blob/master/smartem/devices/josenefuncs.py>`_). May cascade.
 * `converter`: pointer to Python conversion function
 * `type`: value type
 * `min/max`: valid range (for validation)
@@ -595,7 +595,7 @@ Each entry has:
 Entries starting with ``s_`` denote Jose raw sensor indicators. Others like ``no2`` are
 "virtual" (SE) indicators, i.e. derived eventually from ``s_`` indicators.
 
-In the `Refiner ETL-config <https://github.com/smartemission/smartemission/blob/master/etl/refiner.cfg>`_ the
+In the `Refiner ETL-config <https://github.com/smartemission/docker-se-stetl/blob/master/config/refiner.cfg>`_ the
 desired indicators are specified, for example:
 ``temperature,humidity,pressure,noiseavg,noiselevelavg,co2,o3,co,no2,o3raw,coraw,no2raw``.
 In this fashion the Refiner remains generic: driven by required indicators and their Entries.
@@ -612,7 +612,7 @@ appeared to be the most promising.
 
 Gas Calibration using ANN for SE is described more extensively in :ref:`calibration`.
 
-Source code for ANN Gas Calibration learning process: https://github.com/smartemission/smartemission/tree/master/etl/smartem/calibrator .
+Source code for ANN Gas Calibration learning process: https://github.com/smartemission/docker-se-stetl/tree/master/smartem/calibrator .
 
 GPS Data (Josene)
 -----------------
@@ -1057,10 +1057,10 @@ Implementation
 Below are links to the sources of the SOS Publisher implementation.
 
 * ETL run script: https://github.com/smartemission/smartemission/blob/master/etl/sospublisher.sh
-* Stetl conf: https://github.com/smartemission/smartemission/blob/master/etl/sospublisher.cfg
-* Refined DB Input: https://github.com/smartemission/smartemission/blob/master/etl/smartem/refineddbinput.py
-* SOS-T publication: https://github.com/smartemission/smartemission/blob/master/etl/smartem/publisher/sosoutput.py
-* SOS-T templates: https://github.com/smartemission/smartemission/blob/master/etl/smartem/publisher/sostemplates
+* Stetl conf: https://github.com/smartemission/docker-se-stetl/blob/master/config/sospublisher.cfg
+* Refined DB Input: https://github.com/smartemission/docker-se-stetl/blob/master/smartem/refineddbinput.py
+* SOS-T publication: https://github.com/smartemission/docker-se-stetl/blob/master/smartem/publisher/sosoutput.py
+* SOS-T templates: https://github.com/smartemission/docker-se-stetl/blob/master/smartem/publisher/sostemplates
 * Input database schema: https://github.com/smartemission/smartemission/blob/master/database/schema/db-schema-refined.sql (source input schema)
 * Re-init SOS DB schema (.sh): https://github.com/smartemission/smartemission/blob/master/services/sos52n/config/sos-clear.py
 * Restart SOS Publisher (.sh): https://github.com/smartemission/smartemission/blob/master/database/util/sos-publisher-init.sh  (inits last gis published to -1)
@@ -1068,7 +1068,7 @@ Below are links to the sources of the SOS Publisher implementation.
 Sensor Things API (STA)
 -----------------------
 
-The `STAOutput <https://github.com/smartemission/smartemission/blob/master/etl/smartem/publisher/staoutput.py>`_ class
+The `STAOutput <https://github.com/smartemission/docker-se-stetl/blob/master/smartem/publisher/staoutput.py>`_ class
 is used to publish to any SensorThings API server using the standardized
 `OGC SensorThings REST API <http://docs.opengeospatial.org/is/15-078r6/15-078r6.html>`_.
 The implementation is reasonably straightforward, with the following specifics:
@@ -1081,7 +1081,7 @@ via ``POST`` requests to the STA REST API and cached locally in the ETL process 
 of the ``ETL Run``.
 
 ``STA Templates``: all STA requests are built using
-`STA template files <https://github.com/smartemission/smartemission/blob/master/etl/smartem/publisher/statemplates>`_.
+`STA template files <https://github.com/smartemission/docker-se-stetl/blob/master/smartem/publisher/statemplates>`_.
 In these files a complete request body (POST or PATCH)
 is contained, with specific parameters, like ``station_id`` symbolically defined. At publication
 time these are substituted.
@@ -1147,10 +1147,10 @@ Implementation
 Below are links to the sources of the STA Publisher implementation.
 
 * ETL run script: https://github.com/smartemission/smartemission/blob/master/etl/stapublisher.sh
-* Stetl conf: https://github.com/smartemission/smartemission/blob/master/etl/stapublisher.cfg
-* Refined DB Input: https://github.com/smartemission/smartemission/blob/master/etl/smartem/refineddbinput.py
-* STA publication: https://github.com/smartemission/smartemission/blob/master/etl/smartem/publisher/staoutput.py
-* STA templates: https://github.com/smartemission/smartemission/blob/master/etl/smartem/publisher/statemplates
+* Stetl conf: https://github.com/smartemission/docker-se-stetl/blob/master/config/stapublisher.cfg
+* Refined DB Input: https://github.com/smartemission/docker-se-stetl/blob/master/smartem/refineddbinput.py
+* STA publication: https://github.com/smartemission/docker-se-stetl/blob/master/smartem/publisher/staoutput.py
+* STA templates: https://github.com/smartemission/docker-se-stetl/blob/master/smartem/publisher/statemplates
 * Input database schema: https://github.com/smartemission/smartemission/blob/master/database/schema/db-schema-refined.sql (source schema)
 * Restart STA publisher (.sh): https://github.com/smartemission/smartemission/blob/master/database/util/sta-publisher-init.sh  (inits last gis published to -1)
 * Clear/init STA server (.sh): https://github.com/smartemission/smartemission/blob/master/database/util/staclear.sh  (deletes all Entities!)

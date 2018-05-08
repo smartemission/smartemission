@@ -63,7 +63,7 @@ GeoServer         Services       WMS (Time), WFS server             GH DH    1  
 Gost              Services       SensorThings API (STA) server      GH DH    2       done
 SOS52N            Services       52North SOS server                 GH DH    3       done
 Mosquitto         Services       MQTT server coupled with Gost      GH DH    2       done
-PhpPgAdmin        Apps,Admin     Manager PostgreSQL                 GH DH    2       inprog
+PhpPgAdmin        Apps,Admin     Manager PostgreSQL                 GH DH    2       done
 HarvesterLast     ETL            Harvester last sensor data         GH DH    1       done
 HarvesterWhale    ETL            Harvester historic sensor data     GH DH    1       done
 HarvesterInflux   ETL            Harvester InfluxDB sensor data     GH DH    3       inprog
