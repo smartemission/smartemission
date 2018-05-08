@@ -6,21 +6,48 @@ Intro
 
 This is the main (technical) documentation for the Smart Emission Data Platform.
 It can always be found at `smartplatform.readthedocs.org <http://smartplatform.readthedocs.org/>`_.
+A somewhat lighter introduction can be found in `this series of blogs <https://justobjects.nl/category/smartemission/>`_.
 
-The home page for the Smart Emission project is http://www.smartemission.nl
+The home page for the Smart Emission project and data platform is http://data.smartemission.nl
 
-The home page for the Smart Emission Data Platform project is http://data.smartemission.nl
+The home page for the Smart Emission Nijmegen project is http://smartemission.ruhosting.nl
 
 The project GitHub repository is at https://github.com/smartemission/smartemission.
 
-Background reading also via the SOSPilot project via http://sensors.geonovum.nl.
-
 This is document version |release| generated on |today|.
 
-Background
-==========
+History
+=======
 
-Read all about the Smart Emission project via: `www.smartemission.nl <http://www.smartemission.nl>`_.
+The Smart Emission Platform was initiated and largely developed within
+the `Smart Emission Nijmegen project <http://smartemission.ruhosting.nl>`_ (see also below).
+
+The Geonovum/RIVM `SOSPilot Project <http://sensors.geonovum.nl>`_, where RIVM LML
+(Dutch national Air Quality Data) data was harvested and serviced via the OGC Sensor Observation Service (SOS), was
+a precursor for the architecture and approach to ETL with sensor data.
+
+In and after 2017 several other projects, web-clients and sensor-types started utilizing the platform hosted at
+`data.smartemission.nl <http://data.smartemission.nl>`_. These include:
+
+* the `Smart City Living Lab <https://slimstestad.nl/programma-2017-2018/>`_: around 7 major cities within NL deployed Intemo sensor stations
+* `AirSensEUR <http://www.airsenseur.org/>`_ - a EU JRC initiative for an Open Sensor HW/SW platform
+
+This put more strain on the platform and required a more structural development and maintenance approach (than project-based funding).
+
+In 2018, the SE Platform was migrated to the Dutch National GDI infrastructure `PDOK <https://pdok.nl>`_ maintained
+by the `Dutch Kadaster <https://www.kadaster.nl/>`_.
+This gives a tremendous opportunity for long-term evolution and stability of the platform beyond the initial
+and project-based fundings. This migration targeted hosting within a `Docker Kubernetes <https://kubernetes.io/>`_ environment.
+All code was migrated to a dedicated `Smart Emission GitHub Organization <https://github.com/smartemission>`_ and
+hosting of all Docker Images on an `SE DockerHub Organization <https://hub.docker.com/r/smartemission/>`_.
+
+Smart Emission Nijmegen
+=======================
+
+The Smart Emission Platform was largely developed during the Smart Emission Nijmegen project
+started in 2015 and still continuing.
+
+Read all about the Smart Emission Nijmegen project via: `smartemission.ruhosting.nl/ <http://smartemission.ruhosting.nl>`_.
 
 An introductory presentation:
 http://www.ru.nl/publish/pages/774337/smartemission_ru_24juni_lc_v5_smallsize.pdf
@@ -44,17 +71,17 @@ the project is described extensively.
 *distribution of air pollution in the city, balanced against other spatial qualities. ...."*
 
 The data from the Smart Emission sensors is converted and published as standard web services: OGC WMS(-Time), WFS, SOS
-and SensorThings and FIWARE APIs. FIWARE is used as the supporting computing and component platform. Some web clients
+and SensorThings APIs. Some web clients
 (SmartApp, Heron) are developed to visualize the data. All this is part of the Smart Emission Data Platform whose technicalities
 are the subject of this document.
 
-Partners
-========
+SE Nijmegen Project Partners
+----------------------------
 
 .. figure:: _static/se-partners.jpg
    :align: center
 
-   *Smart Emission Project Partners*
+   *Smart Emission Nijmegen Project Partners*
 
 More on: http://smartemission.ruhosting.nl/over-ons/
 

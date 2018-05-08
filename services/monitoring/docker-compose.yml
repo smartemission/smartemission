@@ -97,7 +97,7 @@ services:
 
   cadvisor:
      # image: google/cadvisor
-     image: geonovum/cadvisor:v0.28.3
+     image: smartemission/se-cadvisor:v0.28.3
      volumes:
        - /:/rootfs:ro
        - /var/run:/var/run:rw

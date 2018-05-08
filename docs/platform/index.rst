@@ -16,6 +16,7 @@ Contents:
    calibration.rst
    services.rst
    api.rst
+   code.rst
    installation.rst
    administration.rst
    dissemination.rst
