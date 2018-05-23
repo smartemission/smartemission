@@ -56,8 +56,8 @@ Heron             Apps           Viewer with history                GH DH    1  
 SmartApp          Apps           Viewer for last values             GH DH    1       done
 Waalkade          Apps           Viewer Nijmegen project            GH DH    1       done
 GostDashboard     Apps,Admin     Admin dashboard Gost               GH DH    3       onhold
-Grafana           Apps           View InfluxDB Data                 GH DH    3       inprog
-Chronograf        Apps,Admin     Admin dashboard InfluxDB           GH DH    3       avail
+Grafana           Apps           View InfluxDB Data                 GH DH    3       done
+Chronograf        Apps,Admin     Admin dashboard InfluxDB           GH DH    3       onhold
 SOSEmu            Services       REST API SOS subset                GH DH    1       done
 GeoServer         Services       WMS (Time), WFS server             GH DH    1       done
 Gost              Services       SensorThings API (STA) server      GH DH    2       done
@@ -67,13 +67,13 @@ PhpPgAdmin        Apps,Admin     Manager PostgreSQL                 GH DH    2  
 HarvesterLast     ETL            Harvester last sensor data         GH DH    1       done
 HarvesterWhale    ETL            Harvester historic sensor data     GH DH    1       done
 HarvesterInflux   ETL            Harvester InfluxDB sensor data     GH DH    3       inprog
-HarvesterRivm     ETL            Harvester RIVM ANN ref-data        GH DH    4       avail
+HarvesterRivm     ETL            Harvester RIVM ANN ref-data        GH DH    4       done
 Extractor         ETL            Extract SE refdata for ANN ref     GH DH    4       avail
 Calibrator        ETL            ANN Learning engine                GH DH    4       -
 Refiner           ETL            Transformation/Calibration         GH DH    1       done
 SOSPublisher      ETL            Publish refined data to SOS        GH DH    3       avail
 STAPublisher      ETL            Publish refined data to STA        GH DH    2       done
-InfluxDB          Datastore      Calibration refdata/collector      GH DH    3       -
+InfluxDB          Datastore      Calibration refdata/collector      GH DH    3       done
 PGPool            Datastore      PG Connection Pooling (only K8s)   GH DH    1       done
 Postgis           Datastore      Main database (not used in K8s)    GH DH    N.A.    N.A.
 Traefik           Services       Proxy server (not used in K8s)     GH DH    N.A.    N.A.
