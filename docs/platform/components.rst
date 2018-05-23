@@ -55,7 +55,7 @@ Admin             Apps,Admin     Admin access pages                 GH DH    2  
 Heron             Apps           Viewer with history                GH DH    1       done
 SmartApp          Apps           Viewer for last values             GH DH    1       done
 Waalkade          Apps           Viewer Nijmegen project            GH DH    1       done
-GostDashboard     Apps,Admin     Admin dashboard Gost               GH DH    3       inprog
+GostDashboard     Apps,Admin     Admin dashboard Gost               GH DH    3       onhold
 Grafana           Apps           View InfluxDB Data                 GH DH    3       inprog
 Chronograf        Apps,Admin     Admin dashboard InfluxDB           GH DH    3       avail
 SOSEmu            Services       REST API SOS subset                GH DH    1       done
