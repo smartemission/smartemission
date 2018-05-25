@@ -12,3 +12,5 @@ Documentation: http://docs.grafana.org
 
 ## Docker
 
+Uses https://github.com/smartemission/docker-se-grafana Docker image.
+
