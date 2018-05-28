@@ -9,7 +9,7 @@ services:
     container_name: grafana
 
     environment:
-      - GF_INFLUX_URL=http://influxdb:8086
+      - SE_INFLUX_URL=http://influxdb:8086
       - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/grafana
 
     env_file:

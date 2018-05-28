@@ -43,4 +43,4 @@ scrape_configs:
     # scheme defaults to 'http'.
 
     static_configs:
-         - targets: ['$CADVISOR_HOST:8080','$NODE_EXPORTER_HOST:9100']
+         - targets: ['$CADVISOR_HOST:8081','$NODE_EXPORTER_HOST:9100']

@@ -21,34 +21,10 @@ volumes:
 
 services:
 
-  grafana:
-    image: grafana/grafana:4.6.3
-    labels:
-      - "traefik.backend=grafanamon"
-      - "traefik.enable=true"
-      - "traefik.frontend.priority=600"
-      - "traefik.frontend.rule=Method:GET"
-      - "traefik.frontend.rule=PathPrefixStrip:/adm/grafanamon"
-      # - "traefik.frontend.auth.basic=sadmin:$$apr1$$gVo/HcPx$$2AudzGfyX7Xxg7aD/b1zf."
-      - "traefik.docker.network=se_back"
-
-    depends_on:
-      - prometheus
-    links:
-      - prometheus:prometheus
-#    ports:
-#      - 3000:3000
-    volumes:
-      - grafana_data:/var/lib/grafana
-    env_file:
-      - grafana/grafana.conf
-    networks:
-      # Visible in SE backend and frontend Docker network
-      - se_back
-
   prometheus:
     # image: prom/prometheus:v2.0.0
     image: prom/prometheus:latest
+    container_name: prometheus
     labels:
       - "traefik.backend=prometheus"
       - "traefik.enable=true"
@@ -87,6 +63,32 @@ services:
 #      placement:
 #        constraints:
 #          - node.hostname == moby
+
+  grafana:
+    image: grafana/grafana:4.6.3
+    container_name: grafanamon
+    labels:
+      - "traefik.backend=grafanamon"
+      - "traefik.enable=true"
+      - "traefik.frontend.priority=600"
+      - "traefik.frontend.rule=Method:GET"
+      - "traefik.frontend.rule=PathPrefixStrip:/adm/grafanamon"
+      # - "traefik.frontend.auth.basic=sadmin:$$apr1$$gVo/HcPx$$2AudzGfyX7Xxg7aD/b1zf."
+      - "traefik.docker.network=se_back"
+
+    depends_on:
+      - prometheus
+    links:
+      - prometheus:prometheus
+#    ports:
+#      - 3000:3000
+    volumes:
+      - grafana_data:/var/lib/grafana
+    env_file:
+      - grafana/grafana.conf
+    networks:
+      # Visible in SE backend and frontend Docker network
+      - se_back
 
   alertmanager:
     image: prom/alertmanager

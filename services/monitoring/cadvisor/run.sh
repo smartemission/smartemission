@@ -6,4 +6,4 @@ export GOPATH="/opt/cadvisor/src/github.com/google/cadvisor"
 export PATH="${GOPATH}:${GOROOT}/bin:${PATH}"
 
 cd ${GOPATH}
-./cadvisor -listen_ip ${PARENT_HOST} -port 8080
+./cadvisor -listen_ip ${PARENT_HOST} -port 8081

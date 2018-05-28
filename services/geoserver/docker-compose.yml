@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
   geoserver:
-    image: smartemission/se-geoserver:2.12.1-1
+    image: smartemission/se-geoserver:2.12.1-2
 
     container_name: geoserver
 

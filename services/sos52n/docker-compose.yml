@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
   sos52n:
-    image: smartemission/se-sos52n:4.3.7-4
+    image: smartemission/se-sos52n:4.3.7-3
 
     container_name: sos52n
 
