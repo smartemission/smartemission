@@ -1,7 +1,7 @@
 apiVersion: 1
 
 # Docker Monitoring: https://github.com/philicious/grafana-dashboards nr 193
-# Node Exporter Dashboard Full: https://grafana.com/dashboards/5174
+# Node Exporter Full: https://grafana.com/dashboards/5174
 providers:
 - name: 'Prometheus'
   orgId: 1

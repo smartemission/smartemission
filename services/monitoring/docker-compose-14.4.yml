@@ -23,7 +23,7 @@ services:
 
   prometheus:
     # image: prom/prometheus:v2.0.0
-    image: prom/prometheus:latest
+    image: prom/prometheus:2.2.1
     container_name: prometheus
     labels:
       - "traefik.backend=prometheus"
