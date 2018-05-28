@@ -1,17 +1,19 @@
 version: '3.1'
 
 services:
+
   grafana:
-    image: smartemission/se-grafana:5.1.3-1
-    # image: grafana/grafana:5.1.3
+
+    image: smartemission/se-grafana:5.1.3-2
 
     container_name: grafana
 
     environment:
+      - GF_INFLUX_URL=http://influxdb:8086
       - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/grafana
 
     env_file:
-      # for config vars (see Docker def)
+      # for other config vars (see Docker def README)
       - ../../etl/options/${HOSTNAME}.args
 
     labels:
@@ -22,7 +24,6 @@ services:
       - "traefik.docker.network=se_back"
 
     networks:
-      # Visible in SE backend and frontend Docker network
       - se_back
 
 networks:

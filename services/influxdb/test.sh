@@ -13,7 +13,7 @@ function query() {
   QUERY="$2"
   echo "db=$DB - query: ${QUERY}"
   # See https://docs.influxdata.com/influxdb/v1.4/guides/querying_data/
-  curl -G 'http://localhost/influxdb/query?pretty=true' \
+  curl -G 'http://localhost:8086/query?pretty=true' \
   -u ${influx_admin_user}:${influx_admin_password} \
      --data-urlencode "db=${DB}" --data-urlencode \
      "q=${QUERY}"
