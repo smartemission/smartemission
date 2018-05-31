@@ -4,7 +4,7 @@ services:
 
   heron:
 
-    image: smartemission/se-heron:1.0.3
+    image: smartemission/se-heron:1.0.4
 
     container_name: heron
 

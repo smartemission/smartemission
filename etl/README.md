@@ -11,13 +11,13 @@ All ETL is developed using [Stetl](http://stetl.org). Stetl is a Python framewor
 process. The essence of Stetl is that each ETL process is a chain of linked Input, Filters and Output Python classes
 specified in a Stetl Config File. 
 
-The `.sh` files each invoke a Stetl ETL process via Docker using a Stetl config (`.cfg`) file specific
-for that ETL process. Stetl is run via Docker. 
+The `.sh` files each invoke a Stetl ETL process via Docker.
 
 Additional Python files implement specific ETL modules not defined
 in the Stetl Framework and are available under the 
 Python [smartem](https://github.com/smartemission/docker-se-stetl/tree/master/smartem) package.
-The Stetl config files for each ETL process are defined [here](https://github.com/smartemission/docker-se-stetl/tree/master/config).
+The Stetl config files for each ETL process are 
+defined [here](https://github.com/smartemission/docker-se-stetl/tree/master/config).
 
 All ETL is now migrated to the new SE GitHub repo: https://github.com/smartemission/docker-se-stetl
 
