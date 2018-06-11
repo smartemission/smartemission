@@ -31,7 +31,8 @@
 #sudo docker run --name ${NAME} --network="se_back" ${PORT_MAP} ${VOL_MAP} -d -t ${IMAGE} -config /etc/influxdb/influxdb.conf
 
 # Need HOSTNAME within docker-compose for host-specific path to env file.
-#export HOSTNAME
+mkdir -p /var/smartem/data/influxdb-dc1
+mkdir -p /var/smartem/backup/influxdb-dc1
 
 docker-compose rm --force --stop
 docker-compose up -d

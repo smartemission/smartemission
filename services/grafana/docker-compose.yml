@@ -4,7 +4,7 @@ services:
 
   grafana:
 
-    image: smartemission/se-grafana:5.1.3-2
+    image: smartemission/se-grafana:5.1.3-3
 
     container_name: grafana
 
@@ -14,6 +14,7 @@ services:
 #      - GF_AUTH_ANONYMOUS_ENABLED_ORG_NAME=Main Org.
 #      - GF_AUTH_ANONYMOUS_ENABLED_ORG_ROLE=Viewer
       - SE_INFLUX_URL=http://influxdb:8086
+      - SE_INFLUX_DC1_URL=http://dc1.smartemission.nl:8086
 
     env_file:
       # for other config vars (see Docker def README)
