@@ -9,8 +9,11 @@ services:
     container_name: grafana
 
     environment:
-      - SE_INFLUX_URL=http://influxdb:8086
       - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/grafana
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+#      - GF_AUTH_ANONYMOUS_ENABLED_ORG_NAME=Main Org.
+#      - GF_AUTH_ANONYMOUS_ENABLED_ORG_ROLE=Viewer
+      - SE_INFLUX_URL=http://influxdb:8086
 
     env_file:
       # for other config vars (see Docker def README)
