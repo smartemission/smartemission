@@ -1,6 +1,7 @@
-# InfluxDB Server
+# InfluxDB Server - Smart Emission Internal
 
-This runs the InfluxDB service as a Docker container. See https://www.influxdata.com:
+This runs the InfluxDB service as a Docker container for the SE internal Calibration (source data and results). 
+See https://www.influxdata.com:
 
 > InfluxDB is an open source database written in Go specifically to handle time 
 > series data with high availability and high performance requirements. 
@@ -11,26 +12,14 @@ The Docker image comes from https://hub.docker.com/_/influxdb/
 
 ## Use in SE
 
-InfluxDB is used in the SE platform initially for storing time-series for kalibration ANN learning
-and to test the EU JRC AirSensEUR AQ Sensor: http://www.airsenseur.org and possibly other attached sensors.
-InfluxDB will in time become a central part of the SE platform. 
+InfluxDB was/is used in the SE platform for storing time-series for calibration ANN learning.
 
 ## Docker
 
 Docker is used to deploy/run InfluxDB. See the [run.sh script](run.sh).
 
-The Docker container will expose the InfluxDB ports (8086 and 8083). It makes the following
-Docker-internal directories available to your local machine: 
-
-- config: `/etc/influxdb/influxdb.conf` to [./config/influxdb.conf](config/influxdb.conf)
-- data: `/var/lib/influxdb` to `/var/smartem/data/influxdb` 
-- logs: `/var/log/influxdb` to `/var/smartem/log/influxdb` 
-
-You may edit the [./config/influxdb.conf](config/influxdb.conf) for your local machine.
-Enable authentication by setting the auth-enabled option to true in the ``[http]`` 
-section of the [configuration file](config/influxdb.conf).
-
-Database initialization: tbs.
+The Docker container will NOT expose the InfluxDB port (8086) externally.
+Database initialization: via env settings.
 
 Run `/usr/bin/influx` command as follows:
 
@@ -40,7 +29,7 @@ sudo docker run --rm --net=container:influxdb -it influxdb influx -host localhos
 
 ## Visualization
 
-InfluxDB is closely integrated with Grafana (http://grafana.org). See the [Grafana Service](../grafana) in SE platform.
+InfluxDB is closely integrated with Grafana (http://grafana.org). See the [Grafana Service](../grafana) in the SE platform.
 
 ## Authorization
 
@@ -51,7 +40,7 @@ We use two types of users: a global `admin` user and a per-DB user.
 We need admin user. All below via `influx` CLI.
 
 ```
-sudo docker exec -it influxdb  bash
+docker exec -it influxdb  bash
 influx -username <user> -password <pass>
 ```
 

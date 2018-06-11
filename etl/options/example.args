@@ -90,6 +90,7 @@ stapublisher_max_input_records=5000
 # InfluxDB: settings and Server credentials
 #
 influx_host=influxdb
+influx_dc1_host=dc1.smartemission.nl
 influx_port=8086
 influx_admin_user=youruser
 influx_admin_password=yourpw
