@@ -59,9 +59,11 @@ mkdir -p /opt/geonovum/smartem
 git clone https://github.com/smartemission/smartemission.git /opt/geonovum/smartem/git
 
 # Mount disk Azure
-https://docs.microsoft.com/en-us/azure/virtual-machines/linux/add-disk
+# https://docs.microsoft.com/en-us/azure/virtual-machines/linux/add-disk
 
-echo "READY: now run ./build.sh and ./install.sh to build and run SE Data Platform"
+./init-databases.sh
+
+echo "READY: now run  to build and run SE Data Platform"
 
 # OLD STUFF
 # Need 9.4 version of PG client, not in Ubuntu 14.4, so get from PG Repo
