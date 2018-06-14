@@ -11,17 +11,12 @@ pushd ../services/postgis
   ./run.sh
 popd
 
-pushd ../services/influxdb
-  ./run.sh
-popd
-
 pushd ../database
   ./db-init-meta.sh
   ./db-init-last.sh
   ./db-init-raw.sh
   ./db-init-refined.sh
   ./db-init-extract.sh
-  ./db-init-influxdb.sh
   ./db-init-harvest-rivm.sh
   ./db-init-calibrate.sh
   ./db-init-gost.sh
