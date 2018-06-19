@@ -11,7 +11,7 @@ This repository contains sources and documentation for
 * raw sensor data processing (validation, calibration, aggregation, ETL)
 * unlocking sensor data as Open Data via standardized (OGC) web-APIs (WMS, WFS, SOS, SensorThings API)
 
-**Home page** for this Data Platform is: http://data.smartemission.nl 
+**Home page** for the SE Data Platform is: http://data.smartemission.nl 
 
 The SE Data Platform originates from the **Smart Emission Nijmegen project** (2015+).
 The landing page for that project is http://smartemission.nl.

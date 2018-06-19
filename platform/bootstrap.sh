@@ -40,7 +40,7 @@ systemctl status docker
 # apt-get install -y python-pip libyaml-dev libpython2.7-dev git emacs24-nox apache2-utils apt-show-versions sqlite3 postgresql-client-9.4
 apt-get install -y git emacs24-nox
 apt-get install -y python-pip libyaml-dev libpython2.7-dev postgresql-client-common
-apt-get install -y  apt-show-versions sqlite3
+apt-get install -y apt-show-versions sqlite3
 
 # apache2-utils??
 
@@ -61,9 +61,13 @@ git clone https://github.com/smartemission/smartemission.git /opt/geonovum/smart
 # Mount disk Azure
 # https://docs.microsoft.com/en-us/azure/virtual-machines/linux/add-disk
 
+# Create all database schemas
 ./init-databases.sh
 
-echo "READY: now run  to build and run SE Data Platform"
+# Install system service "smartem"
+./install.sh
+
+echo "READY: now do 'service smartem run' to start SE Data Platform"
 
 # OLD STUFF
 # Need 9.4 version of PG client, not in Ubuntu 14.4, so get from PG Repo
