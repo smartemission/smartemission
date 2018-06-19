@@ -4,7 +4,7 @@ services:
 
   admin:
 
-    image: smartemission/se-admin:1.0.1
+    image: smartemission/se-admin:1.0.2
 
     container_name: admin
 

@@ -98,6 +98,9 @@ services:
     container_name: grafanamon
     depends_on:
       - prometheus
+    environment:
+      - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/adm/grafanamon
+      - GF_AUTH_ANONYMOUS_ENABLED=true
     labels:
       - "traefik.backend=grafanamon"
       - "traefik.enable=true"
