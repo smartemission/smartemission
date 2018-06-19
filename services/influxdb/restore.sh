@@ -19,7 +19,35 @@ fi
 # Parameter ok
 ./stop.sh
 
-source influxdb.env
+SCRIPT_DIR=${0%/*}
+
+pushd ${SCRIPT_DIR}
+	if [ ! -f influxdb.env ]
+	then
+	    echo "Bestand influxdb.env niet gevonden."
+	    exit 1
+	fi
+    source influxdb.env
+popd
+
+# Make sure vars are set
+if [ -z "${SE_BACKUP_DIR}" ]
+then
+    echo "SE_BACKUP_DIR not set"
+    exit 1
+fi
+
+if [ -z "${SE_CONTAINER_NAME}" ]
+then
+    echo "SE_CONTAINER_NAME not set"
+    exit 1
+fi
+
+if [ -z "${SE_DATA_DIR}" ]
+then
+    echo "SE_BACKUP_DIR not set"
+    exit 1
+fi
 
 DATA_DIR="${SE_DATA_DIR}/${SE_CONTAINER_NAME}"
 BACKUP_DIR="${SE_BACKUP_DIR}/${SE_CONTAINER_NAME}"
