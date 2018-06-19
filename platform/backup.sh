@@ -27,10 +27,10 @@ pushd ${SE_DATA_DIR}
 popd
 
 # InfluxDB data dump
-# /opt/geonovum/smartem/git/services/influxdb/backup.sh
+/opt/geonovum/smartem/git/services/influxdb/backup.sh
 
 # InfluxDB Data Collector data dump
-# /opt/geonovum/smartem/git/services/influxdb-dc1/backup.sh
+/opt/geonovum/smartem/git/services/influxdb-dc1/backup.sh
 
 # Config data
 SE_CONFIG_DIR=/var/smartem/config
