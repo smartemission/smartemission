@@ -1,4 +1,4 @@
-# Grafana Service (for Calibration)
+# Grafana Service (for InfluxDB Data Collectors)
 
 From http://grafana.org
 
@@ -13,6 +13,6 @@ Documentation: http://docs.grafana.org
 ## Docker
 
 Uses Docker Image from DockerHub:
-https://hub.docker.com/r/smartemission/se-grafana defined in 
-https://github.com/smartemission/docker-se-grafana.
+https://hub.docker.com/r/smartemission/se-grafana-dc defined in 
+https://github.com/smartemission/docker-se-grafana-dc.
 

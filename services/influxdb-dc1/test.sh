@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Test DB for general health.
-#
+#       http://137.117.141.243:8086/query?
 
 . influxdb.env
 
@@ -11,7 +11,7 @@ function query() {
   QUERY="$2"
   echo "db=$DB - query: ${QUERY}"
   # See https://docs.influxdata.com/influxdb/v1.4/guides/querying_data/
-  curl -G 'http://localhost:8086/query?pretty=true' \
+  curl -G 'http://137.117.141.243:8086/query?pretty=true' \
   -u ${INFLUXDB_ADMIN_USER}:${INFLUXDB_ADMIN_PASSWORD} \
      --data-urlencode "db=${DB}" --data-urlencode \
      "q=${QUERY}"

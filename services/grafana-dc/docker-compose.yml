@@ -1,0 +1,34 @@
+version: '3.1'
+
+services:
+
+  grafana:
+
+    image: smartemission/se-grafana-se:5.1.3-1
+
+    container_name: grafana
+
+    environment:
+      - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/grafana-dc
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+#      - GF_AUTH_ANONYMOUS_ENABLED_ORG_NAME=Main Org.
+#      - GF_AUTH_ANONYMOUS_ENABLED_ORG_ROLE=Viewer
+      - SE_INFLUX_DC1_URL=http://dc1.smartemission.nl:8086
+
+    env_file:
+      # for other config vars (see Docker def README)
+      - ../../etl/options/${HOSTNAME}.args
+
+    labels:
+      - "traefik.backend=grafana-dc"
+      - "traefik.enable=true"
+      - "traefik.frontend.priority=5000"
+      - "traefik.frontend.rule=PathPrefixStrip:/grafana-dc"
+      - "traefik.docker.network=se_back"
+
+    networks:
+      - se_back
+
+networks:
+  se_back:
+    external: true
