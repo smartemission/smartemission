@@ -128,6 +128,8 @@ grafana_admin_password=grafana_admin_pw
 GF_SECURITY_ADMIN_PASSWORD=grafana_admin_pw
 SE_INFLUX_ADMIN_PASSWORD=thepwd
 SE_INFLUX_ADMIN_USER=theuser
+SE_INFLUX_PASSWORD=thepwd
+SE_INFLUX_USER=theuser
 
 #
 # GOST SensorThings API
