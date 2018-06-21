@@ -4,7 +4,7 @@ services:
 
   home:
 
-    image: smartemission/se-home:1.0.0
+    image: smartemission/se-home:1.0.1
 
     container_name: home
 
