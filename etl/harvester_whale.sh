@@ -1,6 +1,6 @@
- #!/bin/bash
+#!/bin/bash
 #
-# ETL for reading last values from Smart Emission CityGIS/Intemo (Whale) Raw Sensor API
+# ETL for reading raw sensor data from Smart Emission CityGIS/Intemo (Whale) Data Collectors via Raw Sensor API
 #
 
 ./run.sh harvester_whale

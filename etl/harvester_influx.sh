@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# ETL for reading last values from Smart Emission CityGIS Raw Sensor API
+# ETL for harvesting raw data from InfluxDB Data Collector
 #
 
 ./run.sh harvester_influx
