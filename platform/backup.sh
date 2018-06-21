@@ -33,10 +33,10 @@ popd
 /opt/geonovum/smartem/git/services/influxdb-dc1/backup.sh
 
 # Config data
-SE_CONFIG_DIR=/var/smartem/config
-pushd ${SE_CONFIG_DIR}
-  tar -cvzf ${BACKUP_DIR}/grafana_config.tar.gz grafana
-popd
+#SE_CONFIG_DIR=/var/smartem/config
+#pushd ${SE_CONFIG_DIR}
+#  tar -cvzf ${BACKUP_DIR}/grafana_config.tar.gz grafana
+#popd
 
 # Calibration images
 SE_ETL_DIR=/opt/geonovum/smartem/git/etl
