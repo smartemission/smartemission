@@ -13,6 +13,11 @@ pushd ../services/postgis
   ./run.sh
 popd
 
+# need some time for PostGIS to setup DB on first run....
+
+echo "wait for PostGIS ready..."
+sleep 60
+
 pushd ../database
   ./db-init-meta.sh
   ./db-init-last.sh
@@ -24,7 +29,7 @@ pushd ../database
   ./db-init-gost.sh
 popd
 
-docker network rm se_back se_front
+docker network rm se_back
 
 pushd ../services/postgis
   ./stop.sh

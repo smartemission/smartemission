@@ -3,11 +3,28 @@
 # This prepares an empty Ubuntu system for running the SmartEmission Data Platform
 # run this script once as root.
 # NB not required when your system already has Docker and docker-compose!!
-#
+# Best to not run entire script but copy the lines to shell
 #
 # Only for Ubuntu 16.04 !!!
 # 
 # Just van den Broecke - 2016-2018
+
+# AZURE VM first mount disk!
+# Mount disk Azure
+# https://docs.microsoft.com/en-us/azure/virtual-machines/linux/add-disk
+# dmesg - get device e.g. /dev/sdc
+# fdisk /dev/sdc
+# n (new partition, p, defaults etc )
+# /dev/sdc1        2048 1048575999 1048573952  500G 83 Linux
+# mkfs -t ext4 /dev/sdc1
+# mkdir /var/smartem
+#
+# get Block ID
+# sudo -i blkid
+# bijv /dev/sdc1: UUID="b67a6a57-393b-4c44-868c-6acd4eabcff5" TYPE="ext4" PARTUUID="1c7a5211-01"
+# dan in /etc/fstab
+# UUID=b67a6a57-393b-4c44-868c-6acd4eabcff5   /var/smartem   ext4   defaults,nofail   1   2
+# zou automounted moeten zijn.
 
 # Bring system uptodate
 
@@ -38,8 +55,8 @@ systemctl status docker
 # https://www.postgresql.org/download/linux/ubuntu/
 # Need 9.4 version of PG client, not in Ubuntu 14.4, so get from PG Repo
 # apt-get install -y python-pip libyaml-dev libpython2.7-dev git emacs24-nox apache2-utils apt-show-versions sqlite3 postgresql-client-9.4
-apt-get install -y git emacs24-nox
-apt-get install -y python-pip libyaml-dev libpython2.7-dev postgresql-client-common
+apt-get install -y emacs24-nox
+apt-get install -y git python-pip libyaml-dev libpython2.7-dev postgresql-client-common postgresql-client
 apt-get install -y apt-show-versions sqlite3
 
 # apache2-utils??
@@ -58,14 +75,16 @@ mkdir -p /opt/geonovum/smartem
 
 git clone https://github.com/smartemission/smartemission.git /opt/geonovum/smartem/git
 
-# Mount disk Azure
-# https://docs.microsoft.com/en-us/azure/virtual-machines/linux/add-disk
-
+# now put in .args files at right places
+# /opt/geonovum/smartem/git/etl/options/<host>.args
+# /opt/geonovum/smartem/git/services/influxdb/influxdb.env
+# /opt/geonovum/smartem/git/services/influxdb-dc/influxdb.env
+#
 # Create all database schemas
-./init-databases.sh
+# ./init-databases.sh
 
 # Install system service "smartem"
-./install.sh
+# ./install.sh
 
 echo "READY: now do 'service smartem run' to start SE Data Platform"
 
