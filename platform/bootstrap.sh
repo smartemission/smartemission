@@ -82,6 +82,7 @@ git clone https://github.com/smartemission/smartemission.git /opt/geonovum/smart
 #
 # Create all database schemas
 # ./init-databases.sh
+# Populate Calibrated from backup: gis-smartem_calibrated_171003.dmp
 
 # Install system service "smartem"
 # ./install.sh
