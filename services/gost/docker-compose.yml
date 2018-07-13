@@ -33,6 +33,8 @@ services:
     networks:
       - se_back
 
+    restart: unless-stopped
+
 networks:
   se_back:
     external: true
