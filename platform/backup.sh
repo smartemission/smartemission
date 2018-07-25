@@ -19,12 +19,12 @@ mkdir -p ${BACKUP_DIR}
 
 # GeoServer data, SOS52N config data and  Grafana
 SE_DATA_DIR=/var/smartem/data
-pushd ${SE_DATA_DIR}
-  tar -cvzf ${BACKUP_DIR}/geoserver_data.tar.gz geoserver
-  tar -cvzf ${BACKUP_DIR}/sos52n_data.tar.gz sos52n
-  cp grafana/grafana.db ${BACKUP_DIR}
-  # tar -cvzf ${BACKUP_DIR}/influxdb_data.tar.gz influxdb
-popd
+#pushd ${SE_DATA_DIR}
+#  tar -cvzf ${BACKUP_DIR}/geoserver_data.tar.gz geoserver
+#  tar -cvzf ${BACKUP_DIR}/sos52n_data.tar.gz sos52n
+#  cp grafana/grafana.db ${BACKUP_DIR}
+#  # tar -cvzf ${BACKUP_DIR}/influxdb_data.tar.gz influxdb
+#popd
 
 # InfluxDB data dump
 /opt/geonovum/smartem/git/services/influxdb/backup.sh
