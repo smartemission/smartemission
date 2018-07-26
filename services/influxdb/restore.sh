@@ -16,8 +16,6 @@ then
     exit 1
 fi
 
-# Parameter ok
-./stop.sh
 
 SCRIPT_DIR=${0%/*}
 
@@ -28,6 +26,9 @@ pushd ${SCRIPT_DIR}
 	    exit 1
 	fi
     source influxdb.env
+
+	# Parameter ok
+	./stop.sh
 popd
 
 # Make sure vars are set
