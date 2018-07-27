@@ -18,8 +18,8 @@ done
 
 echo "END restore PG databases op `date`"
 
-BACKUP_FILE="${BACKUP_DIR}/influxdb_smartemission_data.tar.gz"
-pushd ../services/influxdb
-  ./restore.sh ${BACKUP_FILE}
-popd
+#BACKUP_FILE="${BACKUP_DIR}/influxdb_smartemission_data.tar.gz"
+#pushd ../services/influxdb
+#  ./restore.sh ${BACKUP_FILE}
+#popd
 
