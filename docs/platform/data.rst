@@ -1136,12 +1136,13 @@ Finally the ``POST Observation`` STA template: ::
 Entity Mapping
 --------------
 
-Data records produced by the Refinerare mapped to STA Entities by the STA Publisher.
+Data records produced by the `Refiner` are mapped to STA Entities by the `STA Publisher`.
 
 =======================     ======================  ===============================================================
 SE Artefact                 STA Entity              Example
 =======================     ======================  ===============================================================
-Station and location        `Thing`                 Intemo station  AirSensEUR Box at lat/lon
+Station                     `Thing`                 Intemo station  AirSensEUR Box
+Station point location      `Location`              AirSensEUR Box location at 4.982, 52.358 lon/lat
 Sensor Type/Metadata        `Sensor`                AlphaSense NO2B43F
 Type and unit (uom)         `ObservedProperty`      NO2 in ug/m3
 Value and time              `Observation`           42 ug/m3 on 1 aug 2018 13:42:45
