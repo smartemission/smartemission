@@ -18,6 +18,7 @@ Contents:
    api.rst
    code.rst
    installation.rst
+   kubernetes.rst
    administration.rst
    dissemination.rst
    cookbook.rst

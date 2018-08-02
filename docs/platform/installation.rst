@@ -4,7 +4,8 @@
 Installation
 ============
 
-This chapter describes the installation steps for the Smart Emission Data Platform.
+This chapter describes the installation steps for the Smart Emission Data Platform in a regular Docker environment.
+Note that installation and maintenance on Kubernetes is described in a separate chapter.
 
 Principles
 ==========
@@ -317,57 +318,18 @@ Uses the ``geonovum/stetl`` image with Stetl config from GitHub for all ETL proc
 The ``last.sh`` script is a wrapper to run the generic Docker ``geonovum/stetl`` with our
 local ETL-config and PostGIS:
 
-.. literalinclude:: ../../etl/last.sh
+.. literalinclude:: ../../etl/harvester_last.sh
     :language: bash
 
 
-web - Web Container
--------------------
+webapps - Web Containers
+------------------------
 
-Uses the generic ``geonovum/apache2`` Docker Image from GitHub. It contains the standard Apache2 server with various
-modules enabled to be able to run Python and act as a proxy to backend services. To build: ::
+Each webapp has its own Docker image and is started via `docker-compose`.
 
-   # build apache2 image
-   cd ~/git/docker/apache2
-   sudo docker build -t geonovum/apache2 .
+.. literalinclude:: ../../apps/home/docker-compose.yml
+    :language: YAML
 
-The Bash-script at ``~/git/services/web/run.sh``  will re(run) the generic
-Apache2 Docker image with mappings to local directories of the host for the  Apache2 config, webcontent and logfiles.
-It will also link to the PostGIS Container (for the Flask Python app):
-
-.. literalinclude:: ../../services/web/run.sh
-    :language: bash
-
-To run locally, e.g. with Vagrant, hardcode the DNS mapping in ``/etc/hosts`` : ::
-
-   127.0.0.1	local.smartemission.nl
-   127.0.0.1	local.data.smartemission.nl
-
-Inspect logfiles within the host ``/var/smartem/log/apache2`` : ::
-
-   tail -f   /var/smartem/log/apache2/data.smartem-error.log
-
-Debugging, start/stop Apache quickly within container: ::
-
-   # go into docker image named apache2 to bash prompt
-   sudo docker exec -it apache2 bash
-
-   # Kill running Apache parent process instance
-   root@ed393501ed58:/# ps -al
-   F S   UID   PID  PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
-   4 S     0     8     1  0  80   0 - 15344 poll_s ?        00:00:00 sshd
-   4 S     0     9     1  0  80   0 - 23706 poll_s ?        00:00:00 apache2
-   5 S    33    10     9  0  80   0 - 23641 skb_re ?        00:00:00 apache2
-   5 S    33    11     9  0  80   0 - 96540 pipe_w ?        00:00:01 apache2
-   5 S    33    12     9  0  80   0 - 112940 pipe_w ?       00:00:01 apache2
-   0 R     0    94    81  0  80   0 -  1783 -      ?        00:00:00 ps
-   root@ed393501ed58:/# kill 9
-
-   # Start Apache from commandline
-   /bin/bash -c "source /etc/apache2/envvars && exec /usr/sbin/apache2 -DFOREGROUND"
-
-Securing access: create the file `htpasswd` under `config/admin` (see README there) with
-users for general site admin and SensorThings publication.
 
 geoserver - GeoServer
 ---------------------
@@ -545,10 +507,7 @@ Used for getting metrics in Prometheus from Docker components. See https://githu
     histograms of complete historical resource usage and network statistics. This data is exported by container and machine-wide."
 
 NB for now cAdvisor needs to be built because of `this bug <https://github.com/google/cadvisor/issues/1802>`_.
-Once that is resolved we can use official Docker Image. The Dockerfile :
-
-.. literalinclude:: ../../docker/cadvisor/Dockerfile
-    :language: guess
+Once that is resolved we can use official Docker Image. 
 
 NB cAdvisor via Docker on Ubuntu 14.04 has a `serious issue (like Node_exporter) <https://github.com/smartemission/smartemission/issues/73>`_
 and `this issue <https://github.com/google/cadvisor/issues/771>`_,

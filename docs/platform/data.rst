@@ -1133,6 +1133,24 @@ Finally the ``POST Observation`` STA template: ::
 	  }}
 	}}
 
+Entity Mapping
+--------------
+
+Data records produced by the Refinerare mapped to STA Entities by the STA Publisher.
+
+=======================     ======================  ===============================================================
+SE Artefact                 STA Entity              Example
+=======================     ======================  ===============================================================
+Station and location        `Thing`                 Intemo station  AirSensEUR Box at lat/lon
+Sensor Type/Metadata        `Sensor`                AlphaSense NO2B43F
+Type and unit (uom)         `ObservedProperty`      NO2 in ug/m3
+Value and time              `Observation`           42 ug/m3 on 1 aug 2018 13:42:45
+Combination of above        `Datastream`            Combines T, S, OP and O
+Station time+location       `HistoricalLocation`    AirSensEUR Box at lat/lon 52.35,4.92 on on 1 aug 2018 13:42:45
+Station Area                `FeatureOfInterest`     Location of Station 11820004
+=======================     ======================  ===============================================================
+
+
 Deleting STA Entities
 ~~~~~~~~~~~~~~~~~~~~~
 
