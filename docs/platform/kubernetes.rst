@@ -4,26 +4,55 @@
 Kubernetes
 ==========
 
-This chapter describes the installation and maintenance for the Smart Emission Data Platform in a Kubernetes environment.
-Note that installation and maintenance on regular Docker is described in a separate chapter.
+This chapter describes the installation and maintenance for the Smart Emission Data Platform in a
+`Kubernetes (K8s) <https://kubernetes.io/>`_ environment.
+Note that installation and maintenance in a Docker environment is described in
+the :ref:`installation` chapter. SE was initially (2016-2018) deployed as Containers on a single "bare Docker" machine.
+Later with the use of `docker-compose` and Docker Hub but still "bare Docker". In spring 2018 migration within Kadaster-PDOK
+to K8s started, deploying in the K8s environment on Azure.
 
 Principles
 ==========
 
 These are requirements and principles to understand and install an instance of the SE platform.
-It is required to have an understanding of `Docker <https://www.docker.com>`_ and Kubernetes (K8s)
+It is required to have an understanding of `Docker <https://www.docker.com>`_ a
+nd `Kubernetes (K8s) <https://kubernetes.io/>`_
 as that is the main environment in which the SE Platform is run.
+
+Links
+=====
+
+Links to the main artefacts related to Kubernetes deployment:
+
+* K8s deployment specs and Readme: https://github.com/smartemission/kubernetes-se
+* GitHub repositories for all SE Docker Images: https://github.com/smartemission
+* Docker Images repo: https://hub.docker.com/r/smartemission
 
 Services
 ========
 
+Most Smart Emission services are deployed as follows in K8s:
+
+* deployment.yml - specifies (`Pods` for) a K8s `Deployment`
+* service.yml - describes a K8s `Service` (internal network proxy access) for the `Pods` in the `Deployment`
+* ingress.yml - rules how to route outside requests to `Service` (only if the `Service` requires outside access)
+
+Only for InfluxDB, as it requires local storage a `StatefulSet` is deployed i.s.o. a regular `Deployment`.
+
+
 InfluxDB
 --------
+
+Links
+~~~~~
+
+* K8s deployment specs: https://github.com/smartemission/kubernetes-se/tree/master/smartemission/services/influxdb
+* GitHub repo/var specs: https://github.com/smartemission/docker-se-influxdb
 
 Creation
 ~~~~~~~~
 
-Create volumes via `PersistentVolumeClaim` (pvc.yml) , one for staorage, one for backup/restore: ::
+Create two volumes via `PersistentVolumeClaim` (pvc.yml) , one for storage, one for backup/restore: ::
 
 	# Run this once to make volumes
 	apiVersion: apps/v1beta2
@@ -133,3 +162,21 @@ Here are the commands: ::
 	NAME                          STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
 	influxdb-backup-influxdb-0    Bound     pvc-f127f07a-958d-11e8-beac-0a58ac1f1ed2   2Gi        RWO            default        1h
 	influxdb-storage-influxdb-0   Bound     pvc-6c3a3d85-63fb-11e8-8f98-0a58ac1f0043   5Gi        RWO            default        63d
+
+CronJobs
+========
+
+K8s `Cronjobs` are applied for all SE ETL.
+CronJobs run jobs on a time-based schedule. These automated jobs run like Cron tasks on a Linux or UNIX system.
+
+Implementation
+--------------
+
+All ETL is based on `the Stetl ETL framework <http://stetl.org>`_. A single Docker Image based on the official Stetl Docker Image
+contains all ETL processes. Design of the ETL is described in the :ref:`data` chapter.
+
+* GitHub repository: https://github.com/smartemission/docker-se-stetl
+* Docker Image: https://hub.docker.com/r/smartemission/se-stetl
+* K8s `CronJobs`: https://github.com/smartemission/kubernetes-se/tree/master/smartemission/cronjobs
+
+

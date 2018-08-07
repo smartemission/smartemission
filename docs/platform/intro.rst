@@ -20,9 +20,9 @@ History
 =======
 
 The Smart Emission Platform was initiated and largely developed within
-the `Smart Emission Nijmegen project <http://smartemission.ruhosting.nl>`_ (see also below).
+the `Smart Emission Nijmegen project <http://smartemission.ruhosting.nl>`_ (2015-2017, see also below).
 
-The Geonovum/RIVM `SOSPilot Project <http://sensors.geonovum.nl>`_, where RIVM LML
+The Geonovum/RIVM `SOSPilot Project <http://sensors.geonovum.nl>`_ (2014-2015) , where RIVM LML
 (Dutch national Air Quality Data) data was harvested and serviced via the OGC Sensor Observation Service (SOS), was
 a precursor for the architecture and approach to ETL with sensor data.
 
@@ -32,7 +32,8 @@ In and after 2017 several other projects, web-clients and sensor-types started u
 * the `Smart City Living Lab <https://slimstestad.nl/programma-2017-2018/>`_: around 7 major cities within NL deployed Intemo sensor stations
 * `AirSensEUR <http://www.airsenseur.org/>`_ - a EU JRC initiative for an Open Sensor HW/SW platform
 
-This put more strain on the platform and required a more structural development and maintenance approach (than project-based funding).
+This put more strain on the platform and required a more structural development and
+maintenance approach (than project-based funding).
 
 In 2018, the SE Platform was migrated to the Dutch National GDI infrastructure `PDOK <https://pdok.nl>`_ maintained
 by the `Dutch Kadaster <https://www.kadaster.nl/>`_.

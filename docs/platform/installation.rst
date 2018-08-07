@@ -5,7 +5,7 @@ Installation
 ============
 
 This chapter describes the installation steps for the Smart Emission Data Platform in a regular Docker environment.
-Note that installation and maintenance on Kubernetes is described in a separate chapter.
+Note that installation and maintenance on Kubernetes is described in the :ref:`kubernetes`_ chapter.
 
 Principles
 ==========
