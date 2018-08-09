@@ -19,6 +19,18 @@ It is required to have an understanding of `Docker <https://www.docker.com>`_ a
 nd `Kubernetes (K8s) <https://kubernetes.io/>`_
 as that is the main environment in which the SE Platform is run.
 
+Most Smart Emission services are deployed as follows in K8s:
+
+* deployment.yml - specifies (`Pods` for) a K8s `Deployment`
+* service.yml - describes a K8s `Service` (internal network proxy access) for the `Pods` in the `Deployment`
+* ingress.yml - rules how to route outside requests to `Service` (only if the `Service` requires outside access)
+
+Only for InfluxDB instances, as it requires local
+storage a `StatefulSet` is deployed i.s.o. a regular `Deployment`.
+
+Postgres/PostGIS is not deployed within K8s but accessed as an external
+`Azure Database for PostgreSQL server` service from MS Azure.
+
 Links
 =====
 
@@ -28,16 +40,26 @@ Links to the main artefacts related to Kubernetes deployment:
 * GitHub repositories for all SE Docker Images: https://github.com/smartemission
 * Docker Images repo: https://hub.docker.com/r/smartemission
 
-Services
-========
+Namespaces
+==========
 
-Most Smart Emission services are deployed as follows in K8s:
+The main two operational K8s `Namespaces` are:
 
-* deployment.yml - specifies (`Pods` for) a K8s `Deployment`
-* service.yml - describes a K8s `Service` (internal network proxy access) for the `Pods` in the `Deployment`
-* ingress.yml - rules how to route outside requests to `Service` (only if the `Service` requires outside access)
+* `smartemission` - the main SE service stack and ETL
+* `collectors` - Data Collector services and Dashboards (see global :ref:`architecture` Chapter)
 
-Only for InfluxDB, as it requires local storage a `StatefulSet` is deployed i.s.o. a regular `Deployment`.
+Additional, supporting, `Namespaces` are:
+
+* `monitoring` - Monitoring related
+* `cert-manager` - (Let's Encrypt) SSL certificate management
+* `ingress-nginx` - Ingress services based on nginx-proxying (external/public access)
+* `kube-system` - mainly K8s Dashboard related
+
+
+Namespace smartemission
+=======================
+
+Below are the main K8s artefacts related under the `smartemission` operational `Namespace`.
 
 
 InfluxDB
@@ -132,6 +154,9 @@ Use these in `StatefulSet` deployment: ::
 Backup and Restore
 ~~~~~~~~~~~~~~~~~~
 
+Restore based on
+`this medium.com article <https://medium.com/innocode-stories/restore-influxdb-from-backup-in-kubernetes-c5b71ddbd825>`_
+
 Restoring in these steps:
 
 * copy backup files into `influxdb-backup` volume
@@ -164,19 +189,24 @@ Here are the commands: ::
 	influxdb-storage-influxdb-0   Bound     pvc-6c3a3d85-63fb-11e8-8f98-0a58ac1f0043   5Gi        RWO            default        63d
 
 CronJobs
-========
+--------
 
 K8s `Cronjobs` are applied for all SE ETL.
 CronJobs run jobs on a time-based schedule. These automated jobs run like Cron tasks on a Linux or UNIX system.
 
-Implementation
---------------
-
-All ETL is based on `the Stetl ETL framework <http://stetl.org>`_. A single Docker Image based on the official Stetl Docker Image
-contains all ETL processes. Design of the ETL is described in the :ref:`data` chapter.
+Links
+~~~~~
 
 * GitHub repository: https://github.com/smartemission/docker-se-stetl
 * Docker Image: https://hub.docker.com/r/smartemission/se-stetl
 * K8s `CronJobs`: https://github.com/smartemission/kubernetes-se/tree/master/smartemission/cronjobs
+
+Implementation
+~~~~~~~~~~~~~~
+
+All ETL is based on `the Stetl ETL framework <http://stetl.org>`_.
+A single Docker Image based on the official Stetl Docker Image
+contains all ETL processes. A start-up parameter determines the specific ETL process to run.
+Design of the ETL is described in the :ref:`data` chapter.
 
 
