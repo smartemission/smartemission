@@ -4,6 +4,15 @@ services:
   geoserver:
     image: smartemission/se-geoserver:2.12.1-2
 
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 5G
+        reservations:
+          cpus: '0.25'
+          memory: 1G
+
     container_name: geoserver
 
     env_file:
