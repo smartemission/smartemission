@@ -40,6 +40,22 @@ Links to the main artefacts related to Kubernetes deployment:
 * GitHub repositories for all SE Docker Images: https://github.com/smartemission
 * Docker Images repo: https://hub.docker.com/r/smartemission
 
+Updating
+========
+
+For Deployments, CronJobs, StatefulSets, the current sequence of actions to roll out
+new updates for code or config changes in Docker Images, is as follows (pre-CI/CD):
+
+* make code changes in related GH repo, e.g `docker-se-stetl <https://github.com/smartemission/docker-se-stetl>`_ for ETL changes
+* increase the GH tag number: `git tag` to list current tags, then: `git tag <new version nr>` and `git push --tags`
+* add a new build with the tag just added for this component in SmartEmission Organisation in DockerHub, e.g. `smartemission/se-stetl <https://hub.docker.com/r/smartemission/se-stetl/~/settings/automated-builds/>`_
+* trigger the build there in DockerHub, wait until build finished and succesful
+* increase version number in the Deployment YAML, e.g. the GeoServer  `deployment.yml <https://github.com/smartemission/kubernetes-se/blob/master/smartemission/services/geoserver/deployment.yml>`_
+* upgrade current Deployment (or Cronjob StatefulSet) to the Cluster `kubectl -n smartemission replace  -f deployment.yml`
+* follow in K8s Dashboard or with `kubectl` for any errors
+
+(TODO: automate this via Jenkins or some CI/CD tooling).
+
 Namespaces
 ==========
 
