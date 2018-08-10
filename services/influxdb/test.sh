@@ -1,4 +1,4 @@
-##!/bin/bash
+#!/bin/bash
 #
 # Test DB for general health.
 #
