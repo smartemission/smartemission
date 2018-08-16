@@ -2,7 +2,7 @@ version: '2'
 
 services:
   geoserver:
-    image: smartemission/se-geoserver:2.12.1-5
+    image: smartemission/se-geoserver:2.12.1-6
     mem_limit: 5g
 
 #    deploy:
