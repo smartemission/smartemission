@@ -27,7 +27,10 @@ query ${INFLUXDB_DB} "SELECT * from ASE_NL_01 limit 2"
 query ${INFLUXDB_DB} "SELECT * from ASE_NL_02 limit 2"
 query ${INFLUXDB_DB} "SELECT * from ASE_NL_03 limit 2"
 query ${INFLUXDB_DB} "SELECT * from ASE_NL_04 limit 2"
-query ${INFLUXDB_DB} "SELECT * from ASE_NL_05 limit 20"
+query ${INFLUXDB_DB} "SELECT * from ASE_NL_05 limit 2"
+
+# Get the last N records
+query ${INFLUXDB_DB} "SELECT * from ASE_NL_04 WHERE time > now() - 1h ORDER BY time DESC LIMIT 21"
 
 # examples
 # http://test.smartemission.nl:8086/query?db=smartemission&q=SELECT%20*%20from%20rivm%20limit%202
