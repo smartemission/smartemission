@@ -44,37 +44,26 @@ then
     exit 1
 fi
 
-if [ -z "${SE_DATA_DIR}" ]
+if [ -z "${INFLUXDB_DB}" ]
 then
-    echo "SE_BACKUP_DIR not set"
+    echo "INFLUXDB_DB not set"
     exit 1
 fi
 
-DATA_DIR="${SE_DATA_DIR}/${SE_CONTAINER_NAME}"
-BACKUP_DIR="${SE_BACKUP_DIR}/${SE_CONTAINER_NAME}"
-IMAGE="influxdb:1.5.3"
-
-
-# NB possibly best to make InfluxDB empty (db-init-influxdb.sh script)!
-# otherwise this issue: https://github.com/influxdata/influxdb/issues/8320
-# and restore just one DB...
-rm -rf ${DATA_DIR}
-mkdir -p ${DATA_DIR}
+BACKUP_DIR="${SE_BACKUP_DIR}/${SE_CONTAINER_NAME}/${INFLUXDB_DB}"
+if [ -z "${BACKUP_DIR}" ]
+then
+    echo "BACKUP_DIR not set"
+    exit 1
+fi
 
 rm -rf ${BACKUP_DIR}
 mkdir -p ${BACKUP_DIR}
 
-pushd ${SE_BACKUP_DIR}
+pushd ${SE_BACKUP_DIR}/${SE_CONTAINER_NAME}
 	tar xzvf ${DUMP_FILE}
 popd
 
 
-# On STOPPED container named influxdb
-docker run --rm \
-  --entrypoint /bin/bash \
-  -v ${DATA_DIR}:/var/lib/influxdb \
-  -v ${BACKUP_DIR}:/backup \
-  ${IMAGE} \
-  -c "influxd restore -metadir /var/lib/influxdb/meta -datadir /var/lib/influxdb/data -database ${INFLUXDB_DB} /backup"
-
-# ./run.sh
+# On RUNNING container named influxdb
+docker exec ${SE_CONTAINER_NAME} influxd restore -portable -db ${INFLUXDB_DB} -newdb ${INFLUXDB_DB} /backup/${INFLUXDB_DB}

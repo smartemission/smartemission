@@ -25,15 +25,21 @@ then
     exit 1
 fi
 
-BACKUP_DIR="${SE_BACKUP_DIR}/${SE_CONTAINER_NAME}"
+BACKUP_DIR="${SE_BACKUP_DIR}/${SE_CONTAINER_NAME}/${INFLUXDB_DB}"
+if [ -z "${BACKUP_DIR}" ]
+then
+    echo "BACKUP_DIR not set"
+    exit 1
+fi
+
+rm -rf ${BACKUP_DIR}
 mkdir -p ${BACKUP_DIR}
 
-rm -rf ${BACKUP_DIR}/*
-TARGET_DUMP_FILE=${SE_BACKUP_DIR}/influxdb_${INFLUXDB_DB}_data.tar.gz
+TARGET_DUMP_FILE=${SE_BACKUP_DIR}/${SE_CONTAINER_NAME}_${INFLUXDB_DB}_data.tar.gz
 
 # On RUNNING container named influxdb
-docker exec ${SE_CONTAINER_NAME} influxd backup -database ${INFLUXDB_DB} /backup
+docker exec ${SE_CONTAINER_NAME} influxd backup -portable -database ${INFLUXDB_DB} /backup/${INFLUXDB_DB}
 
-pushd ${SE_BACKUP_DIR}
-	tar -cvzf ${TARGET_DUMP_FILE} ${SE_CONTAINER_NAME}
+pushd ${SE_BACKUP_DIR}/${SE_CONTAINER_NAME}
+	tar -cvzf ${TARGET_DUMP_FILE} ${INFLUXDB_DB}
 popd
