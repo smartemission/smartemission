@@ -81,10 +81,15 @@ Below are the main K8s artefacts related under the `smartemission` operational `
 InfluxDB
 --------
 
+InfluxDB holds data for:
+
+* Calibration Learning Process: RIVM reference Data and SE raw data for learning
+* Refined Data: calibrated hour-values from refiner ETL process for comparing with ref data
+
 Links
 ~~~~~
 
-* K8s deployment specs: https://github.com/smartemission/kubernetes-se/tree/master/smartemission/services/influxdb
+* K8s deployment specs and backup/restore scripts: https://github.com/smartemission/kubernetes-se/tree/master/smartemission/services/influxdb
 * GitHub repo/var specs: https://github.com/smartemission/docker-se-influxdb
 
 Creation
@@ -141,7 +146,30 @@ Use these in `StatefulSet` deployment: ::
 	      terminationGracePeriodSeconds: 10
 	      containers:
 	      - name: influxdb
-	        image: influxdb:1.5.3
+	        image: influxdb:1.6.1
+	        env:
+	          - name: INFLUXDB_DB
+	            value: smartemission
+	          - name: INFLUXDB_ADMIN_USER
+	            valueFrom:
+	              secretKeyRef:
+	                name: influxdb
+	                key: username
+					.
+					.
+					.
+
+	          - name: INFLUXDB_DATA_INDEX_VERSION
+	            value: tsi1
+	          - name: INFLUXDB_HTTP_AUTH_ENABLED
+	            value: "true"
+	        resources:
+	          limits:
+	            cpu: "500m"
+	            memory: "10.0Gi"
+	          requests:
+	            cpu: "500m"
+	            memory: "1.0Gi"
 	        ports:
 	        - containerPort: 8086
 	        volumeMounts:
@@ -170,39 +198,31 @@ Use these in `StatefulSet` deployment: ::
 Backup and Restore
 ~~~~~~~~~~~~~~~~~~
 
-Restore based on
-`this medium.com article <https://medium.com/innocode-stories/restore-influxdb-from-backup-in-kubernetes-c5b71ddbd825>`_
+Backup and restore based on
+`InfluxDB documentation <https://docs.influxdata.com/influxdb/v1.6/administration/backup_and_restore>`_
 
-Restoring in these steps:
+Using the "modern" (v1.5+) InfluxDB backup/restore on live servers with the `portable` backup format.
 
-* copy backup files into `influxdb-backup` volume
-* stop/delete  `influxdb` container
-* run `job-restore` Job
-* re-create influxdb
+Before:
 
-Here are the commands: ::
+* login on maintenance vm
+* working kubectl with cluster
+* `git clone https://github.com/smartemission/kubernetes-se`
+* `cd kubernetes-se/smartemission/services/influxdb`
 
-	# All backup files are contained in local dir influxdb
-    # influxdb/smartemission.autogen.00101.00
-    # influxdb/meta.00
-    # influxdb/smartemission.autogen.00079.00
-    # etc
-	kubectl cp influxdb  smartemission/influxdb-0:/backup/
-    # NB files will reside remotely under /backup/influxdb/*.00 etc !
+Example backup/restore ::
 
-	# Delete in Kubernetes the StateFulSet influxdb, YES DELETE!
+	# Test initial
+	./test.sh
 
-	# Job must run on specific node
-	$ kubectl get nodes
-	NAME                       STATUS    ROLES     AGE       VERSION
-	aks-agentpool-34284374-0   Ready     agent     35d       v1.10.3
-	aks-agentpool-34284374-1   Ready     agent     35d       v1.10.3
-	aks-agentpool-34284374-2   Ready     agent     35d       v1.10.3
+	# Backup
+	./backup.sh influxdb-smartemission_181123.tar.gz
 
-	$ kubectl -n smartemission get pvc
-	NAME                          STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-	influxdb-backup-influxdb-0    Bound     pvc-f127f07a-958d-11e8-beac-0a58ac1f1ed2   2Gi        RWO            default        1h
-	influxdb-storage-influxdb-0   Bound     pvc-6c3a3d85-63fb-11e8-8f98-0a58ac1f0043   5Gi        RWO            default        63d
+	# Restore
+	./restore.sh influxdb-smartemission_181123.tar.gz
+
+	# Test the restore
+	./test.sh
 
 CronJobs
 --------
