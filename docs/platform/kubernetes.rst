@@ -40,6 +40,20 @@ Links to the main artefacts related to Kubernetes deployment:
 * GitHub repositories for all SE Docker Images: https://github.com/smartemission
 * Docker Images repo: https://hub.docker.com/r/smartemission
 
+Setup
+=====
+
+Setting up local environment to interact with K8s cluster on Azure.
+
+Mac OSX
+-------
+
+Using Homebrew. Need to install `kubernetes-cli` and `az-cli`: ::
+
+	$ brew install azure-cli
+	
+    $ brew install kubernetes-cli
+
 Updating
 ========
 

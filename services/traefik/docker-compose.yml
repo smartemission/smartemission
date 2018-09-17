@@ -6,7 +6,7 @@ services:
 
     container_name: traefik
 
-    command: --docker --logLevel=DEBUG
+    command: --docker --logLevel=ERROR
     
     networks:
       - se_front
