@@ -47,40 +47,40 @@ of the Docker Image for K8s deployment:
 * avail=available for deploy
 * done=deployed in K8s
 
-================  =============  =================================  ======== ======= ========
-Name              Categories     Function                           Repos    Prio    Status
-================  =============  =================================  ======== ======= ========
-Home              Apps           Platform home/landing page         GH DH    1       done
-Admin             Apps,Admin     Admin access pages                 GH DH    2       done
-Heron             Apps           Viewer with history                GH DH    1       done
-SmartApp          Apps           Viewer for last values             GH DH    1       done
-Waalkade          Apps           Viewer Nijmegen project            GH DH    1       done
-GostDashboard     Apps,Admin     Admin dashboard Gost               GH DH    3       onhold
-Grafana           Apps           View InfluxDB Data                 GH DH    2       -
-GrafanaDC         Apps           View InfluxDB Data Collector Data  GH DH    2       -
-Chronograf        Apps,Admin     Admin dashboard InfluxDB           GH DH    3       onhold
-SOSEmu            Services       REST API SOS subset                GH DH    1       done
-GeoServer         Services       WMS (Time), WFS server             GH DH    1       done
-Gost              Services       SensorThings API (STA) server      GH DH    2       done
-SOS52N            Services       52North SOS server                 GH DH    3       -
-Mosquitto         Services       MQTT server coupled with Gost      GH DH    2       done
-PhpPgAdmin        Apps,Admin     Manager PostgreSQL                 GH DH    2       -
-HarvesterLast     ETL            Harvester last sensor data         GH DH    1       -
-HarvesterWhale    ETL            Harvester historic sensor data     GH DH    1       -
-HarvesterInflux   ETL            Harvester InfluxDB sensor data     GH DH    2       -
-HarvesterRivm     ETL            Harvester RIVM ANN ref-data        GH DH    2       -
-Extractor         ETL            Extract SE refdata for ANN ref     GH DH    2       -
-Calibrator        ETL            ANN Learning engine                GH DH    2       -
-Refiner           ETL            Transformation/Calibration         GH DH    1       -
-SOSPublisher      ETL            Publish refined data to SOS        GH DH    3       -
-STAPublisher      ETL            Publish refined data to STA        GH DH    2       -
-InfluxDB          Datastore      Calibration refdata/collector      GH DH    2       inprog
-InfluxDB DC       Datastore      Data Collector AirSensEUR          GH DH    2       -
-Postgis           Datastore      Main database (not used in K8s)    GH DH    N.A.    N.A.
-Traefik           Services       Proxy server (not used in K8s)     GH DH    N.A.    N.A.
-Prometheus        Mon,Apps       Monitoring metrics collector       GH DH    4       -
-AlertManager      Mon            Prometheus (Prom.)alerter          GH DH    4       -
-CAdvisor          Mon            Prom. Docker metrics exporter      GH DH    4       -
-NodeExporter      Mon            Prom. host  metrics exporter       GH DH    4       -
-GrafanaMon        Mon,Apps       Grafana Dashboards Prometheus      GH DH    4       -
-================  =============  =================================  ======== ======= ========
+================  =============  =================================  =============================================================================================== ======= ========
+Name              Categories     Function                           Repos                                                                                           Prio    Status
+================  =============  =================================  =============================================================================================== ======= ========
+Home              Apps           Platform home/landing page         `GH <https://github.com/smartemission/docker-se-home>`_ DH                                      1       done
+Admin             Apps,Admin     Admin access pages                 `GH <https://github.com/smartemission/docker-se-admin>`_  DH                                    2       done
+Heron             Apps           Viewer with history                `GH <https://github.com/smartemission/docker-se-heron>`_  DH                                    1       done
+SmartApp          Apps           Viewer for last values             `GH <https://github.com/smartemission/docker-se-smartapp>`_ DH                                  1       done
+Waalkade          Apps           Viewer Nijmegen project            `GH <https://github.com/smartemission/docker-se-waalkade>`_ DH                                  1       done
+GostDashboard     Apps,Admin     Admin dashboard Gost               `GH <https://github.com/smartemission/docker-se-gostdashboard>`_ DH                             3       onhold
+Grafana           Apps           View InfluxDB Data                 `GH <https://github.com/smartemission/docker-se-grafana>`_ DH                                   2       done
+GrafanaDC         Apps           View InfluxDB Data Collector Data  `GH <https://github.com/smartemission/docker-se-grafana-dc>`_ DH                                2       done
+Chronograf        Apps,Admin     Admin dashboard InfluxDB           `GH <https://https://www.influxdata.com/time-series-platform/chronograf/>`_ DH                  3       onhold
+SOSEmu            Services       REST API SOS subset                `GH <https://github.com/smartemission/docker-se-sosemu>`_ DH                                    1       done
+GeoServer         Services       WMS (Time), WFS server             `GH <https://github.com/smartemission/docker-se-geoserver>`_ DH                                 1       done
+Gost              Services       SensorThings API (STA) server      `GH <https://github.com/smartemission/docker-se-gost>`_ DH                                      2       done
+SOS52N            Services       52North SOS server                 `GH <https://github.com/smartemission/docker-se-sos52n>`_ DH                                    3       done
+Mosquitto         Services       MQTT server coupled with Gost      `GH <https://github.com/smartemission/docker-se-mosquitto>`_ DH                                 2       done
+PhpPgAdmin        Apps,Admin     Manager PostgreSQL                 `GH <https://github.com/smartemission/docker-se-phppgadmin>`_ DH                                2       done
+HarvesterLast     ETL            Harvester last sensor data         `GH <https://github.com/smartemission/docker-se-stetl>`_ DH                                     1       done
+HarvesterWhale    ETL            Harvester historic sensor data     `GH <https://github.com/smartemission/docker-se-stetl>`_ DH                                     1       inprog
+HarvesterInflux   ETL            Harvester InfluxDB sensor data     `GH <https://github.com/smartemission/docker-se-stetl>`_ DH                                     2       inprog
+HarvesterRivm     ETL            Harvester RIVM ANN ref-data        `GH <https://github.com/smartemission/docker-se-stetl>`_ DH                                     2       inprog
+Extractor         ETL            Extract SE refdata for ANN ref     `GH <https://github.com/smartemission/docker-se-stetl>`_ DH                                     2       inprog
+Calibrator        ETL            ANN Learning engine                `GH <https://github.com/smartemission/docker-se-stetl>`_ DH                                     2       -
+Refiner           ETL            Transformation/Calibration         `GH <https://github.com/smartemission/docker-se-stetl>`_ DH                                     1       inprog
+SOSPublisher      ETL            Publish refined data to SOS        `GH <https://github.com/smartemission/docker-se-stetl>`_ DH                                     3       inprog
+STAPublisher      ETL            Publish refined data to STA        `GH <https://github.com/smartemission/docker-se-stetl>`_ DH                                     2       inprog
+InfluxDB          Datastore      Calibration refdata/collector      `GH <https://github.com/smartemission/docker-se-influxdb>`_ DH                                  2       inprog
+InfluxDB DC       Datastore      Data Collector AirSensEUR          `GH <https://github.com/smartemission/docker-se-influxdb>`_ DH                                  2       inprog
+Postgis           Datastore      Main database (not used in K8s)    `GH <https://github.com/smartemission/docker-se-postgis>`_ DH                                   N.A.    N.A.
+Traefik           Services       Proxy server (not used in K8s)     `GH <https://traefik.io/>`_ DH                                                                  N.A.    N.A.
+Prometheus        Mon,Apps       Monitoring metrics collector       `GH <https://prometheus.io/>`_ DH                                                               4       -
+AlertManager      Mon            Prometheus (Prom.)alerter          `GH <https://prometheus.io/docs/alerting/alertmanager/>`_ DH                                    4       -
+CAdvisor          Mon            Prom. Docker metrics exporter      `GH <https://github.com/google/cadvisor>`_ DH                                                   4       -
+NodeExporter      Mon            Prom. host  metrics exporter       `GH <https://github.com/prometheus/node_exporter>`_ DH                                          4       -
+GrafanaMon        Mon,Apps       Grafana Dashboards Prometheus      `GH <https://github.com/smartemission/smartemission/tree/master/services/monitoring>`_ DH       4       -
+================  =============  =================================  =============================================================================================== ======= ========
