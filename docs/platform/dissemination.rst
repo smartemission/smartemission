@@ -181,4 +181,4 @@ Presented by Linda Carton at INSPIRE Conference in Antwerp on sept 20, 2018:
 * Title: *Development of a national Spatial Data Infrastructure for Open Sensor Data based on citizen science initiatives*
 * Authors: Linda Carton, Paul Geurts, Just van den Broecke, Janus Hoeks, Michel Grothe, Robert Kieboom, Hester Volten, Jene van der Heide, Marga Jacobs and Piet Biemans
 * `Abstract <https://inspire.ec.europa.eu/events/conferences/inspire_2018/submissions/363.html>`_
-* `Presentation Slides (PDF) <inspire-conf-antwerp-2018/INSPIRE2018_SDI_forSensorData_Carton.pdf>`_
+* `Presentation Slides (PDF) <_static/dissemination/inspire-conf-antwerp-2018/INSPIRE2018_SDI_forSensorData_Carton.pdf>`_
