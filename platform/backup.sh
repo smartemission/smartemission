@@ -26,11 +26,6 @@ SE_DATA_DIR=/var/smartem/data
 #  # tar -cvzf ${BACKUP_DIR}/influxdb_data.tar.gz influxdb
 #popd
 
-# InfluxDB data dump
-/opt/geonovum/smartem/git/services/influxdb/backup.sh
-
-# InfluxDB Data Collector data dump
-/opt/geonovum/smartem/git/services/influxdb-dc1/backup.sh
 
 # Config data
 #SE_CONFIG_DIR=/var/smartem/config
@@ -110,6 +105,12 @@ do
 done
 
 echo "END backup databases op `date`" >> ${LOG_FILE}
+
+# InfluxDB data dump
+/opt/geonovum/smartem/git/services/influxdb/backup.sh
+
+# InfluxDB Data Collector data dump
+/opt/geonovum/smartem/git/services/influxdb-dc1/backup.sh
 
 # Now sync to backup server
 #RSYNC="rsync -e ssh -alzvx --delete "
