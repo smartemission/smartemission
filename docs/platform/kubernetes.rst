@@ -31,6 +31,57 @@ storage a `StatefulSet` is deployed i.s.o. a regular `Deployment`.
 Postgres/PostGIS is not deployed within K8s but accessed as an external
 `Azure Database for PostgreSQL server` service from MS Azure.
 
+Install
+=======
+
+Install clients.
+
+Ubuntu
+------
+
+As follows: ::
+
+	#
+	# 1) Install AZ CLI
+	#
+	# https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-apt?view=azure-cli-latest
+	$ AZ_REPO=$(lsb_release -cs)
+	$ echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | \
+	    sudo tee /etc/apt/sources.list.d/azure-cli.list
+
+	# Check
+	$ more /etc/apt/sources.list.d/azure-cli.list
+	deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ xenial main
+
+	# Get signing key
+	$ curl -L https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+
+	# Install
+	$ apt-get update
+	# Problem: https://github.com/Microsoft/WSL/issues/2775
+	$ apt-get install python-dev build-essential libffi-dev libssl-dev
+	$ apt-get install apt-transport-https azure-cli
+
+	#
+	# 2) Install kubectl
+	#
+	$ az aks install-cli
+    $ which kubectl
+    /usr/local/bin/kubectl
+
+	#
+	# 3) Get cluster creds
+	#
+	$ az aks get-credentials --resource-group <rsc group name> --name <cluster name>
+	# View config
+    $ kubectl config view
+    
+	#
+	# 4) Open k8s dashboard in browser
+	#
+	$ az aks browse --resource-group <rsc group name> --name <cluster name>
+
+
 Links
 =====
 
