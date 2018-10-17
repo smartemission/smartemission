@@ -152,7 +152,7 @@ CREATE VIEW smartem_rt.v_cur_measurements AS
   SELECT gid, unique_id, device_id, device_name, device_meta, sensor_meta,label, unit,
     name, value_raw, value_stale, time AS sample_time, value, point, altitude,
     ST_X(point) as lon, ST_Y(point) as lat, EXTRACT(epoch from time ) AS timestamp
-  FROM smartem_rt.last_device_output WHERE value_stale = 0 AND time > now() - interval '15 minutes' ORDER BY device_id ASC;
+  FROM smartem_rt.last_device_output WHERE value_stale = 0 AND time > now() - interval '120 minutes' ORDER BY device_id ASC;
 
 -- Current Measurements per Component
 DROP VIEW IF EXISTS smartem_rt.v_cur_measurements_CO2;
