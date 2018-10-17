@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
   proxy:
-    image: traefik:1.5.4-alpine
+    image: traefik:1.7.3-alpine
 
     container_name: traefik
 
@@ -14,6 +14,7 @@ services:
 
     ports:
       - "80:80"
+      - "443:443"
       - "8080:8080"
 
     labels:
@@ -22,6 +23,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./config/traefik.toml:/traefik.toml
+      - ./config/acme.json:/acme.json
 
 networks:
   se_front:
