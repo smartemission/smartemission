@@ -14,7 +14,7 @@ services:
       - "traefik.backend=waalkade"
       - "traefik.enable=true"
       - "traefik.frontend.priority=500"
-      - "traefik.frontend.rule=PathPrefix:/waalkade"
+      - "traefik.frontend.rule=Host: pdok.smartemission.nl,test.smartemission.nl;PathPrefix:/waalkade"
       - "traefik.docker.network=se_back"
 
     networks:
