@@ -173,8 +173,8 @@ Emit Blog Posts - 2018+
 `Emit #1+ – series of blog posts on SE Platform <https://justobjects.nl/category/smartemission/>`_
 by Just van den Broecke on `justobjects.nl <https://justobjects.nl>`_
 
-INSPIRE Confrence 2018 - Antwerp
-================================
+INSPIRE Conference 2018 - Antwerp
+=================================
 
 Presented by Linda Carton at INSPIRE Conference in Antwerp on sept 20, 2018:
 
@@ -182,3 +182,25 @@ Presented by Linda Carton at INSPIRE Conference in Antwerp on sept 20, 2018:
 * Authors: Linda Carton, Paul Geurts, Just van den Broecke, Janus Hoeks, Michel Grothe, Robert Kieboom, Hester Volten, Jene van der Heide, Marga Jacobs and Piet Biemans
 * `Abstract <https://inspire.ec.europa.eu/events/conferences/inspire_2018/submissions/363.html>`_
 * `Presentation Slides (PDF) <_static/dissemination/inspire-conf-antwerp-2018/INSPIRE2018_SDI_forSensorData_Carton.pdf>`_
+
+Geo Gebruikersfestival 2018 - Amersfoort
+========================================
+
+Presented by Just van den Broecke at `Geo Gebruikersfestival/SDI.Next 2018 <https://www.geonovum.nl/over-geonovum/agenda/geo-gebruikersfestival-2018-en-sdinext>`_ in Amersfoort on okt 31, 2018.
+
+Abstract: ::
+
+	"Eind september heeft PDOK het beheer van het Smart
+	Emissions Platform op zich genomen. Daarmee is de
+	Sensordata Stack op PDOK live gegaan. Het PDOK ITteam
+	heeft veel kennis kunnen opdoen over sensordatastromen,
+	onder andere door de inzet van de OGC
+	SensorThingsAPI. Just van den Broecke was zowel bij de
+	opzet van het Smart Emissions Platform zelf betrokken
+	als bij de landing hiervan in PDOK. Hij vertelt over de
+	gekozen architectuur en standaarden en werpt alvast
+	een blik in de toekomst."
+
+* Title: *SensorSDI op PDOK met het Smart Emission Data Platform*
+* Author: Just van den Broecke
+* `Presentation Slides (PDF) <_static/dissemination/geogebruikersfestival-31okt2018/SensorSDI-GGF-181031-v1.pdf>`_
