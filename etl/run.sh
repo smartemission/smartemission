@@ -16,7 +16,7 @@ then
 	exit -1
 fi
 
-IMAGE=smartemission/se-stetl:1.0.27
+IMAGE=smartemission/se-stetl:1.0.28
 NAME="stetl_${ETL_PROCESS}"
 NETWORK="--network=se_back"
 ETL_DEFAULT_ARGS="/work/options/default.args"
