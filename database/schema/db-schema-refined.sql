@@ -130,7 +130,19 @@ CREATE VIEW smartem_refined.v_timeseries_CO_raw AS
     unit, value, value_raw, value_min, value_max, time, day, hour, sample_count, point, gid, gid_raw
   FROM smartem_refined.timeseries WHERE name = 'coraw' ORDER BY device_id, gid DESC;
 
-DROP VIEW IF EXISTS smartem_refined.v_timeseries_NO2;
+DROP VIEW IF EXISTS smartem_refined.v_timeseries_NO;
+CREATE VIEW smartem_refined.v_timeseries_NO AS
+ SELECT device_id, device_meta, sensor_meta, name, label,
+   unit, value, value_raw, value_min, value_max, time, day, hour, sample_count, point, gid, gid_raw
+ FROM smartem_refined.timeseries WHERE name = 'no' ORDER BY device_id, gid DESC;
+
+DROP VIEW IF EXISTS smartem_refined.v_timeseries_NO_raw;
+CREATE VIEW smartem_refined.v_timeseries_NO_raw AS
+ SELECT device_id, device_meta, sensor_meta, name, label,
+   unit, value, value_raw, value_min, value_max, time, day, hour, sample_count, point, gid, gid_raw
+ FROM smartem_refined.timeseries WHERE name = 'noraw' ORDER BY device_id, gid DESC;
+
+ DROP VIEW IF EXISTS smartem_refined.v_timeseries_NO2;
 CREATE VIEW smartem_refined.v_timeseries_NO2 AS
   SELECT device_id, device_meta, sensor_meta, name, label,
     unit, value, value_raw, value_min, value_max, time, day, hour, sample_count, point, gid, gid_raw
