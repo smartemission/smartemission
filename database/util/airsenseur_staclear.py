@@ -30,8 +30,7 @@ def delete_ase_things(url, user, password):
 
     ase_things = sta_rest(get_url, 'GET').json()
     for thing in ase_things['value']:
-        pass
-        # sta_rest(url + '%s(%d)' % ('Thing', thing['@iot.id']), 'DELETE', user, password)
+        sta_rest(url + '%s(%d)' % ('Thing', thing['@iot.id']), 'DELETE', user, password)
 
 if __name__ == '__main__':
     url = sys.argv[1]
