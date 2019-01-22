@@ -30,13 +30,12 @@ def delete_ase_things(url, user, password):
 
     ase_things = sta_rest(get_url, 'GET').json()
     for thing in ase_things['value']:
-        sta_rest(url + '%s(%d)' % ('Thing', thing['@iot.id']), 'DELETE', user, password)
+        sta_rest(url + '%s(%d)' % ('Things', thing['@iot.id']), 'DELETE', user, password)
 
 if __name__ == '__main__':
     url = sys.argv[1]
     user = sys.argv[2]
     password = sys.argv[3]
 
-    base_url = url
     # Delete all ASE Things
-    delete_ase_things(base_url, user, password)  # also deletes Datastreams and Observations
+    delete_ase_things(url, user, password)  # also deletes Datastreams and Observations
