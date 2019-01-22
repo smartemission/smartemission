@@ -70,6 +70,18 @@ CREATE VIEW smartem_rt.v_last_measurements_CO_raw AS
     name, value_raw, value_stale, time AS sample_time, value, point, gid, unique_id
   FROM smartem_rt.last_device_output WHERE value_stale = 0 AND name = 'coraw' ORDER BY device_id, gid DESC;
 
+DROP VIEW IF EXISTS smartem_rt.v_last_measurements_NO;
+CREATE VIEW smartem_rt.v_last_measurements_NO AS
+  SELECT device_id, device_name, device_meta, sensor_meta,label, unit,
+    name, value_raw, value_stale, time AS sample_time, value, point, gid, unique_id
+  FROM smartem_rt.last_device_output WHERE value_stale = 0 AND name = 'no' ORDER BY device_id, gid DESC;
+
+DROP VIEW IF EXISTS smartem_rt.v_last_measurements_NO_raw;
+CREATE VIEW smartem_rt.v_last_measurements_NO_raw AS
+  SELECT device_id, device_name, device_meta, sensor_meta,label, unit,
+    name, value_raw, value_stale, time AS sample_time, value, point, gid, unique_id
+  FROM smartem_rt.last_device_output WHERE value_stale = 0 AND name = 'noraw' ORDER BY device_id, gid DESC;
+
 DROP VIEW IF EXISTS smartem_rt.v_last_measurements_NO2;
 CREATE VIEW smartem_rt.v_last_measurements_NO2 AS
   SELECT device_id, device_name, device_meta, sensor_meta,label, unit,
@@ -164,6 +176,11 @@ DROP VIEW IF EXISTS smartem_rt.v_cur_measurements_CO;
 CREATE VIEW smartem_rt.v_cur_measurements_CO AS
   SELECT *
   FROM smartem_rt.v_cur_measurements WHERE name = 'co';
+
+DROP VIEW IF EXISTS smartem_rt.v_cur_measurements_NO;
+CREATE VIEW smartem_rt.v_cur_measurements_NO AS
+  SELECT *
+  FROM smartem_rt.v_cur_measurements WHERE name = 'no';
 
 DROP VIEW IF EXISTS smartem_rt.v_cur_measurements_NO2;
 CREATE VIEW smartem_rt.v_cur_measurements_NO2 AS

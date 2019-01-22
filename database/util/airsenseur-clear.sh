@@ -28,4 +28,27 @@ popd
 python airsenseur_staclear.py https://test.smartemission.nl/gost/v1.0/ ${sta_user_extern} ${sta_password_extern}
 
 # 5. restart InfluxDB harvesting then others
+# Shorthand func to call InfluxDB REST Query API
 
+# Delete refined data from InfluxDB
+function query() {
+    DB=$1
+    QUERY="$2"
+    echo "db=$DB - query: ${QUERY}"
+    # See https://docs.influxdata.com/influxdb/v1.4/guides/querying_data/
+    curl -G 'https://test.smartemission.nl/influxdb/query?pretty=true' \
+	 -u ${influx_admin_user}:${influx_admin_password} \
+	 --data-urlencode "db=${DB}" --data-urlencode \
+	 "q=${QUERY}"
+}
+
+query smartemission "DELETE from joserefined where station = '11820001'"
+query smartemission "DELETE from joserefined where station = '11820002'"
+query smartemission "DELETE from joserefined where station = '11820003'"
+query smartemission "DELETE from joserefined where station = '11820004'"
+query smartemission "DELETE from joserefined where station = '11820005'"
+query smartemission "SELECT * from joserefined where station = '11820001' limit 2"
+query smartemission "SELECT * from joserefined where station = '11820002' limit 2"
+query smartemission "SELECT * from joserefined where station = '11820003' limit 2"
+query smartemission "SELECT * from joserefined where station = '11820004' limit 2"
+query smartemission "SELECT * from joserefined where station = '11820005' limit 2"
