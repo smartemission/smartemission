@@ -25,7 +25,7 @@ services:
       - "traefik.enable=true"
       - "traefik.frontend.priority=500"
       # - "traefik.frontend.rule=PathPrefixStrip:/grafana"
-      - "traefik.frontend.rule=Host: test.smartemission.nl;PathPrefixStrip:/grafana"
+      - "traefik.frontend.rule=Host: localhost,local.smartemission.nl,test.smartemission.nl;PathPrefixStrip:/grafana"
       - "traefik.docker.network=se_back"
 
     networks:

@@ -1,0 +1,24 @@
+# defaultEntryPoints must be at the top because it should not be in any table below
+# Initial from:
+# https://github.com/containerize-my-server/reverse-proxy/blob/master/traefik.toml
+defaultEntryPoints = ["http"]
+
+[entryPoints]
+  [entryPoints.http]
+  address = ":80"
+
+#[frontends]
+#  [frontends.admin_front]
+#    backend = "admin_back"
+#    basicAuth = ["madmin:$apr1$/ZTm3wNa$$Z/EVJKmzTqcAJsp0t00tY."]
+
+[retry]
+
+[docker]
+endpoint = "unix:///var/run/docker.sock"
+# domain = "geoqos.com"
+watch = true
+exposedbydefault = false
+
+[accessLog]
+  filePath = "/var/log/traefik/access.log"

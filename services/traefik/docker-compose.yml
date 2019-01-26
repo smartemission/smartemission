@@ -13,7 +13,7 @@ services:
       - se_back
 
     ports:
-      - "80:80"
+      - "${HTTP_PORT}:80"
       - "443:443"
       - "8080:8080"
 
@@ -22,7 +22,7 @@ services:
       
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./config/traefik.toml:/traefik.toml
+      - ./config/traefik.${HOSTNAME}.toml:/traefik.toml
       - ./config/acme.json:/acme.json
 
 networks:
