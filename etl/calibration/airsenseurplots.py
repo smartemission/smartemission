@@ -21,8 +21,8 @@ GAS_DEFS = {
 }
 
 SITE_DEFS = {
-    'breukelen': 'breukelen_snelweg',
-    'nijmegen': 'nijmegen_ruyterstraat',
+    'breuk-sw': 'breukelen_snelweg',
+    'nijm-ruy': 'nijmegen_ruyterstraat',
 }
 
 # InfluxDB creds
@@ -95,11 +95,16 @@ def make_plots(date_start, date_end, site, ase_stations, gasses):
             df = pd.DataFrame(data=d)
 
             # R-square calculator from the two x (Ref) and y (ASE) arrays
-            def r_squared(x, y):
+            def linregress(x, y):
                 # Alternative R2 calc, leads to same value
-                # slope, intercept, r_value, p_value, std_err = stats.linregress(x, y)
-                # return r_value ** 2
-                r2 = stats.pearsonr(x, y)[0] ** 2.0
+                slope, intercept, r_value, p_value, std_err = stats.linregress(x, y)
+                r2 = r_value ** 2.0
+                # r2 = stats.pearsonr(x, y)[0] ** 2.0
+                return r2, slope
+
+            # R-square calculator from the two x (Ref) and y (ASE) arrays
+            def r_squared(x, y):
+                r2, slope = linregress(x, y)
                 return r2
 
             # Plot styling
@@ -110,7 +115,9 @@ def make_plots(date_start, date_end, site, ase_stations, gasses):
             sns.lmplot(x='x', y='y', data=df)
 
             # More styling
-            plt.title("%s - %s - %s - %s to %s - R2=%.3f" % (gas.upper(), site, ASE_DEFS[ase], date_start, date_end, r_squared(x, y)))
+            r2, slope = linregress(x, y)
+
+            plt.title("%s - %s - %s - %s to %s - R2=%.3f m=%.2f" % (gas.upper(), site, ASE_DEFS[ase], date_start, date_end, r2, slope))
             plt.xlabel('RIVM Ref (SOS) - 1h avg - ug/m3')
             plt.ylabel('ASE Calc - 1h avg - ug/m3')
             # plt.show()
@@ -121,5 +128,5 @@ def make_plots(date_start, date_end, site, ase_stations, gasses):
 
 
 if __name__ == '__main__':
-    make_plots('2018-09-10', '2018-10-09', 'breukelen', ASE_DEFS.keys(), ['no', 'no2', 'o3'])
-    make_plots('2018-12-25', '2019-01-24', 'nijmegen', ['11820001'], ['co', 'no', 'no2', 'o3'])
+    make_plots('2018-09-10', '2018-10-09', 'breuk-sw', ASE_DEFS.keys(), ['no', 'no2', 'o3'])
+    make_plots('2018-12-25', '2019-01-24', 'nijm-ruy', ['11820001'], ['co', 'no', 'no2', 'o3'])
