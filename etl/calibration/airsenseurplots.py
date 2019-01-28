@@ -112,7 +112,11 @@ def make_plots(date_start, date_end, site, ase_stations, gasses):
             sns.set(font_scale=0.8)
 
             # Draw the plot
-            sns.lmplot(x='x', y='y', data=df)
+            # sns.lmplot(x='x', y='y', data=df)
+            # sns.scatterplot(x="x", y="y", data=df)
+            g = sns.PairGrid(df, y_vars=["y"], x_vars=["x"], height=5)
+            g.map(sns.scatterplot, s=50)
+            # g.set(ylim=(0,120), yticks=[0, 10, 20, 30, 40, 50, 60, 70, 80, 90,100,110,120])
 
             # More styling
             r2, slope = linregress(x, y)
