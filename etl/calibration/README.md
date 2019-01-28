@@ -6,7 +6,7 @@ Sources and plots for some of the analysis related to SE and AirSensEUR Calibrat
 * airsenseur - regression plots for calibrated and reference data for AirSensEUR
 
 [airsenseurplots.py](airsenseurplots.py) draws various plots from data stored in InfluxDB.
-Both calibrated and RIVM reference data are stored there. For each gas both R-squared and the slope is
+Both calibrated and RIVM reference data are stored there. For each gas both R-squared ('R2') and the slope ('m') is
 depicted. The Python `scipi.stats.linregress(x, y)` function is used.
 
 Two periods and locations are taken:
@@ -19,4 +19,10 @@ locations. The result is shown in a [combined plots for ASE_NL_01](airsenseur/as
 Upper row is in Breukelen, lower in Nijmegen (only Nijmegen has RIVM CO via SOS)
 
 
-![Combined plots for ASE_NL_01](airsenseur/asenl01-se-pycal-plots.png?raw=true "Combined plots for ASE_NL_01")
+![Combined plots for ASE_NL_01](airsenseur/asenl01-se-pycal-plots-grafana.png?raw=true "Combined plots for ASE_NL_01")
+
+For all ASEs, especially NO2 prediction is quite good: all slopes ('m') near 1 and R2 all above 0.9 (except ASE_NL_02).
+
+
+![Combined plots for ASE_NL_All NO2](airsenseur/breuk-sw-no2-ASE_NL_All-2018-09-10-2018-10-09.png?raw=true "Combined plots for ASE_NL_01")
+ 
