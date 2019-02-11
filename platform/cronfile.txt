@@ -18,8 +18,7 @@ SMARTEM=/opt/geonovum/smartem/git
 10,25,40,55 * * * * cd $SMARTEM/etl; ./harvester_influx.sh > /var/smartem/log/etl/harvester_influx.log 2>&1
 
 # Run LuftDaten Harvester (once an hour)
-# */15 * * * * cd $SMARTEM/etl; ./harvester_influx.sh > /var/smartem/log/etl/harvester_influx.log 2>&1
-5 * * * * cd $SMARTEM/etl; ./harvester_influx.sh > /var/smartem/log/etl/harvester_influx.log 2>&1
+5 * * * * cd $SMARTEM/etl; ./harvester_luftdaten.sh > /var/smartem/log/etl/harvester_luftdaten.log 2>&1
 
 # Run Refiner Smartemission
 */15 * * * * cd $SMARTEM/etl; ./refiner.sh > /var/smartem/log/etl/refiner.log 2>&1
