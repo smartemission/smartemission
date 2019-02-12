@@ -19,6 +19,7 @@ Contents:
    code.rst
    installation.rst
    kubernetes.rst
+   sensors.rst
    administration.rst
    dissemination.rst
    cookbook.rst

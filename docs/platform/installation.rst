@@ -5,7 +5,9 @@ Installation
 ============
 
 This chapter describes the installation steps for the Smart Emission Data Platform in a regular Docker environment.
-Note that installation and maintenance on Kubernetes is described in the :ref:`kubernetes`_ chapter.
+Note that installation and maintenance on Kubernetes is described in the :ref:`kubernetes`_ (K8s) chapter.
+
+Currently http://test.smartemission.nl runs in this regular Docker environment, while the SE production http://data.smartemission.nl runs on K8s.
 
 Principles
 ==========
@@ -27,7 +29,6 @@ in which the SE Platform is run.
 - all ETL Processes use a single Docker Image that embeds the `Stetl ETL Tool <http://stetl.org>`_
 - maintain ETL functionality in GitHub and just refresh/pull GitHub dir on server (no need for rebuilding Docker)
 - backups for all configuration and databases is scheduled each midnight
-- a test http://test.smartemission.nl and production http://data.smartemission.nl server exists
 
 Security
 ========

@@ -4,7 +4,7 @@
 Administration
 ==============
 
-This chapter describes the daily operation and maintenance aspects for the Smart Emission platform. For example:
+This chapter describes the daily operation and maintenance aspects for the Smart Emission platform (regular Docker environment). For example:
 
 * how to start stop servers
 * backup and restore

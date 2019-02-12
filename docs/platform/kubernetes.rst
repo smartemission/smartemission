@@ -87,8 +87,8 @@ Links
 
 Links to the main artefacts related to Kubernetes deployment:
 
-* K8s deployment specs and Readme: https://github.com/smartemission/kubernetes-se
-* GitHub repositories for all SE Docker Images: https://github.com/smartemission
+* K8s deployment specs and Readme: https://github.com/smartemission/kubernetes-se (NB not used anymore, repo is in GitLab: https://gitlab.com/smartemission/sensor-cloud-k8s)
+* GitHub repositories for all SE Docker Images: https://github.com/smartemission  (all `docker-se-*` repos)
 * Docker Images repo: https://hub.docker.com/r/smartemission
 
 Setup

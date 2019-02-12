@@ -46,6 +46,7 @@ of the Docker Image for K8s deployment:
 * inprog=in progress
 * avail=available for deploy
 * done=deployed in K8s
+* status on feb.12.2019
 
 ================  =============  =================================  =============================================================================================== ======= ========
 Name              Categories     Function                           Repos                                                                                           Prio    Status
@@ -66,16 +67,17 @@ SOS52N            Services       52North SOS server                 `GH <https:/
 Mosquitto         Services       MQTT server coupled with Gost      `GH <https://github.com/smartemission/docker-se-mosquitto>`_ DH                                 2       done
 PhpPgAdmin        Apps,Admin     Manager PostgreSQL                 `GH <https://github.com/smartemission/docker-se-phppgadmin>`_ DH                                2       done
 HarvesterLast     ETL            Harvester last sensor data         `GH <https://github.com/smartemission/docker-se-stetl>`_ DH                                     1       done
-HarvesterWhale    ETL            Harvester historic sensor data     `GH <https://github.com/smartemission/docker-se-stetl>`_ DH                                     1       inprog
-HarvesterInflux   ETL            Harvester InfluxDB sensor data     `GH <https://github.com/smartemission/docker-se-stetl>`_ DH                                     2       inprog
-HarvesterRivm     ETL            Harvester RIVM ANN ref-data        `GH <https://github.com/smartemission/docker-se-stetl>`_ DH                                     2       inprog
-Extractor         ETL            Extract SE refdata for ANN ref     `GH <https://github.com/smartemission/docker-se-stetl>`_ DH                                     2       inprog
+HarvesterWhale    ETL            Harvester historic sensor data     `GH <https://github.com/smartemission/docker-se-stetl>`_ DH                                     1       done
+HarvesterInflux   ETL            Harvester InfluxDB sensor data     `GH <https://github.com/smartemission/docker-se-stetl>`_ DH                                     2       done
+HarvesterLuftdat  ETL            Harvester Luftdaten sensor data    `GH <https://github.com/smartemission/docker-se-stetl>`_ DH                                     2       done
+HarvesterRivm     ETL            Harvester RIVM ANN ref-data        `GH <https://github.com/smartemission/docker-se-stetl>`_ DH                                     2       done
+Extractor         ETL            Extract SE refdata for ANN ref     `GH <https://github.com/smartemission/docker-se-stetl>`_ DH                                     2       onhold
 Calibrator        ETL            ANN Learning engine                `GH <https://github.com/smartemission/docker-se-stetl>`_ DH                                     2       -
-Refiner           ETL            Transformation/Calibration         `GH <https://github.com/smartemission/docker-se-stetl>`_ DH                                     1       inprog
-SOSPublisher      ETL            Publish refined data to SOS        `GH <https://github.com/smartemission/docker-se-stetl>`_ DH                                     3       inprog
-STAPublisher      ETL            Publish refined data to STA        `GH <https://github.com/smartemission/docker-se-stetl>`_ DH                                     2       inprog
-InfluxDB          Datastore      Calibration refdata/collector      `GH <https://github.com/smartemission/docker-se-influxdb>`_ DH                                  2       inprog
-InfluxDB DC       Datastore      Data Collector AirSensEUR          `GH <https://github.com/smartemission/docker-se-influxdb>`_ DH                                  2       inprog
+Refiner           ETL            Transformation/Calibration         `GH <https://github.com/smartemission/docker-se-stetl>`_ DH                                     1       done
+SOSPublisher      ETL            Publish refined data to SOS        `GH <https://github.com/smartemission/docker-se-stetl>`_ DH                                     3       done
+STAPublisher      ETL            Publish refined data to STA        `GH <https://github.com/smartemission/docker-se-stetl>`_ DH                                     2       done
+InfluxDB          Datastore      Calibration refdata/collector      `GH <https://github.com/smartemission/docker-se-influxdb>`_ DH                                  2       done
+InfluxDB DC       Datastore      Data Collector AirSensEUR          `GH <https://github.com/smartemission/docker-se-influxdb>`_ DH                                  2       done
 Postgis           Datastore      Main database (not used in K8s)    `GH <https://github.com/smartemission/docker-se-postgis>`_ DH                                   N.A.    N.A.
 Traefik           Services       Proxy server (not used in K8s)     `GH <https://traefik.io/>`_ DH                                                                  N.A.    N.A.
 Prometheus        Mon,Apps       Monitoring metrics collector       `GH <https://prometheus.io/>`_ DH                                                               4       -
