@@ -4,27 +4,28 @@
 Sensors
 =======
 
-Originally the SE Platform was developed for a single sensors station, the Intemo Jose(ne).
-As time moved on additional sensors stations from various sensor projects were connected,
-or are in the process of connecting. To allow for multiple sensor stations/devices, each with multiple
-internal sensors from multiple projects, internals for mainly the ETL were generalized while still keeping the
-core principles of the overall architecture: harvesting, refinement, service-publication.
+Originally the SE Platform was developed for a single sensor device (station), the Intemo Jose(ne).
+As time moved on additional sensor devices from various sensor projects were integrated,
+or are in progress. To allow for multiple sensor stations/devices, each with multiple
+internal sensors from multiple projects, internals for mainly the ETL processes (cron jobs) were generalized while still keeping the
+core principles of the overall architecture
+and multi-step ETL processing: raw data harvesting (pull), refinement (validation, calibration), service-publication.
 
-Based on sensor-types attached different ETL algorithms
-need to be applied. For example some already emit calibrated values (Luftdaten, Osiris), others require ANN calibration (Jose), others
+Based on device/sensor-types different ETL algorithms
+need to be applied. For example, some devices already emit calibrated sensor-values (Luftdaten, Osiris), others require ANN calibration (Jose), others
 even per-sensor linear or polynominal equations, sometimes per-sensor (AirSensEUR AlphaSense).
 
-The big advantage of the current approach is that once measurements are 'in', they
-become automatically available thorugh all external APIs without any additional action. Only on the 'input' (harvesting) side
-are specific formatting steps required.
+The advantage of the current approach is that once measurements are 'in', they
+become automatically available through all external APIs without any additional action. Only on the 'input' (harvesting)-side
+and refinement ETL are specific formatting steps required.
 
 Principles
 ==========
 
-To attach a new sensor station type, two main items need to be resolved:
+To integrate a new sensor station type, two main items need to be resolved:
 
-* APIs from which sensor data can be harvested ('getting the raw data in')
-* amount/complexity of calibration that needs to be done
+* APIs from which sensor-data can be harvested ('getting the raw or sometimes calibrated data in')
+* amount/complexity of calibration and validation needed
 
 In addition, a sensor station type is usually related to a Project. In an early stage
 every device was given a unique id, where the first 4 digits is the project id, followed by additional
@@ -34,19 +35,27 @@ The original station id is always kept in metadata columns.
 APIs
 ----
 
-Currently, harvesting from three APIs is implemented:
+Data from sensors is never sent directly to the SE platform.
+It is sent to what are called **Data Collectors**. These are usually not maintained by SE but
+by the specific projects like *Smart City Living Lab*, *Luftdaten* and/or companies like *Intemo* etc.
+The only requirement is that these
+Data Collectors provide APIs for pulling data into (Harvesting) the SE Platform.
 
-1. Raw Sensor (a.k.a. Whale) API from now mainly Intemo (Jose stations)
+Currently, harvesting from three Data Collector APIs has been realized:
+
+1. Raw Sensor (a.k.a. Whale) API from now mainly Intemo (Jose stations) servers
 
 2. InfluxDB Data Collector API, now mainly for `AirSensEUR <https://airsenseur.org>`_ stations
 
 3. `Luftdaten API <https://github.com/opendata-stuttgart/meta/wiki/APIs>`_, for `Luftdaten.info <https://luftdaten.info/en/home-en/>`_ kits
 
+Ad 2) this InfluxDB API is maintained by the SE Project itself and may be used in later projects to publish (push) data from additional sensors.
+
 
 Calibration
 -----------
 
-Currently, the following calibration algorithms implemented:
+Currently, the following calibration algorithms are implemented:
 
 1. Jose stations: ANN Calibration
 
@@ -54,19 +63,21 @@ Currently, the following calibration algorithms implemented:
 
 3. `Luftdaten.info <https://luftdaten.info/en/home-en/>`_ : no calibration required
 
+These algorithms are reusable, mainly the parameters for each need to be set.
+
 So how is this realized internally? Basic principles:
 
-* while harvesting as much metadata as possible is extracted or configure
-* the programming concept of a `Device <https://github.com/smartemission/docker-se-stetl/blob/master/smartem/devices/device.py>`_ and `Device registry <https://github.com/smartemission/docker-se-stetl/blob/master/smartem/devices/devicereg.py>`_
+* while harvesting as much metadata as possible is extracted or configured
+* the programming concept of an abstract `Device <https://github.com/smartemission/docker-se-stetl/blob/master/smartem/devices/device.py>`_ and `Device registry <https://github.com/smartemission/docker-se-stetl/blob/master/smartem/devices/devicereg.py>`_
 
-Each station-type (Jose, ASE, Luftdaten) is mapped to a Device Type. From there specific processing, configuration and
+Each station-type (Jose, ASE, Luftdaten) is mapped to a Device Type. From there, specific processing, configuration and
 algorithms are invoked. A special Device Type is the `Vanilla Device <https://github.com/smartemission/docker-se-stetl/blob/master/smartem/devices/vanilla.py>`_.
 The Vanilla Device Type can be used when no specific calibration is required. This is the easiest way to attach stations
 and was introduced when attaching kits from the `Luftdaten Project <https://luftdaten.info/en/home-en/>`_ .
 
 Each Device has one to three additional items/files:
 
-* Device Definitions ("device devs"), these map component indicators like `no2`, `temperature` etc to their raw inputs and provides pointers to the functions that perform converting (e.g. via calibration) the raw inputs
+* Device Definitions ("device devs"), these map component indicators like `no2`, `temperature` etc to their raw inputs and provides pointers to the functions that perform converting (e.g. via calibration) the raw inputs, plus min/max values for validation
 * Device Functions: functions that provide all conversions/calibrations
 * Device Params (AirSensEUR-AlphaSense sensors only): per-device calibration params
 
@@ -85,7 +96,7 @@ Examples:
 * `Device <https://github.com/smartemission/docker-se-stetl/blob/master/smartem/devices/airsenseur.py>`_
 * `Device Definitions <https://github.com/smartemission/docker-se-stetl/blob/master/smartem/devices/airsenseurdefs.py>`_
 * `Device Functions <https://github.com/smartemission/docker-se-stetl/blob/master/smartem/devices/airsenseurfuncs.py>`_
-* `Per-sensor params <https://github.com/smartemission/docker-se-stetl/blob/master/smartem/devices/airsenseurparams.py>`_  (provided by M. Gerboles, EU JRC)
+* `Per-sensor params <https://github.com/smartemission/docker-se-stetl/blob/master/smartem/devices/airsenseurparms.py>`_  (provided by M. Gerboles, EU JRC)
 
 3) Luftdaten Kits (using Vanilla Device):
 
@@ -123,6 +134,9 @@ The Stetl configurations as run in the ETL cronjobs are:
 * `Last Values Stetl Config <https://github.com/smartemission/docker-se-stetl/blob/master/config/last.cfg>`_ - Common Harvester for all last values (near real-time values)
 * `Harvester Stetl Config <https://github.com/smartemission/docker-se-stetl/blob/master/config/harvester_luftdaten.cfg>`_ - Harvester for last-hour average values (history timeseries)
 
+Device id's consist of a fixed `project id`, `4931` (German and Dutch country codes) followed by 4-5 digits Luftdaten `Location id`. Although
+each LTD sensor has its own unique id, the Location Id (and related lat/lon) binds multiple sensors together and can be considered as a "kit" or "station".
+
 No specific code is required for any of the other SE ETL processes, like Refiner and SOS and STA Publishers. For example all Luftdaten STA `Things` can be queried
 by the project id `4931`: https://data.smartemission.nl/gost/v1.0/Things?$filter=properties/project_id%20eq%20%274931%27
 
@@ -130,15 +144,17 @@ by the project id `4931`: https://data.smartemission.nl/gost/v1.0/Things?$filter
 AirSensEUR
 ----------
 
-TBS
+To Be Supplied.
 
 Project id is `1182`.
+
 Via STA:
 https://data.smartemission.nl/gost/v1.0/Things?$filter=properties/project_id%20eq%20%271182%27
 
 Josene
 ------
 
-TBS
+To Be Supplied.
 
-Several projects including Smart City Living Lab, Waalkade.
+Several projects including Smart City Living Lab, Waalkade. The original Nijmegen SE project has project id '0000', others usually start with '2'.
+

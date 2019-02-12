@@ -37,7 +37,25 @@ CREATE INDEX last_device_output_geom_idx ON smartem_rt.last_device_output USING 
 -- All Stations
 DROP VIEW IF EXISTS smartem_rt.stations CASCADE;
 CREATE VIEW smartem_rt.stations AS
-  SELECT DISTINCT on (d.device_id) d.gid, d.device_id as device_id, d.device_id%10000 as device_subid, d.device_id/10000 as project_id, d.device_name, d.device_meta, d.point, d.altitude, d.value_stale, d.time as last_update, ST_X(point) as lon, ST_Y(point) as lat  FROM smartem_rt.last_device_output as d order by d.device_id;
+  SELECT DISTINCT on (d.device_id)
+    d.gid, d.device_id as device_id,
+    CASE
+     WHEN d.device_id > 99999999
+       THEN
+         d.device_id%100000
+       ELSE
+        d.device_id%10000
+    END as device_subid,
+    CASE
+     WHEN d.device_id > 99999999
+       THEN
+         d.device_id/100000
+       ELSE
+        d.device_id/10000
+    END as project_id,
+    d.device_name, d.device_meta, d.point, d.altitude, d.value_stale,
+    d.time as last_update, ST_X(point) as lon, ST_Y(point) as lat
+  FROM smartem_rt.last_device_output as d order by d.device_id;
 
 --
 -- LAST MEASUREMENTS
@@ -235,4 +253,22 @@ CREATE VIEW smartem_rt.v_cur_measurements_noise_level_avg AS
 -- All Current/Active Stations
 DROP VIEW IF EXISTS smartem_rt.v_cur_stations CASCADE;
 CREATE VIEW smartem_rt.v_cur_stations AS
-  SELECT DISTINCT on (d.device_id) d.gid, d.device_id as device_id, d.device_id%10000 as device_subid, d.device_id/10000 as project_id, d.device_name, d.device_meta, d.point, d.altitude, d.value_stale, d.sample_time as last_update, lon, lat FROM smartem_rt.v_cur_measurements as d order by d.device_id;
+  SELECT DISTINCT on (d.device_id)
+    d.gid, d.device_id as device_id,
+    CASE
+     WHEN d.device_id > 99999999
+       THEN
+         d.device_id%100000
+       ELSE
+        d.device_id%10000
+    END as device_subid,
+    CASE
+     WHEN d.device_id > 99999999
+       THEN
+         d.device_id/100000
+       ELSE
+        d.device_id/10000
+    END as project_id,
+    d.device_name, d.device_meta,
+    d.point, d.altitude, d.value_stale, d.sample_time as last_update, lon, lat
+  FROM smartem_rt.v_cur_measurements as d order by d.device_id;
